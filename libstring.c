@@ -558,8 +558,6 @@ char * convert_punycode (char * domain, int mode, int debug) {
 			exit (FAILURE);
 		}
 
-		printf ("## %s\n", stringprep_locale_charset ());
-
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
