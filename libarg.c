@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.5 2003-10-28 17:39:24 oops Exp $ */
+/* $Id: libarg.c,v 1.6 2003-10-28 18:22:25 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -52,34 +52,38 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 		
 		longno = longopt_chk ( x + 2, longopt );
 
-		if ( longopt[longno].required == required_arguments ) {
+		if ( longno == -1 ) {
+			ret = -2;
 			memset (o_optarg, 0, ARGLENGTH);
-
-			if ( longopt_sep != NULL ) {
-				/* if argument with equer (=) */
-				strncpy (o_optarg, longopt_sep_arg, ARGLENGTH);
-			} else {
-				/* elseif argument with white charactor */
-				opt_t++;
-
-				if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
-					fprintf (stderr, "No value of %s optoin\n", x);
-					exit (1);
-				}
-
-				strncpy (o_optarg, *opt_t, ARGLENGTH);
-				_ogetopt_chk_int--;
-			}
 		} else {
-			memset (o_optarg, 0, ARGLENGTH);
-		}
 
-		ret = longopt[longno].value;
+			if ( longopt[longno].required == required_arguments ) {
+				memset (o_optarg, 0, ARGLENGTH);
+
+				if ( longopt_sep != NULL ) {
+					/* if argument with equer (=) */
+					strncpy (o_optarg, longopt_sep_arg, ARGLENGTH);
+				} else {
+					/* elseif argument with white charactor */
+					opt_t++;
+	
+					if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
+						fprintf (stderr, "No value of %s optoin\n\n", x);
+					}
+
+					strncpy (o_optarg, *opt_t, ARGLENGTH);
+					_ogetopt_chk_int--;
+				}
+			} else {
+				memset (o_optarg, 0, ARGLENGTH);
+			}
+
+			ret = longopt[longno].value;
+		}
 	} else if ( x[0] == '-' ) {
 
 		if ( strlen (x) > 2 ) {
-			fprintf (stderr, "Unsupported option %s\n", x);
-			exit (1);
+			fprintf (stderr, "Unsupported option %s\n\n", x);
 		}
 
 		optargs_chk = optvalue_chk (x[1], opt);
@@ -88,8 +92,7 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 			opt_t++;
 
 			if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
-				fprintf (stderr, "No value of -%c optoin\n", x[1]);
-				exit (1);
+				fprintf (stderr, "No value of -%c optoin\n\n", x[1]);
 			}
 
 			memset (o_optarg, 0, ARGLENGTH);
@@ -292,8 +295,7 @@ int optvalue_chk (char option, const char *options) {
 	}
 
 	if ( val == -1 ) {
-		fprintf (stderr, "Unsupported option -%c\n", option);
-		exit (1);
+		fprintf (stderr, "Unsupported option -%c\n\n", option);
 	}
 
 	return val;
@@ -312,8 +314,7 @@ int longopt_chk (char *option, const struct o_option *options) {
 		i++;
 	}
 
-	fprintf (stderr, "Unsupported option --%s\n", option);
-	exit (1);
+	fprintf (stderr, "Unsupported option --%s\n\n", option);
 
 	return -1;
 }
