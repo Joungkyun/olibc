@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.14 2003-11-10 03:58:50 oops Exp $ */
+/* $Id: libstring.c,v 1.15 2003-11-10 05:50:18 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -126,7 +126,7 @@ char * trim_r (char *str, int should_free) {
 	int start = 0, end = 0, i = 0;
 	char *ret, *tmp;
 
-	tmp = malloc ( sizeof ( sizeof (char) * (len + 1) ) );
+	tmp = malloc ( sizeof (char) * (len + 1) );
 	strcpy ( tmp, str );
 	if ( should_free ) ofree (str);
 	
