@@ -1,8 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.38 2004-06-21 10:20:12 oops Exp $
+$Id: Changes,v 1.39 2004-08-06 10:46:40 oops Exp $
 
-* Mon, Jun 21 2003
+* Fri, Aug  6 2004
+	- fixed iconv problem on liboc that conflict gpl license problem
+
+* Mon, Jun 21 2004
 	- Support FreeBSD
 	- added ax_create_stdint_h.m4 file
 	- allow autoconf 2.59 and automake 1.8

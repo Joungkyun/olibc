@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.17 2004-06-21 10:20:12 oops Exp $
+# $Id: Makefile.in,v 1.18 2004-08-06 10:46:40 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -78,7 +78,7 @@ staticlib:
 
 sharedlib:
 	$(CC) -shared -Wl,-soname,$(SONAME) -o lib$(PROG).so.$(VERSION) $(OBJECT) $(PCREOBJ) $(IDNOBJ)
-	$(CC) -shared -Wl,-soname,$(SBNAME) -o liboc.so.$(VERSION) $(OBOBJ) $(PCREOBJ) $(IDNOBJ)
+	$(CC) -shared -Wl,-soname,$(SBNAME) -o liboc.so.$(VERSION) $(OBOBJ) $(PCREOBJ)
 	$(CC) -shared -Wl,-soname,$(SGNAME) -o libogc.so.$(VERSION) $(OGOBJ) $(IDNOBJ)
 
 olibc-config:
