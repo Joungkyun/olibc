@@ -1,6 +1,6 @@
 ** File Function
 
-$Id: file.txt,v 1.2 2003-09-18 06:43:57 oops Exp $
+$Id: file.txt,v 1.3 2003-09-19 10:56:37 oops Exp $
 
 File 관련 high level 함수이다.
 
@@ -35,6 +35,24 @@ int file_exits (char *path, int mode)
         printf ("BDEV : %d\n", file_exists (path, _IS_BDEV));
         printf ("FIFO : %d\n", file_exists (path, _IS_FIFO));
         printf ("SOCK : %d\n", file_exists (path, _IS_SOCK));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * fileread (char * path)
+
+    파일 내용을 반환한다.
+
+    반환된 값은 반드시 메모리 해제 (free) 를 해 주어야 한다.
+
+    ex) #include <olibc/libfile.h>
+
+        char *text;
+        char *path = "/etc/hosts";
+
+        text = fileread (path);
+        printf ("%s\n", text);
+        free (text);
 
     저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 

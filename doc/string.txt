@@ -1,6 +1,6 @@
 ** String Function
 
-$Id: string.txt,v 1.2 2003-09-18 06:43:57 oops Exp $
+$Id: string.txt,v 1.3 2003-09-19 10:56:37 oops Exp $
 
 String 관련 함수들은 문자열 변환과 관련된 high level 의 함수들이다.
 
@@ -390,19 +390,3 @@ char * convert_punycode (char *domain, int mode, int debug)
 
     저작권: LGPL 2.1 License
 
-char * fileread (char * path)
-
-    파일 내용을 반환한다.
-
-    반환된 값은 반드시 메모리 해제 (free) 를 해 주어야 한다.
-
-    ex) #include <olibc/libstring.h>
-
-        char *text;
-        char *path = "/etc/hosts";
-
-        text = fileread (path);
-        printf ("%s\n", text);
-        free (text);
-
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>

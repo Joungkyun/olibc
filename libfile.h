@@ -1,4 +1,4 @@
-/* $Id: libfile.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libfile.h,v 1.3 2003-09-19 10:56:37 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -24,6 +24,13 @@
  *         _IS_FIFO  : whether path is FIFO
  *         _SI_SOCK  : whether path is socket file */
 int file_exists (const char *path, int mode);
+
+/* fileread follow BPL License v.1 <http://devel.oops.org/document/bpl>
+ * read file
+ *
+ * path  => path of read file
+ * return values must allocated memory */
+char * fileread (char * path);
 
 #endif
 /*

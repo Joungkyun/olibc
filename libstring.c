@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.7 2003-09-19 10:52:31 oops Exp $ */
+/* $Id: libstring.c,v 1.8 2003-09-19 10:56:37 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -650,40 +650,6 @@ char * convert_punycode (char * domain, int mode, int debug) {
 	fprintf (stderr, "ERROR: olibc compiles without libidn\n");
 	exit (FAILURE);
 #endif
-}
-
-char * fileread (char * path) {
-	FILE *fp;
-	size_t fsize = 0, len = 0, length = 0;
-	char tmp[FILEBUF] = { 0, }, *text;
-	struct stat f;
-
-	if ((fp = fopen(path, "rb")) == NULL) {
-		fprintf(stderr, "ERROR: Can't open %s in read mode\n", path);
-		exit (FAILURE);
-	}
-
-	stat (path, &f);
-	if ( f.st_size < 1 )
-		return NULL;
-
-	/* initialize tmp variavle */
-	text = malloc (sizeof (char) * (f.st_size + 1));
-
-	/* if failed memory allocation */
-	if ( text == NULL )
-		return NULL;
-
-	while ( (length = fread (tmp, sizeof (char), FILEBUF, fp)) > 0 ) {
-		memmove (text + len, tmp, length);
-		len += length;
-		memset (tmp, 0, sizeof (tmp));
-	}
-	memset (tmp + len, 0, 1);
-
-	fclose (fp);
-
-	return text;
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libstring.h,v 1.3 2003-09-19 10:56:37 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -172,13 +172,6 @@ char * convert_racecode (char *str, int mode, int debug);
  *           1 : decode from punycode
  * debug => verbose mode */
 char * convert_punycode (char * domain, int mode, int debug);
-
-/* fileread follow BPL License v.1 <http://devel.oops.org/document/bpl>
- * read file
- *
- * path  => path of read file
- * return values must allocated memory */
-char * fileread (char * path);
 #endif
 
 /*

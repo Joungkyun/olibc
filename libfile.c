@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.2 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libfile.c,v 1.3 2003-09-19 10:56:37 oops Exp $ */
 #include <common.h>
 
 #include <libfile.h>
@@ -38,6 +38,40 @@ int file_exists (const char *path, int mode) {
 		default:
 			return 1;
 	}
+}
+
+char * fileread (char * path) {
+	FILE *fp;
+	size_t fsize = 0, len = 0, length = 0;
+	char tmp[FILEBUF] = { 0, }, *text;
+	struct stat f;
+
+	if ((fp = fopen(path, "rb")) == NULL) {
+		fprintf(stderr, "ERROR: Can't open %s in read mode\n", path);
+		exit (FAILURE);
+	}
+
+	stat (path, &f);
+	if ( f.st_size < 1 )
+		return NULL;
+
+	/* initialize tmp variavle */
+	text = malloc (sizeof (char) * (f.st_size + 1));
+
+	/* if failed memory allocation */
+	if ( text == NULL )
+		return NULL;
+
+	while ( (length = fread (tmp, sizeof (char), FILEBUF, fp)) > 0 ) {
+		memmove (text + len, tmp, length);
+		len += length;
+		memset (tmp, 0, sizeof (tmp));
+	}
+	memset (tmp + len, 0, 1);
+
+	fclose (fp);
+
+	return text;
 }
 
 /*

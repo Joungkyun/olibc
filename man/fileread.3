@@ -1,13 +1,13 @@
-.TH fileread(1) 2003-09-09 "Linux Manpage" "OOPS Library's Manual"
+.TH fileread(1) 2003-09-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man fileread.1
-.\" 2003-09-09 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: fileread.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.\" 2003-09-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: fileread.3,v 1.3 2003-09-19 10:56:37 oops Exp $
 .SH 이름
 fileread
 
 .SH 사용법
-.B #include <olibc/libstring.h>
+.B #include <olibc/libfile.h>
 .sp
 .BI "char * fileread (char * path);"
 
@@ -19,7 +19,7 @@ fileread
 
 .SH 예제
 .nf
-#include <olibc/libstring.h>
+#include <olibc/libfile.h>
 
 char *text;
 char *path = "/etc/hosts";
@@ -30,7 +30,7 @@ free (text);
 .fi
 
 .SH 작성
-2003.09.09 김정균 <http://www.oops.org>
+2003.09.19 김정균 <http://www.oops.org>
 
 .SH 버그
 버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
