@@ -31,7 +31,7 @@ MV		= @MV@
 CP		= @CP@
 PERL		= @PERL@
 
-all: $(OBJECT) pcre idn staticlib sharedlib olibc-config
+all: pcre idn $(OBJECT) idn staticlib sharedlib olibc-config
 
 libpcre.o: libpcre.c libpcre.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
