@@ -1,3 +1,4 @@
+/* $Id: _race.c,v 1.2 2003-09-18 06:42:46 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -20,6 +21,7 @@ char * decode_race (char *domain, char *charset, int debug) {
 	int i = 0, len = 0;
 	static char redomain[1024];
 
+	memset (redomain, 0, sizeof (redomain));
 	len = strlen (domain);
 
 	/* convert to low case */
@@ -27,8 +29,8 @@ char * decode_race (char *domain, char *charset, int debug) {
 
 	/* if don't start 'bq--', name is not race code */
 	if ( strncmp (domain, RacePrefix, 4) ) {
-		fprintf (stderr, "ERROR: %s is not Race Code\n", domain);
-		exit (1);
+		strcpy (redomain, domain);
+		return redomain;
 	}
 
 	memset (name, '\0', sizeof (name));
@@ -37,8 +39,8 @@ char * decode_race (char *domain, char *charset, int debug) {
 	for ( i=len - 1; i>0; i-- ) {
 		if ( name[i] == '.' ) name[i] = '\0';
 		if ( name[i] & 0x80 ) {
-			fprintf (stderr, "ERROR: %s is not Race Code\n", domain);
-			exit (1);
+			strcpy (redomain, domain);
+			return redomain;
 		}
 	}   
 
@@ -62,7 +64,10 @@ char * decode_race (char *domain, char *charset, int debug) {
 	}
 
 	/* if local domain or don't com/net/org or singlebyte domain, don't convert */
-	if ( strlen (tail) < 3 || ! permit_extension (tail) ) return domain;
+	if ( strlen (tail) < 3 || ! permit_extension (tail) ) {
+		strcpy (redomain, domain);
+		return redomain;
+	}
 
 	/* decoding base 32 */
 	memset (backupstr, '\0', sizeof (backupstr));
@@ -86,6 +91,7 @@ char * encode_race (char *domain, char *charset, int debug) {
 	int i = 0, yes = 0, len = 0, comlen = 0;
 	static char endomain[1024];
 
+	memset (endomain, 0, sizeof (endomain));
 	len = strlen (domain);
 
 	/* convert to low case */
@@ -122,7 +128,10 @@ char * encode_race (char *domain, char *charset, int debug) {
 	}
 
 	/* if local domain or don't com/net/org or singlebyte domain, don't convert */
-	if ( ! yes || strlen (tail) < 3 || ! permit_extension (tail) ) return domain;
+	if ( ! yes || strlen (tail) < 3 || ! permit_extension (tail) ) {
+		strcpy (endomain, domain);
+		return endomain;
+	}
 
 	memset (utf16str, '\0', sizeof (utf16str));
 	memset (backupstr, '\0', sizeof (backupstr));
