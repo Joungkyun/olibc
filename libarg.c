@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.9 2003-10-30 10:43:13 oops Exp $ */
+/* $Id: libarg.c,v 1.10 2003-11-03 19:07:49 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -71,10 +71,10 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 	
 					if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
 						fprintf (stderr, "No value of %s optoin\n\n", x);
+					} else {
+						strncpy (o_optarg, *opt_t, ARGLENGTH);
+						_ogetopt_chk_int--;
 					}
-
-					strncpy (o_optarg, *opt_t, ARGLENGTH);
-					_ogetopt_chk_int--;
 				}
 			} else {
 				memset (o_optarg, 0, ARGLENGTH);
@@ -92,14 +92,14 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 
 		if ( optargs_chk == 1 ) {
 			opt_t++;
+			memset (o_optarg, 0, ARGLENGTH);
 
 			if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
 				fprintf (stderr, "No value of -%c optoin\n\n", x[1]);
+			} else {
+				strncpy (o_optarg, *opt_t, ARGLENGTH);
+				_ogetopt_chk_int--;
 			}
-
-			memset (o_optarg, 0, ARGLENGTH);
-			strncpy (o_optarg, *opt_t, ARGLENGTH);
-			_ogetopt_chk_int--;
 		} else {
 			memset (o_optarg, 0, ARGLENGTH);
 		}
