@@ -1,5 +1,5 @@
-/* $Id: libarg.c,v 1.14 2004-02-18 13:48:24 oops Exp $ */
-#include <common.h>
+/* $Id: libarg.c,v 1.15 2004-08-09 07:47:51 oops Exp $ */
+#include <oc_common.h>
 #include <libarg.h>
 
 int _ogetopt_chk_int = -1;

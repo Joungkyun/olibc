@@ -1,5 +1,5 @@
-/* $Id: libstring.c,v 1.20 2004-02-18 16:17:15 oops Exp $ */
-#include <common.h>
+/* $Id: libstring.c,v 1.21 2004-08-09 07:47:51 oops Exp $ */
+#include <oc_common.h>
 #include <libstring.h>
 
 void memlocate_chk (char *str);

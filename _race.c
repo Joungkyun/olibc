@@ -1,5 +1,5 @@
-/* $Id: _race.c,v 1.9 2004-02-18 16:17:15 oops Exp $ */
-#include <common.h>
+/* $Id: _race.c,v 1.10 2004-08-09 07:47:51 oops Exp $ */
+#include <oc_common.h>
 #include <_race.h>
 
 #ifdef HAVE_ICONV_H

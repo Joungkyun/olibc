@@ -1,6 +1,6 @@
-/* $Id: common.h,v 1.5 2003-11-06 18:04:50 oops Exp $ */
-#ifndef COMMON_H
-#define COMMON_H
+/* $Id: oc_common.h,v 1.1 2004-08-09 07:47:51 oops Exp $ */
+#ifndef OC_COMMON_H
+#define OC_COMMON_H
 
 #ifdef HAVE_CONFIG_H
 #include <olibc-config.h>

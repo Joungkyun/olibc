@@ -1,5 +1,5 @@
-/* $Id: libidn.c,v 1.1 2004-02-18 16:17:46 oops Exp $ */
-#include <common.h>
+/* $Id: libidn.c,v 1.2 2004-08-09 07:47:51 oops Exp $ */
+#include <oc_common.h>
 #include <libidn.h>
 
 #include <idna.h>

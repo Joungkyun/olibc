@@ -1,5 +1,5 @@
-/* $Id: libmisc.c,v 1.2 2003-11-06 18:04:50 oops Exp $ */
-#include <common.h>
+/* $Id: libmisc.c,v 1.3 2004-08-09 07:47:51 oops Exp $ */
+#include <oc_common.h>
 
 void ofree (void *s) {
 	if ( s != NULL ) free (s);

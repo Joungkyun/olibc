@@ -1,5 +1,5 @@
-/* $Id: libtime.c,v 1.3 2003-09-18 06:43:57 oops Exp $ */
-#include <common.h>
+/* $Id: libtime.c,v 1.4 2004-08-09 07:47:51 oops Exp $ */
+#include <oc_common.h>
 
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
