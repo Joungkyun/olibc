@@ -2,7 +2,7 @@
 *      Perl-Compatible Regular Expressions       *
 *************************************************/
 
-#include <common.h>
+#include <oc_common.h>
 
 
 /* This is a library of functions to support regular expressions whose syntax
