@@ -511,7 +511,7 @@ int bin2dec (char *src) {
 	return ret;
 }
 
-#ifdef HAVE_IDNA_H
+#ifdef HAVE_ICONV_H
 char * convert_racecode (char * domain, int mode, int debug) {
 	static char conv[1024];
 	char charset[32];
@@ -519,7 +519,7 @@ char * convert_racecode (char * domain, int mode, int debug) {
 	memset (charset, '\0', sizeof (charset));
 	memset (conv, '\0', sizeof (conv));
 
-#ifdef HAVE_IDNA_H
+#ifdef HAVE_LIBIDN
 	strcpy (charset, stringprep_locale_charset ());
 #else
 	strcpy (charset, "EUC-KR");
@@ -534,7 +534,7 @@ char * convert_racecode (char * domain, int mode, int debug) {
 }
 #else
 char * convert_racecode (char * domain, int mode, int debug) {
-	fprintf (stderr, "olibc compiled without idn library\n");
+	fprintf (stderr, "ERROR: olibc compiled without iconv library\n");
 	exit (FAILURE);
 }
 #endif
@@ -552,7 +552,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 	if ( ! mode ) {
 		p = stringprep_locale_to_utf8 (domain);
 		if ( !p ) {
-			fprintf (stderr, "%s: could not convert from %s to UTF-8.\n",
+			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
 				 	 domain, stringprep_locale_charset ());
 
 			exit (FAILURE);
@@ -562,28 +562,28 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
-			fprintf (stderr, "%s: could not convert from UCS-4 to UTF-8.\n", domain);
+			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
 			exit (FAILURE);
 		}
 
 		if ( debug ) {
 			size_t i;
 			for ( i = 0; q[i]; i++ )
-				fprintf (stderr, "input[%d] = U+%04x\n", i, q[i] & 0xFFFF);
+				fprintf (stderr, "ERROR: input[%d] = U+%04x\n", i, q[i] & 0xFFFF);
 		}
 
 		rc = idna_to_ascii_4z (q, &r, 0);
 		free (q);
 
 		if ( rc != IDNA_SUCCESS ) {
-			fprintf (stderr, "%s: idna_to_ascii_from_locale() failed with error %d.\n",
+			fprintf (stderr, "ERROR: %s: idna_to_ascii_from_locale() failed with error %d.\n",
 					 domain, rc);
 			exit (FAILURE);
 		}
 	} else {
 		p = stringprep_locale_to_utf8 (domain);
 		if ( !p ) {
-			fprintf (stderr, "%s: could not convert from %s to UTF-8.\n",
+			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
 					 domain, stringprep_locale_charset ());
 			exit (FAILURE);
 		}
@@ -591,7 +591,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
 			free (p);
-			fprintf (stderr, "%s: could not convert from UCS-4 to UTF-8.\n", domain);
+			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
 			exit (FAILURE);
 		}
 
@@ -599,7 +599,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		free (p);
 
 		if (rc != IDNA_SUCCESS) {
-			fprintf (stderr, "%s: idna_to_unicode_locale_from_locale() failed with error %d.\n",
+			fprintf (stderr, "ERROR: %s: idna_to_unicode_locale_from_locale() failed with error %d.\n",
 					 domain, rc);
 			exit (FAILURE);
 		}
@@ -613,14 +613,14 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		p = stringprep_ucs4_to_utf8 (q, -1, NULL, NULL);
 		if ( !p ) {
 			free (q);
-			fprintf (stderr, "%s: could not convert from UCS-4 to UTF-8.\n", domain);
+			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
 			exit (FAILURE);
 		}
 
 		r = stringprep_utf8_to_locale (p);
 		free (p);
 		if ( !r ) {
-			fprintf (stderr, "%s: could not convert from UTF-8 to %s.\n",
+			fprintf (stderr, "ERROR: %s: could not convert from UTF-8 to %s.\n",
 					 domain, stringprep_locale_charset ());
 			exit (FAILURE);
 		}
@@ -629,11 +629,11 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 	return r;
 #else
-	fprintf (stderr, "olibc compiles without iconv library\n");
+	fprintf (stderr, "ERROR: olibc compiles without iconv library\n");
 	exit (FAILURE);
 #endif
 #else
-	fprintf (stderr, "olibc compiles without libidn\n");
+	fprintf (stderr, "ERROR: olibc compiles without libidn\n");
 	exit (FAILURE);
 #endif
 }
@@ -645,7 +645,7 @@ char * fileread (char * path) {
 	struct stat f;
 
 	if ((fp = fopen(path, "rb")) == NULL) {
-		fprintf(stderr, "Can't open %s in read mode\n", path);
+		fprintf(stderr, "ERROR: Can't open %s in read mode\n", path);
 		exit (FAILURE);
 	}
 

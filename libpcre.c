@@ -115,7 +115,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 	}
 
 	if ( delnum != 2 ) {
-		fprintf (stderr, "Error: wrong uses delimiters on regex rule\n");
+		fprintf (stderr, "ERROR: wrong uses delimiters on regex rule\n");
 		free (pattern);
 		exit (FAILURE);
 	}
@@ -146,7 +146,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 			case '\n':
 						break;
 			default:
-				fprintf (stderr, "Unknown modifier '%c'", opt[i]);
+				fprintf (stderr, "ERROR: Unknown modifier '%c'", opt[i]);
 				exit (FAILURE);
 		}
 	}

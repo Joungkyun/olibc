@@ -25,7 +25,7 @@ double microtime (void) {
 }
 #else
 double microtime (void) {
-	fprintf (stderr, "olibc compiled without sys/time.h\n");
+	fprintf (stderr, "ERROR: olibc compiled without sys/time.h\n");
 }
 #endif
 
