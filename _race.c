@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.2 2003-09-18 06:42:46 oops Exp $ */
+/* $Id: _race.c,v 1.3 2003-09-26 04:42:31 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -21,7 +21,7 @@ char * decode_race (char *domain, char *charset, int debug) {
 	int i = 0, len = 0;
 	static char redomain[1024];
 
-	memset (redomain, 0, sizeof (redomain));
+	memset (redomain, 0, 1024);
 	len = strlen (domain);
 
 	/* convert to low case */
@@ -33,11 +33,11 @@ char * decode_race (char *domain, char *charset, int debug) {
 		return redomain;
 	}
 
-	memset (name, '\0', sizeof (name));
+	memset (name, 0, BUFSIZ);
 	strcpy (name, domain + 4);
 
 	for ( i=len - 1; i>0; i-- ) {
-		if ( name[i] == '.' ) name[i] = '\0';
+		if ( name[i] == '.' ) name[i] = 0;
 		if ( name[i] & 0x80 ) {
 			strcpy (redomain, domain);
 			return redomain;
@@ -70,12 +70,12 @@ char * decode_race (char *domain, char *charset, int debug) {
 	}
 
 	/* decoding base 32 */
-	memset (backupstr, '\0', sizeof (backupstr));
+	memset (backupstr, 0, 1024);
 	strcpy (backupstr, race_base32_decode (name));
 
 	/* uncompress unicode hex */
-	memset (uncompress, '\0', sizeof (uncompress));
-	race_uncompress (uncompress, backupstr);
+	memset (uncompress, 0, 1024);
+	race_uncompress (uncompress, backupstr, 1024);
 
 	/* convert utf-16be to euc-kr */
 	string_convert (dedomain, uncompress, "UTF-16BE", charset, debug);
@@ -91,17 +91,17 @@ char * encode_race (char *domain, char *charset, int debug) {
 	int i = 0, yes = 0, len = 0, comlen = 0;
 	static char endomain[1024];
 
-	memset (endomain, 0, sizeof (endomain));
+	memset (endomain, 0, 1024);
 	len = strlen (domain);
 
 	/* convert to low case */
 	strtolower (domain);
 
-	memset (name, '\0', sizeof (name));
+	memset (name, 0, BUFSIZ);
 	strcpy (name, domain);
 
 	for ( i=len - 1; i>0; i-- ) {
-		if ( name[i] == '.' ) name[i] = '\0';
+		if ( name[i] == '.' ) name[i] = 0;
 		if ( name[i] & 0x80 ) {
 			yes = 1;
 			break;
@@ -133,8 +133,8 @@ char * encode_race (char *domain, char *charset, int debug) {
 		return endomain;
 	}
 
-	memset (utf16str, '\0', sizeof (utf16str));
-	memset (backupstr, '\0', sizeof (backupstr));
+	memset (utf16str, 0, 1024);
+	memset (backupstr, 0, 1024);
 
 	strcpy (backupstr, name);
 	len = utf16_length (backupstr);
@@ -143,7 +143,7 @@ char * encode_race (char *domain, char *charset, int debug) {
 	string_convert (utf16str, backupstr, charset, "UTF-16BE", debug);
 
 	/* compress unicode */
-	memset (compress, '\0', sizeof (compress));
+	memset (compress, 0, 1024);
 	strcpy (compress, race_compress (utf16str, len * 2));
 
 	comlen = strlen (compress);
@@ -156,7 +156,7 @@ char * encode_race (char *domain, char *charset, int debug) {
 		exit (1);
 	}
 
-	memset (endomain, '\0', sizeof (endomain));
+	memset (endomain, 0, 1024);
 	sprintf (endomain, "%s%s.%s", RacePrefix, race_base32_encode (compress), tail);
 
 	return endomain;
@@ -240,7 +240,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 		else utflen = unbuflen;
 		for (i = 0; i < utflen; i++) {
 			sprintf (buf, "%02X", dest[i] & 0x000000ff);
-			memset (buf + 2, '\0', 1);
+			memset (buf + 2, 0, 1);
 				fprintf (stderr, "%s", buf);
 
 			if ( (i % 2) == 1 ) fprintf (stderr, " ");
@@ -258,12 +258,12 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 	}
 }
 
-void race_uncompress (char *ret, char *src) {
+void race_uncompress (char *ret, char *src, int retlen) {
 	int i = 0, len = 0, buflen = 0, retlen = 0;
 	char tmp[9], buf[1024];
 
-	memset (ret, '\0', sizeof (ret));
-	memset (buf, '\0', sizeof (buf));
+	memset (ret, '0', retlen);
+	memset (buf, '0', sizeof (buf));
 
 	len = strlen (src);
 	for ( i=0; i<len; i+=8 ) {
@@ -306,8 +306,8 @@ char * race_compress (char *src, int len) {
 	static char outputstr[1024];
 	char buf[BUFSIZ];
 
-	memset (buf, '\0', sizeof (buf));
-	memset (outputstr, '\0', sizeof (outputstr));
+	memset (buf, 0, BUFSIZ);
+	memset (outputstr, 0, 1024);
 
 	/* for debugging code
 	for ( i=0; i<len; i++ ) {
@@ -410,9 +410,9 @@ char * race_base32_encode (char *src) {
 	char buf[1024], buf1[6];
 	static char ret[1024];
 
-	memset (ret, '\0', sizeof (ret));
-	memset (buf, '\0', sizeof (buf));
-	memset (buf1, '\0', sizeof (buf1));
+	memset (ret, 0, 1024);
+	memset (buf, 0, 1024);
+	memset (buf1, 0, 6);
 
 	slen = strlen (src);
 	for ( i=0; i<slen; i++ ) {
@@ -444,7 +444,7 @@ char * race_base32_decode (char *src) {
 	int i = 0, len = 0, retlen = 0;
 	static char ret[1024];
 
-	memset (ret, '\0', sizeof (ret));
+	memset (ret, 0, 1024);
 
 	len = strlen (src);
 	for ( i=0; i<len; i++ ) {

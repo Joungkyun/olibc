@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.11 2003-09-19 17:44:57 oops Exp $ */
+/* $Id: libstring.c,v 1.12 2003-09-26 04:42:31 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -114,9 +114,9 @@ void trim (char *str) {
 		end = len;
 	}
 
-	memset ( str + end + 1, '\0', 1);
+	memset ( str + end + 1, 0, 1);
 	memmove ( str, str + start, end - start + 1);
-	memset ( str + end - start +1, '\0', 1);
+	memset ( str + end - start +1, 0, 1);
 }
 
 /* trim is remove space charactor on behind and forward on string.
@@ -154,7 +154,7 @@ char * trim_r (char *str, int should_free) {
 	ret = malloc (sizeof(char) * (len +	32));
 	memlocate_chk (ret);
 
-	memset (ret, '\0', sizeof(ret));
+	memset (ret, 0, sizeof (char) * (len + 32));
 	memcpy (ret, str + start, end - start + 1);
 
 	if ( should_free ) free (str);
@@ -338,9 +338,9 @@ char * human_size (double size, int sub, int unit) {
 	char * BYTE_C, bytes[1024];
 	static char result[256];
 
-	memset (result, '\0', sizeof(result));
-	memset (sunit, '\0', sizeof(sunit));
-	memset (re_unit, '\0', sizeof(re_unit));
+	memset (result, 0, 256);
+	memset (sunit, 0, 6);
+	memset (re_unit, 0, 3);
 
 	if (unit != 1) {
 		strcpy (sunit, "Bytes");
@@ -471,7 +471,7 @@ char * hex2bin (char *str) {
 	data = malloc (sizeof (char) * (len + 4));
 	memlocate_chk (data);
 
-	memset (data, '\0', sizeof (data));
+	memset (data, 0, sizeof (char) * (len + 4));
 
 	for ( i = 0, j = 0; i < len; i++ ) {
 		memcpy (data + j, _hex2bin (str[i]), 4);
@@ -484,7 +484,7 @@ char * hex2bin (char *str) {
 char * _hex2bin (char c) {
 	static char h2b[5];
 
-	memset (h2b, '\0', sizeof (h2b));
+	memset (h2b, 0, 5);
 
 	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
 		switch (c) {
@@ -540,8 +540,8 @@ char * convert_racecode (char * domain, int mode, int debug) {
 	if ( len > 256 )
 		return domain;
 
-	memset (charset, '\0', sizeof (charset));
-	memset (conv, '\0', sizeof (conv));
+	memset (charset, 0, 32);
+	memset (conv, 0, 512);
 
 #ifdef HAVE_LIBIDN
 	strcpy (charset, stringprep_locale_charset ());
@@ -656,7 +656,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 	if ( strlen (r) > 510 )
 		return domain;
 
-	memset ( conv, 0, sizeof (conv) );
+	memset ( conv, 0, 512 );
 	memmove ( conv, r, strlen (r));
 	free (r);
 

@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.7 2003-09-19 15:16:30 oops Exp $ */
+/* $Id: libpcre.c,v 1.8 2003-09-26 04:42:31 oops Exp $ */
 #include <common.h>
 #include <libpcre.h>
 
@@ -94,7 +94,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 
 	len = strlen (regex);
 
-	memset (opt, 0, sizeof (opt));
+	memset (opt, 0, 16);
 	memset (pattern, 0, strlen (regex));
 
 	for ( i=0; i<len; i++ ) {
@@ -261,7 +261,7 @@ char * preg_grep (char *regex, char *subject, int opt) {
 	token = strtok_r (bufstr, delimiters, &btoken);
 
 	while (token != NULL) {
-		memset (buf, 0, sizeof (buf));
+		memset (buf, 0, 4096);
 		sprintf (buf, "%s\n", token);
 		buflen = strlen (buf);
 
