@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.1 2003-10-28 12:09:00 oops Exp $ */
+/* $Id: libarg.c,v 1.2 2003-10-28 12:34:53 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -120,6 +120,7 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 	free (x);
 
 	_ogetopt_chk_int--;
+	o_optlen = strlen (o_optarg);
 
 	return ret;
 }
