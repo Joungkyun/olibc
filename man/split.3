@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man split.1
 .\" 2003-11-07 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: split.3,v 1.1 2003-11-06 18:04:50 oops Exp $
+.\" $Id: split.3,v 1.2 2003-11-06 18:29:11 oops Exp $
 .SH 이름
 split
 
@@ -28,6 +28,7 @@ delimiter 는 배열로 구분할 문자열을 지정한다.
 
 .SH 반환값
 생성된 배열은 ofree_array 함수로 메모리 해제를 해 주어야 한다.
+stream 이나 delimiter 가 주어지지 않으면 NULL 을 반환을 한다.
 
 .SH 예제
 .nf

@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.11 2003-11-06 18:04:50 oops Exp $ */
+/* $Id: libarg.c,v 1.12 2003-11-06 18:29:11 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -136,35 +136,35 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 char ** argv_make ( char * stream, int *oargc ) {
 	const char delimiters[] = " \n\t";
 	char ** oargv;
+	char **sep, **sep_t;
+
 	char *tmp, *tmparg;
-	char *token, *t_token, *btoken;
-	int len, i, white;
+	int i, white;
 
-	i = 0;
-	len = strlen (stream);
-
-	if ( len < 1 ) return NULL;
+	if ( stream == NULL ) return NULL;
+	if ( strlen (stream) < 1 ) return NULL;
 
 	tmp = convert_quoted_blank ( stream );
 	white = get_whitespace ( tmp );
 
-
 	oargv = malloc ( sizeof (char *) * (white + 3) );
+	sep   = malloc ( sizeof (char *) * (white + 3) );
+	sep_t = sep;
 
-	t_token = strdup (tmp);
-	ofree ( tmp );
+	i = 0;
+	while ( (*sep = strsep (&tmp, delimiters) ) != NULL ) {
+		if ( **sep != 0 ) {
+			tmparg = unconvert_quoted_blank ( *sep );
+			oargv[i] = strdup ( tmparg );
+			ofree ( tmparg );
 
-	token = strtok_r (t_token, delimiters, &btoken);
-
-	while ( token != NULL ) {
-		tmparg = unconvert_quoted_blank ( token );
-		oargv[i] = strdup ( tmparg );
-		ofree ( tmparg );
-
-		i++;
-
-		token = strtok_r (NULL, delimiters, &btoken);
+			sep++;
+			i++;
+		}
 	}
+
+	ofree ( sep_t );
+	ofree ( tmp );
 
 	oargv[i] = NULL;
 	*oargc = i;
@@ -181,10 +181,20 @@ char ** split ( char * stream, int * oargc, char *delimiter ) {
 	/* removed white space of front and end string */
 	trim (stream);
 
-	delno = get_charcount (stream, delimiter);
+	if ( stream == NULL || delimiter == NULL ) {
+		*oargc = 0;
+		return NULL;
+	}
+
 	len = strlen (stream);
 	dlen = strlen (delimiter);
 
+	if ( len < 1 || dlen < 1 ) {
+		*oargc = 0;
+		return NULL;
+	}
+
+	delno = get_charcount (stream, delimiter);
 	sep = malloc ( sizeof (char *) * (delno + 3) );
 
 	start = 0;
