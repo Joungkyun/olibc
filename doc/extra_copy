@@ -1,4 +1,4 @@
-$Id: extra_copy,v 1.2 2003-09-18 06:43:57 oops Exp $
+$Id: extra_copy,v 1.3 2003-10-23 06:43:27 oops Exp $
 
 라이센스 정보
 
@@ -7,7 +7,7 @@ oops C library 에 적용되는 라이센스는 다음과 같다.
 BOB Please License version 1
 PHP License 2.02 (PHP_COPY)
 GNU GENERAL PUBLIC LICENSE Version 2 (GPL2_COPY)
-GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 (PHP_COPY)
+GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 (LGPL_COPY)
 
 각 라이센스는 각 함수마다 별도로 지정이 되어 있지 않을 경우에는
 기본적으로 BPL v1 을 따른다.
