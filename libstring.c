@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.17 2003-11-10 12:40:22 oops Exp $ */
+/* $Id: libstring.c,v 1.18 2004-02-03 08:44:05 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -13,6 +13,7 @@
 void memlocate_chk (char *str);
 char * decode_race (char *domain, char *charset, int debug);
 char * encode_race (char *domain, char *charset, int debug);
+int permit_extension (char *tail);
 
 void olibc_version (void) {
 	printf ("%s\n", PACKAGE_VERSION);
@@ -473,6 +474,44 @@ void strtoupper (char *str) {
 		memset (str + i, toupper (str[i]), 1);
 }
 
+char * bin2hex (char *str) {
+	int i, j, len;
+	char tmp[5];
+	static char buf[1024] = { 0, };
+
+	len = strlen (str);
+
+	for ( i = 0, j = 0; i < len; i += 4, j++ ) {
+		memset (tmp, 0, 5);
+		strncpy ( tmp, str + i, 4 );
+		if ( strlen (tmp) < 4 ) continue;
+
+		memset ( buf + j, _bin2hex (tmp), 1);
+	}
+
+	return buf;
+}
+
+char _bin2hex (char *s) {
+	if ( ! strcmp ( s, "0000" ) ) return '0';
+	else if ( ! strcmp ( s, "0001" ) ) return '1';
+	else if ( ! strcmp ( s, "0010" ) ) return '2';
+	else if ( ! strcmp ( s, "0011" ) ) return '3';
+	else if ( ! strcmp ( s, "0100" ) ) return '4';
+	else if ( ! strcmp ( s, "0101" ) ) return '5';
+	else if ( ! strcmp ( s, "0110" ) ) return '6';
+	else if ( ! strcmp ( s, "0111" ) ) return '7';
+	else if ( ! strcmp ( s, "1000" ) ) return '8';
+	else if ( ! strcmp ( s, "1001" ) ) return '9';
+	else if ( ! strcmp ( s, "1010" ) ) return 'a';
+	else if ( ! strcmp ( s, "1011" ) ) return 'b';
+	else if ( ! strcmp ( s, "1100" ) ) return 'c';
+	else if ( ! strcmp ( s, "1101" ) ) return 'd';
+	else if ( ! strcmp ( s, "1110" ) ) return 'e';
+	else if ( ! strcmp ( s, "1111" ) ) return 'f';
+	else return 0;
+}
+
 char * hex2bin (char *str) {
 	char *data;
 	int len = strlen (str), i, j;
@@ -542,13 +581,20 @@ int bin2dec (char *src) {
 
 #ifdef HAVE_ICONV_H
 char * convert_racecode (char * domain, int mode, int debug) {
-	static char conv[512];
+	const char delimiters[] = ".";
+	static char retconv[1024];
+	char conv[512];
 	char charset[32];
+	char chkname[512];
+	char *extension = NULL, ext[8] = { 0, };
+	char *token, *btoken;
 	int len = strlen (domain);
 
-	if ( len > 256 )
+	if ( len > 512 )
 		return domain;
 
+	memset (retconv, 0, 1024);
+	memset (chkname, 0, 32);
 	memset (charset, 0, 32);
 	memset (conv, 0, 512);
 
@@ -558,12 +604,47 @@ char * convert_racecode (char * domain, int mode, int debug) {
 	strcpy (charset, "EUC-KR");
 #endif
 
-	if ( ! mode )
-		strcpy (conv, encode_race (domain, charset, debug));
-	else
-		strcpy (conv, decode_race (domain, charset, debug));
+	/* convert to low case */
+	strtolower ( domain );
 
-	return conv;
+	/* get domain extension */
+	extension = rindex ( domain, '.' );
+
+	/* if don't exists domain extension, return zero string */
+	if ( extension == NULL ) {
+		if ( debug )
+			fprintf ( stderr, "ERROR: Don't exist domain extension\n" );
+
+		return "";
+	}
+	
+	memcpy ( ext, extension + 1, strlen (extension + 1) );
+
+	if ( strlen ( ext ) < 3 || ! permit_extension ( ext ) ) {
+		return domain;
+	}
+
+	memcpy ( chkname, domain, strlen (domain) - strlen (ext) -1 );
+
+	token = strtok_r ( chkname, delimiters, &btoken );
+
+	while ( token != NULL ) {
+		char tmpval[512] = { 0, };
+		memset (conv, 0, 512);
+
+		if ( ! mode )
+			strcpy (tmpval, encode_race (token, charset, debug));
+		else
+			strcpy (tmpval, decode_race (token, charset, debug));
+
+		sprintf ( conv, "%s.", tmpval );
+		strcat ( retconv, conv );
+		token = strtok_r ( NULL, delimiters, &btoken );
+	}
+
+	strcat ( retconv, ext );
+
+	return retconv;
 }
 #else
 char * convert_racecode (char * domain, int mode, int debug) {

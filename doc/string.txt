@@ -1,6 +1,6 @@
 ** String Function
 
-$Id: string.txt,v 1.3 2003-09-19 10:56:37 oops Exp $
+$Id: string.txt,v 1.4 2004-02-03 08:44:05 oops Exp $
 
 String 관련 함수들은 문자열 변환과 관련된 high level 의 함수들이다.
 
@@ -292,6 +292,48 @@ void strtoupper (char *str)
         char data[5] = "DaTa";
 
         printf ("%s\n", strtoupper (data));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char _bin2hex (char *s)
+
+    길이가 4인 2진수 형태의 문자열을 16진수 형태의 캐릭터로 반환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *data = "101100101110010011100100";
+        int i, j, len;
+        char tmp[5];
+        static char buf[1024] = { 0, };
+
+        len = strlen (str);
+
+        for ( i = 0, j = 0; i < len; i += 4, j++ ) {
+            memst (tmp, 0, 5);
+            strncpy ( tmp, str + i, 4 );
+            if ( strlen (tmp) < 4 ) continue;
+
+            memset ( buf + j, _bin2hex (tmp), 1);
+        }
+
+        printf ("%s\\n", buf);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * bin2hex (char *str)
+
+    2진수 형태의 문자열을 16진수의 문자열로 반환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *data = "101100101110010011100100";
+        char *ret;
+
+        ret = bin2hex (data);
+
+        printf ("%s\\n", ret);
 
     저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 

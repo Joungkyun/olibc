@@ -1,6 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.26 2003-11-10 12:27:51 oops Exp $
+$Id: Changes,v 1.27 2004-02-03 08:44:04 oops Exp $
+
+* Tue, Feb  3 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- added bin2hex function
+	- fixed convert_racecode ugly parsing bug
 
 * Mon, Nov 10 2003
 	by JoungKyun Kim <http://www.oops.org>

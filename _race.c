@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.4 2003-09-26 05:18:33 oops Exp $ */
+/* $Id: _race.c,v 1.5 2004-02-03 08:44:04 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -9,13 +9,14 @@
 #include <langinfo.h>
 #endif
 
+#define DEBUGARG 0
+
 char ansist[] = "[1;34m";
 char ansien[] = "[7;0m";
 int  unbuflen = 0;
-char *extension[] = { "com", "net", "org" };
+char *extension[] = { "com", "net", "org", "info", "biz", "name" };
 
 char * decode_race (char *domain, char *charset, int debug) {
-	char *tail = NULL, *gettail = NULL;
 	char name[BUFSIZ];
 	char dedomain[1024], backupstr[1024], uncompress[1024];
 	int i = 0, len = 0;
@@ -37,36 +38,18 @@ char * decode_race (char *domain, char *charset, int debug) {
 	strcpy (name, domain + 4);
 
 	for ( i=len - 1; i>0; i-- ) {
-		if ( name[i] == '.' ) name[i] = 0;
 		if ( name[i] & 0x80 ) {
-			strcpy (redomain, domain);
-			return redomain;
+			return domain;
 		}
 	}   
-
-	/* get extension */
-	gettail = rindex (domain, '.');
-	tail = ( gettail != NULL ) ? strdup (gettail + 1) : NULL;
-
-	if ( tail == NULL ) {
-		fprintf (stderr, "ERROR: Domain don't have extension\n");
-		exit (1);
-	}
 
 	if ( debug ) {
 		fprintf (stderr, "\n");
 		fprintf (stderr, "%s[ INPUT Date Check ]%s\n", ansist, ansien);
 		fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
-		fprintf (stderr, "Original Domain :     %s \n", domain);
-		fprintf (stderr, "Convert  Target :     %s \n", name);
-		fprintf (stderr, "Extension       :     %s \n", tail);
+		fprintf (stderr, "Original Domain  :     %s \n", domain);
+		fprintf (stderr, "Convert  Target  :     %s \n", name);
 		fprintf (stderr, "\n");
-	}
-
-	/* if local domain or don't com/net/org or singlebyte domain, don't convert */
-	if ( strlen (tail) < 3 || ! permit_extension (tail) ) {
-		strcpy (redomain, domain);
-		return redomain;
 	}
 
 	/* decoding base 32 */
@@ -79,13 +62,12 @@ char * decode_race (char *domain, char *charset, int debug) {
 
 	/* convert utf-16be to euc-kr */
 	string_convert (dedomain, uncompress, "UTF-16BE", charset, debug);
-	sprintf (redomain, "%s.%s", dedomain, tail);
+	sprintf (redomain, "%s", dedomain);
 
 	return redomain;
 }
 
 char * encode_race (char *domain, char *charset, int debug) {
-	char *tail = NULL, *gettail = NULL;
 	char name[BUFSIZ];
 	char utf16str[1024], backupstr[1024], compress[1024];
 	int i = 0, yes = 0, len = 0, comlen = 0;
@@ -101,36 +83,24 @@ char * encode_race (char *domain, char *charset, int debug) {
 	strcpy (name, domain);
 
 	for ( i=len - 1; i>0; i-- ) {
-		if ( name[i] == '.' ) name[i] = 0;
 		if ( name[i] & 0x80 ) {
 			yes = 1;
 			break;
 		}
 	}
 
-	/* get extension */
-	gettail = rindex (domain, '.');
-	tail = ( gettail != NULL ) ? strdup (gettail + 1) : NULL;
-
-	if ( tail == NULL ) {
-		fprintf (stderr, "ERROR: Domain don't have extension\n");
-		exit (1);
-	}
-
 	if ( debug ) {
 		fprintf (stderr, "\n");
-		fprintf (stderr, "%s[ INPUT Date Check ]%s\n", ansist, ansien);
+		fprintf (stderr, "%s[ INPUT Data Check ]%s\n", ansist, ansien);
 		fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
 		fprintf (stderr, "Original Domain  :     %s \n", domain);
 		fprintf (stderr, "Convert  Target  :     %s \n", name);
-		fprintf (stderr, "Extension        :     %s \n", tail);
 		fprintf (stderr, "\n");
 	}
 
-	/* if local domain or don't com/net/org or singlebyte domain, don't convert */
-	if ( ! yes || strlen (tail) < 3 || ! permit_extension (tail) ) {
-		strcpy (endomain, domain);
-		return endomain;
+	/* if singlebyte domain, don't convert */
+	if ( ! yes ) {
+		return domain;
 	}
 
 	memset (utf16str, 0, 1024);
@@ -150,14 +120,14 @@ char * encode_race (char *domain, char *charset, int debug) {
 
 	if ( ! comlen ) {
 		fprintf (stderr, "ERROR: Race code compress failed\n");
-		exit (1);
+		return "";
 	} else if ( comlen > 72 ) {
 		fprintf (stderr, "ERROR: Compress string is bigger than 72 charactors\n");
-		exit (1);
+		return "";
 	}
 
 	memset (endomain, 0, 1024);
-	sprintf (endomain, "%s%s.%s", RacePrefix, race_base32_encode (compress), tail);
+	sprintf (endomain, "%s%s", RacePrefix, race_base32_encode (compress));
 
 	return endomain;
 }
@@ -230,7 +200,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 	iconv_close (cd);
 
 	if ( debug ) {
-		int i, utflen;
+		int i, utflen = 0;
 
 		fprintf (stderr, "%sstring_convert() debug%s\n", ansist, ansien);
 		fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
@@ -238,6 +208,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 		fprintf (stderr, "Convert String   :     %s\nHex Data         :     ", src);
 		if ( strcmp ( from, "UTF-16BE") ) utflen = utf16_length (src);
 		else utflen = unbuflen;
+
 		for (i = 0; i < utflen; i++) {
 			sprintf (buf, "%02X", dest[i] & 0x000000ff);
 			memset (buf + 2, 0, 1);
@@ -262,16 +233,16 @@ void race_uncompress (char *ret, char *src, int retsize) {
 	int i = 0, len = 0, buflen = 0, retlen = 0;
 	char tmp[9], buf[1024];
 
-	memset (ret, '0', retlen);
-	memset (buf, '0', sizeof (buf));
+	memset (tmp, 0, sizeof (tmp));
+	memset (ret, 0, retlen);
+	memset (buf, 0, sizeof (buf));
 
 	len = strlen (src);
-	for ( i=0; i<len; i+=8 ) {
+	for ( i=0, buflen = 0; i<len; i+=8, buflen++ ) {
 		strncpy (tmp, src + i, 8);
 		if ( strlen(tmp) < 8 ) continue;
 
 		memset (buf + buflen, bin2dec (tmp), 1);
-		buflen += 1;
 	}
 
 	if ( buf[0] == 0xffffffd8 ) {
@@ -279,10 +250,11 @@ void race_uncompress (char *ret, char *src, int retsize) {
 	} else {
 		i = 1;
 		len = buflen;
-		for ( i=1; i<len-1; i++ ) {
+		for ( i=1; i<len; i++ ) {
 			if ( buf[i] == 0xffffffff ) {
+				if ( (i+1) == len ) break;
+
 				if ( buf[i+1] == 0xffffff99 ) {
-					if ( (i+1) == len ) break;
 					memset (ret + retlen, buf[0] & 0x000000ff, 1);
 					memset (ret + retlen + 1, 0xff, 1);
 				} else {
@@ -292,32 +264,49 @@ void race_uncompress (char *ret, char *src, int retsize) {
 				i++;
 			} else {
 				memset (ret + retlen, buf[0] & 0x000000ff, 1);
-				memset (ret + retlen, buf[i] & 0x000000ff, 1);
+				memset (ret + retlen + 1, buf[i] & 0x000000ff, 1);
 			}
 			retlen += 2;
 		}
 	}
+
+#if DEBUGARG
+	fprintf (stderr, "%srace_uncompress() debug%s\n", ansist, ansien);
+	fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
+	fprintf (stderr, "Origianl Source  :     %s\n", src);
+	fprintf (stderr, "Hexa Convert     :     %s\n", bin2hex (src));
+	fprintf (stderr, "Convert Data     :     %s\n", buf);
+	fprintf (stderr, "Return Value     :     %s\n\n", ret);
+#endif
+
 	unbuflen = buflen - 1;
 }
 
 char * race_compress (char *src, int len) {
-	int i = 0; // j = 0;
+	int i = 0;
 	int simple = 0, outlen = 0;
 	static char outputstr[1024];
 	char buf[BUFSIZ];
+#if DEBUGARG
+	int j=0;
+#endif
 
 	memset (buf, 0, BUFSIZ);
 	memset (outputstr, 0, 1024);
 
-	/* for debugging code
+#if DEBUGARG
+	/* for debugging code */
+	fprintf (stderr, "%srace_compress() debug%s\n", ansist, ansien);
+	fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
+
 	for ( i=0; i<len; i++ ) {
 		//fprintf (stderr, "%d, %02x\n", i, src[i] << 24);
 		fprintf (stderr, "%d, %02x\n", i, src[i] & 0x000000ff);
 		sprintf (buf + j, "%02x", src[i] & 0x000000ff);
 		j += 2;
 	}   
-	printf ("%s\n", buf);
-	*/
+	fprintf (stderr, "HEX CODE         : %s\n", buf);
+#endif
 
 	if ( ! race_check_same (src, len) ) {
 		simple = race_check_simple (src, len);
@@ -328,10 +317,16 @@ char * race_compress (char *src, int len) {
 			sprintf (outputstr, "%02x", 0xd8);
 			outlen = strlen (outputstr);
 			for ( i=0; i<len; i++ ) {
+				if ( src[i] == 0 && src[i+1] == 0 )
+					break;
+
 				sprintf (outputstr + outlen, "%02x", src[i] & 0x000000ff); 
 				outlen = strlen (outputstr);
 			}
 
+#if DEBUGARG
+			fprintf (stderr, "Return Value     : %s\n\n", outputstr);
+#endif
 			return outputstr;
 		}
 	} else {
@@ -339,12 +334,20 @@ char * race_compress (char *src, int len) {
 	}
 	outlen = strlen (outputstr);
 
-	if ( src[0] >= 0xffffffd8 && src[0] <= 0xffffffdc )
+	if ( src[0] >= 0xffffffd8 && src[0] <= 0xffffffdc ) {
+#if DEBUGARG
+			fprintf (stderr, "Return Value     : NULL\n\n");
+#endif
 		return "";
+	}
 
 	for ( i=0; i<len; i+=2 ) {
-		if ( src[i] == 0xffffff00 && src[i+1] == 0xffffff99 )
+		if ( src[i] == 0xffffff00 && src[i+1] == 0xffffff99 ) {
+#if DEBUGARG
+			fprintf (stderr, "Return Value     : NULL\n\n");
+#endif
 			return "";
+		}
 
 		if ( src[i] == src[0] && src[i+1] != 0xffffffff) {
 			sprintf (outputstr + outlen, "%02x", src[i+1] & 0x000000ff);
@@ -357,6 +360,10 @@ char * race_compress (char *src, int len) {
 			outlen = strlen (outputstr);
 		}
 	}
+
+#if DEBUGARG
+	fprintf (stderr, "Return Value     : %s\n\n", outputstr);
+#endif
 
 	return outputstr;
 }
@@ -415,10 +422,22 @@ char * race_base32_encode (char *src) {
 	memset (buf1, 0, 6);
 
 	slen = strlen (src);
+
+#if DEBUGARG
+	fprintf (stderr, "%srace_base32_encode() debug%s\n", ansist, ansien);
+	fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
+	fprintf (stderr, "Origianl Source  : %s\n", src);
+#endif
+
 	for ( i=0; i<slen; i++ ) {
 		strcpy ( buf + buflen, _hex2bin (src[i]));
 		buflen = strlen (buf);
 	}
+
+#if DEBUGARG
+	fprintf (stderr, "Convert BIN data : %s\n", buf);
+	fprintf (stderr, "Convert BIN len  : %d\n", strlen(buf));
+#endif
 
 	for ( i=0; i<buflen; i+=5 ) {
 		strncpy ( buf1, buf + i, 5);
@@ -437,20 +456,40 @@ char * race_base32_encode (char *src) {
 		retlen = strlen (ret);
 	}
 
+#if DEBUGARG
+	fprintf (stderr, "Return Value     : %s\n\n", ret);
+#endif
+
 	return ret;
 }
 
 char * race_base32_decode (char *src) {
-	int i = 0, len = 0, retlen = 0;
+	int i = 0, len = 0, retlen = 0, setlen = 0;
 	static char ret[1024];
 
 	memset (ret, 0, 1024);
 
 	len = strlen (src);
+
 	for ( i=0; i<len; i++ ) {
 		strcpy (ret + retlen, de_base32 (src[i]));
 		retlen = strlen (ret);
 	}
+
+	setlen = len * 5;
+	if ( setlen % 8 ) {
+		setlen = setlen - ( setlen % 8 );
+		memset ( ret + setlen, 0, 1 );
+	}
+
+#if DEBUGARG
+	fprintf (stderr, "%srace_base32_decode() debug%s\n", ansist, ansien);
+	fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
+	fprintf (stderr, "Origianl Source  :     '%s'\n", src);
+	fprintf (stderr, "Orig Source LEN  :     '%d'\n", len);
+	fprintf (stderr, "Return Value     :     %s\n", ret);
+	fprintf (stderr, "Return Value Len :     %d\n\n", strlen(ret));
+#endif
 
 	return ret;
 }

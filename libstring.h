@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.4 2003-09-19 15:23:51 oops Exp $ */
+/* $Id: libstring.h,v 1.5 2004-02-03 08:44:05 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -143,6 +143,16 @@ void strtolower (char *str);
  * this function convert original str */
 void strtoupper (char *str);
 
+/* bin2hex follows BPL License v.1 <http://devel.oops.org/document/bpl>
+ * convert binary type strings to hexadecimal type string
+ *
+ * this function convert original str */
+char * bin2hex (char *str);
+
+/* _bin2hex follows BPL License v.1 <http://devel.oops.org/document/bpl>
+ * convert binary type strings to hexadecimal charactor */
+char _bin2hex (char *s);
+
 /* hex2bin follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert binary type strings from hexadecimal type string
  *
@@ -153,7 +163,7 @@ char * hex2bin (char *str);
  * convert binary type strings from hexadecimal charactor */
 char * _hex2bin (char c);
 
-/* bin2dec follows BPL License v.1 <http://devel.oops.org/document/bpl>
+/* _bin2dec follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert to decimal number from binary type string */
 int bin2dec (char *src);
 

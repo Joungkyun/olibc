@@ -1,4 +1,4 @@
-/* $Id: _race.h,v 1.4 2003-09-26 05:18:33 oops Exp $ */
+/* $Id: _race.h,v 1.5 2004-02-03 08:44:05 oops Exp $ */
 #ifndef __RACE_H
 #define __RACE_H
 
@@ -24,6 +24,8 @@ char * de_base32 (char src);
 void strtolower (char *str);
 char * _hex2bin (char c);
 int bin2dec (char *src);
+char _bin2hex (char *s);
+char * bin2hex (char *s);
 #endif
 
 /*
