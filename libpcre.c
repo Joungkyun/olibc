@@ -236,6 +236,9 @@ int preg_match (char *regex, char *subject) {
 	int ret;
 
 	tmp = malloc (sizeof (char) * (strlen (subject + 1)));
+	/* if failed memory allocation, return unmatched */
+	if ( tmp == NULL ) return 0;
+
 	strcpy (tmp, subject);
 
 	if ( lib_preg_match (regex, subject) )
