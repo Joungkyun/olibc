@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.3 2003-09-26 04:42:31 oops Exp $ */
+/* $Id: _race.c,v 1.4 2003-09-26 05:18:33 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -258,7 +258,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 	}
 }
 
-void race_uncompress (char *ret, char *src, int retlen) {
+void race_uncompress (char *ret, char *src, int retsize) {
 	int i = 0, len = 0, buflen = 0, retlen = 0;
 	char tmp[9], buf[1024];
 
