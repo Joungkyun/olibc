@@ -2,12 +2,12 @@
 .\" Process with
 .\" nroff -man convert_punycode.1
 .\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: convert_punycode.3,v 1.5 2004-02-18 16:17:15 oops Exp $
+.\" $Id: convert_punycode.3,v 1.6 2004-06-26 18:11:14 oops Exp $
 .SH 이름
 convert_punycode
 
 .SH 사용법
-.B #include <olibc/libstring.h>
+.B #include <olibc/libidn.h>
 .sp
 .BI "char * convert_punycode (char * domain, int mode, int debug);"
 
@@ -46,7 +46,7 @@ debug 옵션
 
 .SH 예제
 .nf
-#include <olibc/libstring.h>
+#include <olibc/libidn.h>
 
 char x[32] = "한글도메인.kr";
 char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
