@@ -1,0 +1,23 @@
+CC		= @CC@ -Wall
+CFLAGS		= @CFLAGS@ -fpic
+CPPFLAGS	= -I. -I.. @CPPFLAGS@
+DEFS		= $(CPPFLAGS) -DHAVE_CONFIG_H -DSUPPORT_UTF8 -DLINK_SIZE=2 -DPOSIX_MALLOC_THRESHOLD=10
+PCREOBJ		= maketables.o get.o study.o pcre.o
+DESTDIR		=
+
+all: $(PCREOBJ)
+
+maketables.o: maketables.c
+	$(CC) $(CFLAGS) $(DEFS) -c maketables.c -o maketables.o
+
+get.o: get.c
+	$(CC) $(CFLAGS) $(DEFS) -c get.c -o get.o
+
+study.o: study.c
+	$(CC) $(CFLAGS) $(DEFS) -c study.c -o study.o
+
+pcre.o: pcre.c
+	$(CC) $(CFLAGS) $(DEFS) -c pcre.c -o pcre.o
+
+clean:
+	-$(RM) -f *.o *.a *.lo
