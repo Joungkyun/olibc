@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.4 2003-09-19 11:01:23 oops Exp $ */
+/* $Id: libfile.c,v 1.5 2003-09-19 16:02:27 oops Exp $ */
 #include <common.h>
 
 #include <libfile.h>
@@ -42,7 +42,7 @@ int file_exists (const char *path, int mode) {
 
 char * fileread (char * path) {
 	FILE *fp;
-	size_t fsize = 0, len = 0, length = 0;
+	size_t len = 0, length = 0;
 	char tmp[FILEBUF] = { 0, }, *text;
 	struct stat f;
 
