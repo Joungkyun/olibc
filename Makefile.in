@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.6 2003-09-19 11:01:56 oops Exp $
+# $Id: Makefile.in,v 1.7 2003-09-19 12:26:52 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -32,7 +32,7 @@ MV		= @MV@
 CP		= @CP@
 PERL		= @PERL@
 
-all: pcre idn $(OBJECT) idn staticlib sharedlib olibc-config
+all: pcre idn $(OBJECT) staticlib sharedlib olibc-config
 
 libpcre.o: libpcre.c libpcre.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
