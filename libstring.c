@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.10 2003-09-19 16:00:01 oops Exp $ */
+/* $Id: libstring.c,v 1.11 2003-09-19 17:44:57 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -175,7 +175,14 @@ long long str2long (char *s) {
 	if ( buf[0] == '-' ) minus = 1;
 
 	for ( i = len - 1; i > -1; i-- ) {
-		if ( (bufno = char2int (buf[i])) > 0 ) {
+		bufno = char2int (buf[i]);
+
+		if ( bufno == 0 ) {
+			x *= 10;
+			continue;
+		}
+
+		if ( bufno > 0 ) {
 			res += bufno * x;
 			x *= 10;
 		}
@@ -203,13 +210,8 @@ long double str2double (char *s) {
 	if ( buf[0] == '-' ) minus = 1;
 
 	if ( dot == NULL ) {
-		for ( i = len - 1; i > -1; i-- ) {
-			if ( ! check_int (buf[i]) ) continue;
-			else {
-				l += char2int (buf[i]) * x;
-				x *= 10;
-			}
-		}
+		if ( minus ) l = str2long (buf + 1);
+		else l = str2long (buf);
 	} else {
 		dotlen = strlen (dot);
 
@@ -219,7 +221,14 @@ long double str2double (char *s) {
 		}
 
 		for ( i = len - dotlen + 1; i < len; i++ ) {
-			if ( (bufno = char2int (buf[i])) > 0 ) {
+			bufno = char2int (buf[i]);
+
+			if ( bufno == 0 ) {
+				y /= 10;
+				continue;
+			}
+
+			if ( bufno > 0 ) {
 				f += bufno * y;
 				y /= 10;
 			}
@@ -227,7 +236,13 @@ long double str2double (char *s) {
 
 		len = len - dotlen;
 		for ( i = len; i > -1; i-- ) {
-			if ( (bufno = char2int (buf[i])) > 0 ) {
+			bufno = char2int (buf[i]);
+			if ( bufno == 0 ) {
+				x *= 10;
+				continue;
+			}
+
+			if ( bufno > 0 ) {
 				l += bufno * x;
 				x *= 10;
 			}
