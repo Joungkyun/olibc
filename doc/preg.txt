@@ -112,7 +112,7 @@ int preg_match ( char *regex, char *subject )
 
     ex) #include <olibc/libpcre.h>
 
-        char *x = "abcd1234\n6943Aaa";
+        char *x = "abcd1234\\\n6943Aaa";
 
         printf ("%d\n", preg_match ("/[0-9][a-z]/i", x));
 

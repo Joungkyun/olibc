@@ -1,14 +1,14 @@
-.TH preg_match(1) 2003-09-08 "Linux Manpage" "OOPS Library's Manual"
+.TH preg_match(1) 2003-09-14 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man preg_match.1
-.\" 2003-09-08 JoungKyun Kim <htt://www.oops.org>
+.\" 2003-09-14 JoungKyun Kim <htt://www.oops.org>
 .SH 이름
 preg_match
 
 .SH 사용법
 .B #include <olibc/libpcre.h>
 .sp
-.BI "char * preg_match (char *regex, char *subject);"
+.BI "int preg_match (char *regex, char *subject);"
 
 .SH 설명
 .B preg_match
@@ -31,13 +31,13 @@ preg_match
 .nf
 #include <olibc/libpcre.h>
 
-char *x = "abcd1234\\n6943Aaa";
+char *x = "abcd1234\\\\n6943Aaa";
 printf ("%d\\n", preg_match ("/[0-9][a-z]/i", x));
 
 .fi
 
 .SH 작성
-2003.08.31 김정균 <http://www.oops.org>
+2003.09.14 김정균 <http://www.oops.org>
 
 .SH 버그
 버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.

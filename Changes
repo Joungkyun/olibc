@@ -2,6 +2,7 @@
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed group expression bug on lib_preg_match function
 	- modified Makefile
+	- fixed typo man page
 
 * Tue, Sep 09 2003
 	by JoungKyun Kim <http://www.oops.org>
