@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.19 2003-10-28 14:05:35 oops Exp $
+$Id: Changes,v 1.20 2003-10-30 10:28:41 oops Exp $
+
+* thu, Oct 30 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- fixed segmentation fault that free array variable with argv_make
 
 * tue, Oct 28 2003
 	by JoungKyun Kim <http://www.oops.org>
