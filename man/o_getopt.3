@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man o_getopt.1
 .\" 2003-10-28 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: o_getopt.3,v 1.5 2004-02-18 13:34:51 oops Exp $
+.\" $Id: o_getopt.3,v 1.6 2004-02-18 13:48:24 oops Exp $
 .SH 이름
 o_getopt
 
@@ -109,9 +109,6 @@ o_getopt 의 리턴값이 -1 일 경우에는 파싱이 종료됨을 의미한다.
 옵션 charactor 가 반환이 되며, -1 일 리턴되면 넘어온 값의 파싱이 완료 되었음을
 의미한다.
 
-0 이 반환될 경우는 옵션에 관련된 부분이 아닌 명령행 인자를 처리할 경우이므로,
-이 부분은 pass 를 할 수 있도록 처리해 줘야 한다.
-
 
 .SH 예제
 .nf
@@ -154,13 +151,11 @@ int main (int argc, char **argv) {
                   strcpy (app, o_optarg);
               } else {
                   fprintf (stderr, "no argument with -%c option\\n", opt);
+                  exit (1);
               }
               break;
            case 'b' :
               bestopt = 1;
-              break;
-           /* 옵션으로 처리되지 않는 부분의 리턴값은 그냥 통과 시킨다. */
-           case 0 :
               break;
            default:
               fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);

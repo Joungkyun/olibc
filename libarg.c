@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.13 2004-01-16 10:41:02 oops Exp $ */
+/* $Id: libarg.c,v 1.14 2004-02-18 13:48:24 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -19,15 +19,18 @@ void trim ( char * str );
 int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *longopt) {
 	register char **opt_t;
 	char *x;
-	int ret = 0;
+	int ret;
 	int cint;
 	int optargs_chk;
-	int chklong = 0, longno;
+	int chklong, longno;
 	char *longopt_sep;
 	char longopt_sep_arg[ARGLENGTH];
 
+retry:
 	/* init argument string length */
 	o_optlen = 0;
+	ret = 0;
+	chklong = 0;
 
 	if ( oargc < 2 ) return -1;
 
@@ -128,6 +131,9 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 
 	_ogetopt_chk_int--;
 	o_optlen = strlen (o_optarg);
+
+	if ( ! ret )
+		goto retry;
 
 	return ret;
 }

@@ -1,11 +1,12 @@
 Changelog
 
-$Id: Changes,v 1.33 2004-02-18 13:24:48 oops Exp $
+$Id: Changes,v 1.34 2004-02-18 13:48:24 oops Exp $
 
 * Wed, Feb 18 2004
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed miss declaration on stringprep_locale_charset_cache variable
 	- fixed invalid function type
+	- removed routine case of return 0 on o_getopt function
 
 * Tue, Feb 10 2004
 	by JoungKyun Kim <http://www.oops.org>
