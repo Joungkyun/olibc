@@ -1,4 +1,4 @@
-/* $Id: libarg.h,v 1.1 2003-10-28 12:09:00 oops Exp $ */
+/* $Id: libarg.h,v 1.2 2003-11-06 18:04:50 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -52,8 +52,14 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 
 /* argv_make follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_make make array variables from string like argv
- * return value must free with argv_free */
+ * return value must free with ofree_array */
 char ** argv_make ( char *stream, int *oargc );
+
+/* split follows BPL License v.1 <http://devel.oops.org/document/bpl>
+ * split function make array variables from string with each charactor of given string
+ * See the man page split.1.
+ * return value must free with ofree_array */
+char ** split ( char *stream, int *oargc, char *delimiter );
 
 /* argv_free follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_free freed return value of argv_make */

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.4 2003-10-28 14:05:35 oops Exp $ */
+/* $Id: common.h,v 1.5 2003-11-06 18:04:50 oops Exp $ */
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -35,6 +35,7 @@
 #endif
 
 void ofree (void *s);
+int get_charcount (char *str, char *del);
 #endif
 
 /*

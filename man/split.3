@@ -1,0 +1,61 @@
+.TH split(1) 2003-11-07 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man split.1
+.\" 2003-11-07 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: split.3,v 1.1 2003-11-06 18:04:50 oops Exp $
+.SH 이름
+split
+
+.SH 사용법
+.B #include <olibc/libarg.h>
+.sp
+.BI "char * split (char *stream, int *argc, char *delimiter);"
+
+.SH 설명
+문자열을 주어진 delimiter 에 의해서 배열로 반환한다. delimiter 는 문자열로
+지정을 하며, 지정된 문자열은 charactor 단위로 문자열을 쪼개게 된다. 이는
+delimiter 가 'ab' 로 지정이 되었을 경우 'ab' 로 쪼개는 것이 아니라 'a' 또는
+'b' 로 쪼개는 것을 의미한다.
+
+또한, 주어진 문자열 중, delimiter 에 지정된 charactor 과 매치가 되는 글
+자가 있더라도 매치가 되는 글자 앞에 '\\' 가 있을 경우에는 무시가 된다.
+
+stream 은 원본 문자열을 지정한다.
+
+argc 는 생성된 배열의 수를 반환한다.
+
+delimiter 는 배열로 구분할 문자열을 지정한다.
+
+.SH 반환값
+생성된 배열은 ofree_array 함수로 메모리 해제를 해 주어야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libarg.h>
+
+char ** sep;
+char *a = "abcAabcAabc";
+int i, j;
+
+sep = split (files, &i, "A");
+
+for (j = 0; j < i; j++) {
+          printf ("** %s\\n", sep[i]);
+}
+
+ofree_array (sep);
+.fi
+
+.SH 참고
+ofree_array(1)
+
+.SH 작성
+2003.11.07 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.10 2003-11-03 19:07:49 oops Exp $ */
+/* $Id: libarg.c,v 1.11 2003-11-06 18:04:50 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -13,6 +13,8 @@ int longopt_chk (char *option, const struct o_option *options);
 int optvalue_chk (char option, const char *options);
 char * convert_quoted_blank ( char * stream );
 char * unconvert_quoted_blank ( char * stream );
+int only_whitespace ( char * stream, int len );
+void trim ( char * str );
 
 int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *longopt) {
 	register char **opt_t;
@@ -170,13 +172,78 @@ char ** argv_make ( char * stream, int *oargc ) {
 	return oargv;
 }
 
+char ** split ( char * stream, int * oargc, char *delimiter ) {
+	char **sep;
+	int delno, len, dlen;
+	int start, end;
+	int i, j, no;
+
+	/* removed white space of front and end string */
+	trim (stream);
+
+	delno = get_charcount (stream, delimiter);
+	len = strlen (stream);
+	dlen = strlen (delimiter);
+
+	sep = malloc ( sizeof (char *) * (delno + 3) );
+
+	start = 0;
+	end = 0;
+	no = 0;
+
+	trim (stream);
+
+	for ( i=0; i<len; i++ ) {
+		for ( j=0; j<dlen; j++ ) {
+			if ( stream[i] == delimiter[j] ) {
+				if ( stream[i-1] != '\\' ) {
+					end = i;
+				}
+
+				if ( start == end ) {
+					end--;
+					start++;
+					break;
+				}
+			}
+
+			if ( end > start && end - start != 0 ) {
+				if ( only_whitespace ( stream + start, end - start ) ) {
+					start = end + 1;
+					break;
+				}
+
+				sep[no] = malloc ( sizeof (char) * ( end - start + 2 ) );
+				memset ( sep[no], 0, end - start + 2 );
+				memcpy ( sep[no], stream + start, end - start );
+				trim (sep[no]);
+
+				start = end + 1;
+				no++;
+				break;
+			}
+		}
+	}
+
+	if ( end != len && ! only_whitespace ( stream + start, 0 ) ) {
+		sep[no] = strdup ( stream + start );
+		no++;
+	}
+
+	sep[no] = NULL;
+	*oargc = no;
+
+	return sep;
+}
+
 /* free argv_make array */
 void ofree_array ( char **oargv ) {
-	register char **i;
+	int i = 0;
 
 	if ( oargv != NULL ) {
-		for ( i = oargv; *i != NULL; i++ ) {
-			if ( *i != NULL ) { ofree ( *i ); }
+		while ( oargv[i] != NULL ) {
+			ofree (oargv[i]);
+			i++;
 		}
 		ofree (oargv);
 	}
@@ -279,6 +346,18 @@ int get_whitespace ( char * stream ) {
 	}
 
 	return no;
+}
+
+int only_whitespace ( char * stream, int length ) {
+	int i, len;
+
+	len = length ? length : strlen (stream);
+
+	for ( i = 0; i < len; i++ )
+		if ( ! isspace (stream[i]) )
+			return 0;
+
+	return 1;
 }
 
 int optvalue_chk (char option, const char *options) {
