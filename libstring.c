@@ -513,8 +513,12 @@ int bin2dec (char *src) {
 
 #ifdef HAVE_ICONV_H
 char * convert_racecode (char * domain, int mode, int debug) {
-	static char conv[1024];
+	static char conv[512];
 	char charset[32];
+	int len = strlen (domain);
+
+	if ( len > 256 )
+		return domain;
 
 	memset (charset, '\0', sizeof (charset));
 	memset (conv, '\0', sizeof (conv));
@@ -542,12 +546,16 @@ char * convert_racecode (char * domain, int mode, int debug) {
 char * convert_punycode (char * domain, int mode, int debug) {
 #ifdef HAVE_LIBIDN
 #ifdef HAVE_ICONV_H
+	static char conv[512];
 	int dlen = strlen (domain), rc;
 	char *p, *r;
 	uint32_t *q;
 
+	if ( dlen > 256 )
+		return domain;
+
 	if ( domain[dlen - 1] == '\n' )
-		domain[dlen -1] = '\0';
+		domain[dlen -1] = 0;
 
 	if ( ! mode ) {
 		p = stringprep_locale_to_utf8 (domain);
@@ -625,7 +633,14 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 	}
 
-	return r;
+	if ( strlen (r) > 510 )
+		return domain;
+
+	memset ( conv, 0, sizeof (conv) );
+	memmove ( conv, r, strlen (r));
+	free (r);
+
+	return conv;
 #else
 	fprintf (stderr, "ERROR: olibc compiles without iconv library\n");
 	exit (FAILURE);
