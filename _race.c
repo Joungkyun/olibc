@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.6 2004-02-07 09:55:10 oops Exp $ */
+/* $Id: _race.c,v 1.7 2004-02-10 04:57:21 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -179,7 +179,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 
 	err = iconv ( cd, &inbuf_p, &il, &outbuf_p, &ol );
 
-	if (err == (size_t) - 1) {
+	if (err == (size_t) -1) {
 		switch (errno) {
 			case EINVAL:
 				// Incomplete text, do not report an error

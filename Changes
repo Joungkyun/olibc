@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.30 2004-02-07 09:55:10 oops Exp $
+$Id: Changes,v 1.31 2004-02-10 04:57:21 oops Exp $
+
+* Tue, Feb 10 2004
+	by JoungKyun Kim <http://www.oops.org>
+	- changed stringprep_locale_charset_cache to extern
 
 * Sat, Feb  7 2004
 	by JoungKyun Kim <http://www.oops.org>

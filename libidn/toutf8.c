@@ -84,7 +84,7 @@ stringprep_locale_charset_slow (void)
   return "ASCII";
 }
 
-static const char *stringprep_locale_charset_cache = NULL;
+const char *stringprep_locale_charset_cache = NULL;
 
 /**
  * stringprep_locale_charset:
