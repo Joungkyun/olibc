@@ -193,7 +193,7 @@ static int lib_preg_get_backref(char **str, int *backref) {
 int lib_preg_match (char *regex, char *subject) {
 	pcre *re = NULL;
 	pcre_extra *extra = NULL;
-	int preg_options = 0, *offsets;
+	int preg_options = 0, *offsets, size_offsets;
 	int val = 0, subjlen = 0, study = 0, erroffset;
 	const char *error;
 	char *pattern = NULL;
@@ -219,9 +219,10 @@ int lib_preg_match (char *regex, char *subject) {
 		exit (FAILURE);
 	}
 
+	size_offsets = (pcre_info(re, NULL, NULL) + 1) * 3;
 	offsets = (int *) malloc (3 * sizeof (int) );
 	/* Execute the regular expression. */
-	if ((pcre_exec(re, extra, subject, subjlen, 0, 0, offsets, 3)) > 0)
+	if ((pcre_exec(re, extra, subject, subjlen, 0, 0, offsets, size_offsets)) > 0)
 		val = 1;
 
 	free(offsets);
@@ -231,10 +232,19 @@ int lib_preg_match (char *regex, char *subject) {
 }
 
 int preg_match (char *regex, char *subject) {
+	char *tmp;
+	int ret;
+
+	tmp = malloc (sizeof (char) * (strlen (subject + 1)));
+	strcpy (tmp, subject);
+
 	if ( lib_preg_match (regex, subject) )
-		return 1;
+		ret = 1;
 	else
-		return 0;
+		ret = 0;
+
+	free (tmp);
+	return ret;
 }
 
 char * preg_grep (char *regex, char *subject, int opt) {

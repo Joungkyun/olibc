@@ -1,7 +1,7 @@
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
-#ifdef HAVE_PCRE_PCRE_H
+#ifdef HAVE_LIBPCRE
 #include <pcre.h>
 #endif
 
