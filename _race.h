@@ -1,4 +1,4 @@
-/* $Id: _race.h,v 1.5 2004-02-03 08:44:05 oops Exp $ */
+/* $Id: _race.h,v 1.6 2004-02-18 13:24:48 oops Exp $ */
 #ifndef __RACE_H
 #define __RACE_H
 
@@ -10,7 +10,7 @@
 char * encode_race (char *domain, char *charset, int debug);
 char * decode_race (char *domain, char *charset, int debug);
 int permit_extension (char *tail);
-void string_convert (char *dest, char *src, char *from, char *to, int debug);
+int string_convert (char *dest, char *src, char *from, char *to, int debug);
 char * race_compress (char *src, int len);
 void race_uncompress (char *ret, char *src, int retsize);
 int utf16_length (char *src);

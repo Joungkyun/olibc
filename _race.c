@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.7 2004-02-10 04:57:21 oops Exp $ */
+/* $Id: _race.c,v 1.8 2004-02-18 13:24:48 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -144,7 +144,7 @@ int permit_extension (char *tail) {
 	return 0;
 }
 
-void string_convert (char *dest, char *src, char *from, char *to, int debug) {
+int string_convert (char *dest, char *src, char *from, char *to, int debug) {
 	iconv_t cd;
 	char * inbuf_p = src;
 	char * outbuf_p = dest;
@@ -152,7 +152,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 
 	size_t il;
 	size_t ol;
-	int err, have_error = 0, len;
+	int err, len;
 
     if ( strcmp (from, "UTF-16BE") ) len = strlen (src);
 	else len = unbuflen * 2;
@@ -162,19 +162,21 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 
 	if (src == NULL) {
 		fprintf (stderr, "ERROR: input data is nothing\n");
-		exit (1);
+		return 1;
 	}
 
 	if ( ! strcmp (to, from) ) {
 		fprintf (stderr, "ERROR: original charactor set sames convert charactor set\n");
-		return src;
+		strcpy (outbuf_p, src);
+		return 1;
 	}
 
 	cd = iconv_open (to, from);
 
 	if ( cd == (iconv_t) -1 ) {
 		fprintf (stderr, "ERROR: Can't not open iconv point\n");
-		return src;
+		strcpy (outbuf_p, src);
+		return 1;
 	}
 
 	err = iconv ( cd, &inbuf_p, &il, &outbuf_p, &ol );
@@ -182,19 +184,23 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 	if (err == (size_t) -1) {
 		switch (errno) {
 			case EINVAL:
-				// Incomplete text, do not report an error
+				fprintf (stderr, "Incomplete text, do not report an error\n");
+				return 1;
 				break;
 			case E2BIG:
-				// There is not sufficient room at *outbuf
-				have_error = 1;
+				fprintf (stderr, "There is not sufficient room at *outbuf\n");
+				strcpy (outbuf_p, src);
+				return 1;
 				break;
 			case EILSEQ:
-				// An invalid multibyte sequence has been encountered in the input
-				have_error = 1;
+				fprintf (stderr, "An invalid multibyte sequence has been encountered in the input\n");
+				strcpy (outbuf_p, src);
+				return 1;
 				break;
 			default:
-				have_error = 1;
-			break;
+				fprintf (stderr, "ERROR: encoding error with iconv\n");
+				strcpy (outbuf_p, src);
+				return 1;
 		}
 	}
 	iconv_close (cd);
@@ -223,10 +229,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 		fprintf (stderr, "\n");
 	}
 
-	if (have_error == 1) {
-		fprintf (stderr, "ERROR: encoding error with iconv\n");
-		return src;
-	}
+	return 0;
 }
 
 void race_uncompress (char *ret, char *src, int retsize) {

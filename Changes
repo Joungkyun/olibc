@@ -1,10 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.32 2004-02-18 13:20:41 oops Exp $
+$Id: Changes,v 1.33 2004-02-18 13:24:48 oops Exp $
 
 * Wed, Feb 18 2004
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed miss declaration on stringprep_locale_charset_cache variable
+	- fixed invalid function type
 
 * Tue, Feb 10 2004
 	by JoungKyun Kim <http://www.oops.org>
