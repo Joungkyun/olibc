@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.8 2003-09-27 09:11:24 oops Exp $
+# $Id: Makefile.in,v 1.9 2003-10-28 12:09:00 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -8,7 +8,7 @@ CPPFLAGS	= -I. -Ipcrelib -Ilibidn @CPPFLAGS@
 LDFLAGS		= @LIBS@ @LDFLAGS@
 LIBS		= @LIBS@
 DEFS		= @DEFS@ $(CPPFLAGS)
-OBJECT		= libmisc.o libstring.o libpcre.o libfile.o libtime.o _race.o
+OBJECT		= libmisc.o libstring.o libpcre.o libfile.o libtime.o libarg.o _race.o
 PCREOBJ		= pcrelib/get.o pcrelib/maketables.o pcrelib/pcre.o pcrelib/study.o
 IDNOBJ		= libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
 		  libidn/stringprep.o libidn/stringprep_generic.o libidn/toutf8.o
@@ -47,6 +47,9 @@ libfile.o: libfile.c libfile.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
 
 libtime.o: libtime.c libtime.h olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+libarg.o: libarg.c libarg.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
 
 _race.o: _race.c _race.h olibc-config.h common.h

@@ -1,0 +1,33 @@
+.TH ofree_array(1) 2003-10-28 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man ofree_array.1
+.\" 2003-10-28 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: ofree_array.3,v 1.1 2003-10-28 12:09:00 oops Exp $
+.SH 이름
+ofree_array
+
+.SH 사용법
+.B #include <olibc/libarg.h>
+.sp
+.BI "char * ofree_array (char **array);"
+
+.SH 설명
+메모리가 할당된 배열에 대해서 메모리를 해제 시킨다. 이 함수를 사용하기 위해서는
+마지막 배열이 NULL 값을 가지고 있어야 한다.
+
+.SH 예제
+argv_make 문서를 참고한다.
+
+.SH 참고
+argv_make(1)
+
+.SH 작성
+2003.10.28 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.
