@@ -1,9 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.41 2004-08-09 07:51:35 oops Exp $
+$Id: Changes,v 1.42 2004-08-09 09:06:36 oops Exp $
 
 * Mon, Aug  9 2004
 	- changed filename commoh.h to oc_common.h
+	- fixed typo in Makefile.in
 
 * Fri, Aug  6 2004
 	- fixed iconv problem on liboc that conflict gpl license problem
