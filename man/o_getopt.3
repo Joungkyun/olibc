@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man o_getopt.1
 .\" 2003-10-28 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: o_getopt.3,v 1.3 2004-02-18 13:31:35 oops Exp $
+.\" $Id: o_getopt.3,v 1.4 2004-02-18 13:33:09 oops Exp $
 .SH ¿Ã∏ß
 o_getopt
 
@@ -176,7 +176,7 @@ int main (int argc, char **argv) {
 
     if ( ! strcmp (o_cmdarg[0], "log") ) {
         ....
-    else if ( strcmp (o_cmdarg[0], "conf") ) {
+    } else if ( strcmp (o_cmdarg[0], "conf") ) {
         ...
     } else {
         fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);
