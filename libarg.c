@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.4 2003-10-28 14:23:39 oops Exp $ */
+/* $Id: libarg.c,v 1.5 2003-10-28 17:39:24 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -226,7 +226,11 @@ char * convert_quoted_blank ( char * stream ) {
 			memcpy (ret + newlen, "__OABC__", 8);
 			newlen += 8;
 		} else {
-			if ( stream[i] == '\\' ) continue;
+			if ( stream[i] == '\\' ) {
+				if ( stream[i+1] == '\\' ) i++;
+				else continue;
+			}
+
 			memset (ret + newlen, stream[i], 1);
 			newlen++;
 		}
