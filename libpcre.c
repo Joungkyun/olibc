@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.9 2003-09-27 09:01:56 oops Exp $ */
+/* $Id: libpcre.c,v 1.10 2003-09-27 09:11:24 oops Exp $ */
 #include <common.h>
 #include <libpcre.h>
 
@@ -117,7 +117,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 
 	if ( delnum != 2 ) {
 		fprintf (stderr, "ERROR: wrong uses delimiters on regex rule\n");
-		free (pattern);
+		ofree (pattern);
 		exit (FAILURE);
 	}
 
@@ -216,7 +216,7 @@ int lib_preg_match (char *regex, char *subject) {
 	re = pcre_compile (pattern, preg_options, &error, &erroffset, tables);
 	if ( re == NULL ) {
 		fprintf (stderr, "ERROR: Compilation failed: %s at offset %d", error, erroffset);
-		free (pattern);
+		ofree (pattern);
 		exit (FAILURE);
 	}
 
@@ -226,8 +226,8 @@ int lib_preg_match (char *regex, char *subject) {
 	if ((pcre_exec(re, extra, subject, subjlen, 0, 0, offsets, size_offsets)) > 0)
 		val = 1;
 
-	free(offsets);
-	free(re);
+	ofree(offsets);
+	ofree(re);
 
 	return val;
 }
@@ -247,7 +247,7 @@ int preg_match (char *regex, char *subject) {
 	else
 		ret = 0;
 
-	free (tmp);
+	ofree (tmp);
 	return ret;
 }
 
@@ -286,7 +286,7 @@ char * preg_grep (char *regex, char *subject, int opt) {
 	}
 
 	memset (str + len -1, 0, 1);
-	free (bufstr);
+	ofree (bufstr);
 
 	return str;
 }
@@ -300,7 +300,7 @@ char * preg_replace_arr (char *regex[], char *replace[], char *subject, int rega
 			buf[i] = (char *) preg_replace (regex[i], replace[i], subject, &blen);
 		else {
 			buf[i] = (char *) preg_replace (regex[i], replace[i], buf[i-1], &blen);
-			free (buf[i-1]);
+			ofree (buf[i-1]);
 		}
 	}
 	
@@ -357,7 +357,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	re = pcre_compile (pattern, preg_options, &error, &erroffset, tables);
 	if ( re == NULL ) {
 		fprintf (stderr, "ERROR: Compilation failed: %s at offset %d", error, erroffset);
-		free (pattern);
+		ofree (pattern);
 		exit (FAILURE);
 	}
 
@@ -367,12 +367,12 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 		extra = pcre_study(re, soptions, &error);
 		if (error != NULL) {
 			fprintf (stderr, "ERROR: While studying pattern\n");
-			free (pattern);
+			ofree (pattern);
 			exit (FAILURE);
 		}
 	}
 
-	free (pattern);
+	ofree (pattern);
 
 	replace_len = strlen(replace);
 	replace_end = replace + replace_len;
@@ -433,7 +433,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 				alloc_len = 1 + alloc_len + 2 * new_len;
 				new_buf = malloc(alloc_len);
 				memcpy(new_buf, result, *retlen);
-				free(result);
+				ofree(result);
 				result = new_buf;
 			}
 			/* copy the part of the string before the match */
@@ -485,7 +485,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 					alloc_len = new_len + 1; /* now we know exactly how long it is */
 					new_buf = malloc (alloc_len * sizeof(char));
 					memcpy(new_buf, result, *retlen);
-					free(result);
+					ofree(result);
 					result = new_buf;
 				}
 				/* stick that last bit of string on our output */
@@ -506,8 +506,8 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 		start_offset = offsets[1];
 	}
 	
-	free (offsets);
-	free (re);
+	ofree (offsets);
+	ofree (re);
 
 	return result;
 }

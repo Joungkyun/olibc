@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: common.h,v 1.3 2003-09-27 09:11:24 oops Exp $ */
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -33,4 +33,15 @@
 #ifdef HAVE_LIBINTL_H
 #include <libintl.h>
 #endif
+
+void ofree (void *s);
 #endif
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * c-basic-offset: 4
+ * End:
+ * vim600: noet sw=4 ts=4 fdm=marker
+ * vim<600: noet sw=4 ts=4
+ */

@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.7 2003-09-25 11:49:18 oops Exp $ */
+/* $Id: libfile.c,v 1.8 2003-09-27 09:11:24 oops Exp $ */
 #include <common.h>
 
 #include <libfile.h>
@@ -100,18 +100,18 @@ int writefile(char *filename, char *str, int mode) {
 
 	if ( (fp = fopen(filename, act)) == NULL ) {
 		fprintf (stderr, "ERROR: Can't open %s in write mode\n", filename);
-		free (string);
+		ofree (string);
 		return -1;
 	}
 
 	if (fwrite(string, sizeof(char), strlen(string), fp) != strlen(string)) {
 		fclose(fp);
 		fprintf (stderr, "ERROR: writing to file %s\n", filename);
-		free (string);
+		ofree (string);
 		return -1;
 	}
 
-	free(string);
+	ofree(string);
 	fclose(fp);
 
 	return 0;

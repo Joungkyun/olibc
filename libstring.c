@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.12 2003-09-26 04:42:31 oops Exp $ */
+/* $Id: libstring.c,v 1.13 2003-09-27 09:11:24 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -43,7 +43,7 @@ char * addslashes(char *str, int should_free) {
 		strcpy (new_str, str);
 
 		if (should_free) {
-			free (str);
+			ofree (str);
 		}
 		return new_str;
 	}
@@ -77,7 +77,7 @@ char * addslashes(char *str, int should_free) {
 	*target = 0;
 	new_length = target - new_str;
 	if (should_free) {
-		free(str);
+		ofree(str);
 	}
 	new_str = (char *) realloc(new_str, new_length+1);
 	return new_str;
@@ -157,7 +157,7 @@ char * trim_r (char *str, int should_free) {
 	memset (ret, 0, sizeof (char) * (len + 32));
 	memcpy (ret, str + start, end - start + 1);
 
-	if ( should_free ) free (str);
+	if ( should_free ) ofree (str);
 
 	return ret;
 }
@@ -189,7 +189,7 @@ long long str2long (char *s) {
 	}
 
 	if (minus) res *= -1;
-	free (buf);
+	ofree (buf);
 
 	return res;
 }
@@ -251,7 +251,7 @@ long double str2double (char *s) {
 
 	res = l + f;
 	if (minus) res *= -1;
-	free (buf);
+	ofree (buf);
 
 	return res;
 }
@@ -352,7 +352,7 @@ char * human_size (double size, int sub, int unit) {
 
 	BYTE_C = (char *) numberFormat (size, 0, '.', ',', 0);
 	strcpy (bytes, BYTE_C);
-	free(BYTE_C);
+	ofree(BYTE_C);
 
 	if (size < 1024) {
 		sprintf (result, "%s %s", bytes, sunit);
@@ -437,11 +437,11 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
 		 *tgt-- = '-';
 	 }
 
-	 free(tmpbuf);
+	 ofree(tmpbuf);
 
 	 if (print) {
 		 printf ("%s", resbuf);
-		 free (resbuf);
+		 ofree (resbuf);
 		 return NULL;
 	 } else {
 		 return resbuf;
@@ -599,7 +599,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		}
 
 		rc = idna_to_ascii_4z (q, &r, 0);
-		free (q);
+		ofree (q);
 
 		if ( rc != IDNA_SUCCESS ) {
 			fprintf (stderr, "ERROR: %s: idna_to_ascii_from_locale() failed with error %d.\n",
@@ -616,13 +616,13 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
-			free (p);
+			ofree (p);
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
 			exit (FAILURE);
 		}
 
 		rc = idna_to_unicode_8z4z (p, &q, 0|0);
-		free (p);
+		ofree (p);
 
 		if (rc != IDNA_SUCCESS) {
 			fprintf (stderr, "ERROR: %s: idna_to_unicode_locale_from_locale() failed with error %d.\n",
@@ -638,13 +638,13 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 		p = stringprep_ucs4_to_utf8 (q, -1, NULL, NULL);
 		if ( !p ) {
-			free (q);
+			ofree (q);
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
 			exit (FAILURE);
 		}
 
 		r = stringprep_utf8_to_locale (p);
-		free (p);
+		ofree (p);
 		if ( !r ) {
 			fprintf (stderr, "ERROR: %s: could not convert from UTF-8 to %s.\n",
 					 domain, stringprep_locale_charset ());
@@ -658,7 +658,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 	memset ( conv, 0, 512 );
 	memmove ( conv, r, strlen (r));
-	free (r);
+	ofree (r);
 
 	return conv;
 #else
