@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.8 2003-09-27 09:11:24 oops Exp $ */
+/* $Id: libfile.c,v 1.9 2003-11-05 16:41:00 oops Exp $ */
 #include <common.h>
 
 #include <libfile.h>
@@ -68,7 +68,7 @@ char * fileread (char * path) {
 		len += length;
 		memset (tmp, 0, FILEBUF);
 	}
-	memset (tmp + len, 0, 1);
+	memset (text + len, 0, 1);
 
 	fclose (fp);
 

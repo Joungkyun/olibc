@@ -1,12 +1,16 @@
 Changelog
 
-$Id: Changes,v 1.20 2003-10-30 10:28:41 oops Exp $
+$Id: Changes,v 1.21 2003-11-05 16:40:59 oops Exp $
 
-* thu, Oct 30 2003
+* Thu, Nov  6 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- fixed print gabage string problem on fileread function
+
+* Thu, Oct 30 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed segmentation fault that free array variable with argv_make
 
-* tue, Oct 28 2003
+* Tue, Oct 28 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- added argument function
           argv_make
@@ -15,21 +19,21 @@ $Id: Changes,v 1.20 2003-10-30 10:28:41 oops Exp $
           o_getopt
 	- fixed typo in olibc-config.h.in
 
-* sat, Sep 27 2003
+* Sat, Sep 27 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed miss memory allocation
 	- added safely free function
 
-* fri, Sep 26 2003
+* Fri, Sep 26 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- changed to real size intead of sizeof on memset
 	- release 0.0.4
 
-* thu, Sep 25 2003
+* Thu, Sep 25 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed tmp variable reset size
 
-* sat, Sep 20 2003
+* Sat, Sep 20 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed return wrong value on str2long, str2double function
 
