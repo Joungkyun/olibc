@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.8 2003-09-26 04:42:31 oops Exp $ */
+/* $Id: libpcre.c,v 1.9 2003-09-27 09:01:56 oops Exp $ */
 #include <common.h>
 #include <libpcre.h>
 
@@ -236,7 +236,7 @@ int preg_match (char *regex, char *subject) {
 	char *tmp;
 	int ret;
 
-	tmp = malloc (sizeof (char) * (strlen (subject + 1)));
+	tmp = malloc (sizeof (char) * (strlen (subject) + 1));
 	/* if failed memory allocation, return unmatched */
 	if ( tmp == NULL ) return 0;
 
