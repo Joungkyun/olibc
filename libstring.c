@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.16 2003-11-10 12:27:51 oops Exp $ */
+/* $Id: libstring.c,v 1.17 2003-11-10 12:40:22 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -109,7 +109,7 @@ void trim (char *str) {
 		exit (FAILURE);
 	}
 
-	if ( ! start && ! end && isspace ( tmp[start] ) ) {
+	if ( ! start && ! end && isspace ( str[start] ) ) {
 		memset ( str + end, 0, 1 );
 	} if ( start == end ) {
 		end = len;
