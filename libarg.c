@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.8 2003-10-30 10:28:41 oops Exp $ */
+/* $Id: libarg.c,v 1.9 2003-10-30 10:43:13 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -27,8 +27,7 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 	/* init argument string length */
 	o_optlen = 0;
 
-	if ( oargc < 2 )
-		return -1;
+	if ( oargc < 2 ) return -1;
 
 	if ( longopt != NULL )
 	   	chklong = 1;
@@ -148,9 +147,11 @@ char ** argv_make ( char * stream, int *oargc ) {
 	white = get_whitespace ( tmp );
 
 
-	oargv = malloc ( sizeof (char *) * white + 3 );
+	oargv = malloc ( sizeof (char *) * (white + 3) );
 
 	t_token = strdup (tmp);
+	ofree ( tmp );
+
 	token = strtok_r (t_token, delimiters, &btoken);
 
 	while ( token != NULL ) {
@@ -164,9 +165,6 @@ char ** argv_make ( char * stream, int *oargc ) {
 	}
 
 	oargv[i] = NULL;
-
-	ofree ( tmp );
-
 	*oargc = i;
 
 	return oargv;
