@@ -1,3 +1,4 @@
+/* $Id: libfile.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 

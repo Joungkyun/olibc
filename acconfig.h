@@ -1,3 +1,4 @@
+/* $Id: acconfig.h,v 1.4 2003-09-18 06:43:57 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 

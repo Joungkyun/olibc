@@ -1,3 +1,4 @@
+/* $Id: common.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
 #ifndef COMMON_H
 #define COMMON_H
 

@@ -1,5 +1,7 @@
 ** PREG Function
 
+$Id: preg.txt,v 1.4 2003-09-18 06:43:57 oops Exp $
+
 PREG 관련 함수들은 PHP 4 의 PCRE extension 에서 빌려온 코드들과 새로 만들어진 몇몇
 코드들이 존재를 한다.
 

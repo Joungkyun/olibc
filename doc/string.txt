@@ -1,5 +1,7 @@
 ** String Function
 
+$Id: string.txt,v 1.2 2003-09-18 06:43:57 oops Exp $
+
 String 관련 함수들은 문자열 변환과 관련된 high level 의 함수들이다.
 
 

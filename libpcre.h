@@ -1,3 +1,4 @@
+/* $Id: libpcre.h,v 1.4 2003-09-18 06:43:57 oops Exp $ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 

@@ -1,3 +1,4 @@
+/* $Id: libtime.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
 #ifndef LIBTIME_H
 #define LIBTIME_H
 

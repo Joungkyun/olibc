@@ -1,5 +1,7 @@
 ** TIME Function
 
+$Id: time.txt,v 1.2 2003-09-18 06:43:57 oops Exp $
+
 
 시간 관련 high level 함수이다.
 

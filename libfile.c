@@ -1,3 +1,4 @@
+/* $Id: libfile.c,v 1.2 2003-09-18 06:43:57 oops Exp $ */
 #include <common.h>
 
 #include <libfile.h>

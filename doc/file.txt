@@ -1,5 +1,7 @@
 ** File Function
 
+$Id: file.txt,v 1.2 2003-09-18 06:43:57 oops Exp $
+
 File 관련 high level 함수이다.
 
 

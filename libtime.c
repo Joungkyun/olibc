@@ -1,3 +1,4 @@
+/* $Id: libtime.c,v 1.3 2003-09-18 06:43:57 oops Exp $ */
 #include <common.h>
 
 #ifdef HAVE_SYS_TIME_H
