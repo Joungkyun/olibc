@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.13 2004-02-18 16:24:22 oops Exp $
+# $Id: Makefile.in,v 1.14 2004-02-18 16:33:27 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -15,9 +15,12 @@ IDNOBJ		= libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
 OBOBJ		= libmisc.o libstring.o libpcre.o libfile.o libtime.o libarg.o
 OGOBJ		= libstring.o libmisc.o _race.o libidn.o
 OLDSO		= lib$(PROG).so.0.0.8
-SONAME		= lib$(PROG).so.@SONAME_MAJOR@
-SBNAME		= liboc.so.@SOMANE_MAJOR@
-SCNAME		= libogc.so.@SOMANE_MAJOR@
+
+SONAME_MAJOR	= @SONAME_MAJOR@
+
+SONAME		= lib$(PROG).so.$(SONAME_MAJOR)
+SBNAME		= liboc.so.$(SOMANE_MAJOR)
+SGNAME		= libogc.so.$(SOMANE_MAJOR)
 DESTDIR		=
 
 prefix		= @prefix@
