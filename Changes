@@ -1,10 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.14 2003-09-26 04:42:31 oops Exp $
+$Id: Changes,v 1.15 2003-09-26 04:45:29 oops Exp $
 
 * fri, Sep 26 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- changed to real size intead of sizeof on memset
+	- release 0.0.4
 
 * thu, Sep 25 2003
 	by JoungKyun Kim <http://www.oops.org>
