@@ -1,6 +1,6 @@
 ** Argument Function
 
-$Id: arg.txt,v 1.1 2003-10-28 12:09:00 oops Exp $
+$Id: arg.txt,v 1.2 2003-10-28 13:26:02 oops Exp $
 
 
 변수 관련 high level 함수이다.
@@ -131,6 +131,9 @@ int o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *l
 
     o_getopt 의 리턴값이 -1 일 경우에는 파싱이 종료됨을 의미한다.
 
+    주의할 것은 loop 문 안에서 o_geopt 의 반환값 0 (명령행 인자일 경우의 리턴값) 에 대
+    한 부분을 처리해야 한다.
+
 
     ex)
 
@@ -177,6 +180,9 @@ int o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *l
                       break;
                    case 'b' :
                       bestopt = 1;
+                      break;
+                   /* 옵션으로 처리되지 않는 부분의 리턴값은 그냥 통과 시킨다. */
+                   case 0 :
                       break;
                    default:
                       fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\n", argv[0]);
