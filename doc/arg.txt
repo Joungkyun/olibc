@@ -1,6 +1,6 @@
 ** Argument Function
 
-$Id: arg.txt,v 1.4 2003-11-06 18:29:11 oops Exp $
+$Id: arg.txt,v 1.5 2004-02-18 13:32:06 oops Exp $
 
 
 변수 관련 high level 함수이다.
@@ -230,9 +230,9 @@ int o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *l
                 exit (1);
             }
 
-            if ( ! strcmp (o_cmdarg[0], log) ) {
+            if ( ! strcmp (o_cmdarg[0], "log") ) {
                 ....
-            else if ( strcmp (o_cmdarg[0], conf) ) {
+            else if ( strcmp (o_cmdarg[0], "conf") ) {
                 ...
             } else {
                 fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\n", argv[0]);
