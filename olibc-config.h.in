@@ -1,6 +1,6 @@
 /*
  * olibc-config.h.in.  Generated from configure.ac by autoheader.
- * $Id: olibc-config.h.in,v 1.4 2003-09-18 06:43:57 oops Exp $
+ * $Id: olibc-config.h.in,v 1.5 2003-10-28 14:05:35 oops Exp $
  */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
@@ -142,7 +142,7 @@
 
 #define EANBLE_NLS 1
 
-#ifndef HAVE_SETLOCALE_H
+#ifndef HAVE_LOCALE_H
 #undef EANBLE_NLS
 #endif
 

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.3 2003-09-27 09:11:24 oops Exp $ */
+/* $Id: common.h,v 1.4 2003-10-28 14:05:35 oops Exp $ */
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -26,7 +26,7 @@
 #include <sys/stat.h>
 #endif
 
-#ifdef HAVE_SETLOCALE_H
+#ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 
