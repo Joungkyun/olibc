@@ -15,6 +15,8 @@
 
 @BOTTOM@
 
+#define HAVE_LIBIDN 1
+
 #define HAVE_LIBPCRE 1
 
 #define EANBLE_NLS 1
