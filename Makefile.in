@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.15 2004-02-18 16:35:23 oops Exp $
+# $Id: Makefile.in,v 1.16 2004-02-18 16:42:24 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -14,13 +14,12 @@ IDNOBJ		= libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
 		  libidn/stringprep.o libidn/rfc3454.o libidn/toutf8.o
 OBOBJ		= libmisc.o libstring.o libpcre.o libfile.o libtime.o libarg.o
 OGOBJ		= libstring.o libmisc.o _race.o libidn.o
-OLDSO		= lib$(PROG).so.0.0.8
 
 SONAME_MAJOR	= @SONAME_MAJOR@
 
 SONAME		= lib$(PROG).so.$(SONAME_MAJOR)
-SBNAME		= liboc.so.$(SONANE_MAJOR)
-SGNAME		= libogc.so.$(SONANE_MAJOR)
+SBNAME		= liboc.so.$(SONAME_MAJOR)
+SGNAME		= libogc.so.$(SONAME_MAJOR)
 DESTDIR		=
 
 prefix		= @prefix@
@@ -81,8 +80,6 @@ sharedlib:
 	$(CC) -shared -Wl,-soname,$(SONAME) -o lib$(PROG).so.$(VERSION) $(OBJECT) $(PCREOBJ) $(IDNOBJ)
 	$(CC) -shared -Wl,-soname,$(SBNAME) -o liboc.so.$(VERSION) $(OBOBJ) $(PCREOBJ) $(IDNOBJ)
 	$(CC) -shared -Wl,-soname,$(SGNAME) -o libogc.so.$(VERSION) $(OGOBJ) $(IDNOBJ)
-	# for compotable old version
-	$(CC) -shared -Wl,-soname,$(OLDSO) -o lib$(PROG).so.0.0.8 $(OBJECT) $(PCREOBJ) $(IDNOBJ)
 
 olibc-config:
 	$(CP) -f olibc-config.in olibc-config
@@ -118,10 +115,6 @@ install: install-doc install-header
 	$(INSTALL) -m 644 lib$(PROG).a $(DESTDIR)$(libdir)
 	$(INSTALL) -m 644 liboc.a $(DESTDIR)$(libdir)
 	$(INSTALL) -m 644 libogc.a $(DESTDIR)$(libdir)
-
-	# for compotable old version
-	$(INSTALL) -m 755 lib$(PROG).so.0.0.8 $(DESTDIR)$(libdir)
-
 
 install-header:
 	$(MKDIR) $(DESTDIR)$(includedir)/olibc
