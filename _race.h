@@ -1,4 +1,7 @@
-/* $Id: _race.h,v 1.6 2004-02-18 13:24:48 oops Exp $ */
+/*
+ * Follow functions follows BPL License v.1 <http://devel.oops.org/document/bpl>
+ * $Id: _race.h,v 1.7 2004-02-18 16:17:15 oops Exp $
+ */
 #ifndef __RACE_H
 #define __RACE_H
 

@@ -1,8 +1,8 @@
-.TH convert_punycode(1) 2003-09-08 "Linux Manpage" "OOPS Library's Manual"
+.TH convert_punycode(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man convert_punycode.1
-.\" 2003-09-08 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: convert_punycode.3,v 1.4 2003-09-18 06:43:57 oops Exp $
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: convert_punycode.3,v 1.5 2004-02-18 16:17:15 oops Exp $
 .SH 이름
 convert_punycode
 
@@ -10,6 +10,17 @@ convert_punycode
 .B #include <olibc/libstring.h>
 .sp
 .BI "char * convert_punycode (char * domain, int mode, int debug);"
+
+.SH 라이브러리 링크
+.B gcc source -l libogc
+.br
+
+또는
+
+.B gcc source -l libolibc
+.br
+
+libogc 나 libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거한다.
 
 .SH 설명
 convert_punycode 함수는 com/net/org 에 사용이 되는 muitibyte 도메인의 punycode 변환을
@@ -48,10 +59,7 @@ printf ("%s\\n", convert_punycode (y, 1, 1));
 convert_punycode(1)
 
 .SH 작성
-2003.09.04 김정균 <http://www.oops.org>
+2004.02.19 김정균 <http://www.oops.org>
 
 .SH 버그
 버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
-
-.SH 저작권
-LGPL 2.1 License

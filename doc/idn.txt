@@ -1,0 +1,51 @@
+** IDN Function
+
+$Id: idn.txt,v 1.1 2004-02-18 16:17:46 oops Exp $
+
+IDN 관련 함수들은 RFC 문서에 기반한 국제 도메인의 Multibyte 를 처리하는 함수이다.  이
+함수를 사용하기 위해서는 libidn.h 를 포함해야 하며 libogc 라이브러리 또는 libolibc 라
+이브러리를 링크를 해야 한다. 이 라이브러리는 convert_punycode 의 원형함수 (libidn) 때
+문에 LGPL2 에 따른다.
+
+만약 코드만 추출을 하여 사용을 하고 싶다면, convert_racecode 의 경우 BPL 을 따르고,
+convert_punycode 함수와 libidn 코드들은 LGPL2 를 따르면 된다.
+
+
+char * convert_racecode (char * domain, int mode, int debug)
+
+    멀티바이트 도메인 (com/net/org) 에 사용되는 race 변환 함수
+
+    domain 은 변경할 멀티바이트 도메인 또는 racecode 도메인을 지정
+    mode 는 0을 지정할 경우 멀티바이트 도메인을 racecode 로 변환하며, 1을 지정할 경우
+    racecode 도메인을 멀티바이트 도메인으로 변환함.
+
+    system 의 iconv library 가 필요함.
+
+    ex) #include <olibc/libidn.h>
+
+        char x[32] = "한글도메인.com";
+        char y[64] = "bq--3dkvzlqawpcluvghpa.com";
+
+        printf ("%s\n", convert_racecode (x, 0, 1));
+        printf ("%s\n", convert_racecode (y, 1, 1));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+char * convert_punycode (char *domain, int mode, int debug)
+
+    로컬 다국어 도메인에 사용되는 punycode 변환 함수
+
+    domain 은 변경할 멀티바이트 도메인 또는 punycode 도메인을 지정
+    mode 는 0을 지정할 경우 멀티바이트 도메인을 punycode 로 변환하며, 1을 지정할 경우
+    punycode 도메인을 멀티바이트 도메인으로 변환함.
+
+    ex) #include <olibc/libidn.h>
+
+        char x[32] = "한글도메인.kr";
+        char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
+
+        printf ("%s\n", convert_punycode (x, 0, 0));
+        printf ("%s\n", convert_punycode (y, 1, 0));
+
+    저작권: LGPL 2.1 License
+

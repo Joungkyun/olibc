@@ -1,8 +1,8 @@
-.TH ofree_array(1) 2003-10-28 "Linux Manpage" "OOPS Library's Manual"
+.TH ofree_array(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man ofree_array.1
-.\" 2003-10-28 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: ofree_array.3,v 1.1 2003-10-28 12:09:00 oops Exp $
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: ofree_array.3,v 1.2 2004-02-18 16:17:15 oops Exp $
 .SH 이름
 ofree_array
 
@@ -10,6 +10,18 @@ ofree_array
 .B #include <olibc/libarg.h>
 .sp
 .BI "char * ofree_array (char **array);"
+
+.SH 라이브러리 링크
+.B gcc source -l liboc
+.br
+
+또는
+
+.B gcc source -l libolibc
+.br
+
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
 .SH 설명
 메모리가 할당된 배열에 대해서 메모리를 해제 시킨다. 이 함수를 사용하기 위해서는
@@ -22,12 +34,7 @@ argv_make 문서를 참고한다.
 argv_make(1)
 
 .SH 작성
-2003.10.28 김정균 <http://www.oops.org>
+2004.02.19 김정균 <http://www.oops.org>
 
 .SH 버그
 버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
-
-.SH 저작권
-BPL License v.1
-.br
-http://devel.oops.org/document/bpl 을 참고 하도록 한다.

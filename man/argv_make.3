@@ -1,8 +1,8 @@
-.TH argv_make(1) 2003-10-28 "Linux Manpage" "OOPS Library's Manual"
+.TH argv_make(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man argv_make.1
-.\" 2003-10-28 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: argv_make.3,v 1.1 2003-10-28 12:09:00 oops Exp $
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: argv_make.3,v 1.2 2004-02-18 16:17:15 oops Exp $
 .SH 이름
 argv_make
 
@@ -10,6 +10,18 @@ argv_make
 .B #include <olibc/libarg.h>
 .sp
 .BI "char * argv_make (char *stream, int *argc);"
+
+.SH 라이브러리 링크
+.B gcc source -l liboc
+.br
+
+또는
+
+.B gcc source -l libolibc
+.br
+
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
 .SH 설명
 문자열을 공백문자를 기준으로 배열로 변환을 한다. 쉽게 command line 의 명령행이 argv
@@ -44,12 +56,7 @@ ofree_array (argv);
 ofree_array(1)
 
 .SH 작성
-2003.10.28 김정균 <http://www.oops.org>
+2004.02.19 김정균 <http://www.oops.org>
 
 .SH 버그
 버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
-
-.SH 저작권
-BPL License v.1
-.br
-http://devel.oops.org/document/bpl 을 참고 하도록 한다.

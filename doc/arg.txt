@@ -1,9 +1,13 @@
 ** Argument Function
 
-$Id: arg.txt,v 1.8 2004-02-18 13:48:24 oops Exp $
+$Id: arg.txt,v 1.9 2004-02-18 16:17:15 oops Exp $
 
 
-변수 관련 high level 함수이다.
+변수 관련 high level 함수이다.  이 함수들을 사용 하기 위해서는 liboc 또는
+libolibc 라이브러리를 링크해야 한다.
+
+주의할 것은 libolibc 라이브러리는 LGPL2 원형 함수가 포함이 되어 있으므로,
+LGPL2에 위반되지 않아야 한다.
 
 
 char ** argv_make ( char * stream, int *argc )
@@ -32,8 +36,6 @@ char ** argv_make ( char * stream, int *argc )
         }
 
         ofree_array (argv);
-
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char ** split ( char * stream, int *argc, char *delimiter )
@@ -67,8 +69,6 @@ char ** split ( char * stream, int *argc, char *delimiter )
      
         ofree_array (sep);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
 
 void ofree_array ( char **array )
 
@@ -76,8 +76,6 @@ void ofree_array ( char **array )
     위해서는 마지막 배열이 NULL 값을 가지고 있어야 한다.
 
     ex) argv_make 함수 참조
-
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 int get_whitespace ( char * string )
@@ -89,8 +87,6 @@ int get_whitespace ( char * string )
         char * string = "a b c d e	f";
 
         printf ("## %d\n", get_whitespace (string));
-
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 int o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *longopt)
@@ -238,6 +234,4 @@ int o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *l
             /* 꼭 해줘야 한다. */
             ofree_array (o_cmdarg);
         }
-
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 

@@ -1,8 +1,12 @@
 ** File Function
 
-$Id: file.txt,v 1.4 2003-09-19 11:01:23 oops Exp $
+$Id: file.txt,v 1.5 2004-02-18 16:17:15 oops Exp $
 
-File 관련 high level 함수이다.
+File 관련 high level 함수이다. 이 함수들을 사용하기 위해서는 liboc 또는, libolibc 라
+이브러리를 링크해야 한다.
+
+주의할 것은 libolibc 라이브러리는 LGPL2 원형 함수가 포함이 되어 있으므로, LGPL2에 위
+반되지 않아야 한다.
 
 
 int file_exits (char *path, int mode)
@@ -36,8 +40,6 @@ int file_exits (char *path, int mode)
         printf ("FIFO : %d\n", file_exists (path, _IS_FIFO));
         printf ("SOCK : %d\n", file_exists (path, _IS_SOCK));
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
 
 char * fileread (char * path)
 
@@ -54,8 +56,6 @@ char * fileread (char * path)
         printf ("%s\n", text);
         free (text);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
 
 int writefile (char * filename, char * str, int mode)
 
@@ -71,5 +71,4 @@ int writefile (char * filename, char * str, int mode)
 
     printf ("%d\\n", writefile (path, text, 0));
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 

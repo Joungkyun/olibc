@@ -1,8 +1,12 @@
 ** String Function
 
-$Id: string.txt,v 1.4 2004-02-03 08:44:05 oops Exp $
+$Id: string.txt,v 1.5 2004-02-18 16:17:15 oops Exp $
 
-String 관련 함수들은 문자열 변환과 관련된 high level 의 함수들이다.
+String 관련 함수들은 문자열 변환과 관련된 high level 의 함수들이다. 이 함수들을 사용
+하기 위해서는 liboc 또는 libolibc 라이브러리를 링크해야 한다.
+
+주의할 것은 libolibc 라이브러리는 LGPL2 원형 함수가 포함이 되어 있으므로, LGPL2에 위
+반되지 않아야 한다.
 
 
 char * addslashes(char *str, int should_free)
@@ -28,8 +32,6 @@ char * addslashes(char *str, int should_free)
         printf ("%s\n", buf);
 
         free (buf);
-
-    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
 
 
 void trim (char *str);
@@ -69,8 +71,6 @@ void trim (char *str);
         trim (str);
         printf ("%s\n", str);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
 
 char * trim_r (char *str, int should_free)
 
@@ -93,8 +93,6 @@ char * trim_r (char *str, int should_free)
 
         free (buf);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
 
 long long str2long (char *s)
 
@@ -111,7 +109,6 @@ long long str2long (char *s)
 
         printf ("%lld\n", a);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 long double str2double (char *s)
 
@@ -131,7 +128,6 @@ long double str2double (char *s)
 
         printf ("%Lf\n", a);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 int char2int (char c)
 
@@ -151,7 +147,6 @@ int char2int (char c)
 
         printf ("%d\n", res);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 int check_int (char c)
 
@@ -172,7 +167,6 @@ int check_int (char c)
           }
         }
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 void setansi (FILE *stream, int color, int nosnsi)
 
@@ -215,7 +209,6 @@ void setansi (FILE *stream, int color, int nosnsi)
        printf ("FILE : %d\n", file_exists (path, _IS_FILE));
        setansi (stdout, ENDANSI, 0);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char * human_size (double size, int sub, int unit);
@@ -239,7 +232,6 @@ char * human_size (double size, int sub, int unit);
         printf ("%s\n", data);
         free (data);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int print)
@@ -263,7 +255,6 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
         printf ("%s\n", data);
         free (data);
 
-    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
 
 
 void strtolower (char *str)
@@ -278,7 +269,6 @@ void strtolower (char *str)
 
         printf ("%s\n", strtolower (data));
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 void strtoupper (char *str)
@@ -293,7 +283,6 @@ void strtoupper (char *str)
 
         printf ("%s\n", strtoupper (data));
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char _bin2hex (char *s)
@@ -319,7 +308,6 @@ char _bin2hex (char *s)
 
         printf ("%s\\n", buf);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char * bin2hex (char *str)
@@ -335,7 +323,6 @@ char * bin2hex (char *str)
 
         printf ("%s\\n", ret);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char * _hex2bin (char c)
@@ -357,7 +344,6 @@ char * _hex2bin (char c)
     
         printf ("%s\n", ret);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 char * hex2bin (char *str)
@@ -375,7 +361,6 @@ char * hex2bin (char *str)
         printf ("%s\n", ret);
         free (ret);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
 
 
 int bin2dec (char *src)
@@ -391,44 +376,4 @@ int bin2dec (char *src)
 
         printf ("%c\n", x);
 
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
-
-char * convert_racecode (char * domain, int mode, int debug)
-
-    멀티바이트 도메인 (com/net/org) 에 사용되는 race 변환 함수
-
-    domain 은 변경할 멀티바이트 도메인 또는 racecode 도메인을 지정
-    mode 는 0을 지정할 경우 멀티바이트 도메인을 racecode 로 변환하며, 1을 지정할 경우
-    racecode 도메인을 멀티바이트 도메인으로 변환함.
-
-    system 의 iconv library 가 필요함.
-
-    ex) #include <olibc/libstring.h>
-
-        char x[32] = "한글도메인.com";
-        char y[64] = "bq--3dkvzlqawpcluvghpa.com";
-
-        printf ("%s\n", convert_racecode (x, 0, 1));
-        printf ("%s\n", convert_racecode (y, 1, 1));
-
-    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
-
-char * convert_punycode (char *domain, int mode, int debug)
-
-    로컬 다국어 도메인에 사용되는 punycode 변환 함수
-
-    domain 은 변경할 멀티바이트 도메인 또는 punycode 도메인을 지정
-    mode 는 0을 지정할 경우 멀티바이트 도메인을 punycode 로 변환하며, 1을 지정할 경우
-    punycode 도메인을 멀티바이트 도메인으로 변환함.
-
-    ex) #include <olibc/libstring.h>
-
-        char x[32] = "한글도메인.kr";
-        char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
-
-        printf ("%s\n", convert_punycode (x, 0, 0));
-        printf ("%s\n", convert_punycode (y, 1, 0));
-
-    저작권: LGPL 2.1 License
 

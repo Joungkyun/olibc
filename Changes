@@ -1,12 +1,13 @@
 Changelog
 
-$Id: Changes,v 1.35 2004-02-18 13:50:35 oops Exp $
+$Id: Changes,v 1.36 2004-02-18 16:17:15 oops Exp $
 
 * Wed, Feb 18 2004
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed miss declaration on stringprep_locale_charset_cache variable
 	- fixed invalid function type
 	- removed routine case of return 0 on o_getopt function
+	- devided license with BPL and LGPL (liboc and libogc)
 
 * Tue, Feb 10 2004
 	by JoungKyun Kim <http://www.oops.org>

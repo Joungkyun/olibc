@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man bin2hex.1
 .\" 2004-02-03 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: bin2hex.3,v 1.1 2004-02-03 08:45:21 oops Exp $
+.\" $Id: bin2hex.3,v 1.2 2004-02-18 16:17:15 oops Exp $
 .SH 이름
 bin2hex
 
@@ -12,6 +12,18 @@ bin2hex
 .BI "char * bin2hex (char *str);"
 .sp
 .BI "char * _bin2hex (char c);"
+
+.SH 라이브러리 링크
+.B gcc source -l liboc
+.br
+
+또는
+
+.B gcc source -l libolibc
+.br
+
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
 .SH 설명
 bin2hex 은 2진수 형태의 문자열을 16진수의 문자열로 반환한다.
@@ -65,8 +77,3 @@ hex2bin(1)
 
 .SH 버그
 버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
-
-.SH 저작권
-BPL License v.1
-.br
-http://devel.oops.org/document/bpl 을 참고 하도록 한다.

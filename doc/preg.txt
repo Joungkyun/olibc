@@ -1,11 +1,16 @@
 ** PREG Function
 
-$Id: preg.txt,v 1.4 2003-09-18 06:43:57 oops Exp $
+$Id: preg.txt,v 1.5 2004-02-18 16:17:15 oops Exp $
 
-PREG 관련 함수들은 PHP 4 의 PCRE extension 에서 빌려온 코드들과 새로 만들어진 몇몇
-코드들이 존재를 한다.
+PREG 관련 함수들은 PHP4 의 PCRE extension 에서 빌려온 코드들과 새로 만들어진 몇몇 코
+드들이 존재를 한다.
 
 PREG 함수들은 pcrelib 를 이용한 펄 호환 정규식을 사용하는 함수들이다.
+
+이 함수들을 사용 하기 위해서는 liboc 또는 libolibc 라이브러리를 링크해야 한다.
+
+주의할 것은 libolibc 라이브러리는 LGPL2 원형 함수가 포함이 되어 있으므로, LGPL2에 위
+반되지 않아야 한다.
 
 
 
@@ -41,8 +46,6 @@ char * preg_quote (char *string, char *delimiters)
         free (buf);
         free (regex);
 
-    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
-        
 
 char * preg_replace (char *regex, char *replace, char *subject, int *retlen)
 
@@ -63,8 +66,6 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen)
 
         free (result);
 
-    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
-
 
 char * preg_replace_arr (char *regex[], char *replace[], char *subject, int arrno)
 
@@ -81,8 +82,6 @@ char * preg_replace_arr (char *regex[], char *replace[], char *subject, int arrn
         printf ("%s\n", result);
 
         free (result);
-
-    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
 
 
 char * preg_grep (char *regex, char *str, int opt)

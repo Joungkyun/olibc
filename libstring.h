@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.7 2004-02-18 13:20:41 oops Exp $ */
+/* $Id: libstring.h,v 1.8 2004-02-18 16:17:15 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -168,24 +168,6 @@ char * _hex2bin (char c);
 /* _bin2dec follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert to decimal number from binary type string */
 int bin2dec (char *src);
-
-/* convert_racecode follow BPL License v.1 <http://devel.oops.org/document/bpl>
- * encode and decode race code for multibyte domain (com/net/org)
- *
- * str   => original domain
- * mode  => 0 : encode to racecode
- *          1 : decode from racecode
- * debug => verbose mode */
-char * convert_racecode (char *str, int mode, int debug);
-
-/* convert_punycode follows GPL License v2
- * encode and decode punycode for local multibyte domain
- *
- * domain => original domain
- * mode   => 0 : encode to punycode
- *           1 : decode from punycode
- * debug => verbose mode */
-char * convert_punycode (char * domain, int mode, int debug);
 #endif
 
 /*

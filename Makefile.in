@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.11 2004-02-04 05:33:15 oops Exp $
+# $Id: Makefile.in,v 1.12 2004-02-18 16:17:15 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -8,11 +8,16 @@ CPPFLAGS	= -I. -Ipcrelib -Ilibidn @CPPFLAGS@
 LDFLAGS		= @LIBS@ @LDFLAGS@
 LIBS		= @LIBS@
 DEFS		= @DEFS@ $(CPPFLAGS)
-OBJECT		= libmisc.o libstring.o libpcre.o libfile.o libtime.o libarg.o _race.o
+OBJECT		= libmisc.o libidn.o libstring.o libpcre.o libfile.o libtime.o libarg.o _race.o
 PCREOBJ		= pcrelib/get.o pcrelib/maketables.o pcrelib/pcre.o pcrelib/study.o
 IDNOBJ		= libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
 		  libidn/stringprep.o libidn/rfc3454.o libidn/toutf8.o
+OBOBJ		= libmisc.o libstring.o libpcre.o libfile.o libtime.o libarg.o
+OGOBJ		= libstring.o libmisc.o _race.o libidn.o
+OLDSO		= lib$(PROG).so.0.0.8
 SONAME		= lib$(PROG).so.@SONAME_MAJOR@
+SBNAME		= liboc.so.@SOMANE_MAJOR@
+SCNAME		= libogc.so.@SOMANE_MAJOR@
 DESTDIR		=
 
 prefix		= @prefix@
@@ -35,6 +40,9 @@ PERL		= @PERL@
 all: pcre idn $(OBJECT) staticlib sharedlib olibc-config
 
 libmisc.o: libmisc.c olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+libidn.o: libidn.c libidn.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
 
 libpcre.o: libpcre.c libpcre.h olibc-config.h common.h
@@ -63,9 +71,15 @@ idn:
 
 staticlib:
 	$(AR) rcs lib$(PROG).a $(OBJECT) $(PCREOBJ) $(IDNOBJ)
+	$(AR) rcs liboc.a $(OBOBJ) $(PCREOBJ)
+	$(AR) rcs libogc.a $(OGOBJ) $(IDNOBJ)
 
 sharedlib:
 	$(CC) -shared -Wl,-soname,$(SONAME) -o lib$(PROG).so.$(VERSION) $(OBJECT) $(PCREOBJ) $(IDNOBJ)
+	$(CC) -shared -Wl,-soname,$(SBNAME) -o liboc.so.$(VERSION) $(OBOBJ) $(PCREOBJ) $(IDNOBJ)
+	$(CC) -shared -Wl,-soname,$(SGNAME) -o libogc.so.$(VERSION) $(OGOBJ) $(IDNOBJ)
+	# for compotable old version
+	$(CC) -shared -Wl,-soname,$(OLDSO) -o lib$(PROG).so.0.0.8 $(OBJECT) $(PCREOBJ) $(IDNOBJ)
 
 olibc-config:
 	$(CP) -f olibc-config.in olibc-config
@@ -83,10 +97,14 @@ install: install-doc install-header
 	$(MKDIR) $(DESTDIR)$(libdir)
 	$(LN) lib$(PROG).so.$(VERSION) lib$(PROG).so
 	$(LN) lib$(PROG).so.$(VERSION) $(SONAME)
-	$(INSTALL) -m 755 lib$(PROG).so.$(VERSION) $(DESTDIR)$(libdir)
 	$(MV) lib$(PROG).so $(DESTDIR)$(libdir)
 	$(MV) $(SONAME) $(DESTDIR)$(libdir)
+
+	$(INSTALL) -m 755 lib$(PROG).so.$(VERSION) $(DESTDIR)$(libdir)
 	$(INSTALL) -m 644 lib$(PROG).a $(DESTDIR)$(libdir)
+
+	# for compotable old version
+	$(INSTALL) -m 755 lib$(PROG).so.0.0.8 $(DESTDIR)$(libdir)
 
 
 install-header:
@@ -98,6 +116,7 @@ install-header:
 	$(INSTALL) -m 644 libstring.h $(DESTDIR)$(includedir)/olibc/
 	$(INSTALL) -m 644 libtime.h $(DESTDIR)$(includedir)/olibc/
 	$(INSTALL) -m 644 libarg.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 libidn.h $(DESTDIR)$(includedir)/olibc/
 
 install-doc:
 	$(MAKE) -C man install

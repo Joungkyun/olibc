@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.8 2004-02-18 13:24:48 oops Exp $ */
+/* $Id: _race.c,v 1.9 2004-02-18 16:17:15 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -47,8 +47,8 @@ char * decode_race (char *domain, char *charset, int debug) {
 		fprintf (stderr, "\n");
 		fprintf (stderr, "%s[ INPUT Date Check ]%s\n", ansist, ansien);
 		fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
-		fprintf (stderr, "Original Domain  :     %s \n", domain);
-		fprintf (stderr, "Convert  Target  :     %s \n", name);
+		fprintf (stderr, "Input String     :     %s \n", domain);
+		fprintf (stderr, "Convert Target   :     %s \n", name);
 		fprintf (stderr, "\n");
 	}
 
@@ -93,8 +93,8 @@ char * encode_race (char *domain, char *charset, int debug) {
 		fprintf (stderr, "\n");
 		fprintf (stderr, "%s[ INPUT Data Check ]%s\n", ansist, ansien);
 		fprintf (stderr, "%s-------------------------------------------%s\n", ansist, ansien);
-		fprintf (stderr, "Original Domain  :     %s \n", domain);
-		fprintf (stderr, "Convert  Target  :     %s \n", name);
+		fprintf (stderr, "Input STring     :     %s \n", domain);
+		fprintf (stderr, "Convert Target   :     %s \n", name);
 		fprintf (stderr, "\n");
 	}
 
