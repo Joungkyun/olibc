@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.6 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libpcre.c,v 1.7 2003-09-19 15:16:30 oops Exp $ */
 #include <common.h>
 #include <libpcre.h>
 
@@ -94,8 +94,8 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 
 	len = strlen (regex);
 
-	memset (opt, '\0', sizeof (opt));
-	memset (pattern, '\0', sizeof (pattern));
+	memset (opt, 0, sizeof (opt));
+	memset (pattern, 0, strlen (regex));
 
 	for ( i=0; i<len; i++ ) {
 		// check first delimiter
@@ -122,7 +122,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 	}
 
 	memcpy (pattern, regex + start + 1, end - start - 1);
-	memset (pattern + end, '\0', 1);
+	memset (pattern + end, 0, 1);
 
 	strcpy (opt, regex + end + 1);
 	optlen = strlen (opt);
@@ -261,7 +261,7 @@ char * preg_grep (char *regex, char *subject, int opt) {
 	token = strtok_r (bufstr, delimiters, &btoken);
 
 	while (token != NULL) {
-		memset (buf, '\0', sizeof (buf));
+		memset (buf, 0, sizeof (buf));
 		sprintf (buf, "%s\n", token);
 		buflen = strlen (buf);
 
@@ -279,13 +279,13 @@ char * preg_grep (char *regex, char *subject, int opt) {
 
 			memcpy (str + len, buf, buflen);
 			len += buflen;
-			memset (str + len, '\0', 1);
+			memset (str + len, 0, 1);
 		}
 
 		token = strtok_r (NULL, delimiters, &btoken);
 	}
 
-	memset (str + len -1, '\0', 1);
+	memset (str + len -1, 0, 1);
 	free (bufstr);
 
 	return str;
