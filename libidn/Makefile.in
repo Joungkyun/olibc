@@ -1,8 +1,9 @@
+#$Id: Makefile.in,v 1.2 2004-02-04 05:33:15 oops Exp $
 CC		= @CC@ -Wall
 CFLAGS		= @CFLAGS@ -fpic
 LDFLAGS		= @LIBS@ @LDFLAGS@
 LIBS		= @LIBS@
-OBJECT		= idna.o nfkc.o profiles.o punycode.o stringprep.o stringprep_generic.o toutf8.o
+OBJECT		= idna.o nfkc.o profiles.o punycode.o stringprep.o rfc3454.o toutf8.o
 CPPFLAGS	= -I. -I.. @CPPFLAGS@
 DEFS		= @DEFS@ $(CPPFLAGS)
 
@@ -10,25 +11,25 @@ RM		= @RM@ -f
 
 all: $(OBJECT)
 
-idna.o: idna.c internal.h stringprep.h punycode.h idna.h
+idna.o: idna.c stringprep.h punycode.h idna.h
 	$(CC) $(DEFS) $(CFLAGS) -c idna.c
 
-nfkc.o: nfkc.c internal.h stringprep.h punycode.h idna.h gunidecomp.h gunicomp.h
+nfkc.o: nfkc.c stringprep.h punycode.h idna.h gunidecomp.h gunicomp.h
 	$(CC) $(DEFS) $(CFLAGS) -c nfkc.c
 
-profiles.o: profiles.c internal.h stringprep.h punycode.h idna.h
+profiles.o: profiles.c stringprep.h punycode.h idna.h
 	$(CC) $(DEFS) $(CFLAGS) -c profiles.c
 
-punycode.o: punycode.c internal.h stringprep.h punycode.h idna.h
+punycode.o: punycode.c stringprep.h punycode.h idna.h
 	$(CC) $(DEFS) $(CFLAGS) -c punycode.c
 
-stringprep.o: stringprep.c internal.h stringprep.h punycode.h idna.h
+stringprep.o: stringprep.c stringprep.h punycode.h idna.h
 	$(CC) $(DEFS) $(CFLAGS) -c stringprep.c
 
-stringprep_generic.o: stringprep_generic.c stringprep.h
-	$(CC) $(DEFS) $(CFLAGS) -c stringprep_generic.c
+rfc3454.o: rfc3454.c stringprep.h
+	$(CC) $(DEFS) $(CFLAGS) -c rfc3454.c
 
-toutf8.o: toutf8.c internal.h stringprep.h punycode.h idna.h
+toutf8.o: toutf8.c stringprep.h punycode.h idna.h
 	$(CC) $(DEFS) $(CFLAGS) -c toutf8.c
 
 clean:

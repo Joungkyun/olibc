@@ -31,10 +31,10 @@ extern "C"
 #include <unistd.h>		/* ssize_t */
 #include <idn-int.h>		/* uint32_t */
 
-#define STRINGPREP_VERSION "0.2.2"
+#define STRINGPREP_VERSION "0.3.7"
 
 /* Error codes. */
-  enum Stringprep_rc
+  typedef enum
   {
     STRINGPREP_OK = 0,
     /* Stringprep errors. */
@@ -51,18 +51,18 @@ extern "C"
     /* Internal errors. */
     STRINGPREP_NFKC_FAILED = 200,
     STRINGPREP_MALLOC_ERROR = 201
-  };
+  } Stringprep_rc;
 
 /* Flags used when calling stringprep(). */
-  enum Stringprep_profile_flags
+  typedef enum
   {
     STRINGPREP_NO_NFKC = 1,
     STRINGPREP_NO_BIDI = 2,
     STRINGPREP_NO_UNASSIGNED = 4
-  };
+  } Stringprep_profile_flags;
 
 /* Steps in a stringprep profile. */
-  enum Stringprep_profile_steps
+  typedef enum
   {
     STRINGPREP_NFKC = 1,
     STRINGPREP_BIDI = 2,
@@ -72,61 +72,57 @@ extern "C"
     STRINGPREP_BIDI_PROHIBIT_TABLE = 6,
     STRINGPREP_BIDI_RAL_TABLE = 7,
     STRINGPREP_BIDI_L_TABLE = 8
-  };
+  } Stringprep_profile_steps;
 
 #define STRINGPREP_MAX_MAP_CHARS 4
 
   struct Stringprep_table_element
   {
     uint32_t start;
-    uint32_t end;				/* 0 if only one character */
-    uint32_t map[STRINGPREP_MAX_MAP_CHARS];/* NULL if end is not 0 */
+    uint32_t end;		/* 0 if only one character */
+    uint32_t map[STRINGPREP_MAX_MAP_CHARS];	/* NULL if end is not 0 */
   };
   typedef struct Stringprep_table_element Stringprep_table_element;
 
   struct Stringprep_table
   {
-    int operation;
-    int flags;
-    Stringprep_table_element *table;
-    char *name;
+    Stringprep_profile_steps operation;
+    Stringprep_profile_flags flags;
+    const Stringprep_table_element *table;
   };
   typedef struct Stringprep_table Stringprep_profile;
 
   struct Stringprep_profiles
   {
     char *name;
-    Stringprep_profile *tables;
+    const Stringprep_profile *tables;
   };
   typedef struct Stringprep_profiles Stringprep_profiles;
 
-  extern Stringprep_profiles stringprep_profiles[];
+  extern const Stringprep_profiles stringprep_profiles[];
 
 /* Profiles */
-  extern Stringprep_table_element stringprep_generic_A_1[];
-  extern Stringprep_table_element stringprep_generic_B_1[];
-  extern Stringprep_table_element stringprep_generic_B_2[];
-  extern Stringprep_table_element stringprep_generic_B_3[];
-  extern Stringprep_table_element stringprep_generic_C_1_1[];
-  extern Stringprep_table_element stringprep_generic_C_1_2[];
-  extern Stringprep_table_element stringprep_generic_C_2_1[];
-  extern Stringprep_table_element stringprep_generic_C_2_2[];
-  extern Stringprep_table_element stringprep_generic_C_3[];
-  extern Stringprep_table_element stringprep_generic_C_4[];
-  extern Stringprep_table_element stringprep_generic_C_5[];
-  extern Stringprep_table_element stringprep_generic_C_6[];
-  extern Stringprep_table_element stringprep_generic_C_7[];
-  extern Stringprep_table_element stringprep_generic_C_8[];
-  extern Stringprep_table_element stringprep_generic_C_9[];
-  extern Stringprep_table_element stringprep_generic_D_1[];
-  extern Stringprep_table_element stringprep_generic_D_2[];
+  extern const Stringprep_table_element stringprep_rfc3454_A_1[];
+  extern const Stringprep_table_element stringprep_rfc3454_B_1[];
+  extern const Stringprep_table_element stringprep_rfc3454_B_2[];
+  extern const Stringprep_table_element stringprep_rfc3454_B_3[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_1_1[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_1_2[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_2_1[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_2_2[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_3[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_4[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_5[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_6[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_7[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_8[];
+  extern const Stringprep_table_element stringprep_rfc3454_C_9[];
+  extern const Stringprep_table_element stringprep_rfc3454_D_1[];
+  extern const Stringprep_table_element stringprep_rfc3454_D_2[];
 
-  extern Stringprep_profile stringprep_generic[];
+  /* Nameprep */
 
-#define stringprep_generic(in, maxlen)		\
-  stringprep(in, maxlen, 0, stringprep_generic)
-
-  extern Stringprep_profile stringprep_nameprep[];
+  extern const Stringprep_profile stringprep_nameprep[];
 
 #define stringprep_nameprep(in, maxlen)			\
   stringprep(in, maxlen, 0, stringprep_nameprep)
@@ -134,39 +130,56 @@ extern "C"
 #define stringprep_nameprep_no_unassigned(in, maxlen)			\
   stringprep(in, maxlen, STRINGPREP_NO_UNASSIGNED, stringprep_nameprep)
 
-  extern Stringprep_profile stringprep_saslprep[];
+  /* SASL */
 
-  extern Stringprep_profile stringprep_kerberos5[];
+  extern const Stringprep_profile stringprep_saslprep[];
+  extern const Stringprep_profile stringprep_plain[];
+  extern const Stringprep_profile stringprep_trace[];
+
+#define stringprep_plain(in, maxlen)		\
+  stringprep(in, maxlen, 0, stringprep_plain)
+
+  /* Kerberos */
+
+  extern const Stringprep_profile stringprep_kerberos5[];
 
 #define stringprep_kerberos5(in, maxlen)		\
   stringprep(in, maxlen, 0, stringprep_kerberos5)
 
-  extern Stringprep_profile stringprep_xmpp_nodeprep[];
-  extern Stringprep_profile stringprep_xmpp_resourceprep[];
-  extern Stringprep_table_element stringprep_xmpp_nodeprep_prohibit[];
+  /* XMPP */
+
+  extern const Stringprep_profile stringprep_xmpp_nodeprep[];
+  extern const Stringprep_profile stringprep_xmpp_resourceprep[];
+  extern const Stringprep_table_element stringprep_xmpp_nodeprep_prohibit[];
 
 #define stringprep_xmpp_nodeprep(in, maxlen)		\
   stringprep(in, maxlen, 0, stringprep_xmpp_nodeprep)
 #define stringprep_xmpp_resourceprep(in, maxlen)		\
   stringprep(in, maxlen, 0, stringprep_xmpp_resourceprep)
 
-  extern Stringprep_profile stringprep_plain[];
+  /* iSCSI */
 
-#define stringprep_plain(in, maxlen)		\
-  stringprep(in, maxlen, 0, stringprep_plain)
-
-  extern Stringprep_profile stringprep_iscsi[];
+  extern const Stringprep_profile stringprep_iscsi[];
 
 #define stringprep_iscsi(in, maxlen)		\
   stringprep(in, maxlen, 0, stringprep_iscsi)
 
-/* API */
+  /* API */
 
-  extern int stringprep (char *in, size_t maxlen, int flags,
-			 Stringprep_profile * profile);
+  extern int stringprep_4i (uint32_t * ucs4, size_t * len, size_t maxucs4len,
+			    Stringprep_profile_flags flags,
+			    const Stringprep_profile * profile);
+  extern int stringprep_4zi (uint32_t * ucs4, size_t maxucs4len,
+			     Stringprep_profile_flags flags,
+			     const Stringprep_profile * profile);
+  extern int stringprep (char *in, size_t maxlen,
+			 Stringprep_profile_flags flags,
+			 const Stringprep_profile * profile);
 
-  extern int stringprep_profile (char *in, char **out,
-				 char *profile, int flags);
+  extern int stringprep_profile (const char *in,
+				 char **out,
+				 const char *profile,
+				 Stringprep_profile_flags flags);
 
   extern const char *stringprep_check_version (const char *req_version);
 
@@ -176,13 +189,13 @@ extern "C"
   extern uint32_t stringprep_utf8_to_unichar (const char *p);
 
   extern uint32_t *stringprep_utf8_to_ucs4 (const char *str, ssize_t len,
-					    size_t *items_written);
-  extern char *stringprep_ucs4_to_utf8 (const uint32_t *str, ssize_t len,
-					size_t *items_read,
-					size_t *items_written);
+					    size_t * items_written);
+  extern char *stringprep_ucs4_to_utf8 (const uint32_t * str, ssize_t len,
+					size_t * items_read,
+					size_t * items_written);
 
   extern char *stringprep_utf8_nfkc_normalize (const char *str, ssize_t len);
-  extern uint32_t *stringprep_ucs4_nfkc_normalize (uint32_t *str,
+  extern uint32_t *stringprep_ucs4_nfkc_normalize (uint32_t * str,
 						   ssize_t len);
 
   extern const char *stringprep_locale_charset (void);

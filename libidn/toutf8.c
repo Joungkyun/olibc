@@ -19,9 +19,21 @@
  *
  */
 
-#include "internal.h"
+#if HAVE_CONFIG_H
+# include <olibc-config.h>
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "stringprep.h"
+
+#ifdef HAVE_ICONV_H
+# define HAVE_ICONV 1
 /* Define as const if the declaration of iconv() needs const. */
-#define ICONV_CONST
+# define ICONV_CONST
+#endif
 
 #define ENABLE_NLS
 
@@ -33,15 +45,17 @@
 #undef ENABLE_NLS
 #endif
 
-#ifdef HAVE_ICONV_H
-
-#include <stdio.h>
-#include <iconv.h>
-
-#ifdef ENABLE_NLS
-#include <langinfo.h>
-#include <locale.h>
+#if defined(HAVE_ERRNO_H) || defined(_LIBC)
+# include <errno.h>
 #endif
+
+#ifdef HAVE_ICONV
+# include <iconv.h>
+
+# ifdef ENABLE_NLS
+#  include <langinfo.h>
+#  include <locale.h>
+# endif
 
 static const char *
 stringprep_locale_charset_slow (void)
@@ -51,7 +65,7 @@ stringprep_locale_charset_slow (void)
   if (charset && *charset)
     return charset;
 
-#ifdef ENABLE_NLS
+# ifdef ENABLE_NLS
   {
     char *p;
 
@@ -65,7 +79,7 @@ stringprep_locale_charset_slow (void)
     if (charset && *charset)
       return charset;
   }
-#endif
+# endif
 
   return "ASCII";
 }
@@ -130,14 +144,22 @@ stringprep_convert (const char *str,
   int len;
 
   if (strcmp (to_codeset, from_codeset) == 0)
-    return (char *) strdup (str);
+    {
+      char *p;
+      p = malloc (strlen (str) + 1);
+      if (!p)
+	return NULL;
+      strcpy (p, str);
+      return p;
+    }
 
   cd = iconv_open (to_codeset, from_codeset);
 
   if (cd == (iconv_t) - 1)
     return NULL;
 
-  p = (char *) strdup (str);
+  p = (char *) malloc (strlen (str) + 1);
+  strcpy (p, str);
   if (p == NULL)
     return NULL;
   len = strlen (p);
@@ -204,7 +226,7 @@ again:
   return dest;
 }
 
-#else
+#else /* HAVE_ICONV */
 
 const char *
 stringprep_locale_charset ()
@@ -216,13 +238,17 @@ char *
 stringprep_convert (const char *str,
 		    const char *to_codeset, const char *from_codeset)
 {
-  //fprintf (stderr,
-//	   "warning: cannot convert data to UTF-8, returning source\n");
- // fprintf (stderr, "warning: this indicate a badly installed GNU Libidn\n");
-  return strdup (str);
+  char *p;
+  fprintf (stderr, "libidn: warning: libiconv not installed, cannot "
+	   "convert data to UTF-8\n");
+  p = malloc (strlen (str) + 1);
+  if (!p)
+    return NULL;
+  strcpy (p, str);
+  return p;
 }
 
-#endif
+#endif /* HAVE_ICONV */
 
 /**
  * stringprep_locale_to_utf8:

@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.27 2004-02-03 08:44:04 oops Exp $
+$Id: Changes,v 1.28 2004-02-04 05:33:15 oops Exp $
+
+* Wed, Feb  4 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- updated libidn library 0.3.7
 
 * Tue, Feb  3 2003
 	by JoungKyun Kim <http://www.oops.org>
