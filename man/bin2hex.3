@@ -1,0 +1,72 @@
+.TH bin2hex(1) 2004-02-03 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man bin2hex.1
+.\" 2004-02-03 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: bin2hex.3,v 1.1 2004-02-03 08:45:21 oops Exp $
+.SH 이름
+bin2hex
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "char * bin2hex (char *str);"
+.sp
+.BI "char * _bin2hex (char c);"
+
+.SH 설명
+bin2hex 은 2진수 형태의 문자열을 16진수의 문자열로 반환한다.
+
+_bin2hex 은 길이 4의 이진수 문자열을 16진수 형태의 캐릭터로 반환을 한다.
+
+
+.SH 반환값
+16진수 형태의 문자열로 반환.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+char *data = "101100101110010011100100";
+int i, j, len;
+char tmp[5];
+static char buf[1024] = { 0, };
+
+len = strlen (str);
+
+for ( i = 0, j = 0; i < len; i += 4, j++ ) {
+    memst (tmp, 0, 5);
+    strncpy ( tmp, str + i, 4 );
+    if ( strlen (tmp) < 4 ) continue;
+
+    memset ( buf + j, _bin2hex (tmp), 1);
+}
+
+printf ("%s\\n", buf);
+.fi
+
+위의 코드는 bin2hex 의 원형이 된다.
+
+.nf
+#include <olibc/libstring.h>
+
+char *data = "101100101110010011100100";
+char *ret;
+
+ret = bin2hex (data);
+
+printf ("%s\\n", ret);
+.fi
+
+.SH 참고
+hex2bin(1)
+
+.SH 작성
+2004.02.03 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.
