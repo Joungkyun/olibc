@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.6 2004-02-10 04:57:21 oops Exp $ */
+/* $Id: libstring.h,v 1.7 2004-02-18 13:20:41 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -22,7 +22,7 @@
 
 #define MAX(a, b)	(((a)>(b))?(a):(b))
 
-extern const char *stringprep_locale_charset_cache = NULL;
+extern const char *stringprep_locale_charset_cache;
 
 void olibc_version (void);
 
