@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.3 2003-10-28 14:05:35 oops Exp $ */
+/* $Id: libarg.c,v 1.4 2003-10-28 14:23:39 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -157,7 +157,7 @@ char ** argv_make ( char * stream, int *oargc ) {
 		token = strtok_r (NULL, delimiters, &btoken);
 	}
 
-	oargv[i+1] = NULL;
+	oargv[i] = NULL;
 
 	ofree ( tmp );
 
