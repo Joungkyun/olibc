@@ -1,6 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.10 2003-09-19 15:23:51 oops Exp $
+$Id: Changes,v 1.11 2003-09-19 15:53:11 oops Exp $
+
+* Sat, Sep 20 2003
+	- fixed gabage problem on lib_preg_parse function
+	- added olibc_version function
+	- release 0.0.3
 
 * Fri, Sep 19 2003
 	by JoungKyun Kim <http://www.oops.org>
@@ -8,8 +13,6 @@ $Id: Changes,v 1.10 2003-09-19 15:23:51 oops Exp $
 	- move to libfile.h from libstring.h on fileread function
 	- added writefile function
 	- removed strip option on Makefile
-	- fixed gabage problem on lib_preg_parse function
-	- added olibc_version function
 
 * Thu, Sep 18 2003
 	by JoungKyun Kim <http://www.oops.org>
