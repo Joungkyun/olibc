@@ -2,12 +2,12 @@
 .\" Process with
 .\" nroff -man file_exists.1
 .\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: file_exists.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.\" $Id: file_exists.3,v 1.3 2003-09-19 10:52:31 oops Exp $
 .SH 이름
 file_exists
 
 .SH 사용법
-.B #include <olibc/libstring.h>
+.B #include <olibc/libfile.h>
 .sp
 .BI "int file_exists(char *path, int mode);"
 
@@ -55,7 +55,7 @@ file_exists
 
 .SH 예제
 .nf
-#include <olibc/libstring.h>
+#include <olibc/libfile.h>
 
 char *path = "/vars";
 

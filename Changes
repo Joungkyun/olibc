@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.4 2003-09-18 06:43:57 oops Exp $
+$Id: Changes,v 1.5 2003-09-19 10:52:31 oops Exp $
+
+* Fri, Sep 19 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- fixed blank return fileread function
 
 * Thu, Sep 18 2003
 	by JoungKyun Kim <http://www.oops.org>

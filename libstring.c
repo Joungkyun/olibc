@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.6 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libstring.c,v 1.7 2003-09-19 10:52:31 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -655,7 +655,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 char * fileread (char * path) {
 	FILE *fp;
 	size_t fsize = 0, len = 0, length = 0;
-	char tmp[FILEBUF], *text;
+	char tmp[FILEBUF] = { 0, }, *text;
 	struct stat f;
 
 	if ((fp = fopen(path, "rb")) == NULL) {
@@ -664,21 +664,22 @@ char * fileread (char * path) {
 	}
 
 	stat (path, &f);
-	if ( (fsize = f.st_size) < 1 )
+	if ( f.st_size < 1 )
 		return NULL;
 
 	/* initialize tmp variavle */
-	text = malloc (sizeof (char) * (fsize + 1));
+	text = malloc (sizeof (char) * (f.st_size + 1));
 
 	/* if failed memory allocation */
 	if ( text == NULL )
 		return NULL;
 
 	while ( (length = fread (tmp, sizeof (char), FILEBUF, fp)) > 0 ) {
-		memset (tmp, '\0', sizeof (tmp));
 		memmove (text + len, tmp, length);
 		len += length;
+		memset (tmp, 0, sizeof (tmp));
 	}
+	memset (tmp + len, 0, 1);
 
 	fclose (fp);
 
