@@ -54,7 +54,7 @@ char *result;
 char *regex[3] = { "/X/", "Y", "Z" };
 char *rep[3] = { "x", "y", "z" };
 
-result = preg_replace_arr (regex, rep, "opqrstuvwXYZ");
+result = preg_replace_arr (regex, rep, "opqrstuvwXYZ", 3);
 printf ("%s\\n", result);
 
 free (result);

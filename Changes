@@ -1,0 +1,11 @@
+* Tue, Sep 09 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- added internal pcre library
+	- added internal idn library
+	- fixed typo
+	- release 0.0.2
+
+* Mon, Sep 08 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- relase 0.0.1
+

@@ -15,7 +15,9 @@
 
 @BOTTOM@
 
-#define EANBLE_NLS	1
+#define HAVE_LIBPCRE 1
+
+#define EANBLE_NLS 1
 
 #ifndef HAVE_SETLOCALE_H
 #undef EANBLE_NLS

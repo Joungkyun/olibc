@@ -4,7 +4,7 @@
 #
 AC_PREREQ(2.53)
 
-AC_INIT([olibc], [0.0.1], [http://www.oops.org])
+AC_INIT([olibc], [0.0.2], [http://www.oops.org])
 AC_CONFIG_SRCDIR([libstring.h])
 AC_CONFIG_HEADER([olibc-config.h])
 AC_PREFIX_DEFAULT([/usr/local])
@@ -74,35 +74,6 @@ if test ! -f "$ac_cv_path_MV"; then
   AC_MSG_ERROR(Can't not found mv)
 fi
 
-# Checks for libraries.
-AC_ARG_WITH(pcre,
-[  --with-pcre=DIR         where to find pcre library],
-  [if test -d "$withval"; then
-     LDFLAGS="$LDFALGS -L$withval/lib"
-     CPPFLAGS="$CPPFLAGS -I$withval/include"
-   fi],
-  withval=no)
-
-if test "$withval" != no; then
-  AC_CHECK_LIB(pcre, pcre_version)
-else
-  ac_cv_lib_pcre_pcre_version=no
-fi
-
-AC_ARG_WITH(idn,
-[  --with-idn=DIR          where to find idn library],
-  [if test -d "$withval"; then
-     LDFLAGS="$LDFALGS -L$withval/lib"
-     CPPFLAGS="$CPPFLAGS -I$withval/include"
-   fi],
-  withval=no)
-
-if test "$withval" != no; then
-  AC_CHECK_LIB(idn, stringprep_locale_charset)
-else
-  ac_cv_lib_idn_stringprep_locale_charset=no
-fi
-
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([langinfo.h libintl.h locale.h stdlib.h string.h sys/time.h unistd.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h idna.h punycode.h stringprep.h iconv.h])
@@ -118,5 +89,7 @@ AC_FUNC_STAT
 AC_CHECK_FUNCS([gettimeofday memmove memset setlocale strchr strdup])
 
 AC_CONFIG_FILES([Makefile
-                 man/Makefile])
+                 man/Makefile
+                 pcrelib/Makefile
+                 libidn/Makefile])
 AC_OUTPUT

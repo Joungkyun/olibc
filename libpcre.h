@@ -2,7 +2,7 @@
 #define LIBPCRE_H
 
 #ifdef HAVE_PCRE_PCRE_H
-#include <pcre/pcre.h>
+#include <pcre.h>
 #endif
 
 /* preg_quote follows PHP License 2.02 <http://www.php.net/license/2_02.txt>

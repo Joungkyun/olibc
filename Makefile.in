@@ -3,11 +3,14 @@ VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
 CC		= @CC@ -Wall
 CFLAGS		= @CFLAGS@ -fpic
-CPPFLAGS	= -I. @CPPFLAGS@
+CPPFLAGS	= -I. -Ipcrelib @CPPFLAGS@
 LDFLAGS		= @LIBS@ @LDFLAGS@
 LIBS		= @LIBS@
 DEFS		= @DEFS@ $(CPPFLAGS)
 OBJECT		= libstring.o libpcre.o libfile.o libtime.o _race.o
+PCREOBJ		= pcrelib/get.o pcrelib/maketables.o pcrelib/pcre.o pcrelib/study.o
+IDNOBJ		= libidn/idna.o libidn/nfkc.o libidn/profiles.o libidn/punycode.o \
+		  libidn/stringprep.o libidn/stringprep_generic.o libidn/toutf8.o
 SONAME		= lib$(PROG).so.@SONAME_MAJOR@
 DESTDIR		=
 
@@ -28,7 +31,7 @@ MV		= @MV@
 CP		= @CP@
 PERL		= @PERL@
 
-all: $(OBJECT) staticlib sharedlib olibc-config
+all: $(OBJECT) pcre idn staticlib sharedlib olibc-config
 
 libpcre.o: libpcre.c libpcre.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
@@ -45,11 +48,17 @@ libtime.o: libtime.c libtime.h olibc-config.h common.h
 _race.o: _race.c _race.h olibc-config.h common.h
 	$(CC) $(CFLAGS) $(DEFS) -c $<
 
+pcre:
+	$(MAKE) -C pcrelib
+
+idn:
+	$(MAKE) -C libidn
+
 staticlib:
-	$(AR) rcs lib$(PROG).a $(OBJECT)
+	$(AR) rcs lib$(PROG).a $(OBJECT) $(PCREOBJ) $(IDNOBJ)
 
 sharedlib:
-	$(CC) -shared -Wl,-soname,$(SONAME) -o lib$(PROG).so.$(VERSION) $(OBJECT)
+	$(CC) -shared -Wl,-soname,$(SONAME) -o lib$(PROG).so.$(VERSION) $(OBJECT) $(PCREOBJ) $(IDNOBJ)
 
 olibc-config:
 	$(CP) -f olibc-config.in olibc-config
@@ -86,8 +95,10 @@ install-doc:
 	$(MAKE) -C man install
 
 clean:
+	$(MAKE) -C pcrelib clean
+	$(MAKE) -C libidn clean
 	-$(RM) -f *.o *.so* *.a main olibc-config
 
 distclean: clean
-	-$(RM) -f olibc-config.h config.* Makefile man/Makefile *~
+	-$(RM) -f olibc-config.h config.* Makefile man/Makefile pcrelib/Makefile libidn/Makefile *~
 	-$(RM) -rf autom4te*

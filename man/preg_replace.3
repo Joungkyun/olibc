@@ -49,8 +49,9 @@ UTF8 은 시스템의 pcrelib 에 의존을 한다.
 #include <olibc/libpcre.h>
 
 char *result;
+int len;
 
-result = preg_replace("/xx/i", "!!", "SeeEEeex");
+result = preg_replace("/xx/i", "!!", "SeeEEeex", &len);
 printf ("%s\\n", result);
 
 free (result);

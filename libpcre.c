@@ -500,27 +500,27 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 #else
 
 char * preg_quote (char *string, char *delimiters) {
-	fprintf (stderr, "olibc compiled without idn library\n");
+	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
 	exit (FAILURE);
 }
 
 char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
-	fprintf (stderr, "olibc compiled without idn library\n");
+	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
 	exit (FAILURE);
 }
 
 char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no) {
-	fprintf (stderr, "olibc compiled without idn library\n");
+	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
 	exit (FAILURE);
 }
 
 char * preg_grep (char *regex, char *str, int opt) {
-	fprintf (stderr, "olibc compiled without idn library\n");
+	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
 	exit (FAILURE);
 }
 
 int preg_match (char *regex, char *subject) {
-	fprintf (stderr, "olibc compiled without idn library\n");
+	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
 	exit (FAILURE);
 }
 
