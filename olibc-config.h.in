@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.8 2003-11-10 12:42:47 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.9 2004-02-04 05:38:46 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
@@ -26,9 +26,6 @@
 
 /* Define to 1 if you have the <iconv.h> header file. */
 #undef HAVE_ICONV_H
-
-/* Define to 1 if you have the <idna.h> header file. */
-#undef HAVE_IDNA_H
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -57,9 +54,6 @@
 /* Define to 1 if you have the <pcre/pcre.h> header file. */
 #undef HAVE_PCRE_PCRE_H
 
-/* Define to 1 if you have the <punycode.h> header file. */
-#undef HAVE_PUNYCODE_H
-
 /* Define to 1 if you have the `setlocale' function. */
 #undef HAVE_SETLOCALE
 
@@ -78,9 +72,6 @@
 
 /* Define to 1 if you have the `strdup' function. */
 #undef HAVE_STRDUP
-
-/* Define to 1 if you have the <stringprep.h> header file. */
-#undef HAVE_STRINGPREP_H
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H

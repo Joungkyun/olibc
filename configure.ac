@@ -1,12 +1,12 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.9 2003-11-10 12:42:47 oops Exp $
+# $Id: configure.ac,v 1.10 2004-02-04 05:38:46 oops Exp $
 
 #
 AC_PREREQ(2.53)
 
-AC_INIT([olibc], [0.0.7], [http://www.oops.org])
+AC_INIT([olibc], [0.0.8], [http://www.oops.org])
 AC_CONFIG_SRCDIR([libstring.h])
 AC_CONFIG_HEADER([olibc-config.h])
 AC_PREFIX_DEFAULT([/usr/local])
@@ -78,7 +78,7 @@ fi
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([langinfo.h libintl.h locale.h stdlib.h string.h sys/time.h unistd.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h idna.h punycode.h stringprep.h iconv.h])
+AC_CHECK_HEADERS([langinfo.h libintl.h locale.h stdlib.h string.h sys/time.h unistd.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
