@@ -155,7 +155,7 @@ stringprep_convert (const char *str,
 
   cd = iconv_open (to_codeset, from_codeset);
 
-  if (cd == (iconv_t) - 1)
+  if (cd == (iconv_t) -1)
     return NULL;
 
   p = (char *) malloc (strlen (str) + 1);
