@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.18 2004-02-03 08:44:05 oops Exp $ */
+/* $Id: libstring.c,v 1.19 2004-02-07 09:55:10 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -649,7 +649,7 @@ char * convert_racecode (char * domain, int mode, int debug) {
 #else
 char * convert_racecode (char * domain, int mode, int debug) {
 	fprintf (stderr, "ERROR: olibc compiled without iconv library\n");
-	exit (FAILURE);
+	return domain;
 }
 #endif
 
@@ -673,13 +673,13 @@ char * convert_punycode (char * domain, int mode, int debug) {
 			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
 				 	 domain, stringprep_locale_charset ());
 
-			exit (FAILURE);
+			return domain;
 		}
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
-			exit (FAILURE);
+			return domain;
 		}
 
 		if ( debug ) {
@@ -694,21 +694,21 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		if ( rc != IDNA_SUCCESS ) {
 			fprintf (stderr, "ERROR: %s: idna_to_ascii_from_locale() failed with error %d.\n",
 					 domain, rc);
-			exit (FAILURE);
+			return domain;
 		}
 	} else {
 		p = stringprep_locale_to_utf8 (domain);
 		if ( !p ) {
 			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
 					 domain, stringprep_locale_charset ());
-			exit (FAILURE);
+			return domain;
 		}
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
 			ofree (p);
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
-			exit (FAILURE);
+			return domain;
 		}
 
 		rc = idna_to_unicode_8z4z (p, &q, 0|0);
@@ -717,7 +717,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		if (rc != IDNA_SUCCESS) {
 			fprintf (stderr, "ERROR: %s: idna_to_unicode_locale_from_locale() failed with error %d.\n",
 					 domain, rc);
-			exit (FAILURE);
+			return domain;
 		}
 
 		if ( debug ) {
@@ -730,7 +730,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		if ( !p ) {
 			ofree (q);
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
-			exit (FAILURE);
+			return domain;
 		}
 
 		r = stringprep_utf8_to_locale (p);
@@ -738,7 +738,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		if ( !r ) {
 			fprintf (stderr, "ERROR: %s: could not convert from UTF-8 to %s.\n",
 					 domain, stringprep_locale_charset ());
-			exit (FAILURE);
+			return domain;
 		}
 
 	}
@@ -753,11 +753,11 @@ char * convert_punycode (char * domain, int mode, int debug) {
 	return conv;
 #else
 	fprintf (stderr, "ERROR: olibc compiles without iconv library\n");
-	exit (FAILURE);
+	return domain;
 #endif
 #else
 	fprintf (stderr, "ERROR: olibc compiles without libidn\n");
-	exit (FAILURE);
+	return domain;
 #endif
 }
 

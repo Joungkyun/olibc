@@ -1,4 +1,4 @@
-/* $Id: _race.c,v 1.5 2004-02-03 08:44:04 oops Exp $ */
+/* $Id: _race.c,v 1.6 2004-02-07 09:55:10 oops Exp $ */
 #include <common.h>
 #include <_race.h>
 
@@ -167,14 +167,14 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 
 	if ( ! strcmp (to, from) ) {
 		fprintf (stderr, "ERROR: original charactor set sames convert charactor set\n");
-		exit (1);
+		return src;
 	}
 
 	cd = iconv_open (to, from);
 
-	if ( !cd ) {
+	if ( cd == (iconv_t) -1 ) {
 		fprintf (stderr, "ERROR: Can't not open iconv point\n");
-		exit (1);
+		return src;
 	}
 
 	err = iconv ( cd, &inbuf_p, &il, &outbuf_p, &ol );
@@ -225,7 +225,7 @@ void string_convert (char *dest, char *src, char *from, char *to, int debug) {
 
 	if (have_error == 1) {
 		fprintf (stderr, "ERROR: encoding error with iconv\n");
-		exit (1);
+		return src;
 	}
 }
 
@@ -572,12 +572,12 @@ char *de_base32 (char src) {
 
 char * encode_race (char *domain, char *charset, int debug) {
 	fprintf (stderr, "ERROR: compiled without iconv\n");
-	exit (1);
+	return domain;
 }
 
 char * decode_race (char *domain, char *charset, int debug) {
 	fprintf (stderr, "ERROR: compiled without iconv\n");
-	exit (1);
+	return domain;
 }
 #endif
 

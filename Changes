@@ -1,8 +1,12 @@
 Changelog
 
-$Id: Changes,v 1.29 2004-02-04 05:38:46 oops Exp $
+$Id: Changes,v 1.30 2004-02-07 09:55:10 oops Exp $
 
-* Wed, Feb  4 2003
+* Sat, Feb  7 2004
+	by JoungKyun Kim <http://www.oops.org>
+	- changed exit code to return source variable on idn code
+
+* Wed, Feb  4 2004
 	by JoungKyun Kim <http://www.oops.org>
 	- updated libidn library 0.3.7
 	- release 0.0.8
