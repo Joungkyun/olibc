@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.12 2004-02-18 16:17:15 oops Exp $
+# $Id: Makefile.in,v 1.13 2004-02-18 16:24:22 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -97,11 +97,24 @@ install: install-doc install-header
 	$(MKDIR) $(DESTDIR)$(libdir)
 	$(LN) lib$(PROG).so.$(VERSION) lib$(PROG).so
 	$(LN) lib$(PROG).so.$(VERSION) $(SONAME)
+	$(LN) liboc.so.$(VERSION) liboc.so
+	$(LN) liboc.so.$(VERSION) $(SBNAME)
+	$(LN) libogc.so.$(VERSION) libogc.so
+	$(LN) libogc.so.$(VERSION) $(SGNAME)
+
 	$(MV) lib$(PROG).so $(DESTDIR)$(libdir)
 	$(MV) $(SONAME) $(DESTDIR)$(libdir)
+	$(MV) liboc.so $(DESTDIR)$(libdir)
+	$(MV) $(SBNAME) $(DESTDIR)$(libdir)
+	$(MV) libogc.so $(DESTDIR)$(libdir)
+	$(MV) $(SGNAME) $(DESTDIR)$(libdir)
 
 	$(INSTALL) -m 755 lib$(PROG).so.$(VERSION) $(DESTDIR)$(libdir)
+	$(INSTALL) -m 755 liboc.so.$(VERSION) $(DESTDIR)$(libdir)
+	$(INSTALL) -m 755 libogc.so.$(VERSION) $(DESTDIR)$(libdir)
 	$(INSTALL) -m 644 lib$(PROG).a $(DESTDIR)$(libdir)
+	$(INSTALL) -m 644 liboc.a $(DESTDIR)$(libdir)
+	$(INSTALL) -m 644 libogc.a $(DESTDIR)$(libdir)
 
 	# for compotable old version
 	$(INSTALL) -m 755 lib$(PROG).so.0.0.8 $(DESTDIR)$(libdir)
