@@ -1,0 +1,41 @@
+.TH writefile(1) 2003-09-19 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man writefile.1
+.\" 2003-09-19 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+writefile
+
+.SH 사용법
+.B #include <olibc/libfile.h>
+.sp
+.BI "int writefile (char * filename, char * str, int mode);"
+
+.SH 설명
+str 을 filename 에 기록한다. mode 가 1 이면, filename 이 존재할 경우
+해당 파일에 이어서 작성을 하며, 0 이거나 해당 파일이 없으면, filename
+을 새로 기록한다.
+
+.SH 반환값
+이 함수는 기록에 성공했을 경우 0을 반환하며, 실패했을 경우 -1 을 반환
+한다.
+
+.SH 예제
+.nf
+#include <olibc/libfile.h>
+
+char *text = "asdf";
+char *path = "/etc/hosts";
+
+printf ("%d\\n", writefile (path, text, 0));
+.fi
+
+.SH 작성
+2003.09.19 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.3 2003-09-19 10:56:37 oops Exp $ */
+/* $Id: libfile.c,v 1.4 2003-09-19 11:01:23 oops Exp $ */
 #include <common.h>
 
 #include <libfile.h>
@@ -72,6 +72,48 @@ char * fileread (char * path) {
 	fclose (fp);
 
 	return text;
+}
+
+int writefile(char *filename, char *str, int mode) {
+	struct stat s;
+
+	FILE *fp;
+	unsigned char *act, *string;
+	int ret;
+
+	if ( mode == 1) {
+		ret = stat (filename, &s);
+
+		if (ret < 0) {
+			act = "wb";
+			string = strdup(str);
+		} else {
+			act = "ab";
+			string = (char *) malloc(strlen(str) + 32);
+			sprintf(string, "\n%s", str);
+		}
+	} else {
+		act = "wb";
+		string = strdup(str);
+	}
+
+	if ( (fp = fopen(filename, act)) == NULL ) {
+		fprintf (stderr, "ERROR: Can't open %s in write mode\n", filename);
+		free (string);
+		return -1;
+	}
+
+	if (fwrite(string, sizeof(char), strlen(string), fp) != strlen(string)) {
+		fclose(fp);
+		fprintf (stderr, "ERROR: writing to file %s\n", filename);
+		free (string);
+		return -1;
+	}
+
+	free(string);
+	fclose(fp);
+
+	return 0;
 }
 
 /*
