@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.9 2003-10-28 12:09:00 oops Exp $
+# $Id: Makefile.in,v 1.10 2003-10-28 12:25:35 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -97,6 +97,7 @@ install-header:
 	$(INSTALL) -m 644 libpcre.h $(DESTDIR)$(includedir)/olibc/
 	$(INSTALL) -m 644 libstring.h $(DESTDIR)$(includedir)/olibc/
 	$(INSTALL) -m 644 libtime.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 libarg.h $(DESTDIR)$(includedir)/olibc/
 
 install-doc:
 	$(MAKE) -C man install
