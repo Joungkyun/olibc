@@ -1,6 +1,6 @@
 Changelog
 
-$Id: Changes,v 1.9 2003-09-19 15:16:30 oops Exp $
+$Id: Changes,v 1.10 2003-09-19 15:23:51 oops Exp $
 
 * Fri, Sep 19 2003
 	by JoungKyun Kim <http://www.oops.org>
@@ -9,6 +9,7 @@ $Id: Changes,v 1.9 2003-09-19 15:16:30 oops Exp $
 	- added writefile function
 	- removed strip option on Makefile
 	- fixed gabage problem on lib_preg_parse function
+	- added olibc_version function
 
 * Thu, Sep 18 2003
 	by JoungKyun Kim <http://www.oops.org>

@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.8 2003-09-19 10:56:37 oops Exp $ */
+/* $Id: libstring.c,v 1.9 2003-09-19 15:23:51 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -13,6 +13,10 @@
 void memlocate_chk (char *str);
 char * decode_race (char *domain, char *charset, int debug);
 char * encode_race (char *domain, char *charset, int debug);
+
+void olibc_version (void) {
+	printf ("%d\n", PACKAGE_VERSION);
+}
 
 void memlocate_chk (char *str) {
 	if (str == NULL) {

@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.3 2003-09-19 10:56:37 oops Exp $ */
+/* $Id: libstring.h,v 1.4 2003-09-19 15:23:51 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -21,6 +21,8 @@
 #define BWHITE		16
 
 #define MAX(a, b)	(((a)>(b))?(a):(b))
+
+void olibc_version (void);
 
 /* addslashes follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
  *
