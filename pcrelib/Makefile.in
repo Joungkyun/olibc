@@ -1,23 +1,30 @@
+# $Id: Makefile.in,v 1.2 2004-08-06 20:26:15 oops Exp $
+top_builddir	= ..
 CC		= @CC@ -Wall
-CFLAGS		= @CFLAGS@ -fpic
+SHELL		= @SHELL@
+LIBTOOL		= @LIBTOOL@
+CFLAGS		= @CFLAGS@
 CPPFLAGS	= -I. -I.. @CPPFLAGS@
-DEFS		= $(CPPFLAGS) -DHAVE_CONFIG_H -DSUPPORT_UTF8 -DLINK_SIZE=2 -DPOSIX_MALLOC_THRESHOLD=10
-PCREOBJ		= maketables.o get.o study.o pcre.o
+DEFS		= -DHAVE_CONFIG_H -DSUPPORT_UTF8 -DLINK_SIZE=2 -DPOSIX_MALLOC_THRESHOLD=10 $(CPPFLAGS)
+PCREOBJ		= maketables.lo get.lo study.lo pcre.lo
 DESTDIR		=
+
+COMPILE		= $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(DEFS) -prefer-pic
+RM		= @RM@ -f
 
 all: $(PCREOBJ)
 
-maketables.o: maketables.c
-	$(CC) $(CFLAGS) $(DEFS) -c maketables.c -o maketables.o
+maketables.lo: maketables.c
+	$(COMPILE) -o $@ -c $<
 
-get.o: get.c
-	$(CC) $(CFLAGS) $(DEFS) -c get.c -o get.o
+get.lo: get.c
+	$(COMPILE) -o $@ -c $<
 
-study.o: study.c
-	$(CC) $(CFLAGS) $(DEFS) -c study.c -o study.o
+study.lo: study.c
+	$(COMPILE) -o $@ -c $<
 
-pcre.o: pcre.c
-	$(CC) $(CFLAGS) $(DEFS) -c pcre.c -o pcre.o
+pcre.lo: pcre.c
+	$(COMPILE) -prefer-pic -o $@ -c $<
 
 clean:
-	-$(RM) -f *.o *.a *.lo
+	-$(RM) *.o *.a *.lo .libs/*

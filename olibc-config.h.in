@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.11 2004-06-21 10:20:12 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.12 2004-08-06 20:26:15 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
@@ -18,6 +18,9 @@
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H
 
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
 /* Define to 1 if you have the <errno.h> header file. */
 #undef HAVE_ERRNO_H
 
@@ -32,6 +35,9 @@
 
 /* Define to 1 if you have the <langinfo.h> header file. */
 #undef HAVE_LANGINFO_H
+
+/* Define to 1 if you have the `iconv' library (-liconv). */
+#undef HAVE_LIBICONV
 
 /* Define to 1 if you have the <libintl.h> header file. */
 #undef HAVE_LIBINTL_H
@@ -99,9 +105,6 @@
    slash. */
 #undef LSTAT_FOLLOWS_SLASHED_SYMLINK
 
-/* Name of package */
-#undef PACKAGE
-
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
@@ -137,9 +140,6 @@
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
-
-/* Version number of package */
-#undef VERSION
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

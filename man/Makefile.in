@@ -1,11 +1,14 @@
-# $Id: Makefile.in,v 1.2 2003-09-18 06:43:57 oops Exp $
+# $Id: Makefile.in,v 1.3 2004-08-06 20:26:15 oops Exp $
+top_builddir	= ..
 CC		= @CC@
 CFLAGS		=
 DESTDIR		=
+SHELL		= @SHELL@
 
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 
+LIBTOOL		= @LIBTOOL@
 INSTALL		= @INSTALL@
 LS		= @LS@
 GZIP		= @GZIP@
@@ -15,8 +18,10 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 mandir		= @mandir@
 
+D_LIBTOOL	= $(LIBTOOL) --mode=install @INSTALL_DATA@
+
 install:
 	$(MKDIR) $(DESTDIR)$(mandir)/ko/man1
 	for i in `$(LS) *.1`; do \
-		$(INSTALL) -m644 $$i $(DESTDIR)$(mandir)/ko/man1/ ;\
+		$(D_LIBTOOL) $$i $(DESTDIR)$(mandir)/ko/man1/ ;\
 	done

@@ -1,9 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.39 2004-08-06 10:46:40 oops Exp $
+$Id: Changes,v 1.40 2004-08-06 20:26:15 oops Exp $
 
 * Fri, Aug  6 2004
 	- fixed iconv problem on liboc that conflict gpl license problem
+	- imported libtool system
 
 * Mon, Jun 21 2004
 	- Support FreeBSD

@@ -1,3 +1,3 @@
 # autoreconf --install --force --verbose
-aclocal --force -I m4 && autoheader --force && autoconf --force
+aclocal --force -I m4 >& /dev/null && autoheader --force && autoconf --force && libtoolize --force
 rm -rf autom4te* *~ aclocal.m4
