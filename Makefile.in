@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.5 2003-09-18 06:43:57 oops Exp $
+# $Id: Makefile.in,v 1.6 2003-09-19 11:01:56 oops Exp $
 PROG		= @PACKAGE_NAME@
 VERSION		= @PACKAGE_VERSION@
 AR		= @AR@
@@ -77,7 +77,7 @@ install: install-doc install-header
 	$(MKDIR) $(DESTDIR)$(libdir)
 	$(LN) lib$(PROG).so.$(VERSION) lib$(PROG).so
 	$(LN) lib$(PROG).so.$(VERSION) $(SONAME)
-	$(INSTALL) -s -m 755 lib$(PROG).so.$(VERSION) $(DESTDIR)$(libdir)
+	$(INSTALL) -m 755 lib$(PROG).so.$(VERSION) $(DESTDIR)$(libdir)
 	$(MV) lib$(PROG).so $(DESTDIR)$(libdir)
 	$(MV) $(SONAME) $(DESTDIR)$(libdir)
 	$(INSTALL) -m 644 lib$(PROG).a $(DESTDIR)$(libdir)

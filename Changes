@@ -1,12 +1,13 @@
 Changelog
 
-$Id: Changes,v 1.7 2003-09-19 11:01:23 oops Exp $
+$Id: Changes,v 1.8 2003-09-19 11:01:56 oops Exp $
 
 * Fri, Sep 19 2003
 	by JoungKyun Kim <http://www.oops.org>
 	- fixed blank return fileread function
 	- move to libfile.h from libstring.h on fileread function
 	- added writefile function
+	- removed strip option on Makefile
 
 * Thu, Sep 18 2003
 	by JoungKyun Kim <http://www.oops.org>
