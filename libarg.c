@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.12 2003-11-06 18:29:11 oops Exp $ */
+/* $Id: libarg.c,v 1.13 2004-01-16 10:41:02 oops Exp $ */
 #include <common.h>
 #include <libarg.h>
 
@@ -113,7 +113,7 @@ int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *l
 		/* increased command line number argument */
 		_ogetopt_cmd_int++;
 
-		if ( o_cmdarg == NULL )
+		if ( _ogetopt_cmd_int == 1 )
 			o_cmdarg = malloc ( sizeof (char *) * _ogetopt_cmd_int + 1 );
 		else
 			o_cmdarg = realloc ( o_cmdarg, sizeof (char *) * _ogetopt_cmd_int + 1 );
