@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.13 2003-09-27 09:11:24 oops Exp $ */
+/* $Id: libstring.c,v 1.14 2003-11-10 03:58:50 oops Exp $ */
 #include <common.h>
 #include <libstring.h>
 
@@ -110,7 +110,6 @@ void trim (char *str) {
 	}
 
 	if ( start == end ) {
-		start = 0;
 		end = len;
 	}
 
@@ -125,17 +124,21 @@ void trim (char *str) {
 char * trim_r (char *str, int should_free) {
 	int len = strlen (str);
 	int start = 0, end = 0, i = 0;
-	char *ret;
+	char *ret, *tmp;
+
+	tmp = malloc ( sizeof ( sizeof (char) * (len + 1) ) );
+	strcpy ( tmp, str );
+	if ( should_free ) ofree (str);
 	
 	for ( i=0; i<len; i++ ) {
-		if ( ! isspace (str[i]) ) {
+		if ( ! isspace (tmp[i]) ) {
 			start = i;
 			break;
 		}
 	}
 
 	for ( i=len-1; i>0; i-- ) {
-		if ( ! isspace (str[i]) ) {
+		if ( ! isspace (tmp[i]) ) {
 			end = i;
 			break;
 		}
@@ -146,8 +149,12 @@ char * trim_r (char *str, int should_free) {
 		exit (FAILURE);
 	}
 
-	if ( start == end ) {
-		start = 0;
+	if ( ! start && ! end ) {
+		ofree (tmp);
+		ret = malloc ( sizeof (char) );
+		memset ( ret, 0, sizeof (ret) );
+		return ret; 
+	} else if ( start == end ) {
 		end = len;
 	}
 
@@ -155,9 +162,9 @@ char * trim_r (char *str, int should_free) {
 	memlocate_chk (ret);
 
 	memset (ret, 0, sizeof (char) * (len + 32));
-	memcpy (ret, str + start, end - start + 1);
+	memcpy (ret, tmp + start, end - start + 1);
 
-	if ( should_free ) ofree (str);
+	ofree (tmp);
 
 	return ret;
 }
