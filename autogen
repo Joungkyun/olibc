@@ -1,2 +1,3 @@
-autoheader && autoconf
-rm -rf autom4te-* *~
+# autoreconf --install --force --verbose
+aclocal --force -I m4 && autoconf --force && autoheader --force
+rm -rf autom4te* *~ aclocal.m4

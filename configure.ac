@@ -1,12 +1,13 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.11 2004-02-18 16:17:15 oops Exp $
+# $Id: configure.ac,v 1.12 2004-06-21 10:20:12 oops Exp $
 
 #
-AC_PREREQ(2.53)
+AC_PREREQ(2.59)
 
-AC_INIT([olibc], [0.1.0], [http://www.oops.org])
+AC_INIT([olibc], [0.1.1], [http://www.oops.org])
+AM_INIT_AUTOMAKE([1.8 gnits])
 AC_CONFIG_SRCDIR([libstring.h])
 AC_CONFIG_HEADER([olibc-config.h])
 AC_PREFIX_DEFAULT([/usr/local])
@@ -18,6 +19,13 @@ SONAME_REVISION=1
 AC_SUBST(SONAME_MAJOR)
 AC_SUBST(SONAME_MINOR)
 AC_SUBST(SONAME_REVISION)
+
+# for libidn
+AC_SUBST(LIBIDN_NAME)
+AC_SUBST(LIBIDN_VERSOIN)
+
+LIBIDN_NAME=libidn
+LIBIDN_VERSION=0.3.7
 
 # Checks for programs.
 AC_PROG_CC
@@ -79,6 +87,9 @@ fi
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([langinfo.h libintl.h locale.h stdlib.h string.h sys/time.h unistd.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h])
+
+# Checks for typedefs, structures, and compiler characteristics for libidn.
+AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
