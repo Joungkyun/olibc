@@ -1,0 +1,69 @@
+.TH numberFormat(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man numberFormat.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+numberFormat
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int print);"
+
+.SH 설명
+숫자에 읽기 쉽도록 자리수를 나누어, 문자열로 반환한다.
+
+.TP
+.B d
+.br
+변환할 원형 숫자를 지정한다.
+
+.TP
+.B dec
+.br
+소수점의 자리수를 지정
+
+.TP
+.B dec_point
+.br
+소수점을 표시할 캐릭터를 지정
+
+.TP
+.B thousand_sep
+.br  
+자리수를 표시할 캐릭터를 지정
+
+.TP
+.B print
+.br
+1로 지정을 하면, 출력을 하고 NULL 을 반환
+
+.SH 반환값
+자리수를 구분한 문자열로 반환. 이 함수가 리턴한 값은 메모리 해제(free)를
+해 줘야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+double no = 123456789;
+char *data;
+
+data = malloc(128);
+
+strcpy (data, numberFormat(no,1,0));
+
+printf ("%s\\n", data);
+free (data);
+.fi
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+PHP License 2.02
+.br
+http://www.php.net/license/2_02.txt 를 참고 하도록 한다.

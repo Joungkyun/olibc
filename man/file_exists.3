@@ -1,0 +1,80 @@
+.TH file_exists(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man file_exists.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+file_exists
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "int file_exists(char *path, int mode);"
+
+.SH 설명
+해당 경로가 존재하는지 여부를 체크한다. 모드를 지정하면 해당 경로의 타입까지
+체크가 가능하다.
+
+.TP
+.B path
+.br
+체크할 경로를 지정한다.
+
+.TP
+.B mode
+.br
+다음의 상수를 참고한다.
+
+.br
+.B _IS_NCHK 0
+=> 해당 경로의 존재 여부만 체크한다.
+.br
+.B _IS_FILE 1
+=> path 가 파일 인지를 체크
+.br
+.B _IS_DIR 2
+=> path 가 디렉토리 인지를 체크
+.br
+.B _IS_SLINK 3
+=> path 가 심볼릭 링크 인지를 체크
+.br
+.B _IS_CDEV 4
+=> path 가 캐릭터 디바이스 인지를 체크
+.br
+.B _IS_BDEV 5
+=> path 가 블럭 디바이스 인지를 체크
+.br
+.B _IS_FIFO 6
+=> path 가 FIFO 인지를 체크
+.br
+.B _IS_SOCK 7
+=> path 가 소켓 인지를 체크
+
+.SH 반환값
+참이면 1을 반환하고, 거짓이면 0을 반환한다.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+char *path = "/vars";
+
+printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
+printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
+printf ("DIR  : %d\\n", file_exists (path, _IS_DIR));
+printf ("SLINK: %d\\n", file_exists (path, _IS_SLINK));
+printf ("CDEV : %d\\n", file_exists (path, _IS_CDEV));
+printf ("BDEV : %d\\n", file_exists (path, _IS_BDEV));
+printf ("FIFO : %d\\n", file_exists (path, _IS_FIFO));
+printf ("SOCK : %d\\n", file_exists (path, _IS_SOCK));
+.fi
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

@@ -1,0 +1,21 @@
+CC		= @CC@
+CFLAGS		=
+DESTDIR		=
+
+PROG		= @PACKAGE_NAME@
+VERSION		= @PACKAGE_VERSION@
+
+INSTALL		= @INSTALL@
+LS		= @LS@
+GZIP		= @GZIP@
+MKDIR		= @MKDIR@ -p
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+mandir		= @mandir@
+
+install:
+	$(MKDIR) $(DESTDIR)$(mandir)/ko/man1
+	for i in `$(LS) *.1`; do \
+		$(INSTALL) -m644 $$i $(DESTDIR)$(mandir)/ko/man1/ ;\
+	done

@@ -1,0 +1,41 @@
+.TH strtoupper(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man strtoupper.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+strtoupper
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "void strtoupper (char *str);"
+
+.SH 설명
+문자열을 대문자로 변경한다.
+
+주의할 것은 원본 str 을 변형한다는 것이다.
+
+.SH 반환값
+없음
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+char data[5] = "DaTa";
+printf ("%s\\n", strtoupper (data));
+.fi
+
+.SH 참고
+strtolower(1)
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

@@ -1,0 +1,71 @@
+.TH human_size(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man human_size.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+human_size
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "char * human_size (double size, int sub, int unit);;"
+
+.SH 설명
+숫자를 읽기 쉬운 단위로 환산을 하여 문자열로 반환을 한다. 반환값은 소수점 2 자리에서
+잘린다.
+
+현재 지원되는 단위는 byte 와 bit 이다.
+
+.TP
+.B size
+.br
+변환할 수를 지정한다.
+
+.TP
+.B sub
+.br
+1 로 지정을 하면,
+.B 117.74 MB (123,456,789 Bytes)
+와 같이 원본 수를 같이 반환을 한다.
+
+.TP
+.B unit
+.br
+Byte 와 Bit 를 지정한다.
+.B 0
+을 지정하면
+.B Bit
+,
+.B 1
+을 지정하면
+.B Byte
+로 계산이 된다.
+
+.SH 반환값
+Byte 단위와 Bit 단위를 자동으로 변환을 하여 문자열로 반환을 한다.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+double no = 123456789;
+char *data;
+
+data = malloc(128);
+
+strcpy (data, human_size(no,1,0));
+
+printf ("%s\\n", data);
+free (data);
+.fi
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

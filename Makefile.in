@@ -1,0 +1,93 @@
+PROG		= @PACKAGE_NAME@
+VERSION		= @PACKAGE_VERSION@
+AR		= @AR@
+CC		= @CC@ -Wall
+CFLAGS		= @CFLAGS@ -fpic
+CPPFLAGS	= -I. @CPPFLAGS@
+LDFLAGS		= @LIBS@ @LDFLAGS@
+LIBS		= @LIBS@
+DEFS		= @DEFS@ $(CPPFLAGS)
+OBJECT		= libstring.o libpcre.o libfile.o libtime.o _race.o
+SONAME		= lib$(PROG).so.@SONAME_MAJOR@
+DESTDIR		=
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+datadir		= @datadir@
+includedir	= @includedir@
+libdir		= @libdir@
+bindir		= @bindir@
+
+INSTALL		= @INSTALL@
+RM		= @RM@ -f
+MAKE		= @MAKE@
+MKDIR		= @MKDIR@ -p
+STRIP		= @STRIP@
+LN		= @LN_S@
+MV		= @MV@
+CP		= @CP@
+PERL		= @PERL@
+
+all: $(OBJECT) staticlib sharedlib olibc-config
+
+libpcre.o: libpcre.c libpcre.h olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+libstring.o: libstring.c libstring.h olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+libfile.o: libfile.c libfile.h olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+libtime.o: libtime.c libtime.h olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+_race.o: _race.c _race.h olibc-config.h common.h
+	$(CC) $(CFLAGS) $(DEFS) -c $<
+
+staticlib:
+	$(AR) rcs lib$(PROG).a $(OBJECT)
+
+sharedlib:
+	$(CC) -shared -Wl,-soname,$(SONAME) -o lib$(PROG).so.$(VERSION) $(OBJECT)
+
+olibc-config:
+	$(CP) -f olibc-config.in olibc-config
+	$(PERL) -pi -e "s!\@prefix\@!$(prefix)!g" olibc-config
+	$(PERL) -pi -e "s!\@exec_prefix\@!$(exec_prefix)!g" olibc-config
+	$(PERL) -pi -e "s!\@VERSION\@!$(VERSION)!g" olibc-config
+	$(PERL) -pi -e "s!\@includedir\@!$(includedir)!g" olibc-config
+	$(PERL) -pi -e "s!\@libdir\@!$(libdir)!g" olibc-config
+	$(PERL) -pi -e "s!\@LIBS\@!$(LIBS)!g" olibc-config
+
+install: install-doc install-header
+	$(MKDIR) $(DESTDIR)$(bindir)
+	$(INSTALL) -m755 olibc-config $(DESTDIR)$(bindir)
+
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(LN) lib$(PROG).so.$(VERSION) lib$(PROG).so
+	$(LN) lib$(PROG).so.$(VERSION) $(SONAME)
+	$(INSTALL) -s -m 755 lib$(PROG).so.$(VERSION) $(DESTDIR)$(libdir)
+	$(MV) lib$(PROG).so $(DESTDIR)$(libdir)
+	$(MV) $(SONAME) $(DESTDIR)$(libdir)
+	$(INSTALL) -m 644 lib$(PROG).a $(DESTDIR)$(libdir)
+
+
+install-header:
+	$(MKDIR) $(DESTDIR)$(includedir)/olibc
+	$(INSTALL) -m 644 olibc-config.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 common.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 libfile.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 libpcre.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 libstring.h $(DESTDIR)$(includedir)/olibc/
+	$(INSTALL) -m 644 libtime.h $(DESTDIR)$(includedir)/olibc/
+
+install-doc:
+	$(MAKE) -C man install
+
+clean:
+	-$(RM) -f *.o *.so* *.a main olibc-config
+
+distclean: clean
+	-$(RM) -f olibc-config.h config.* Makefile man/Makefile *~
+	-$(RM) -rf autom4te*

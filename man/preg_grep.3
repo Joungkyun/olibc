@@ -1,0 +1,66 @@
+.TH preg_grep(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man preg_grep.3
+.\" 2003-08-31 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+preg_grep
+
+.SH 사용법
+.B #include <olibc/libpcre.h>
+.sp
+.BI "char * preg_grep (char *regex, char *str, int opt);"
+
+.SH 설명
+.B preg_grep
+함수는 시스템의 grep 과 비슷하게 작동을 한다. 하지만 정규식은
+.B perl 호환 정규식
+이 적용이 된다.
+
+.B preg_grep
+함수는 지정된 정규식과 매치되는 행을 출력하거나 하지 않을 수 있다.
+
+.TP
+.B regex
+.br
+체크할 정규식을 지정
+
+.TP
+.B str
+.br
+검사할 문자열
+
+.TP
+.B opt
+.br
+0 을 지정하면, 정규식과 매치되는 행만 반환을 하며, 1 로 지정이 되면
+.B grep -v
+와 같이 매치하지 않는 행만 반환을 한다.
+
+.SH 반환값
+행 단위로 반환이 되며, 마지막 행의 \\n 은 삭제가 된다.
+
+이 함수가 리턴한 값은 메모리 해제(free)를 해 줘야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libpcre.h>
+
+char *buf;
+char *string = "asdf\\nqwer";
+
+buf = preg_grep ("/ASDF/i", string, 0);
+printf ("%s\\n", buf);
+
+free (buf);
+.fi
+
+.SH 작성
+2003.08.31 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

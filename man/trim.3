@@ -1,0 +1,71 @@
+.TH trim(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man trim.3
+.\" 2003-08-31 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+trim
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "void trim(char *str);"
+
+.SH 설명
+문자열 앞/뒤의 공백문자를 제거한다.
+
+php 의 trim 함수와 동일하게 작동을 하지만, 값을 리턴하지는 않는다. void 형으로 작동을
+하며, perl 의 chomp 와 같이 호출을 하여 변경하고자 하는 변수 자체를 변경을 한다. 만약
+변수 원형을 수정하고 싶지 않다면,
+.B trim_r
+함수를 이용하도록 한다.
+
+.TP
+.B str
+.br
+공백 문자를 제거할 문자열을 지정한다. 단, 이 인자는 반드시 메모리 할당이 되어 있어야만
+한다.
+
+.SH 반환값
+없음
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+char *str;
+
+str = malloc (sizeof (char) * 32);
+strcpy (str, "   asdf   ");
+
+/* str 변수의 앞/뒤 공백을 삭제 */
+trim (str);
+printf ("%s\\n", str);
+
+free (str);
+.fi
+
+.B 다음의 예제는 잘못된 사용이다.
+
+.nf
+#include <olibc/libstring.h>
+
+char *str = "    asdf    ";
+
+/* str 변수에 메모리 할당이 되어 있지 않다 */
+trim (str);
+printf ("%s\\n", str);
+.fi
+
+.SH 참조
+trim(1)
+
+.SH 작성
+2003.08.31 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.
