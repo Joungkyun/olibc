@@ -2,14 +2,14 @@
 .\" Process with
 .\" nroff -man trim_r.3
 .\" 2003-08-31 JoungKyun Kim <htt://www.oops.org>
-.\" $Id: trim_r.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.\" $Id: trim_r.3,v 1.3 2003-11-06 18:03:41 oops Exp $
 .SH 이름
 trim_r
 
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * ntrim(char *str, int should_free);"
+.BI "char * trim_r(char *str, int should_free);"
 
 .SH 설명
 문자열 앞/뒤의 공백문자를 제거한다.
