@@ -1,17 +1,9 @@
 #include <common.h>
 #include <libstring.h>
 
-#ifdef HAVE_IDNA_H
 #include <idna.h>
-#endif
-
-#ifdef HAVE_PUNYCODE_h
 #include <punycode.h>
-#endif
-
-#ifdef HAVE_STRINGPREP_H
 #include <stringprep.h>
-#endif
 
 #ifdef EANBLE_NLS
 #include <langinfo.h>
