@@ -1,12 +1,12 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.13 2004-08-06 20:26:15 oops Exp $
+# $Id: configure.ac,v 1.14 2005-08-31 18:31:28 oops Exp $
 
 #
 AC_PREREQ(2.59)
 
-AC_INIT([olibc], [0.1.1], [http://www.oops.org])
+AC_INIT([olibc], [0.1.2], [http://www.oops.org])
 #AM_INIT_AUTOMAKE([1.8 gnits])
 AC_CONFIG_SRCDIR([libstring.h])
 AC_CONFIG_HEADER([olibc-config.h])
@@ -20,7 +20,7 @@ AC_SUBST(SONAME_REVISION)
 
 SONAME_MAJOR=0
 SONAME_MINOR=1
-SONAME_REVISION=1
+SONAME_REVISION=2
 SONAME_VERSION=$SONAME_MAJOR.$SONAME_MINOR.$SONAME_REVISION
 
 SONAME_VALUE=$(($SONAME_MAJOR + $SONAME_MINOR))
