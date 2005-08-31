@@ -6,7 +6,7 @@ Summary(ko): 유용한 하이레벨 C 라이브러리
 Name: olibc
 Version: %{major}.%{minor}.%{rev}
 Release: 1
-Epoch: 19
+Epoch: 20
 Copyright: BPL/LGPL
 Group: System Environment/Libraries
 Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/olibc/%{name}-%{version}.tar.bz2
@@ -75,6 +75,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(0755,root,root)
+%{_bindir}/oc-config
+%{_bindir}/ogc-config
 %{_bindir}/olibc-config
 %{_libdir}/libolibc.so.%{version}
 %{_libdir}/libogc.so.%{version}
@@ -92,6 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libolibc.a
 %{_libdir}/libogc.a
 %{_libdir}/liboc.a
+%{_libdir}/*.la
 %{_includedir}/olibc/*.h
 
 %changelog
