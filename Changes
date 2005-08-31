@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.43 2004-08-09 09:27:58 oops Exp $
+$Id: Changes,v 1.44 2005-08-31 17:36:49 oops Exp $
+
+* Thu, Sep  1 2005
+	- fixed CAN-2005-2491 in pcrelib
+	- < release 0.1.2 >
 
 * Mon, Aug  9 2004
 	- changed filename commoh.h to oc_common.h
