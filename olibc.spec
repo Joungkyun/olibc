@@ -1,12 +1,12 @@
 %define major 0
 %define minor 1
-%define rev   2
+%define rev   3
 Summary: useful high level C library
 Summary(ko): 유용한 하이레벨 C 라이브러리
 Name: olibc
 Version: %{major}.%{minor}.%{rev}
 Release: 1
-Epoch: 20
+Epoch: 21
 Copyright: BPL/LGPL
 Group: System Environment/Libraries
 Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/olibc/%{name}-%{version}.tar.bz2
@@ -98,6 +98,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/olibc/*.h
 
 %changelog
+* Fri Jun  9 2006 JoungKyun Kim <http://www.oops.org>
+- update version 0.1.3
+
 * Thu Sep  1 2005 JoungKyun Kim <http://www.oops.org> 19:0.1.2-1
 - fixed  CAN-2005-2491 in pcrelib under 0.1.1
 - update 0.1.2
