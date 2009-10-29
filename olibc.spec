@@ -13,7 +13,7 @@ Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/olibc/%{name}-%{version}.ta
 URL: http://devel.oops.org
 Buildroot: /var/tmp/%{name}-%{version}-root
 
-Packager: JoungKyun Kim <http://www.oops.org>
+Packager: JoungKyun Kim <http://oops.org>
 Vendor: OOPS Development ORG
 
 %description
@@ -98,64 +98,64 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/olibc/*.h
 
 %changelog
-* Fri Jun  9 2006 JoungKyun Kim <http://www.oops.org>
+* Fri Jun  9 2006 JoungKyun Kim <http://oops.org>
 - update version 0.1.3
 
-* Thu Sep  1 2005 JoungKyun Kim <http://www.oops.org> 19:0.1.2-1
+* Thu Sep  1 2005 JoungKyun Kim <http://oops.org> 19:0.1.2-1
 - fixed  CAN-2005-2491 in pcrelib under 0.1.1
 - update 0.1.2
 
-* Mon Aug  9 2004 JoungKyun Kim <http://www.oops.org> 0.1.1-1
+* Mon Aug  9 2004 JoungKyun Kim <http://oops.org> 0.1.1-1
 - update 0.1.1
 
-* Fri Feb 20 2004 JoungKyun Kim <http://www.oops.org> 0.1.0-1,17
+* Fri Feb 20 2004 JoungKyun Kim <http://oops.org> 0.1.0-1,17
 - update 0.1.0
 
-* Thu Feb  5 2004 JoungKyun Kim <http://www.oops.org> 0.0.8-1,16
+* Thu Feb  5 2004 JoungKyun Kim <http://oops.org> 0.0.8-1,16
 - update 0.0.8
 
-* Fri Nov 10 2003 JoungKyun Kim <http://www.oops.org> 0.0.7-1,15
+* Fri Nov 10 2003 JoungKyun Kim <http://oops.org> 0.0.7-1,15
 - update 0.0.7
 
-* Fri Nov 10 2003 JoungKyun Kim <http://www.oops.org> 0.0.6-1,14
+* Fri Nov 10 2003 JoungKyun Kim <http://oops.org> 0.0.6-1,14
 - update 0.0.6
 
-* Fri Nov  7 2003 JoungKyun Kim <http://www.oops.org> 0.0.5-1,13
+* Fri Nov  7 2003 JoungKyun Kim <http://oops.org> 0.0.5-1,13
 - update 0.0.5
 
-* Sat Sep 27 2003 JoungKyun Kim <http://www.oops.org> 0.0.4-2,11
+* Sat Sep 27 2003 JoungKyun Kim <http://oops.org> 0.0.4-2,11
 - added official patch 1
 
-* Fri Sep 26 2003 JoungKyun Kim <http://www.oops.org> 0.0.4-1,10
+* Fri Sep 26 2003 JoungKyun Kim <http://oops.org> 0.0.4-1,10
 - update 0.0.4
 
-* Thu Sep 25 2003 JoungKyun Kim <http://www.oops.org> 0.0.3-3,9
+* Thu Sep 25 2003 JoungKyun Kim <http://oops.org> 0.0.3-3,9
 - fixed tmp variable reset size
 
-* Sat Sep 20 2003 JoungKyun Kim <http://www.oops.org> 0.0.3-2,8
+* Sat Sep 20 2003 JoungKyun Kim <http://oops.org> 0.0.3-2,8
 - added official patch 1
   this bug is seriously --; (str2long, str2double)
 
-* Sat Sep 20 2003 JoungKyun Kim <http://www.oops.org> 0.0.3-1,7
+* Sat Sep 20 2003 JoungKyun Kim <http://oops.org> 0.0.3-1,7
 - update 0.0.3
 
-* Thu Sep 18 2003 JoungKyun Kim <http://www.oops.org> 0.0.2-5,6
+* Thu Sep 18 2003 JoungKyun Kim <http://oops.org> 0.0.2-5,6
 - added second official patch
 
-* Sun Sep 14 2003 JoungKyun Kim <http://www.oops.org> 0.0.2-4,5
+* Sun Sep 14 2003 JoungKyun Kim <http://oops.org> 0.0.2-4,5
 - fixed lib_preg_match bug
 
-* Wed Sep 10 2003 JoungKyun Kim <http://www.oops.org> 0.0.2-3,4
+* Wed Sep 10 2003 JoungKyun Kim <http://oops.org> 0.0.2-3,4
 - changed don't memory free return value of convert_punyconv
 
-* Tue Sep  9 2003 JoungKyun Kim <http://www.oops.org> 0.0.2-2,3
+* Tue Sep  9 2003 JoungKyun Kim <http://oops.org> 0.0.2-2,3
 - fixed trash print
 
-* Tue Sep  9 2003 JoungKyun Kim <http://www.oops.org> 0.0.2-1,2
+* Tue Sep  9 2003 JoungKyun Kim <http://oops.org> 0.0.2-1,2
 - 0.0.2 release
 - added internal libidn
 - added internal pcrelib
 
-* Tue Sep  9 2003 JoungKyun Kim <http://www.oops.org> 0.0.1-1,1
+* Tue Sep  9 2003 JoungKyun Kim <http://oops.org> 0.0.1-1,1
 - first build
 

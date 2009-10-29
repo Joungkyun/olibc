@@ -1,12 +1,12 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.15 2006-06-08 17:21:07 oops Exp $
+# $Id: configure.ac,v 1.16 2009-10-29 13:24:33 oops Exp $
 
 #
 AC_PREREQ(2.59)
 
-AC_INIT([olibc], [0.1.3], [http://www.oops.org])
+AC_INIT([olibc], [0.1.3], [http://oops.org])
 #AM_INIT_AUTOMAKE([1.8 gnits])
 AC_CONFIG_SRCDIR([libstring.h])
 AC_CONFIG_HEADER([olibc-config.h])
