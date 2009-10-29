@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.46 2009-10-29 13:24:33 oops Exp $
+$Id: Changes,v 1.47 2009-10-29 14:01:36 oops Exp $
+
+* Fri, Oct 20 2009
+	- add realpath_r
 
 * Fri, Jun  9 2006
 	- update autogen

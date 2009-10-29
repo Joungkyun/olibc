@@ -1,7 +1,16 @@
-/* $Id: libfile.c,v 1.10 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libfile.c,v 1.11 2009-10-29 14:01:36 oops Exp $ */
 #include <oc_common.h>
 
+#include <limits.h>
 #include <libfile.h>
+
+#ifndef PATH_MAX
+#ifdef _POSIX_PATH_MAX
+#define PATH_MAX _POSIX_PATH_MAX
+#else
+#define PATH_MAX 256
+#endif
+#endif
 
 int file_exists (const char *path, int mode) {
 	struct stat f;
@@ -116,6 +125,83 @@ int writefile(char *filename, char *str, int mode) {
 
 	return 0;
 }
+
+char * realpath_r (char *path) // {{{
+{
+	struct stat f;
+	int r;
+	short isdir;
+	char filename[PATH_MAX + 1] = { 0, };
+	char dirpath[PATH_MAX + 1] = { 0, };
+	char curpath[PATH_MAX + 1] = { 0, };
+	char *buf;
+
+	if ( path[0] == '/' ) {
+		r = strlen (path);
+		buf = (char *) malloc (sizeof (char) * (r + 1));
+		if ( buf == NULL ) {
+			errno = ENOMEM;
+			return NULL;
+		}
+		memcpy (buf, path, r);
+		memset (buf + r, 0, 1);
+
+		return buf;
+	}
+
+	if ( strlen (path) > PATH_MAX ) {
+		errno = ENAMETOOLONG;
+		return NULL;
+	}
+
+	if ( (r = stat (path, &f)) == -1 ) {
+		errno = ENOENT;
+		return NULL;
+	}
+
+	isdir = ( ! S_ISDIR(f.st_mode) ) ? 0 : 1;
+
+	if ( ! isdir ) {
+		// if path is filename
+		if ( (buf = strrchr (path, '/')) == NULL ) {
+			strcpy (filename, path);
+			strcpy (dirpath, "./");
+		} else {
+			strcpy (filename, buf + 1);
+			strcpy (dirpath, path);
+			buf = strrchr (dirpath, '/') + 1;
+			*buf = 0;
+		}
+	} else
+		strcpy (dirpath, path);
+
+	// save current directory
+	if ( getcwd (curpath, PATH_MAX) == NULL )
+		return NULL;
+
+	if ( chdir (dirpath) == -1 )
+		return NULL;
+
+	memset (dirpath, 0, PATH_MAX + 1);
+	if ( getcwd (dirpath, PATH_MAX) == NULL ) {
+		chdir (curpath);
+		return NULL;
+	}
+
+	if ( chdir (curpath) == -1 )
+		return NULL;
+
+	r = strlen (dirpath) + strlen (filename) + 2;
+	buf = (char *) malloc (sizeof (char) * r);
+	memset (buf, 0, r);
+
+	r = strlen (dirpath);
+	memcpy (buf, dirpath, r);
+	memcpy (buf + r++, "/", 1);
+	memcpy (buf + r, filename, strlen (filename));
+
+	return buf;
+} // }}}
 
 /*
  * Local variables:

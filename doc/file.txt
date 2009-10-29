@@ -1,6 +1,6 @@
 ** File Function
 
-$Id: file.txt,v 1.5 2004-02-18 16:17:15 oops Exp $
+$Id: file.txt,v 1.6 2009-10-29 14:01:36 oops Exp $
 
 File 관련 high level 함수이다. 이 함수들을 사용하기 위해서는 liboc 또는, libolibc 라
 이브러리를 링크해야 한다.
@@ -71,4 +71,27 @@ int writefile (char * filename, char * str, int mode)
 
     printf ("%d\\n", writefile (path, text, 0));
 
+char * realpath_r (char *path)
+
+	지정한 경로를 절대 경로로 반환한다.
+
+	해당 경로가 존재하지 않을 경우, NULL을 반환하며, errno 가 다음과 같이 설정이 된다.
+	이 함수는 link의 원 경로를 찾지는 않으며, 내부적으로 chdir과 getcwd를 이용하여
+	파일의 경로를 찾는다.
+
+	EACCES         해당 파일이 확인을 할 수 없는 (접근 권한이 없는) 경로에 존재
+	EBADF          fd가 유효한 파일 기술자가 아님
+	EFAULT         접근할 수 없는 메모리 주소를 가리킴
+	ENAMETOOLONG   path가 너무 김
+	ENOENT         파일이 너무 길거나, 파일명이 주어지지 않음
+	ENOMEM         커널 메모리가 부족 함
+	EIO            I/O 에러가 발생
+
+	반환된 값은 반드시 메모리 해제 (free) 를 해 주어야 한다.
+
+    ex) #include <olibc/libfile.h>
+
+    char *path = realpath_r ("../../../some.txt");
+    printf ("Absolute path is %s\n", path);
+    free (path);
 

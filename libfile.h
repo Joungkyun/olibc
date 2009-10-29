@@ -1,4 +1,4 @@
-/* $Id: libfile.h,v 1.4 2003-09-19 11:01:23 oops Exp $ */
+/* $Id: libfile.h,v 1.5 2009-10-29 14:01:36 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -41,6 +41,13 @@ char * fileread (char * path);
  *             0 : new file
  *             1 : attach file */
 int writefile(char *filename, char *str, int mode);
+
+/* writefile follow BPL License v.1 <http://devel.oops.org/document/bpl>
+ * write file
+ *
+ * path     => search path
+ */
+char * realpath_r (char *path);
 
 #endif
 /*
