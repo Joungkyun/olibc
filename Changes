@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.47 2009-10-29 14:01:36 oops Exp $
+$Id: Changes,v 1.48 2009-12-04 19:44:20 oops Exp $
+
+* Sat, Dec  5 2009
+	- add is_ksc5601
 
 * Fri, Oct 20 2009
 	- add realpath_r

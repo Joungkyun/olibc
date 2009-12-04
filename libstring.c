@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.21 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libstring.c,v 1.22 2009-12-04 19:44:20 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -568,6 +568,36 @@ int bin2dec (char *src) {
 	}
 
 	return ret;
+}
+
+int is_ksc5601 (unsigned c1, unsigned c2) {
+	unsigned char *c = (unsigned char *) ((c1 << 8) | c2);
+	//printf ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
+
+	if ( ! (c1 & 0x80) )
+		return FAILURE;
+
+	if ( ((c1 >= 0xa1 && c1 <= 0xa4) || (c1 >= 0xa8 && c1 <= 0xa9) ||
+		  (c1 >= 0xb0 && c1 <= 0xc8) || (c1 >= 0xca && c1 <= 0xfd))
+		 && (c2 >= 0xa1 && c2 <= 0xfe) )
+		return SUCCESS;
+
+	if ( (int) c >= 0xa1a2 && (int) c <= 0xa1fe )
+		return SUCCESS;
+	if ( (int) c >= 0xa5a1 && (int) c <= 0xa5f8 )
+		return SUCCESS;
+	if ( (int) c >= 0xa6a1 && (int) c <= 0xa6e4 )
+		return SUCCESS;
+	if ( (int) c >= 0xa7a1 && (int) c <= 0xa7ef )
+		return SUCCESS;
+	if ( (int) c >= 0xaaa1 && (int) c <= 0xaaf3 ) // hirakana
+		return SUCCESS;
+	if ( (int) c >= 0xaba1 && (int) c <= 0xabf6 ) // katakana
+		return SUCCESS;
+	if ( (int) c >= 0xaca1 && (int) c <= 0xacf1 )
+		return SUCCESS;
+
+	return FAILURE;
 }
 
 /*

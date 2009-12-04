@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.8 2004-02-18 16:17:15 oops Exp $ */
+/* $Id: libstring.h,v 1.9 2009-12-04 19:44:21 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -169,6 +169,10 @@ char * _hex2bin (char c);
  * convert to decimal number from binary type string */
 int bin2dec (char *src);
 #endif
+
+/* is_ksc5601 follows BPL License v.1
+ * check ksc5601 range */
+int is_ksc5601 (unsigned c1, unsigned c2);
 
 /*
  * Local variables:
