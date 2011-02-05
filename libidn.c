@@ -1,4 +1,4 @@
-/* $Id: libidn.c,v 1.2 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libidn.c,v 1.3 2011-02-05 09:22:42 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 
@@ -112,7 +112,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		if ( debug ) {
 			size_t i;
 			for ( i = 0; q[i]; i++ )
-				fprintf (stderr, "ERROR: input[%d] = U+%04x\n", i, q[i] & 0xFFFF);
+				fprintf (stderr, "input[%d] = U+%04x\n", i, q[i] & 0xFFFF);
 		}
 
 		rc = idna_to_ascii_4z (q, &r, 0);
