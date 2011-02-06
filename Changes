@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.48 2009-12-04 19:44:20 oops Exp $
+$Id: Changes,v 1.49 2011-02-06 14:16:09 oops Exp $
+
+* Sun, Feb  6 2010
+	- fixed idn memory leak
 
 * Sat, Dec  5 2009
 	- add is_ksc5601
