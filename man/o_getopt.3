@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man o_getopt.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: o_getopt.3,v 1.8 2009-10-29 13:24:33 oops Exp $
+.\" $Id: o_getopt.3,v 1.9 2011-02-06 17:12:16 oops Exp $
 .SH 이름
 o_getopt
 
@@ -12,16 +12,8 @@ o_getopt
 .BI "o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *longopt);"
 
 .SH 라이브러리 링크
-.B gcc source -l liboc
+.B gcc source -loc
 .br
-
-또는
-
-.B gcc source -l libolibc
-.br
-
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
 
 .SH 설명
 command line 에서 넘어온 문자열을 getopt 함수와 유사하게 분석을 한다. o_getop
