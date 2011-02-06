@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.15 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libarg.c,v 1.16 2011-02-06 14:58:21 oops Exp $ */
 #include <oc_common.h>
 #include <libarg.h>
 
@@ -11,12 +11,14 @@ char **o_cmdarg;
 
 int longopt_chk (char *option, const struct o_option *options);
 int optvalue_chk (char option, const char *options);
-char * convert_quoted_blank ( char * stream );
-char * unconvert_quoted_blank ( char * stream );
-int only_whitespace ( char * stream, int len );
-void trim ( char * str );
+char * convert_quoted_blank (char * stream);
+char * unconvert_quoted_blank (char * stream);
+int only_whitespace (char * stream, int len);
+void trim (char * str);
 
-int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *longopt) {
+OLIBC_API
+int o_getopt (int oargc, char **oargv, const char *opt, const struct o_option *longopt)
+{
 	register char **opt_t;
 	char *x;
 	int ret;
@@ -139,7 +141,9 @@ retry:
 }
 
 /* build argv array variables */
-char ** argv_make ( char * stream, int *oargc ) {
+OLIBC_API
+char ** argv_make ( char * stream, int *oargc )
+{
 	const char delimiters[] = " \n\t";
 	char ** oargv;
 	char **sep, **sep_t;
@@ -178,7 +182,9 @@ char ** argv_make ( char * stream, int *oargc ) {
 	return oargv;
 }
 
-char ** split ( char * stream, int * oargc, char *delimiter ) {
+OLIBC_API
+char ** split ( char * stream, int * oargc, char *delimiter )
+{
 	char **sep;
 	int delno, len, dlen;
 	int start, end;
@@ -253,7 +259,9 @@ char ** split ( char * stream, int * oargc, char *delimiter ) {
 }
 
 /* free argv_make array */
-void ofree_array ( char **oargv ) {
+OLIBC_API
+void ofree_array ( char **oargv )
+{
 	int i = 0;
 
 	if ( oargv != NULL ) {
@@ -266,7 +274,8 @@ void ofree_array ( char **oargv ) {
 }
 
 /* convert blank to special string */
-char * convert_quoted_blank ( char * stream ) {
+char * convert_quoted_blank ( char * stream )
+{
 	int len, newlen;
 	int white, i, size;
 	int squote = 0;
@@ -328,7 +337,8 @@ char * convert_quoted_blank ( char * stream ) {
 
 
 /* convert sepcail string to blank */
-char * unconvert_quoted_blank ( char * stream ) {
+char * unconvert_quoted_blank ( char * stream )
+{
 	int i, j, len, size;
 	char *ret;
 
@@ -351,7 +361,9 @@ char * unconvert_quoted_blank ( char * stream ) {
 }
 
 /* return number of white space */
-int get_whitespace ( char * stream ) {
+OLIBC_API
+int get_whitespace ( char * stream )
+{
 	int no, i, len;
 
 	no = 0;
@@ -364,7 +376,8 @@ int get_whitespace ( char * stream ) {
 	return no;
 }
 
-int only_whitespace ( char * stream, int length ) {
+int only_whitespace ( char * stream, int length )
+{
 	int i, len;
 
 	len = length ? length : strlen (stream);
@@ -376,7 +389,8 @@ int only_whitespace ( char * stream, int length ) {
 	return 1;
 }
 
-int optvalue_chk (char option, const char *options) {
+int optvalue_chk (char option, const char *options)
+{
 	int len = strlen (options);
 	int i, val = -1;
 
