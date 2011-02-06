@@ -1,4 +1,4 @@
-/* $Id: libidn.c,v 1.3 2011-02-05 09:22:42 oops Exp $ */
+/* $Id: libidn.c,v 1.4 2011-02-06 14:10:22 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 
@@ -83,30 +83,42 @@ char * convert_racecode (char * domain, int mode, int debug) {
 char * convert_punycode (char * domain, int mode, int debug) {
 #ifdef HAVE_LIBIDN
 #ifdef HAVE_ICONV_H
-	static char conv[512];
-	int dlen = strlen (domain), rc;
+	static char conv[512] = { 0, };
+	int dlen, rc;
 	char *p, *r;
 	uint32_t *q;
 
-	if ( dlen > 256 )
-		return domain;
+	if ( domain == NULL )
+		return conv;
 
-	if ( domain[dlen - 1] == '\n' )
-		domain[dlen -1] = 0;
+	dlen = strlen (domain);
+
+	if ( dlen > 511 )
+		strncpy (conv, domain, 511);
+	else
+		strcpy (conv, domain);
+
+	if ( dlen > 256 )
+		return conv;
+
+	if ( conv[dlen - 1] == '\n' )
+		conv[dlen -1] = 0;
 
 	if ( ! mode ) {
-		p = stringprep_locale_to_utf8 (domain);
-		if ( !p ) {
+		p = stringprep_locale_to_utf8 (conv);
+		if ( p == NULL ) {
 			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
-				 	 domain, stringprep_locale_charset ());
+				 	 conv, stringprep_locale_charset ());
 
-			return domain;
+			return conv;
 		}
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
+		ofree (p);
+
 		if ( !q ) {
-			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
-			return domain;
+			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", conv);
+			return conv;
 		}
 
 		if ( debug ) {
@@ -120,31 +132,35 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 		if ( rc != IDNA_SUCCESS ) {
 			fprintf (stderr, "ERROR: %s: idna_to_ascii_from_locale() failed with error %d.\n",
-					 domain, rc);
-			return domain;
+					 conv, rc);
+			return conv;
 		}
 	} else {
-		p = stringprep_locale_to_utf8 (domain);
+		p = stringprep_locale_to_utf8 (conv);
 		if ( !p ) {
 			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
-					 domain, stringprep_locale_charset ());
-			return domain;
+					 conv, stringprep_locale_charset ());
+			return conv;
 		}
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		if ( !q ) {
 			ofree (p);
-			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
-			return domain;
+			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", conv);
+			return conv;
 		}
 
 		rc = idna_to_unicode_8z4z (p, &q, 0|0);
 		ofree (p);
 
 		if (rc != IDNA_SUCCESS) {
-			fprintf (stderr, "ERROR: %s: idna_to_unicode_locale_from_locale() failed with error %d.\n",
-					 domain, rc);
-			return domain;
+			free (q);
+			fprintf (stderr,
+				"ERROR: %s: idna_to_unicode_locale_from_locale() "
+				"failed with error %d.\n",
+				 conv, rc
+			 );
+			return conv;
 		}
 
 		if ( debug ) {
@@ -156,25 +172,27 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		p = stringprep_ucs4_to_utf8 (q, -1, NULL, NULL);
 		if ( !p ) {
 			ofree (q);
-			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", domain);
-			return domain;
+			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", conv);
+			return conv;
 		}
 
 		r = stringprep_utf8_to_locale (p);
 		ofree (p);
 		if ( !r ) {
 			fprintf (stderr, "ERROR: %s: could not convert from UTF-8 to %s.\n",
-					 domain, stringprep_locale_charset ());
-			return domain;
+					 conv, stringprep_locale_charset ());
+			return conv;
 		}
 
 	}
 
-	if ( strlen (r) > 510 )
-		return domain;
+	if ( strlen (r) > 510 ) {
+		ofree (r);
+		return conv;
+	}
 
-	memset ( conv, 0, 512 );
-	memmove ( conv, r, strlen (r));
+	memset (conv, 0, 512);
+	memmove (conv, r, strlen (r));
 	ofree (r);
 
 	return conv;
