@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.2 2011-02-06 14:57:34 oops Exp $ */
+/* $Id: oc_common.h,v 1.3 2011-02-06 15:12:27 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -51,7 +51,7 @@
 
 int get_charcount (char *str, char *del);
 
-#define ofree (v) \
+#define ofree(v) \
 	if ( v != NULL ) free (v)
 
 #define oc_error(fmt,...) \
