@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.17 2011-02-06 14:58:21 oops Exp $
+# $Id: configure.ac,v 1.18 2011-02-06 15:11:19 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -52,6 +52,11 @@ fi
 AC_PATH_PROG(PERL, perl)
 if test ! -f "$ac_cv_path_PERL"; then
   AC_MSG_ERROR(Can't not found perl)
+fi
+
+AC_PATH_PROG(HEAD, head)
+if test ! -f "$ac_cv_path_HEAD"; then
+  AC_MSG_ERROR(Can't not found head)
 fi
 
 AC_PATH_PROG(CP, cp)

@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.13 2011-02-06 14:58:21 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.14 2011-02-06 15:11:19 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
@@ -119,6 +119,21 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* The size of a `char', as computed by sizeof. */
+#undef SIZEOF_CHAR
+
+/* The size of a `int', as computed by sizeof. */
+#undef SIZEOF_INT
+
+/* The size of a `long', as computed by sizeof. */
+#undef SIZEOF_LONG
+
+/* The size of a `short', as computed by sizeof. */
+#undef SIZEOF_SHORT
+
+/* The size of a `void*', as computed by sizeof. */
+#undef SIZEOF_VOIDP
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
