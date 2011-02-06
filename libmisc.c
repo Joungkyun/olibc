@@ -1,9 +1,5 @@
-/* $Id: libmisc.c,v 1.3 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libmisc.c,v 1.4 2011-02-06 14:57:34 oops Exp $ */
 #include <oc_common.h>
-
-void ofree (void *s) {
-	if ( s != NULL ) free (s);
-}
 
 int get_charcount (char *str, char *del) {
 	int no, i, j, len, dlen;
