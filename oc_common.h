@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.4 2011-02-07 06:42:07 oops Exp $ */
+/* $Id: oc_common.h,v 1.5 2011-02-07 07:59:52 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -106,8 +106,8 @@ int get_charcount (char *str, char *del);
 
 #define oc_strdup(v, val, size) \
 	oc_malloc(v, size + 1); \
-	if ( v != NULL ) memcpy (v, val, size);
-	
+	if ( v != NULL ) { memcpy (v, val, size); } \
+	memset (v + size, 0, 1)
 
 #define oc_malloc_originate(type, v, size, ret, result) \
 	if ( type ) { oc_realloc (v, size); } \

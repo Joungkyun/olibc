@@ -1,4 +1,4 @@
-/* $Id: libstring.c,v 1.22 2009-12-04 19:44:20 oops Exp $ */
+/* $Id: libstring.c,v 1.23 2011-02-07 07:59:52 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -78,90 +78,73 @@ char * addslashes(char *str, int should_free) {
 /* trim is remove space charactor on behind and forward on string.
  * warn !! this function modified original variable !!
  */ 
-void trim (char *str) {
+OLIBC_API
+void trim (char *str) // {{{
+{
 	int len = strlen (str);
 	int start = 0, end = 0, i = 0;
-	
-	for ( i=0; i<len; i++ ) {
-		if ( ! isspace (str[i]) ) {
-			start = i;
-			break;
-		}
-	}
 
+	// get end
+	OC_DEBUG ("%s\n", "Get end point");
 	for ( i=len-1; i>0; i-- ) {
+		OC_DEBUG("\t%4d : 0x%x\n", i, str[i]);
 		if ( ! isspace (str[i]) ) {
 			end = i;
 			break;
 		}
 	}
 
+	if ( end == 0 ) {
+		memset (str, 0, 1);
+		return;
+	}
+
+	// get start
+	OC_DEBUG ("%s\n", "Get start point");
+	for ( i=0; i<len; i++ ) {
+		OC_DEBUG("\t%4d : 0x%x\n", i, str[i]);
+		if ( ! isspace (str[i]) ) {
+			start = i;
+			break;
+		}
+	}
+
 	if ( end < start ) {
-		fprintf (stderr, "ERROR: end point is smaller than start point on trim function\n");
+		oc_error ("%s\n", "end point is smaller than start point on trim function");
 		exit (FAILURE);
 	}
 
-	if ( ! start && ! end && isspace ( str[start] ) ) {
-		memset ( str + end, 0, 1 );
-	} if ( start == end ) {
-		end = len;
-	}
-
-	memset ( str + end + 1, 0, 1);
-	memmove ( str, str + start, end - start + 1);
-	memset ( str + end - start +1, 0, 1);
-}
+	OC_DEBUG ("start(%d) : end(%d)\n", start, end);
+	memmove (str, str + start, end - start + 1);
+	memset (str + (end - start + 1), 0, 1);
+} // }}}
 
 /* trim is remove space charactor on behind and forward on string.
  * this function must free
  */ 
-char * trim_r (char *str, int should_free) {
-	int len = strlen (str);
-	int start = 0, end = 0, i = 0;
-	char *ret, *tmp;
+OLIBC_API
+char * trim_r (char *str, int should_free) // {{{
+{
+	int len;
+	char *buf;
 
-	tmp = malloc ( sizeof (char) * (len + 1) );
-	strcpy ( tmp, str );
-	if ( should_free ) ofree (str);
-	
-	for ( i=0; i<len; i++ ) {
-		if ( ! isspace (tmp[i]) ) {
-			start = i;
-			break;
-		}
+	if ( str == NULL )
+		return NULL;
+
+	if ( (len = strlen (str)) == 0 ) {
+		if ( should_free )
+			ofree (str);
+		return NULL;
 	}
 
-	for ( i=len-1; i>0; i-- ) {
-		if ( ! isspace (tmp[i]) ) {
-			end = i;
-			break;
-		}
-	}
+	oc_strdup (buf, str, len);
+	if ( should_free )
+		ofree (str);
 
-	if ( end < start ) {
-		fprintf (stderr, "ERROR: end point is smaller than start point on trim function\n");
-		exit (FAILURE);
-	}
+	trim (buf);
 
-	if ( ! start && ! end && isspace ( tmp[start] ) ) {
-		ofree (tmp);
-		ret = malloc ( sizeof (char) );
-		memset ( ret, 0, sizeof (ret) );
-		return ret; 
-	} else if ( start == end ) {
-		end = len;
-	}
-
-	ret = malloc (sizeof(char) * (len +	32));
-	memlocate_chk (ret);
-
-	memset (ret, 0, sizeof (char) * (len + 32));
-	memcpy (ret, tmp + start, end - start + 1);
-
-	ofree (tmp);
-
-	return ret;
-}
+	return buf;
+} // }}}
 
 long long str2long (char *s) {
 	int len, i = 0, minus = 0, bufno = 0;

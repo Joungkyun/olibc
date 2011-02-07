@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man trim_r.3
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: trim_r.3,v 1.5 2009-10-29 13:24:34 oops Exp $
+.\" $Id: trim_r.3,v 1.6 2011-02-07 07:59:52 oops Exp $
 .SH 이름
 trim_r
 
@@ -12,15 +12,15 @@ trim_r
 .BI "char * trim_r(char *str, int should_free);"
 
 .SH 라이브러리 링크
-.B gcc source -l liboc
+.B gcc source -loc
 .br
 
 또는
 
-.B gcc source -l libolibc
+.B gcc source -logc
 .br
 
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+libogc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
 정적으로 링크할 경우에는 BPL 에 근거한다.
 
 .SH 설명
@@ -54,7 +54,7 @@ char *buf;
 
 /* str 변수의 앞/뒤 공백을 삭제 */
 buf = trim_r (str, 0);
-printf ("STR: %s\\BUF: n%s\\n", str, buf);
+printf ("STR: %s\\nBUF: %s\\n", str, buf);
 
 free (buf);
 .fi
