@@ -2,14 +2,14 @@
 .\" Process with
 .\" nroff -man split.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: split.3,v 1.5 2011-02-06 17:12:16 oops Exp $
+.\" $Id: split.3,v 1.6 2011-02-07 06:42:07 oops Exp $
 .SH 이름
 split
 
 .SH 사용법
 .B #include <olibc/libarg.h>
 .sp
-.BI "char * split (char *stream, int *argc, char *delimiter);"
+.BI "char ** split (char *stream, int *argc, char *delimiter);"
 
 .SH 라이브러리 링크
 .B gcc source -loc
@@ -24,7 +24,8 @@ delimiter 가 'ab' 로 지정이 되었을 경우 'ab' 로 쪼개는 것이 아니라 'a' 또는
 또한, 주어진 문자열 중, delimiter 에 지정된 charactor 과 매치가 되는 글
 자가 있더라도 매치가 되는 글자 앞에 '\\' 가 있을 경우에는 무시가 된다.
 
-stream 은 원본 문자열을 지정한다.
+stream 은 원본 문자열을 지정한다. 원본 문자열의 앞뒤 공백은 자동으로 제거한
+후에 분리를 한다.
 
 argc 는 생성된 배열의 수를 반환한다.
 
@@ -39,13 +40,13 @@ stream 이나 delimiter 가 주어지지 않으면 NULL 을 반환을 한다.
 #include <olibc/libarg.h>
 
 char ** sep;
-char *a = "abcAabcAabc";
+char *a = "abcA abcAabc ";
 int i, j;
 
-sep = split (files, &i, "A");
+sep = split (a, &i, "A");
 
 for (j = 0; j < i; j++) {
-          printf ("** %s\\n", sep[i]);
+    printf ("** %s\\n", sep[j]);
 }
 
 ofree_array (sep);

@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.3 2011-02-06 15:12:27 oops Exp $ */
+/* $Id: oc_common.h,v 1.4 2011-02-07 06:42:07 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -51,31 +51,91 @@
 
 int get_charcount (char *str, char *del);
 
-#define ofree(v) \
-	if ( v != NULL ) free (v)
-
-#define oc_error(fmt,...) \
-	fprintf (stderr, "OC ERROR: " fmt, __VA_ARGS__)
-#endif
-
-#define oc_debug(fmt,...) \
+#define oc_error_debug(fmt,...) \
 	fprintf (stderr, \
-			"%s:%d %s -> " fmt, \
-			__FILE__, __LINE__, __func__, __VA_ARGS__ \
+			"%s(%s:%d): " fmt, \
+			__func__, __FILE__, __LINE__, __VA_ARGS__ \
 	)
 
+#ifdef __OCDEBUG__
+#	define OC_DEBUG(fmt,...) \
+		fprintf (stderr, \
+				 "DEBUG: %s(%s:%d): " fmt, \
+				 __func__, __FILE__, __LINE__, __VA_ARGS__ \
+		);
+#	define oc_error(fmt,...) \
+			oc_error_debug(fmt, __VA_ARGS__)
+#else
+#	define OC_DEBUG(fmt,...)
+#	define oc_error(fmt,...) \
+			fprintf (stderr, "OC ERROR: " fmt, __VA_ARGS__)
+#endif
+
+#ifdef __OCMEMDEBUG__
+#	define OC_MEM_DEBUG(fmt,...) \
+		fprintf (stderr, \
+				 "DEBUG: %s(%s:%d): " fmt, \
+				 __func__, __FILE__, __LINE__, __VA_ARGS__ \
+		);
+#else
+#	define OC_MEM_DEBUG(fmt,...)
+#endif
+
+#define ofree(v) \
+	OC_MEM_DEBUG ("%s%s\n", "Memory free", v == NULL ? ": NULL" : ""); \
+	if ( v != NULL ) { \
+		OC_MEM_DEBUG ("%s\n", "Memory free"); \
+		free (v); \
+	}
+
+#define oc_malloc(v, size) \
+	OC_MEM_DEBUG("%s\n", "Memory allocation"); \
+	v = malloc (size)
+	
+#define oc_realloc(v, size) \
+	OC_MEM_DEBUG("%s\n", "Memory reallocation"); \
+	{ \
+		void * ptr; \
+		if ( (ptr = realloc (v, size)) == NULL ) { \
+			ofree (v); \
+			v = NULL; \
+		} else { \
+			v = ptr; \
+		} \
+	}
+
+#define oc_strdup(v, val, size) \
+	oc_malloc(v, size + 1); \
+	if ( v != NULL ) memcpy (v, val, size);
+	
+
+#define oc_malloc_originate(type, v, size, ret, result) \
+	if ( type ) { oc_realloc (v, size); } \
+	else { oc_malloc (v, size); } \
+	if ( v == NULL ) { \
+		oc_error ("%s: memory %sallocation failed\n", __func__, type ? "re" : ""); \
+		if ( result ) return ret; \
+		else exit (1); \
+	}
+	
 /*
  * v -> allocated variable
  * size -> allocated size
  * ret -> if failed allocat, return value
  */
-#define oc_malloc(v, size, ret) \
-	v = malloc (size); \
-	if ( v == NULL ) { \
-		oc_error ("memory allocation failed\n"); \
-		return ret; \
-	} \
+#define oc_malloc_r(v, size, ret) \
+	oc_malloc_originate (0, v, size, ret, 1);
 
+#define oc_realloc_r(v, size, ret) \
+	oc_malloc_originate (1, v, size, ret, 1);
+
+#define oc_malloc_die(v, size) \
+	oc_malloc_originate (0, v, size, ret, 0);
+
+#define oc_realloc_die(v, size) \
+	oc_malloc_originate (1, v, size, ret, 0);
+
+#endif
 /*
  * Local variables:
  * tab-width: 4

@@ -2,20 +2,20 @@
 .\" Process with
 .\" nroff -man o_getopt.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: o_getopt.3,v 1.9 2011-02-06 17:12:16 oops Exp $
-.SH 이름
+.\" $Id: o_getopt.3,v 1.10 2011-02-07 06:42:07 oops Exp $
+.SH NAME
 o_getopt
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libarg.h>
 .sp
 .BI "o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *longopt);"
 
-.SH 라이브러리 링크
+.SH Library Link
 .B gcc source -loc
 .br
 
-.SH 설명
+.SH DESCRIPTION
 command line 에서 넘어온 문자열을 getopt 함수와 유사하게 분석을 한다. o_getop
 함수는 short 형 옵션과 long 형 옵션을 모두 지원을 하며, 이 함수를 사용하고 난
 후에는 command line 에서 넘어온 문자열에서 옵션에 해당하는 부분을 제외한 나머지
@@ -109,12 +109,12 @@ o_getopt (argc, argv, "ab:c", longopt);
 o_getopt 의 리턴값이 -1 일 경우에는 파싱이 종료됨을 의미한다.
 
 
-.SH 반환값
+.SH "RETURN VALUE"
 옵션 charactor 가 반환이 되며, -1 일 리턴되면 넘어온 값의 파싱이 완료 되었음을
 의미한다.
 
 
-.SH 예제
+.SH EXAMPLE
 .nf
 명령행이
 
@@ -155,6 +155,7 @@ int main (int argc, char **argv) {
                   strcpy (app, o_optarg);
               } else {
                   fprintf (stderr, "no argument with -%c option\\n", opt);
+                  ofree_arry (o_cmdarg);
                   exit (1);
               }
               break;
@@ -163,6 +164,7 @@ int main (int argc, char **argv) {
               break;
            default:
               fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);
+              ofree_array (o_cmdarg);
               exit (1);
        }
     }
@@ -170,6 +172,7 @@ int main (int argc, char **argv) {
     /* 명령행을 확인 */
     if ( _ogetopt_cmd_int != 1 ) {
         fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);
+        ofree_array (o_cmdarg);
         exit (1);
     }
 
@@ -188,11 +191,11 @@ int main (int argc, char **argv) {
 }
 .fi
 
-.SH 참고
+.SH "SEE ALSO"
 argv_make(1), ofree_array(1)
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Report to QnA bulletin board of http://oops.org
