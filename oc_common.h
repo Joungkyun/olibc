@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.7 2011-02-09 15:53:05 oops Exp $ */
+/* $Id: oc_common.h,v 1.8 2011-02-09 15:57:11 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -117,7 +117,7 @@ int get_charcount (char *str, char *del);
 	}
 
 #define OC_DEF_EXIT    0
-#define OC_DEF_RETRUN  1
+#define OC_DEF_RETURN  1
 #define OC_DEF_MALLOC  0
 #define OC_DEF_REALLOC 1
 
