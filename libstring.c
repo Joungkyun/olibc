@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.24 2011-02-09 13:32:12 oops Exp $ */
+/* $Id: libstring.c,v 1.25 2011-02-09 15:14:28 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -67,7 +67,7 @@ void olibc_version (void) // {{{
  * @param	str given strings
  * @return	void
  *
- * trim is remove space charactor on behind and forward on string.
+ * trim is remove white space on behind and forward on string.
  * warn !! this function modified original variable !!
  */ 
 OLIBC_API
@@ -117,7 +117,7 @@ void trim (char *str) // {{{
  * @param[in]	should_free 0 or 1. set 1, free memory of str argument.
  * @return		point of result
  *
- * trim is remove space charactor on behind and forward on string.
+ * trim is remove white space on behind and forward on string.
  * Return point of this function is must freed.
  */ 
 OLIBC_API
