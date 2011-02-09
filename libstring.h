@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.11 2011-02-09 17:29:01 oops Exp $ */
+/* $Id: libstring.h,v 1.12 2011-02-09 18:34:36 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -50,13 +50,13 @@ char * addslashes (char * in, int should_free);
  *
  * This function same as addslashes of PHP
  *
- * in          => original string
+ * in          => original data
  * inlen       => length of in
- * out         => converted string
- * should_free => free memory of in argument
+ * out         => converted data
+ * outlen      => length of converted data
  *
  * return value must freed memory */
-int addslashes_r (unsigned char *in, size_t inlen, unsigned char ** out, int should_free);
+int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, size_t * outlen);
 
 /* trim follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *

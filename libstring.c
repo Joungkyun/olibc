@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.27 2011-02-09 17:29:01 oops Exp $ */
+/* $Id: libstring.c,v 1.28 2011-02-09 18:34:36 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -31,46 +31,42 @@ char _bin2hex (char *s) // {{{
 	else return 0;
 } // }}}
 
-/*
- * This function must memory free
- * This is binary safe.
- */
-size_t addslashes_ex (unsigned char * in, size_t inlen, unsigned char * out) // {{{
-{
-	/* maximum string length, worst case situation */
-	unsigned char *source, *target;
-	unsigned char *end;
-	size_t outlen;
+char * _hex2bin (char c) { // {{{
+	static char h2b[5];
 
-	if ( in == NULL || inlen < 1 )
-		return 0;
+	memset (h2b, 0, 5);
 
-	source = in;
-	target = out;
-	end = source + inlen;
-
-	while (source < end) {
-		switch (*source) {
-			case 0x00: // Null byte (\0)
-				*target++ = 0x5c; // back slash
-				*target++ = 0x30; // '0'
-				break;
-			case 0x27: // single qoute
-			case 0x22: // double qoute
-			case 0x5c: // back slash
-				*target++ = 0x5c;
-				// break is missing *intentionally*
-			default:
-				*target++ = *source;
+	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
+		switch (c) {
+			case 'a' : memcpy (h2b, "1010", 4); break;
+			case 'b' : memcpy (h2b, "1011", 4); break;
+			case 'c' : memcpy (h2b, "1100", 4); break;
+			case 'd' : memcpy (h2b, "1101", 4); break;
+			case 'e' : memcpy (h2b, "1110", 4); break;
+			case 'f' : memcpy (h2b, "1111", 4); break;
+			case 'A' : memcpy (h2b, "1010", 4); break;
+			case 'B' : memcpy (h2b, "1011", 4); break;
+			case 'C' : memcpy (h2b, "1100", 4); break;
+			case 'D' : memcpy (h2b, "1101", 4); break;
+			case 'E' : memcpy (h2b, "1110", 4); break;
+			case 'F' : memcpy (h2b, "1111", 4); break;
 		}
-
-		source++;
+	} else {
+		switch (c) {
+			case '0' : memcpy (h2b, "0000", 4); break;
+			case '1' : memcpy (h2b, "0001", 4); break;
+			case '2' : memcpy (h2b, "0010", 4); break;
+			case '3' : memcpy (h2b, "0011", 4); break;
+			case '4' : memcpy (h2b, "0100", 4); break;
+			case '5' : memcpy (h2b, "0101", 4); break;
+			case '6' : memcpy (h2b, "0110", 4); break;
+			case '7' : memcpy (h2b, "0111", 4); break;
+			case '8' : memcpy (h2b, "1000", 4); break;
+			case '9' : memcpy (h2b, "1001", 4); break;
+		}
 	}
 
-	*target = 0;
-	outlen = target - out;
-
-	return outlen;
+	return h2b;
 } // }}}
 
 /**
@@ -167,6 +163,66 @@ char * trim_r (char * str, int should_free) // {{{
 
 /**
  * @brief	Quote string with slashes
+ * @param	in given binary data for qouting
+ * @param	inlen length of given binary data
+ * @param	out converted binary data
+ * @param	outlen length of converted data
+ * @return	length of converted data
+ * @seealso	addslashes
+ *
+ * convert binary data with * backslashes before characters that need
+ * to be quoted in database queries etc. These characters are single
+ * quote ('), double quote ("), backslash (\) and Null byte (\0).
+ *
+ * This is binary safe.
+ */
+OLIBC_API
+int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, size_t * outlen) // {{{
+{
+	/* maximum string length, worst case situation */
+	unsigned char *source, *target;
+	unsigned char *end;
+
+	if ( in == NULL || inlen < 1 )
+		return 0;
+
+	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), 0);
+
+	source = in;
+	target = *out;
+	end = source + inlen;
+
+	while (source < end) {
+		switch (*source) {
+			case 0x00: // Null byte (\0)
+				*target++ = 0x5c; // back slash
+				*target++ = 0x30; // '0'
+				break;
+			case 0x27: // single qoute
+			case 0x22: // double qoute
+			case 0x5c: // back slash
+				*target++ = 0x5c;
+				// break is missing *intentionally*
+			default:
+				*target++ = *source;
+		}
+
+		source++;
+	}
+
+	*target = 0;
+	*outlen = target - (*out);
+	/*
+	// if you want to save memory
+	if ( *outlen < (inlen * 2) )
+		oc_realloc_r (*out, sizeof (char) * ((*outlen) + 1), NULL);
+	*/
+
+	return 1;
+} // }}}
+
+/**
+ * @brief	Quote string with slashes
  * @param	in given string for qouting
  * @param	should_free hould_free 0 or 1. set 1, free memory of in argument.
  * @return	point of result
@@ -181,70 +237,19 @@ char * trim_r (char * str, int should_free) // {{{
 OLIBC_API
 char * addslashes (char * in, int should_free) // {{{
 {
-	size_t outlen, len;
+	size_t outlen;
 	unsigned char * out;
 
 	if ( in == NULL )
 		return NULL;
 
-	len = strlen (in);
-	oc_malloc_r (out, sizeof (char) * (len * 2 + 1), NULL);
-	outlen = addslashes_ex ((unsigned char *) in, len, out);
+	if ( addslashes_r ((unsigned char *) in, strlen (in), &out, &outlen) == 0 )
+		return NULL;
 
 	if ( should_free )
 		ofree (in);
-
-	if ( ! outlen ) {
-		ofree (out);
-		return NULL;
-	}
-
-	/*
-	// if you want to save memory
-	if ( outlen < (len * 2) )
-		oc_realloc_r (out, outlen + 1, NULL);
-		out = (char *) realloc(out, outlen + 1);
-	*/
 
 	return (char *) out;
-} // }}}
-
-/**
- * @brief	Quote string with slashes
- * @param	in given binary data for qouting
- * @param	inlen length of given binary data
- * @param	out converted binary data
- * @param	should_free 0 or 1. set 1, free memory of in argument.
- * @return	length of converted data
- * @seealso	addslashes
- *
- * convert binary data with * backslashes before characters that need
- * to be quoted in database queries etc. These characters are single
- * quote ('), double quote ("), backslash (\) and Null byte (\0).
- *
- * This is binary safe.
- */
-OLIBC_API
-int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, int should_free) // {{{
-{
-	size_t outlen;
-
-	if ( in == NULL )
-		return 0;
-
-	oc_malloc (*out, sizeof (char) * (inlen * 2 + 1));
-	if ( out == NULL )
-		return 0;
-
-	outlen = addslashes_ex (in, inlen, *out);
-
-	if ( should_free )
-		ofree (in);
-
-	if ( ! outlen )
-		ofree (*out);
-
-	return outlen;
 } // }}}
 
 /**

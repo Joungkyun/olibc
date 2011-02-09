@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.8 2011-02-09 15:57:11 oops Exp $ */
+/* $Id: oc_common.h,v 1.9 2011-02-09 18:34:36 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -164,6 +164,7 @@ int get_charcount (char *str, char *del);
 
 #define oc_strdup_e(v, data, ret) \
 		 oc_strdup_originate (v, data, ret, OC_DEF_EXIT)
+
 #endif
 /*
  * Local variables:
