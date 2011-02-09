@@ -3,12 +3,33 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.26 2011-02-09 15:18:37 oops Exp $ */
+/* $Id: libstring.c,v 1.27 2011-02-09 17:29:01 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
 char * decode_race (char *domain, char *charset, int debug);
 char * encode_race (char *domain, char *charset, int debug);
+
+char _bin2hex (char *s) // {{{
+{
+	if ( ! strcmp ( s, "0000" ) ) return '0';
+	else if ( ! strcmp ( s, "0001" ) ) return '1';
+	else if ( ! strcmp ( s, "0010" ) ) return '2';
+	else if ( ! strcmp ( s, "0011" ) ) return '3';
+	else if ( ! strcmp ( s, "0100" ) ) return '4';
+	else if ( ! strcmp ( s, "0101" ) ) return '5';
+	else if ( ! strcmp ( s, "0110" ) ) return '6';
+	else if ( ! strcmp ( s, "0111" ) ) return '7';
+	else if ( ! strcmp ( s, "1000" ) ) return '8';
+	else if ( ! strcmp ( s, "1001" ) ) return '9';
+	else if ( ! strcmp ( s, "1010" ) ) return 'a';
+	else if ( ! strcmp ( s, "1011" ) ) return 'b';
+	else if ( ! strcmp ( s, "1100" ) ) return 'c';
+	else if ( ! strcmp ( s, "1101" ) ) return 'd';
+	else if ( ! strcmp ( s, "1110" ) ) return 'e';
+	else if ( ! strcmp ( s, "1111" ) ) return 'f';
+	else return 0;
+} // }}}
 
 /*
  * This function must memory free
@@ -71,7 +92,7 @@ void olibc_version (void) // {{{
  * warn !! this function modified original variable !!
  */ 
 OLIBC_API
-void trim (char *str) // {{{
+void trim (char * str) // {{{
 {
 	int len = strlen (str);
 	int start = 0, end = 0, i = 0;
@@ -121,7 +142,7 @@ void trim (char *str) // {{{
  * Return point of this function is must freed.
  */ 
 OLIBC_API
-char * trim_r (char *str, int should_free) // {{{
+char * trim_r (char * str, int should_free) // {{{
 {
 	int len;
 	char *buf;
@@ -226,13 +247,19 @@ int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, int sh
 	return outlen;
 } // }}}
 
-long long str2long (char *s) {
+/**
+ * @brife	convert type casting to long from string
+ * @param[in]	s numeric string
+ * @return	64bit long value
+ */
+long long str2long (const char *s) {
 	int len, i = 0, minus = 0, bufno = 0;
 	long long x = 1, res = 0;
 	char *buf;
 
 	/* removed blank charactor */
-	buf = trim_r (s, 0);
+	buf = strdup (s);
+	trim (buf);
 	len = strlen (buf);
 
 	/* minus value check */
@@ -258,6 +285,11 @@ long long str2long (char *s) {
 	return res;
 }
 
+/**
+ * @brife	convert type casting to long from string
+ * @param[in]	s numeric string
+ * @return	double value
+ */
 long double str2double (char *s) {
 	int len, i = 0, dotlen = 0;
 	int minus = 0, bufno = 0;
@@ -320,19 +352,70 @@ long double str2double (char *s) {
 	return res;
 }
 
-int char2int (char c) {
+/**
+ * @brief	convert casting type to int from char
+ * @param	c	numeric charactor (character 0 - 9)
+ * @return	int value (On fail, return -1)
+ *
+ * If given string is our of range between ascii 48 and 57,
+ * return -1.
+ */
+OLIBC_API
+int char2int (const char c) // {{{
+{
 	if (c > 47 && c < 58)
 		return c - 48;
 
 	return -1;
-}
+} // }}}
 
-int check_int (char c) {
+/**
+ * @brief	check a ascii value of a charactor whether is between 48 and 57
+ * @param	c a charactor for checking
+ * @return	bool
+ *
+ * The check_int() function check whether a given charactor has value
+ * between 48 and 57.
+ */
+OLIBC_API
+int check_int (char c) // {{{
+{
 	if ( c < 48 || c > 57 ) return 0;
 	return 1;
-}
+} // }}}
 
-void setansi (FILE *stream, int color, int noansi) {
+/**
+ * @brief	Set ansi color
+ * @param	stream stdin, stdout or stderr, and so on.
+ * @param	color color constants
+ * @param	noansi bool value. If not 0, this function don't opperate.
+ * @return	void
+ *
+ * Set ansi color of printed string on a file stream. If you want to stop
+ * ansi mode, recall this function with ENDANSI constant.
+ *
+ * Color constants:
+ *     ENDANSI   0
+ *     GRAY      1
+ *     BGRAY     2
+ *     RED       3
+ *     BRED      4
+ *     GREEN     5
+ *     BGREEN    6
+ *     YELLOW    7
+ *     BYELLOW   8
+ *     BLUE      9
+ *     BBLUE    10
+ *     MAGENTA  11
+ *     BMAGENTA 12
+ *     CYAN     13
+ *     BCYAN    14
+ *     WHITE    15
+ *     BWHITE   16
+ */
+OLIBC_API
+void setansi (FILE *stream, int color, int noansi) // {{{
+{
 	int ansi = 0;
 
 	switch ( color ) {
@@ -394,7 +477,7 @@ void setansi (FILE *stream, int color, int noansi) {
 		else
 			fprintf (stream, "[1;%dm", ansi);
 	}
-}
+} // }}}
 
 char * human_size (double size, int sub, int unit) {
 	float res;
@@ -514,23 +597,52 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
 	 }
 }
 
-void strtolower (char *str) {
+/**
+ * @brief	convert strings to lower case
+ * @param	str strings
+ * @return	void
+ *
+ * The strtolower() function converts strings to lower case.
+ * The given argument of strtolower is changed.
+ */
+OLIBC_API
+void strtolower (char * str) // {{{
+{
 	int i = 0;
-	int len = strlen (str);
+	int len;
 
-	for ( i = 0; i < len; i++ )
+	if ( str == NULL )
+		return;
+
+	len = strlen (str);
+	for ( i=0; i<len; i++ )
 		memset (str + i, tolower (str[i]), 1);
-}
+} // }}}
 
-void strtoupper (char *str) {
+/**
+ * @brief	convert strings to upper case
+ * @param	str strings
+ * @return	void
+ *
+ * The strtoupper() function converts strings to upper case.
+ * The given argument of strtoupper is changed.
+ */
+OLIBC_API
+void strtoupper (char * str) // {{{
+{
 	int i = 0;
-	int len = strlen (str);
+	int len;
 
+	if ( str == NULL )
+		return;
+
+	len = strlen (str);
 	for ( i = 0; i < len; i++ )
 		memset (str + i, toupper (str[i]), 1);
-}
+} // }}}
 
-char * bin2hex (char *str) {
+char * bin2hex (char *str) // {{{
+{
 	int i, j, len;
 	char tmp[5];
 	static char buf[1024] = { 0, };
@@ -546,29 +658,10 @@ char * bin2hex (char *str) {
 	}
 
 	return buf;
-}
+} // }}}
 
-char _bin2hex (char *s) {
-	if ( ! strcmp ( s, "0000" ) ) return '0';
-	else if ( ! strcmp ( s, "0001" ) ) return '1';
-	else if ( ! strcmp ( s, "0010" ) ) return '2';
-	else if ( ! strcmp ( s, "0011" ) ) return '3';
-	else if ( ! strcmp ( s, "0100" ) ) return '4';
-	else if ( ! strcmp ( s, "0101" ) ) return '5';
-	else if ( ! strcmp ( s, "0110" ) ) return '6';
-	else if ( ! strcmp ( s, "0111" ) ) return '7';
-	else if ( ! strcmp ( s, "1000" ) ) return '8';
-	else if ( ! strcmp ( s, "1001" ) ) return '9';
-	else if ( ! strcmp ( s, "1010" ) ) return 'a';
-	else if ( ! strcmp ( s, "1011" ) ) return 'b';
-	else if ( ! strcmp ( s, "1100" ) ) return 'c';
-	else if ( ! strcmp ( s, "1101" ) ) return 'd';
-	else if ( ! strcmp ( s, "1110" ) ) return 'e';
-	else if ( ! strcmp ( s, "1111" ) ) return 'f';
-	else return 0;
-}
-
-char * hex2bin (char *str) {
+char * hex2bin (char *str) // {{{
+{
 	char *data;
 	int len = strlen (str), i, j;
 
@@ -582,47 +675,10 @@ char * hex2bin (char *str) {
 	}
 
 	return data;
-}
+} // }}}
 
-char * _hex2bin (char c) {
-	static char h2b[5];
-
-	memset (h2b, 0, 5);
-
-	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
-		switch (c) {
-			case 'a' : memcpy (h2b, "1010", 4); break;
-			case 'b' : memcpy (h2b, "1011", 4); break;
-			case 'c' : memcpy (h2b, "1100", 4); break;
-			case 'd' : memcpy (h2b, "1101", 4); break;
-			case 'e' : memcpy (h2b, "1110", 4); break;
-			case 'f' : memcpy (h2b, "1111", 4); break;
-			case 'A' : memcpy (h2b, "1010", 4); break;
-			case 'B' : memcpy (h2b, "1011", 4); break;
-			case 'C' : memcpy (h2b, "1100", 4); break;
-			case 'D' : memcpy (h2b, "1101", 4); break;
-			case 'E' : memcpy (h2b, "1110", 4); break;
-			case 'F' : memcpy (h2b, "1111", 4); break;
-		}
-	} else {
-		switch (c) {
-			case '0' : memcpy (h2b, "0000", 4); break;
-			case '1' : memcpy (h2b, "0001", 4); break;
-			case '2' : memcpy (h2b, "0010", 4); break;
-			case '3' : memcpy (h2b, "0011", 4); break;
-			case '4' : memcpy (h2b, "0100", 4); break;
-			case '5' : memcpy (h2b, "0101", 4); break;
-			case '6' : memcpy (h2b, "0110", 4); break;
-			case '7' : memcpy (h2b, "0111", 4); break;
-			case '8' : memcpy (h2b, "1000", 4); break;
-			case '9' : memcpy (h2b, "1001", 4); break;
-		}
-	}
-
-	return h2b;
-}
-
-int bin2dec (char *src) {
+int bin2dec (char *src) // {{{
+{
 	int i, ret = 0;
 	char var[2];
 
@@ -632,9 +688,10 @@ int bin2dec (char *src) {
 	}
 
 	return ret;
-}
+} // }}}
 
-int is_ksc5601 (unsigned c1, unsigned c2) {
+int is_ksc5601 (unsigned c1, unsigned c2) // {{{
+{
 	unsigned char *c = (unsigned char *) ((c1 << 8) | c2);
 	//printf ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
 
@@ -662,7 +719,7 @@ int is_ksc5601 (unsigned c1, unsigned c2) {
 		return SUCCESS;
 
 	return FAILURE;
-}
+} // }}}
 
 /*
  * Local variables:

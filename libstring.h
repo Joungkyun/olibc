@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.10 2011-02-09 13:32:12 oops Exp $ */
+/* $Id: libstring.h,v 1.11 2011-02-09 17:29:01 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -64,8 +64,8 @@ int addslashes_r (unsigned char *in, size_t inlen, unsigned char ** out, int sho
  * This function will convert original string. If you don't change
  * original string, use trim_r function.
  *
- * Warn, str variable must located memory.*/
-void trim (char *str);
+ * Warn, str variable must allocated memory.*/
+void trim (char * str);
 
 /* trim_r follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -76,14 +76,14 @@ void trim (char *str);
  * should_free => str memory free in function
  *
  * return value must freed memory */
-char * trim_r (char *str, int should_free);
+char * trim_r (char * str, int should_free);
 
 /* str2long follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
  * convert to long long type from string that composed int charactors
  *
  * this function valid until 19th */
-long long str2long (char *s);
+long long str2long (const char * s);
 
 /* str2double follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -95,7 +95,7 @@ long double str2double (char *s);
 /* char2int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
  * return the int value that sames char charactor */
-int char2int (char c);
+int char2int (const char c);
 
 /* check_int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *

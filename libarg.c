@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.18 2011-02-09 13:32:12 oops Exp $ */
+/* $Id: libarg.c,v 1.19 2011-02-09 17:29:01 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
@@ -357,19 +357,20 @@ OLIBC_API
 char ** split (const char * stream, int * oargc, char * delimiter) // {{{
 {
 	char ** sep;
+	char * buf;
 	int delno, len, dlen;
 	int start, end;
 	int i, j, no;
-
-	/* removed white space of front and end string */
-	trim (stream);
 
 	if ( stream == NULL || delimiter == NULL ) {
 		*oargc = 0;
 		return NULL;
 	}
 
-	len = strlen (stream);
+	/* removed white space of front and end string */
+	oc_strdup_r (buf, stream, NULL);
+
+	len = strlen (buf);
 	dlen = strlen (delimiter);
 
 	if ( len < 1 || dlen < 1 ) {
@@ -377,7 +378,7 @@ char ** split (const char * stream, int * oargc, char * delimiter) // {{{
 		return NULL;
 	}
 
-	delno = get_charcount (stream, delimiter);
+	delno = get_charcount (buf, delimiter);
 	oc_malloc_r (sep, sizeof (char *) * (delno + 3), NULL);
 
 	start = 0;
@@ -386,8 +387,8 @@ char ** split (const char * stream, int * oargc, char * delimiter) // {{{
 
 	for ( i=0; i<len; i++ ) {
 		for ( j=0; j<dlen; j++ ) {
-			if ( stream[i] == delimiter[j] ) {
-				if ( stream[i-1] != '\\' ) {
+			if ( buf[i] == delimiter[j] ) {
+				if ( buf[i-1] != '\\' ) {
 					end = i;
 				}
 
@@ -399,18 +400,19 @@ char ** split (const char * stream, int * oargc, char * delimiter) // {{{
 			}
 
 			if ( end > start && end - start != 0 ) {
-				if ( only_whitespace (stream + start, end - start) ) {
+				if ( only_whitespace (buf + start, end - start) ) {
 					start = end + 1;
 					break;
 				}
 
 				oc_malloc (sep[no], sizeof (char) * (end - start + 2));
 				if ( sep[no] == NULL ) {
+					ofree (buf);
 					ofree_array (sep);
 					return NULL;
 				}
 				memset (sep[no], 0, end - start + 2);
-				memcpy (sep[no], stream + start, end - start);
+				memcpy (sep[no], buf + start, end - start);
 				trim (sep[no]);
 
 				start = end + 1;
@@ -420,10 +422,12 @@ char ** split (const char * stream, int * oargc, char * delimiter) // {{{
 		}
 	}
 
-	if ( end != len && ! only_whitespace (stream + start, 0) ) {
-		oc_strdup (sep[no], stream + start, strlen (stream + start));
+	if ( end != len && ! only_whitespace (buf+ start, 0) ) {
+		oc_strdup (sep[no], buf + start, strlen (buf + start));
 		no++;
 	}
+
+	ofree (buf);
 
 	sep[no] = NULL;
 	*oargc = no;
