@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.5 2011-02-07 07:59:52 oops Exp $ */
+/* $Id: oc_common.h,v 1.6 2011-02-09 13:32:12 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -82,20 +82,23 @@ int get_charcount (char *str, char *del);
 #endif
 
 #define ofree(v) \
-	OC_MEM_DEBUG ("%s%s\n", "Memory free", v == NULL ? ": NULL" : ""); \
-	if ( v != NULL ) { \
-		OC_MEM_DEBUG ("%s\n", "Memory free"); \
-		free (v); \
+	{ \
+		OC_MEM_DEBUG ("%s%s\n", "Memory free", v == NULL ? ": NULL" : ""); \
+		if ( v != NULL ) { \
+			free (v); \
+		} \
 	}
 
 #define oc_malloc(v, size) \
-	OC_MEM_DEBUG("%s\n", "Memory allocation"); \
-	v = malloc (size)
+	{ \
+		OC_MEM_DEBUG("%s\n", "Memory allocation"); \
+		v = malloc (size); \
+	}
 	
 #define oc_realloc(v, size) \
-	OC_MEM_DEBUG("%s\n", "Memory reallocation"); \
 	{ \
 		void * ptr; \
+		OC_MEM_DEBUG("%s\n", "Memory reallocation"); \
 		if ( (ptr = realloc (v, size)) == NULL ) { \
 			ofree (v); \
 			v = NULL; \
@@ -105,17 +108,21 @@ int get_charcount (char *str, char *del);
 	}
 
 #define oc_strdup(v, val, size) \
-	oc_malloc(v, size + 1); \
-	if ( v != NULL ) { memcpy (v, val, size); } \
-	memset (v + size, 0, 1)
+	{ \
+		oc_malloc(v, size + 1); \
+		if ( v != NULL ) { memcpy (v, val, size); } \
+		memset (v + size, 0, 1); \
+	}
 
 #define oc_malloc_originate(type, v, size, ret, result) \
-	if ( type ) { oc_realloc (v, size); } \
-	else { oc_malloc (v, size); } \
-	if ( v == NULL ) { \
-		oc_error ("%s: memory %sallocation failed\n", __func__, type ? "re" : ""); \
-		if ( result ) return ret; \
-		else exit (1); \
+	{ \
+		if ( type ) { oc_realloc (v, size); } \
+		else { oc_malloc (v, size); } \
+		if ( v == NULL ) { \
+			oc_error ("%s: memory %sallocation failed\n", __func__, type ? "re" : ""); \
+			if ( result ) return ret; \
+			else exit (1); \
+		} \
 	}
 	
 /*

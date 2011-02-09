@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.9 2009-12-04 19:44:21 oops Exp $ */
+/* $Id: libstring.h,v 1.10 2011-02-09 13:32:12 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -20,11 +20,27 @@
 #define WHITE		15
 #define BWHITE		16
 
-#define MAX(a, b)	(((a)>(b))?(a):(b))
+#ifndef MAX
+#	define MAX(a, b)	(((a)>(b))?(a):(b))
+#endif
 
-extern const char *stringprep_locale_charset_cache;
+extern const char * stringprep_locale_charset_cache;
 
 void olibc_version (void);
+
+/* addslashes follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
+ *
+ * Returns a string with backslashes before characters that need to be quoted in
+ * database queries etc. These characters are single quote ('), double quote ("),
+ * backslash (\)
+ *
+ * This function same as addslashes of PHP
+ *
+ * in          => original string
+ * should_free => str memory free in addslashes
+ *
+ * return value must freed memory */
+char * addslashes (char * in, int should_free);
 
 /* addslashes follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
  *
@@ -34,11 +50,13 @@ void olibc_version (void);
  *
  * This function same as addslashes of PHP
  *
- * str         => original string
- * should_free => str memory free in addslashes
+ * in          => original string
+ * inlen       => length of in
+ * out         => converted string
+ * should_free => free memory of in argument
  *
  * return value must freed memory */
-char * addslashes(char *str, int should_free);
+int addslashes_r (unsigned char *in, size_t inlen, unsigned char ** out, int should_free);
 
 /* trim follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *

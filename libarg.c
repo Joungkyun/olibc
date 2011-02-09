@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.17 2011-02-07 06:42:07 oops Exp $ */
+/* $Id: libarg.c,v 1.18 2011-02-09 13:32:12 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
@@ -13,7 +13,7 @@ char ** o_cmdarg = NULL;
 
 void trim (char * str);
 
-int longopt_chk (char * option, const struct o_option * options) // {{{
+int longopt_chk (const char * option, const struct o_option * options) // {{{
 {
 	int i = 0;
 
@@ -31,7 +31,7 @@ int longopt_chk (char * option, const struct o_option * options) // {{{
 	return -1;
 } // }}}
 
-int optvalue_chk (char option, const char * options) // {{{
+int optvalue_chk (const char option, const char * options) // {{{
 {
 	int len = strlen (options);
 	int i, val = -1;
@@ -52,7 +52,7 @@ int optvalue_chk (char option, const char * options) // {{{
 	return val;
 } // }}}
 
-int only_whitespace (char * stream, int length) // {{{
+int only_whitespace (const char * stream, int length) // {{{
 {
 	int i, len;
 
@@ -65,8 +65,11 @@ int only_whitespace (char * stream, int length) // {{{
 	return 1;
 } // }}}
 
-/* convert blank to special string */
-char * convert_quoted_blank (char * stream) // {{{
+/*
+ * convert blank to special string
+ * need freed
+ */
+char * convert_quoted_blank (const char * stream) // {{{
 {
 	int len, newlen;
 	int white, i, size;
@@ -127,8 +130,11 @@ char * convert_quoted_blank (char * stream) // {{{
 	return ret;
 } // }}}
 
-/* convert sepcail string to blank */
-char * unconvert_quoted_blank (char * stream) // {{{
+/*
+ * convert sepcail string to blank
+ * need freed
+ */
+char * unconvert_quoted_blank (const char * stream) // {{{
 {
 	int i, j, len, size;
 	char * ret;
@@ -277,9 +283,9 @@ retry:
 	return ret;
 } // }}}
 
-/* build argv array variables */
+/* build argv array variables. must freed */
 OLIBC_API
-char ** argv_make ( char * stream, int * oargc ) // {{{
+char ** argv_make (const char * stream, int * oargc) // {{{
 {
 	const char delimiters[] = " \n\t";
 	char ** oargv;
@@ -346,8 +352,9 @@ char ** argv_make ( char * stream, int * oargc ) // {{{
 	return oargv;
 } // }}}
 
+/* must freed */
 OLIBC_API
-char ** split (char * stream, int * oargc, char * delimiter) // {{{
+char ** split (const char * stream, int * oargc, char * delimiter) // {{{
 {
 	char ** sep;
 	int delno, len, dlen;
@@ -441,7 +448,7 @@ void ofree_array (char ** oargv) // {{{
 
 /* return number of white space */
 OLIBC_API
-int get_whitespace (char * stream) // {{{
+int get_whitespace (const char * stream) // {{{
 {
 	int no, i, len;
 

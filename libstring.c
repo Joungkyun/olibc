@@ -1,81 +1,73 @@
-/* $Id: libstring.c,v 1.23 2011-02-07 07:59:52 oops Exp $ */
+/** 
+ * @file	libstring.c
+ * @brief	String API
+ */
+
+/* $Id: libstring.c,v 1.24 2011-02-09 13:32:12 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
-void memlocate_chk (char *str);
 char * decode_race (char *domain, char *charset, int debug);
 char * encode_race (char *domain, char *charset, int debug);
 
-void olibc_version (void) {
-	printf ("%s\n", PACKAGE_VERSION);
-}
-
-void memlocate_chk (char *str) {
-	if (str == NULL) {
-		fprintf (stderr, "Error: Failed memory location\n");
-		exit (FAILURE);
-	}
-}
-
-/* this function must memory free */
-char * addslashes(char *str, int should_free) {
+/*
+ * This function must memory free
+ * This is binary safe.
+ */
+size_t addslashes_ex (unsigned char * in, size_t inlen, unsigned char * out) // {{{
+{
 	/* maximum string length, worst case situation */
-	char *new_str;
-	char *source, *target;
-	char *end;
-	int length, new_length;
+	unsigned char *source, *target;
+	unsigned char *end;
+	size_t outlen;
 
-	length = strlen (str);
+	if ( in == NULL || inlen < 1 )
+		return 0;
 
-	if (!str) {
-		new_length = 0;
-		new_str = malloc (sizeof (char) * (length + 1) );
-		memlocate_chk (new_str);
-
-		strcpy (new_str, str);
-
-		if (should_free) {
-			ofree (str);
-		}
-		return new_str;
-	}
-
-	new_str = (char *) malloc((length?length:(length=strlen(str)))*2+1);
-	memlocate_chk (new_str);
-
-	source = str;
-	end = source + length;
-	target = new_str;
+	source = in;
+	target = out;
+	end = source + inlen;
 
 	while (source < end) {
 		switch (*source) {
-			case '\0':
-				*target++ = '\\';
-				*target++ = '0';
+			case 0x00: // Null byte (\0)
+				*target++ = 0x5c; // back slash
+				*target++ = 0x30; // '0'
 				break;
-			case '\'':
-			case '\"':
-			case '\\':
-				*target++ = '\\';
-				/* break is missing *intentionally* */
+			case 0x27: // single qoute
+			case 0x22: // double qoute
+			case 0x5c: // back slash
+				*target++ = 0x5c;
+				// break is missing *intentionally*
 			default:
 				*target++ = *source;
-				break;
 		}
 
 		source++;
 	}
 
 	*target = 0;
-	new_length = target - new_str;
-	if (should_free) {
-		ofree(str);
-	}
-	new_str = (char *) realloc(new_str, new_length+1);
-	return new_str;
-}
+	outlen = target - out;
 
-/* trim is remove space charactor on behind and forward on string.
+	return outlen;
+} // }}}
+
+/**
+ * @brief	print olibc version
+ * @return	string
+ */
+OLIBC_API
+void olibc_version (void) // {{{
+{
+	printf ("%s\n", PACKAGE_VERSION);
+} // }}}
+
+/**
+ * @brief	remove white space on behind and forward on strings.
+ * @param	str given strings
+ * @return	void
+ *
+ * trim is remove space charactor on behind and forward on string.
  * warn !! this function modified original variable !!
  */ 
 OLIBC_API
@@ -119,8 +111,14 @@ void trim (char *str) // {{{
 	memset (str + (end - start + 1), 0, 1);
 } // }}}
 
-/* trim is remove space charactor on behind and forward on string.
- * this function must free
+/**
+ * @brief	remove white space on behind and forward on strings.
+ * @param[in]	str given strings
+ * @param[in]	should_free 0 or 1. set 1, free memory of str argument.
+ * @return		point of result
+ *
+ * trim is remove space charactor on behind and forward on string.
+ * Return point of this function is must freed.
  */ 
 OLIBC_API
 char * trim_r (char *str, int should_free) // {{{
@@ -144,6 +142,87 @@ char * trim_r (char *str, int should_free) // {{{
 	trim (buf);
 
 	return buf;
+} // }}}
+
+/**
+ * @brief	Quote string with slashes
+ * @param	in given string for qouting
+ * @param	should_free hould_free 0 or 1. set 1, free memory of in argument.
+ * @return	point of result
+ * @seealso	addslashes_r
+ *
+ * Returns a string with backslashes before characters that need
+ * to be quoted in database queries etc. These characters are single
+ * quote ('), double quote ("), backslash (\).
+ *
+ * This is not binary safe. If you want to binary safe, use addslashes_r.
+ */
+OLIBC_API
+char * addslashes (char * in, int should_free)
+{ // {{{
+	size_t outlen, len;
+	unsigned char * out;
+
+	if ( in == NULL )
+		return NULL;
+
+	len = strlen (in);
+	oc_malloc_r (out, sizeof (char) * (len * 2 + 1), NULL);
+	outlen = addslashes_ex ((unsigned char *) in, len, out);
+
+	if ( should_free )
+		ofree (in);
+
+	if ( ! outlen ) {
+		ofree (out);
+		return NULL;
+	}
+
+	/*
+	// if you want to save memory
+	if ( outlen < (len * 2) )
+		out = (char *) realloc(out, outlen + 1);
+	*/
+
+	return (char *) out;
+} // }}}
+
+/**
+ * @brief	Quote string with slashes
+ * @param	in given binary data for qouting
+ * @param	inlen length of given binary data
+ * @param	out converted binary data
+ * @param	should_free 0 or 1. set 1, free memory of in argument.
+ * @return	length of converted data
+ * @seealso	addslashes
+ *
+ * convert binary data with * backslashes before characters that need
+ * to be quoted in database queries etc. These characters are single
+ * quote ('), double quote ("), backslash (\) and Null byte (\0).
+ *
+ * This is binary safe.
+ */
+OLIBC_API
+int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, int should_free) // {{{
+{
+	size_t outlen;
+
+	if ( in == NULL )
+		return 0;
+
+	oc_malloc (*out, sizeof (char) * (inlen * 2 + 1));
+	if ( out == NULL )
+		return 0;
+
+	outlen = addslashes_ex (in, inlen, *out);
+
+	if ( should_free )
+		ofree (in);
+
+	if ( ! outlen )
+		ofree (*out);
+
+	return outlen;
 } // }}}
 
 long long str2long (char *s) {
@@ -379,8 +458,7 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
 		 d = -d;
 	 }
 	 dec = MAX(0, dec);
-	 tmpbuf = (char *) malloc (1024);
-	 memlocate_chk (tmpbuf);
+	 oc_malloc_r (tmpbuf, 1024, NULL);
 
 	 tmplen = sprintf (tmpbuf, "%.*f", dec, d);
 	 if ( !isdigit ((int) tmpbuf[0]) ) {
@@ -395,8 +473,11 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
 	 if (is_negative)
 		 reslen++;
 
-	 resbuf = (char *) malloc (reslen + 1);
-	 memlocate_chk (resbuf);
+	 oc_malloc (resbuf, reslen + 1);
+	 if ( resbuf == NULL ) {
+		 ofree (tmpbuf);
+		 return NULL;
+	 }
 
 	 src = tmpbuf + tmplen - 1;
 	 tgt = resbuf + reslen;
@@ -490,9 +571,8 @@ char * hex2bin (char *str) {
 	char *data;
 	int len = strlen (str), i, j;
 
-	data = malloc (sizeof (char) * (len + 4));
-	memlocate_chk (data);
-
+	// if failed memory allocate, return NULL
+	oc_malloc_r (data, sizeof (char) * (len + 4), NULL);
 	memset (data, 0, sizeof (char) * (len + 4));
 
 	for ( i = 0, j = 0; i < len; i++ ) {

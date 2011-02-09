@@ -1,4 +1,4 @@
-/* $Id: libarg.h,v 1.3 2011-02-07 06:42:07 oops Exp $ */
+/* $Id: libarg.h,v 1.4 2011-02-09 13:32:12 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -55,13 +55,13 @@ int o_getopt (int oargc, char ** oargv, const char * opt, const struct o_option 
 /* argv_make follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_make make array variables from string like argv
  * return value must free with ofree_array */
-char ** argv_make (char * stream, int * oargc);
+char ** argv_make (const char * stream, int * oargc);
 
 /* split follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * split function make array variables from string with each charactor of given string
  * See the man page split.1.
  * return value must free with ofree_array */
-char ** split (char * stream, int * oargc, char * delimiter);
+char ** split (const char * stream, int * oargc, char * delimiter);
 
 /* argv_free follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_free freed return value of argv_make */
@@ -69,7 +69,7 @@ void ofree_array (char ** stream);
 
 /* unconvert_quoted_blank follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * get number of white space on strings */
-int get_whitespace (char * stream);
+int get_whitespace (const char * stream);
 
 #endif
 /*
