@@ -1,49 +1,51 @@
-.TH strtolower(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH strtolower(1) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man strtolower.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: strtolower.3,v 1.4 2009-10-29 13:24:34 oops Exp $
-.SH 이름
-strtolower
+.\" 2011-02-10 JoungKyun.Kim <htt://oops.org>
+.\" $Id: strtolower.3,v 1.5 2011-02-09 17:28:35 oops Exp $
+.SH NAME
+strtolower \- convert a upper case to lower case
 
-.SH 사용법
+.SH USAGE
 .B #include <olibc/libstring.h>
 .sp
 .BI "void strtolower (char *str);"
 
-.SH 라이브러리 링크
-.B gcc source -l liboc
+.SH Link library
+.B gcc source -loc
+.br
+or
+.B gcc source -logc 
 .br
 
-또는
+If link with -logc, this object is follows LGPL2, but link with -loc, object is
+follows BPL.
 
-.B gcc source -l libolibc
-.br
+.SH DESCRIPTION
+The strtolower() function converts strings to lower case.
+The given argument of strtolower is changed.
 
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
+.SH "RETURN VALUE"
+None
 
-.SH 설명
-문자열을 소문자로 변경한다.
-
-주의할 것은 원본 str 을 변형한다는 것이다.
-
-.SH 반환값
-없음
-
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
-char data[5] = "DaTa";
-printf ("%s\\n", strtolower (data));
+int main (void) {
+    char data[5] = "DaTa";
+    strtolower (data);
+    printf ("%s\\n", data);
+
+    return 0;
+}
 .fi
 
-.SH 참고
+.SH "SEE ALSO"
 strtoupper(1)
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+Thu, 10 Feb 2011 JoungKyun.Kim
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/

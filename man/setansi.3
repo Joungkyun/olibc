@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man setansi.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.4 2009-10-29 13:24:33 oops Exp $
+.\" $Id: setansi.3,v 1.5 2011-02-09 17:28:35 oops Exp $
 .SH 이름
 setansi
 
@@ -12,16 +12,16 @@ setansi
 .BI "int setansi(FILE *stream, int color, int mode);"
 
 .SH 라이브러리 링크
-.B gcc source -l liboc
+.B gcc source -loc
 .br
 
 또는
 
-.B gcc source -l libolibc
+.B gcc source -logc
 .br
 
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
+libogc를 정적으로 링크할 경우에는 LGPL2에 근거하여 사용이 가능하며, liboc를
+정적으로 링크할 경우에는 BPL에 근거한다.
 
 .SH 설명
 파일 스트림의 출력 문자열의 색상을 지정한다. 이 함수를 사용한 후에,

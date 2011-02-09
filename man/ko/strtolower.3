@@ -1,0 +1,54 @@
+.TH strtolower(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man strtolower.1
+.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
+.\" $Id: strtolower.3,v 1.1 2011-02-09 17:28:35 oops Exp $
+.SH 이름
+strtolower
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "void strtolower (char *str);"
+
+.SH 라이브러리 링크
+.B gcc source -loc
+.br
+
+또는
+
+.B gcc source -logc
+.br
+
+libogc를 정적으로 링크할 경우에는 LGPL2에 근거하여 사용이 가능하며, liboc를
+정적으로 링크할 경우에는 BPL에 근거한다.
+
+.SH 설명
+문자열을 소문자로 변경한다.
+
+주의할 것은 원본 str 을 변형한다는 것이다.
+
+.SH 반환값
+없음
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+int main (void) {
+    char data[5] = "DaTa";
+    strtolower (data);
+    printf ("%s\\n", data);
+
+    return 0;
+}
+.fi
+
+.SH 참고
+strtoupper(1)
+
+.SH 작성
+2004.02.19 김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.

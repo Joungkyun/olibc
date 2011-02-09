@@ -1,61 +1,65 @@
-.TH char2int(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH char2int(1) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man char2int.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: char2int.3,v 1.4 2009-10-29 13:24:33 oops Exp $
-.SH 이름
-char2int
+.\" $Id: char2int.3,v 1.5 2011-02-09 17:28:35 oops Exp $
+.SH NAME
+char2int \- convert a charactor to an integer
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
 .BI "int char2int(char c);"
 
-.SH 라이브러리 링크
-.B gcc source -l liboc
+.SH Link library
+.B gcc source -loc
+.br
+or
+.B gcc source -logc 
 .br
 
-또는
+If link with -logc, this object is follows LGPL2, but link with -loc, object is
+follows BPL.
 
-.B gcc source -l libolibc
-.br
-
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
-
-.SH 설명
-캐릭터를 int 형으로 변환한다.
+.SH DESCRIPTION
+The
+.BI char2int()
+function convert a given charactor to an integer.
 
 .TP
-.B c
+.B char c
 .br
-정수로 변경 할 캐릭터를 지정한다.
+A character taht is ascii range between 48 and 57.
 
-.SH 반환값
-정수로 변환이 불가능 하면 -1을 반환한다.
+.SH "RETURN VALUE"
+Return an integer. If a charactor is out of ascii range between 48 and 57,
+return -1.
 
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
-char *str = "123";
-int no = 0, i = 0, x = 1, res = 0;
+int main (void) {
+    char *str = "123";
+    int no = 0, i = 0, x = 1, res = 0;
 
-for (i=strlen(str) - 1; i >= 0; i--) {
-  if ( (no = char2int (str[i])) > 0 ) {
-    res += no;
-    x * 10;
-  }
+    for (i=strlen(str) - 1; i >= 0; i--) {
+        if ( (no = char2int (str[i])) > 0 ) {
+            res += (no * x);
+            x *= 10;
+        }
+    }
+    printf ("%d\\n", res);
+
+    return 0;
 }
-
-printf ("%d\\n", res);
 .fi
 
-.SH 참조
+.SH "SEE ALSO"
 check_int(1) str2double(1) str2long(1)
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+Thu, 10 Feb 2011 JoungKyun.Kim
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
