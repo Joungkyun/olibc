@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.25 2011-02-09 15:14:28 oops Exp $ */
+/* $Id: libstring.c,v 1.26 2011-02-09 15:18:37 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -158,8 +158,8 @@ char * trim_r (char *str, int should_free) // {{{
  * This is not binary safe. If you want to binary safe, use addslashes_r.
  */
 OLIBC_API
-char * addslashes (char * in, int should_free)
-{ // {{{
+char * addslashes (char * in, int should_free) // {{{
+{
 	size_t outlen, len;
 	unsigned char * out;
 
@@ -181,6 +181,7 @@ char * addslashes (char * in, int should_free)
 	/*
 	// if you want to save memory
 	if ( outlen < (len * 2) )
+		oc_realloc_r (out, outlen + 1, NULL);
 		out = (char *) realloc(out, outlen + 1);
 	*/
 
