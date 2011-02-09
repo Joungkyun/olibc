@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.6 2011-02-09 13:32:12 oops Exp $ */
+/* $Id: oc_common.h,v 1.7 2011-02-09 15:53:05 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -110,38 +110,60 @@ int get_charcount (char *str, char *del);
 #define oc_strdup(v, val, size) \
 	{ \
 		oc_malloc(v, size + 1); \
-		if ( v != NULL ) { memcpy (v, val, size); } \
-		memset (v + size, 0, 1); \
+		if ( v != NULL ) { \
+			memcpy (v, val, size); \
+			memset (v + size, 0, 1); \
+		} \
 	}
+
+#define OC_DEF_EXIT    0
+#define OC_DEF_RETRUN  1
+#define OC_DEF_MALLOC  0
+#define OC_DEF_REALLOC 1
 
 #define oc_malloc_originate(type, v, size, ret, result) \
 	{ \
-		if ( type ) { oc_realloc (v, size); } \
+		if ( type == OC_DEF_REALLOC ) { oc_realloc (v, size); } \
 		else { oc_malloc (v, size); } \
 		if ( v == NULL ) { \
 			oc_error ("%s: memory %sallocation failed\n", __func__, type ? "re" : ""); \
-			if ( result ) return ret; \
-			else exit (1); \
+			if ( result == OC_DEF_RETURN ) return ret; \
+			exit (1); \
 		} \
 	}
-	
+
 /*
  * v -> allocated variable
  * size -> allocated size
  * ret -> if failed allocat, return value
  */
 #define oc_malloc_r(v, size, ret) \
-	oc_malloc_originate (0, v, size, ret, 1);
+	oc_malloc_originate (OC_DEF_MALLOC, v, size, ret, OC_DEF_RETURN)
 
 #define oc_realloc_r(v, size, ret) \
-	oc_malloc_originate (1, v, size, ret, 1);
+	oc_malloc_originate (OC_DEF_REALLOC, v, size, ret, OC_DEF_RETURN)
 
 #define oc_malloc_die(v, size) \
-	oc_malloc_originate (0, v, size, ret, 0);
+	oc_malloc_originate (OC_DEF_MALLOC, v, size, ret, OC_DEF_EXIT)
 
 #define oc_realloc_die(v, size) \
-	oc_malloc_originate (1, v, size, ret, 0);
+	oc_malloc_originate (OC_DEF_REALLOC, v, size, ret, OC_DEF_EXIT)
 
+#define oc_strdup_originate(v, data, ret, result) \
+	{ \
+		oc_strdup (v, data, strlen (ret)); \
+		if ( v == NULL ) { \
+			if ( result == OC_DEF_RETURN ) \
+				return ret; \
+			exit (1); \
+		} \
+	}
+
+#define oc_strdup_r(v, data, ret) \
+		 oc_strdup_originate (v, data, ret, OC_DEF_RETURN)
+
+#define oc_strdup_e(v, data, ret) \
+		 oc_strdup_originate (v, data, ret, OC_DEF_EXIT)
 #endif
 /*
  * Local variables:
