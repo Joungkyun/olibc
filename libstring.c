@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.28 2011-02-09 18:34:36 oops Exp $ */
+/* $Id: libstring.c,v 1.29 2011-02-09 18:38:23 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -92,6 +92,13 @@ void trim (char * str) // {{{
 {
 	int len = strlen (str);
 	int start = 0, end = 0, i = 0;
+
+	if ( str == NULL )
+		return;
+
+	len = strlen (str);
+	if ( len < 1 )
+		return;
 
 	// get end
 	OC_DEBUG ("%s\n", "Get end point");
