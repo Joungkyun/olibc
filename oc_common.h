@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.10 2011-02-10 09:51:46 oops Exp $ */
+/* $Id: oc_common.h,v 1.11 2011-02-10 09:58:37 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -44,7 +44,7 @@
 #	endif
 #endif
 
-int get_charcount (char *str, char *del);
+uint get_charcount (char *str, char *del);
 
 #define oc_error_debug(fmt,...) \
 	fprintf (stderr, \
