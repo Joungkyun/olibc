@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.32 2011-02-10 09:51:46 oops Exp $ */
+/* $Id: libstring.c,v 1.33 2011-02-10 09:54:16 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -127,7 +127,7 @@ void trim (char * str) // {{{
 
 	if ( end < start ) {
 		oc_error ("%s\n", "end point is smaller than start point on trim function");
-		exit (FAILURE);
+		exit (1);
 	}
 
 	OC_DEBUG ("start(%d) : end(%d)\n", start, end);
@@ -325,7 +325,7 @@ long double str2double (char *s) {
 
 		if ( dotlen > 7 ) {
 			fprintf (stderr, "ERROR: float length is too long. max 6");
-			exit (FAILURE);
+			exit (1);
 		}
 
 		for ( i = len - dotlen + 1; i < len; i++ ) {

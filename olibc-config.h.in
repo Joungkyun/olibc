@@ -1,22 +1,14 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.15 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.16 2011-02-10 09:51:46 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
 #define FILEBUF		4096
 #define NETWBUF		1024
 
-#define SUCCESS		0
-#define FAILURE		1
-#define LSUCCESS	1
-#define LFAILURE	0
-
 /* config.h:  a general config file */
 
 
-
-/* Define to 1 if the system has the type `bool'. */
-#undef HAVE_BOOL
 
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H

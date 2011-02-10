@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.11 2009-10-29 14:01:36 oops Exp $ */
+/* $Id: libfile.c,v 1.12 2011-02-10 09:54:16 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -57,7 +57,7 @@ char * fileread (char * path) {
 
 	if ((fp = fopen(path, "rb")) == NULL) {
 		fprintf(stderr, "ERROR: Can't open %s in read mode\n", path);
-		exit (FAILURE);
+		exit (1);
 	}
 
 	stat (path, &f);

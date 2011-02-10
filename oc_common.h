@@ -1,14 +1,9 @@
-/* $Id: oc_common.h,v 1.9 2011-02-09 18:34:36 oops Exp $ */
+/* $Id: oc_common.h,v 1.10 2011-02-10 09:51:46 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
 #ifdef HAVE_CONFIG_H
 #include <olibc-config.h>
-#else
-#define SUCCESS		0
-#define FAILURE		1
-#define LSUCCESS	1
-#define LFAILURE	0
 #endif
 
 #include <stdio.h>

@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.14 2011-02-10 09:48:11 oops Exp $ */
+/* $Id: libstring.h,v 1.15 2011-02-10 09:54:16 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -192,7 +192,7 @@ int bin2dec (char *src);
 
 /* is_ksc5601 follows BPL License v.1
  * check ksc5601 range */
-int is_ksc5601 (uint c1, uint c2);
+bool is_ksc5601 (uint c1, uint c2);
 
 /*
  * Local variables:

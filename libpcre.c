@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.11 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libpcre.c,v 1.12 2011-02-10 09:54:16 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -118,7 +118,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 	if ( delnum != 2 ) {
 		fprintf (stderr, "ERROR: wrong uses delimiters on regex rule\n");
 		ofree (pattern);
-		exit (FAILURE);
+		exit (1);
 	}
 
 	memcpy (pattern, regex + start + 1, end - start - 1);
@@ -148,7 +148,7 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 						break;
 			default:
 				fprintf (stderr, "ERROR: Unknown modifier '%c'", opt[i]);
-				exit (FAILURE);
+				exit (1);
 		}
 	}
 
@@ -217,7 +217,7 @@ int lib_preg_match (char *regex, char *subject) {
 	if ( re == NULL ) {
 		fprintf (stderr, "ERROR: Compilation failed: %s at offset %d", error, erroffset);
 		ofree (pattern);
-		exit (FAILURE);
+		exit (1);
 	}
 
 	size_offsets = (pcre_info(re, NULL, NULL) + 1) * 3;
@@ -358,7 +358,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	if ( re == NULL ) {
 		fprintf (stderr, "ERROR: Compilation failed: %s at offset %d", error, erroffset);
 		ofree (pattern);
-		exit (FAILURE);
+		exit (1);
 	}
 
 	/* If study option was specified, study the pattern and
@@ -368,7 +368,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 		if (error != NULL) {
 			fprintf (stderr, "ERROR: While studying pattern\n");
 			ofree (pattern);
-			exit (FAILURE);
+			exit (1);
 		}
 	}
 
@@ -397,7 +397,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 		/* Check for too many substrings condition. */
 		if (count == 0) {
 			fprintf (stderr, "ERROR: Matched, but too many substrings\n");
-			exit (FAILURE);
+			exit (1);
 		}
 
 		piece = subject + start_offset;
@@ -515,27 +515,27 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 
 char * preg_quote (char *string, char *delimiters) {
 	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (FAILURE);
+	exit (1);
 }
 
 char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (FAILURE);
+	exit (1);
 }
 
 char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no) {
 	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (FAILURE);
+	exit (1);
 }
 
 char * preg_grep (char *regex, char *str, int opt) {
 	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (FAILURE);
+	exit (1);
 }
 
 int preg_match (char *regex, char *subject) {
 	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (FAILURE);
+	exit (1);
 }
 
 #endif
