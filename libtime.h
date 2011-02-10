@@ -1,6 +1,8 @@
-/* $Id: libtime.h,v 1.2 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libtime.h,v 1.3 2011-02-10 09:41:59 oops Exp $ */
 #ifndef LIBTIME_H
 #define LIBTIME_H
+
+#include <olibc/oc_type.h>
 
 /* microtim follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * get current microtime */

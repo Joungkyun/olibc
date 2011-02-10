@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.26 2011-02-07 06:42:07 oops Exp $
+# $Id: Makefile.in,v 1.27 2011-02-10 09:41:58 oops Exp $
 srcdir		= @srcdir@
 top_srcdir	= @top_srcdir@
 builddir	= @builddir@
@@ -70,7 +70,17 @@ INSTALL_SCRIPT	= @INSTALL_SCRIPT@
 %.lo: %.c olibc-config.h oc_common.h
 	$(COMPILE) -o $@ -c $<
 
-all: pcre idn $(OBJECT) libs olibc-config
+all: prepare pcre idn $(OBJECT) libs olibc-config
+
+prepare:
+	if test ! -d "olibc"; then \
+		$(MKDIR) olibc; \
+	fi
+	if test ! -L "olibc/oc_type.h"; then \
+		cd olibc; \
+		ln -sf ../oc_type.h ./oc_type.h; \
+		cd -; \
+	fi
 
 pcre:
 	$(MAKE) -C pcrelib
@@ -120,4 +130,4 @@ clean:
 
 distclean: clean
 	-$(RM) -f olibc-config.h config.log config.status Makefile man/Makefile pcrelib/Makefile libidn/Makefile *~
-	-$(RM) -rf autom4te* libidn/idn-int.h stamp* .libs libtool libidn/.libs pcrelib/.libs
+	-$(RM) -rf autom4te* libidn/idn-int.h stamp* .libs libtool libidn/.libs pcrelib/.libs olibc

@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.18 2011-02-06 15:11:19 oops Exp $
+# $Id: configure.ac,v 1.19 2011-02-10 09:41:59 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -9,7 +9,7 @@ AC_PREREQ(2.59)
 AC_INIT([olibc], [0.1.3], [http://oops.org])
 #AM_INIT_AUTOMAKE([1.8 gnits])
 AC_CONFIG_SRCDIR([libstring.h])
-AC_CONFIG_HEADER([olibc-config.h])
+AC_CONFIG_HEADER([olibc-config.h oc_type.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
 AC_SUBST(SONAME_INFO)
@@ -141,7 +141,7 @@ fi
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([langinfo.h libintl.h locale.h stdlib.h string.h sys/time.h unistd.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h])
+AC_CHECK_HEADERS([langinfo.h libintl.h locale.h sys/time.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h stdbool.h])
 
 if test "$GCC" = "yes"; then
 	GCC_MAJOR_VERSION=`$CC --version | $HEAD -n 1 | $PERL -pe 's|^([[^0-9]]*)([[0-9]]+)\..*|\2|g'`
@@ -157,6 +157,7 @@ AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
+AC_CHECK_TYPES([ushort, uint, ulong, uchar])
 
 # Checks for library functions.
 AC_FUNC_MALLOC

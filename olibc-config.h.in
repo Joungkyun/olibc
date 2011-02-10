@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.14 2011-02-06 15:11:19 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.15 2011-02-10 09:41:59 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
@@ -14,6 +14,9 @@
 /* config.h:  a general config file */
 
 
+
+/* Define to 1 if the system has the type `bool'. */
+#undef HAVE_BOOL
 
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H
@@ -68,6 +71,9 @@
    zero-length file name argument. */
 #undef HAVE_STAT_EMPTY_STRING_BUG
 
+/* Define to 1 if you have the <stdbool.h> header file. */
+#undef HAVE_STDBOOL_H
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -98,8 +104,20 @@
 /* Define to 1 if you have the <sys/type.h> header file. */
 #undef HAVE_SYS_TYPE_H
 
+/* Define to 1 if the system has the type `uchar'. */
+#undef HAVE_UCHAR
+
+/* Define to 1 if the system has the type `uint'. */
+#undef HAVE_UINT
+
+/* Define to 1 if the system has the type `ulong'. */
+#undef HAVE_ULONG
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define to 1 if the system has the type `ushort'. */
+#undef HAVE_USHORT
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */

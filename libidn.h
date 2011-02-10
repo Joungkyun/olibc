@@ -1,6 +1,8 @@
-/* $Id: libidn.h,v 1.1 2004-02-18 16:17:46 oops Exp $ */
+/* $Id: libidn.h,v 1.2 2011-02-10 09:41:59 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
+
+#include <olibc/oc_type.h>
 
 #define ENDANSI		0
 #define GRAY		1

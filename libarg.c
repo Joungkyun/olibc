@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.19 2011-02-09 17:29:01 oops Exp $ */
+/* $Id: libarg.c,v 1.20 2011-02-10 09:41:59 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
@@ -52,7 +52,7 @@ int optvalue_chk (const char option, const char * options) // {{{
 	return val;
 } // }}}
 
-int only_whitespace (const char * stream, int length) // {{{
+bool only_whitespace (const char * stream, int length) // {{{
 {
 	int i, len;
 
@@ -60,9 +60,9 @@ int only_whitespace (const char * stream, int length) // {{{
 
 	for ( i = 0; i < len; i++ )
 		if ( ! isspace (stream[i]) )
-			return 0;
+			return false;
 
-	return 1;
+	return true;
 } // }}}
 
 /*
@@ -283,11 +283,13 @@ retry:
 	return ret;
 } // }}}
 
-/* build argv array variables. must freed */
+/*
+ * build argv array variables. must freed
+ */
 OLIBC_API
-char ** argv_make (const char * stream, int * oargc) // {{{
+char ** argv_make (cchar * stream, int * oargc) // {{{
 {
-	const char delimiters[] = " \n\t";
+	cchar delimiters[] = " \n\t";
 	char ** oargv;
 	char ** sep, ** sep_t;
 
@@ -354,7 +356,7 @@ char ** argv_make (const char * stream, int * oargc) // {{{
 
 /* must freed */
 OLIBC_API
-char ** split (const char * stream, int * oargc, char * delimiter) // {{{
+char ** split (cchar * stream, int * oargc, char * delimiter) // {{{
 {
 	char ** sep;
 	char * buf;
@@ -452,7 +454,7 @@ void ofree_array (char ** oargv) // {{{
 
 /* return number of white space */
 OLIBC_API
-int get_whitespace (const char * stream) // {{{
+int get_whitespace (cchar * stream) // {{{
 {
 	int no, i, len;
 

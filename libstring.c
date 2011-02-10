@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.29 2011-02-09 18:38:23 oops Exp $ */
+/* $Id: libstring.c,v 1.30 2011-02-10 09:41:59 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -184,11 +184,11 @@ char * trim_r (char * str, int should_free) // {{{
  * This is binary safe.
  */
 OLIBC_API
-int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, size_t * outlen) // {{{
+int addslashes_r (uchar * in, size_t inlen, uchar ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
-	unsigned char *source, *target;
-	unsigned char *end;
+	uchar *source, *target;
+	uchar *end;
 
 	if ( in == NULL || inlen < 1 )
 		return 0;
@@ -245,12 +245,12 @@ OLIBC_API
 char * addslashes (char * in, int should_free) // {{{
 {
 	size_t outlen;
-	unsigned char * out;
+	uchar * out;
 
 	if ( in == NULL )
 		return NULL;
 
-	if ( addslashes_r ((unsigned char *) in, strlen (in), &out, &outlen) == 0 )
+	if ( addslashes_r ((uchar *) in, strlen (in), &out, &outlen) == 0 )
 		return NULL;
 
 	if ( should_free )
@@ -493,7 +493,7 @@ void setansi (FILE *stream, int color, int noansi) // {{{
 
 char * human_size (double size, int sub, int unit) {
 	float res;
-	unsigned char sunit[6], ssunit, re_unit[3];
+	uchar sunit[6], ssunit, re_unit[3];
 	char * BYTE_C, bytes[1024];
 	static char result[256];
 
@@ -702,9 +702,9 @@ int bin2dec (char *src) // {{{
 	return ret;
 } // }}}
 
-int is_ksc5601 (unsigned c1, unsigned c2) // {{{
+int is_ksc5601 (uint c1, uint c2) // {{{
 {
-	unsigned char *c = (unsigned char *) ((c1 << 8) | c2);
+	uchar *c = (uchar *) ((c1 << 8) | c2);
 	//printf ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
 
 	if ( ! (c1 & 0x80) )

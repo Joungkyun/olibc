@@ -1,6 +1,8 @@
-/* $Id: libstring.h,v 1.12 2011-02-09 18:34:36 oops Exp $ */
+/* $Id: libstring.h,v 1.13 2011-02-10 09:41:59 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
+
+#include <olibc/oc_type.h>
 
 #define ENDANSI		0
 #define GRAY		1
@@ -24,7 +26,7 @@
 #	define MAX(a, b)	(((a)>(b))?(a):(b))
 #endif
 
-extern const char * stringprep_locale_charset_cache;
+extern cchar * stringprep_locale_charset_cache;
 
 void olibc_version (void);
 
@@ -56,7 +58,7 @@ char * addslashes (char * in, int should_free);
  * outlen      => length of converted data
  *
  * return value must freed memory */
-int addslashes_r (unsigned char * in, size_t inlen, unsigned char ** out, size_t * outlen);
+int addslashes_r (uchar * in, size_t inlen, uchar ** out, size_t * outlen);
 
 /* trim follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -83,7 +85,7 @@ char * trim_r (char * str, int should_free);
  * convert to long long type from string that composed int charactors
  *
  * this function valid until 19th */
-long long str2long (const char * s);
+long long str2long (cchar * s);
 
 /* str2double follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -95,7 +97,7 @@ long double str2double (char *s);
 /* char2int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
  * return the int value that sames char charactor */
-int char2int (const char c);
+int char2int (cchar c);
 
 /* check_int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -190,7 +192,7 @@ int bin2dec (char *src);
 
 /* is_ksc5601 follows BPL License v.1
  * check ksc5601 range */
-int is_ksc5601 (unsigned c1, unsigned c2);
+int is_ksc5601 (uint c1, uint c2);
 
 /*
  * Local variables:

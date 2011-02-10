@@ -1,6 +1,8 @@
-/* $Id: libfile.h,v 1.5 2009-10-29 14:01:36 oops Exp $ */
+/* $Id: libfile.h,v 1.6 2011-02-10 09:41:59 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
+
+#include <olibc/oc_type.h>
 
 #define _IS_NCHK	0
 #define _IS_FILE	1
