@@ -1,14 +1,9 @@
-/* $Id: acconfig.h,v 1.4 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: acconfig.h,v 1.5 2011-02-10 09:51:46 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
 #define FILEBUF		4096
 #define NETWBUF		1024
-
-#define SUCCESS		0
-#define FAILURE		1
-#define LSUCCESS	1
-#define LFAILURE	0
 
 /* config.h:  a general config file */
 
