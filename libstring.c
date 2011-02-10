@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.30 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libstring.c,v 1.31 2011-02-10 09:48:11 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -138,14 +138,14 @@ void trim (char * str) // {{{
 /**
  * @brief	remove white space on behind and forward on strings.
  * @param[in]	str given strings
- * @param[in]	should_free 0 or 1. set 1, free memory of str argument.
+ * @param[in]	should_free bool / set true, free memory of str argument.
  * @return		point of result
  *
  * trim is remove white space on behind and forward on string.
  * Return point of this function is must freed.
  */ 
 OLIBC_API
-char * trim_r (char * str, int should_free) // {{{
+char * trim_r (char * str, bool should_free) // {{{
 {
 	int len;
 	char *buf;
@@ -231,7 +231,7 @@ int addslashes_r (uchar * in, size_t inlen, uchar ** out, size_t * outlen) // {{
 /**
  * @brief	Quote string with slashes
  * @param	in given string for qouting
- * @param	should_free hould_free 0 or 1. set 1, free memory of in argument.
+ * @param	should_free bool / set true, free memory of in argument.
  * @return	point of result
  * @seealso	addslashes_r
  *
@@ -242,7 +242,7 @@ int addslashes_r (uchar * in, size_t inlen, uchar ** out, size_t * outlen) // {{
  * This is not binary safe. If you want to binary safe, use addslashes_r.
  */
 OLIBC_API
-char * addslashes (char * in, int should_free) // {{{
+char * addslashes (char * in, bool should_free) // {{{
 {
 	size_t outlen;
 	uchar * out;
@@ -264,7 +264,7 @@ char * addslashes (char * in, int should_free) // {{{
  * @param[in]	s numeric string
  * @return	64bit long value
  */
-long long str2long (const char *s) {
+long long str2long (cchar *s) {
 	int len, i = 0, minus = 0, bufno = 0;
 	long long x = 1, res = 0;
 	char *buf;
@@ -373,7 +373,7 @@ long double str2double (char *s) {
  * return -1.
  */
 OLIBC_API
-int char2int (const char c) // {{{
+int char2int (cchar c) // {{{
 {
 	if (c > 47 && c < 58)
 		return c - 48;
@@ -705,7 +705,7 @@ int bin2dec (char *src) // {{{
 int is_ksc5601 (uint c1, uint c2) // {{{
 {
 	uchar *c = (uchar *) ((c1 << 8) | c2);
-	//printf ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
+	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
 
 	if ( ! (c1 & 0x80) )
 		return FAILURE;

@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.13 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libstring.h,v 1.14 2011-02-10 09:48:11 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -42,7 +42,7 @@ void olibc_version (void);
  * should_free => str memory free in addslashes
  *
  * return value must freed memory */
-char * addslashes (char * in, int should_free);
+char * addslashes (char * in, bool should_free);
 
 /* addslashes follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
  *
@@ -78,7 +78,7 @@ void trim (char * str);
  * should_free => str memory free in function
  *
  * return value must freed memory */
-char * trim_r (char * str, int should_free);
+char * trim_r (char * str, bool should_free);
 
 /* str2long follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
