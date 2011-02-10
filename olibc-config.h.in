@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.16 2011-02-10 09:51:46 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.17 2011-02-10 11:45:17 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
@@ -96,20 +96,8 @@
 /* Define to 1 if you have the <sys/type.h> header file. */
 #undef HAVE_SYS_TYPE_H
 
-/* Define to 1 if the system has the type `uchar'. */
-#undef HAVE_UCHAR
-
-/* Define to 1 if the system has the type `uint'. */
-#undef HAVE_UINT
-
-/* Define to 1 if the system has the type `ulong'. */
-#undef HAVE_ULONG
-
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* Define to 1 if the system has the type `ushort'. */
-#undef HAVE_USHORT
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */

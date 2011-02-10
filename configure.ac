@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.19 2011-02-10 09:41:59 oops Exp $
+# $Id: configure.ac,v 1.20 2011-02-10 11:45:17 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -157,7 +157,8 @@ AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
-AC_CHECK_TYPES([ushort, uint, ulong, uchar])
+AC_CHECK_SIZEOF(long)
+#AC_CHECK_TYPES([ushort, uint, ulong, uchar])
 
 # Checks for library functions.
 AC_FUNC_MALLOC

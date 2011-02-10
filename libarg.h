@@ -1,4 +1,4 @@
-/* $Id: libarg.h,v 1.5 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libarg.h,v 1.6 2011-02-10 11:45:17 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -52,18 +52,18 @@ extern int _ogetopt_chk_int;
  * Before use this function, must init _ogetopt_chk_int = -1 and
  * _ogetopt_cmd_int = 0.
  */
-int o_getopt (int oargc, char ** oargv, cchar * opt, const struct o_option * longopt);
+int o_getopt (int oargc, char ** oargv, CChar * opt, const struct o_option * longopt);
 
 /* argv_make follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_make make array variables from string like argv
  * return value must free with ofree_array */
-char ** argv_make (cchar * stream, int * oargc);
+char ** argv_make (CChar * stream, int * oargc);
 
 /* split follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * split function make array variables from string with each charactor of given string
  * See the man page split.1.
  * return value must free with ofree_array */
-char ** split (cchar * stream, int * oargc, char * delimiter);
+char ** split (CChar * stream, int * oargc, char * delimiter);
 
 /* argv_free follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_free freed return value of argv_make */
@@ -71,7 +71,7 @@ void ofree_array (char ** stream);
 
 /* unconvert_quoted_blank follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * get number of white space on strings */
-int get_whitespace (cchar * stream);
+int get_whitespace (CChar * stream);
 
 #endif
 /*

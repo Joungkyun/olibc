@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.15 2011-02-10 09:54:16 oops Exp $ */
+/* $Id: libstring.h,v 1.16 2011-02-10 11:45:17 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -26,7 +26,7 @@
 #	define MAX(a, b)	(((a)>(b))?(a):(b))
 #endif
 
-extern cchar * stringprep_locale_charset_cache;
+extern CChar * stringprep_locale_charset_cache;
 
 void olibc_version (void);
 
@@ -58,7 +58,7 @@ char * addslashes (char * in, bool should_free);
  * outlen      => length of converted data
  *
  * return value must freed memory */
-int addslashes_r (uchar * in, size_t inlen, uchar ** out, size_t * outlen);
+int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen);
 
 /* trim follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -85,7 +85,7 @@ char * trim_r (char * str, bool should_free);
  * convert to long long type from string that composed int charactors
  *
  * this function valid until 19th */
-long long str2long (cchar * s);
+long long str2long (CChar * s);
 
 /* str2double follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -97,7 +97,7 @@ long double str2double (char *s);
 /* char2int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
  * return the int value that sames char charactor */
-int char2int (cchar c);
+int char2int (CChar c);
 
 /* check_int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *

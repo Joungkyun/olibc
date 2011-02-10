@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.33 2011-02-10 09:54:16 oops Exp $ */
+/* $Id: libstring.c,v 1.34 2011-02-10 11:45:17 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -184,11 +184,11 @@ char * trim_r (char * str, bool should_free) // {{{
  * This is binary safe.
  */
 OLIBC_API
-int addslashes_r (uchar * in, size_t inlen, uchar ** out, size_t * outlen) // {{{
+int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
-	uchar *source, *target;
-	uchar *end;
+	UChar *source, *target;
+	UChar *end;
 
 	if ( in == NULL || inlen < 1 )
 		return 0;
@@ -245,12 +245,12 @@ OLIBC_API
 char * addslashes (char * in, bool should_free) // {{{
 {
 	size_t outlen;
-	uchar * out;
+	UChar * out;
 
 	if ( in == NULL )
 		return NULL;
 
-	if ( addslashes_r ((uchar *) in, strlen (in), &out, &outlen) == 0 )
+	if ( addslashes_r ((UChar *) in, strlen (in), &out, &outlen) == 0 )
 		return NULL;
 
 	if ( should_free )
@@ -264,7 +264,7 @@ char * addslashes (char * in, bool should_free) // {{{
  * @param[in]	s numeric string
  * @return	64bit long value
  */
-long long str2long (cchar *s) {
+long long str2long (CChar *s) {
 	int len, i = 0, minus = 0, bufno = 0;
 	long long x = 1, res = 0;
 	char *buf;
@@ -373,7 +373,7 @@ long double str2double (char *s) {
  * return -1.
  */
 OLIBC_API
-int char2int (cchar c) // {{{
+int char2int (CChar c) // {{{
 {
 	if (c > 47 && c < 58)
 		return c - 48;
@@ -493,7 +493,7 @@ void setansi (FILE *stream, int color, int noansi) // {{{
 
 char * human_size (double size, int sub, int unit) {
 	float res;
-	uchar sunit[6], ssunit, re_unit[3];
+	UChar sunit[6], ssunit, re_unit[3];
 	char * BYTE_C, bytes[1024];
 	static char result[256];
 
@@ -704,7 +704,7 @@ int bin2dec (char *src) // {{{
 
 bool is_ksc5601 (uint c1, uint c2) // {{{
 {
-	uchar *c = (uchar *) ((c1 << 8) | c2);
+	UChar *c = (UChar *) ((c1 << 8) | c2);
 	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
 
 	if ( ! (c1 & 0x80) )

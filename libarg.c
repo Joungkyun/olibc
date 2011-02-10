@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.20 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libarg.c,v 1.21 2011-02-10 11:45:17 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
@@ -287,9 +287,9 @@ retry:
  * build argv array variables. must freed
  */
 OLIBC_API
-char ** argv_make (cchar * stream, int * oargc) // {{{
+char ** argv_make (CChar * stream, int * oargc) // {{{
 {
-	cchar delimiters[] = " \n\t";
+	CChar delimiters[] = " \n\t";
 	char ** oargv;
 	char ** sep, ** sep_t;
 
@@ -356,7 +356,7 @@ char ** argv_make (cchar * stream, int * oargc) // {{{
 
 /* must freed */
 OLIBC_API
-char ** split (cchar * stream, int * oargc, char * delimiter) // {{{
+char ** split (CChar * stream, int * oargc, char * delimiter) // {{{
 {
 	char ** sep;
 	char * buf;
@@ -454,7 +454,7 @@ void ofree_array (char ** oargv) // {{{
 
 /* return number of white space */
 OLIBC_API
-int get_whitespace (cchar * stream) // {{{
+int get_whitespace (CChar * stream) // {{{
 {
 	int no, i, len;
 
