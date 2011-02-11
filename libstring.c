@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.36 2011-02-11 17:18:21 oops Exp $ */
+/* $Id: libstring.c,v 1.37 2011-02-11 18:53:31 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -442,54 +442,81 @@ void setansi (FILE *stream, int color, int noansi) // {{{
 	}
 } // }}}
 
-char * human_size (double size, int sub, int unit) {
-	float res;
-	UChar sunit[6], ssunit, re_unit[3];
-	char * BYTE_C, bytes[1024];
-	static char result[256];
+/**
+ * @brief	convert number to human readable
+ * @param	size double number
+ * @param	sub bool. set true, return with original size. ex, 'convert size (orignal size)'
+ * @param	unit bool. set true, caculation with Byte, else with Bit.
+ * @return	formatted string by human read.
+ *
+ * The human_size_r() funtion convert to unit for human readable.
+ * The return value support decimal porint under 2 digits.
+ *
+ * The return value is must freed.
+ *
+ * This function is thread safe.
+ */
+OLIBC_API
+char * human_size_r (double size, bool sub, bool unit) // {{{
+{
+	char units[] = { 0, 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
+	UInt i = 0, dvd = 1024;
+	double osize = size;
+	char * buf;
+	char singular[2] = { 0, };
 
-	memset (result, 0, 256);
-	memset (sunit, 0, 6);
-	memset (re_unit, 0, 3);
+	oc_safe_cpy (singular, (size > 2) ? "s" : "", 2);
+	oc_malloc_r (buf, sizeof (char) * 64, NULL);
+	memset (buf, 0, 64);
 
-	if (unit != 1) {
-		strcpy (sunit, "Bytes");
-		ssunit = 'B';
-	} else {
-		strcpy (sunit, "Bits");
-		ssunit = 'b';
+	if ( ! unit )
+		dvd = 1000;
+
+	while ( size > dvd ) {
+		size /= dvd;
+		i++;
 	}
 
-	BYTE_C = (char *) numberFormat (size, 0, '.', ',', 0);
-	strcpy (bytes, BYTE_C);
-	ofree(BYTE_C);
+	if ( sub ) {
+		char * BYTE_C;
+		BYTE_C = (char *) numberFormat (osize, 0, '.', ',', 0);
+		sprintf (
+			buf, "%.2f %c%c (%s B%s%s)",
+			size, units[i], unit ? 'b' : 'B',
+			BYTE_C, unit ? "it" : "yte", singular
+		);
+		ofree (BYTE_C);
+	} else
+		sprintf (buf, "%.2f %c%c", size, units[i], unit ? 'b' : 'B');
 
-	if (size < 1024) {
-		sprintf (result, "%s %s", bytes, sunit);
-	} else {
-		if (size < 1048576 ) {
-			res = (float) size/1024;
-			memset (re_unit, 'K', 1);
-		} else if (size < 1073741827) {
-			res = (float) size/1048576;
-			memset (re_unit, 'M', 1);
-		} else if (size < 1099511627776) {
-			res = (float) size/1073741827;
-			memset (re_unit, 'G', 1);
-		} else {
-			res = (float) size/1099511627776;
-			memset (re_unit, 'T', 1);
-		}
-		memset (re_unit + 1, ssunit, 1);
+	return buf;
+} // }}}
 
-		if (sub)
-			sprintf(result, "%.2f %s (%s %s)", res, re_unit, bytes, sunit);
-		else
-			sprintf(result, "%.2f %s", res, re_unit);
-	}
+/**
+ * @brief	convert number to human readable
+ * @param	size double number
+ * @param	sub bool. set true, return with original size. ex, 'convert size (orignal size)'
+ * @param	unit bool. set true, caculation with Byte, else with Bit.
+ * @return	formatted string by human read.
+ *
+ * The human_size_r() funtion convert to unit for human readable.
+ * The return value support decimal porint under 2 digits.
+ *
+ * This function is not thread safe, so use human_size_r function for
+ * thread safe.
+ */
+OLIBC_API
+char * human_size (double size, int sub, int unit) // {{{
+{
+	static char buf[1024] = { 0, };
+	char * tmp;
 
-	return result;
-}
+	tmp = human_size_r (size, sub, unit);
+	oc_safe_cpy (buf, tmp, 1024);
+	ofree (tmp);
+
+	return buf;
+} // }}}
 
 /* follows PHP license 2.02
  * This function must free */
@@ -559,6 +586,10 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
 		 return resbuf;
 	 }
 }
+
+/*
+ * Case sensitive
+ */
 
 /**
  * @brief	convert strings to lower case

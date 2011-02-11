@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.12 2011-02-11 13:27:29 oops Exp $ */
+/* $Id: oc_common.h,v 1.13 2011-02-11 18:53:31 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -165,6 +165,16 @@ ULong64 combined64_high_low (Bit64 v);
 
 #define oc_strdup_e(v, data, ret) \
 		 oc_strdup_originate (v, data, ret, OC_DEF_EXIT)
+
+
+#define oc_safe_cpy(dst, src, size) \
+	{ \
+		UInt cpylen; \
+		cpylen = strlen (src); \
+		cpylen = (cpylen > (size-1)) ? size - 1 : cpylen; \
+		memmove (dst, src, cpylen); \
+		memset (dst + cpylen, 0, 1); \
+	}
 
 #endif
 /*
