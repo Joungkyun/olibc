@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.35 2011-02-11 13:27:29 oops Exp $ */
+/* $Id: libstring.c,v 1.36 2011-02-11 17:18:21 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -897,6 +897,7 @@ UInt Forebyte2bin (ULong32 src, char ** dst, bool complete) // {{{
  *
  * If return value is not 0, you must free dst.
  */
+OLIBC_API
 UInt long2bin (ULong64 dec, char ** dst) // {{{
 {
 	ULong64 tmp;
@@ -949,6 +950,7 @@ lowbit:
  *
  * If return value is not 0, you must free dst.
  */
+OLIBC_API
 UInt dec2bin (CChar * src, char ** dst) // {{{
 {
 	ULong64 dec;
@@ -969,6 +971,7 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
  * @param[in]	2st byte
  * @return		bool
  */
+OLIBC_API
 bool is_ksc5601 (UInt c1, UInt c2) // {{{
 {
 	UChar *c = (UChar *) ((c1 << 8) | c2);
