@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.37 2011-02-11 18:53:31 oops Exp $ */
+/* $Id: libstring.c,v 1.38 2011-02-11 19:26:37 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -518,74 +518,86 @@ char * human_size (double size, int sub, int unit) // {{{
 	return buf;
 } // }}}
 
-/* follows PHP license 2.02
- * This function must free */
-char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int print) {
-	 char *tmpbuf, *resbuf;
-	 char *src, *tgt;  /* source, target */
-	 int tmplen, reslen = 0;
-	 int count = 0;
-	 int is_negative = 0;
+/**
+ * @brief	Format a number with grouped thousands
+ * @param	d The number being formatted.
+ * @param	dec Sets the number of decimal points.
+ * @param	dec_point Sets the separator for the decimal point.
+ * @param	thousand_sep Sets the thousands separator.
+ * @param	print bool. if set true, don't free return value.
+ * @return	formatted string
+ *
+ * This function is formatted a number with grouped thousands.
+ * See also http://php.net/manual/en/function.number-format.php
+ *
+ * This function is written with PHP (http://php.net).
+ */
+OLIBC_API
+char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool print) // {{{
+{
+	char *tmpbuf, *resbuf;
+	char *src, *tgt;  /* source, target */
+	int tmplen, reslen = 0;
+	int count = 0;
+	int is_negative = 0;
 
-	 if (d < 0) {
-		 is_negative = 1;
-		 d = -d;
-	 }
-	 dec = MAX(0, dec);
-	 oc_malloc_r (tmpbuf, 1024, NULL);
+	if (d < 0) {
+		is_negative = 1;
+		d = -d;
+	}
+	dec = MAX (0, dec);
+	oc_malloc_r (tmpbuf, 1024, NULL);
 
-	 tmplen = sprintf (tmpbuf, "%.*f", dec, d);
-	 if ( !isdigit ((int) tmpbuf[0]) ) {
-		 return tmpbuf;
-	 }
+	tmplen = sprintf (tmpbuf, "%.*f", dec, d);
+	if ( ! isdigit ((int) tmpbuf[0]) )
+		return tmpbuf;
 
-	 if ( dec )
-		 reslen = dec + 1 + (tmplen - dec - 1) + ((thousand_sep) ? (tmplen - 1 - dec - 1) / 3 : 0);
-	 else
-		 reslen = tmplen + ((thousand_sep) ? (tmplen - 1) / 3 : 0);
+	if ( dec )
+		reslen = dec + 1 + (tmplen - dec - 1) + ((thousand_sep) ? (tmplen - 1 - dec - 1) / 3 : 0);
+	else
+		reslen = tmplen + ((thousand_sep) ? (tmplen - 1) / 3 : 0);
 
-	 if (is_negative)
-		 reslen++;
+	if (is_negative)
+		reslen++;
 
-	 oc_malloc (resbuf, reslen + 1);
-	 if ( resbuf == NULL ) {
-		 ofree (tmpbuf);
-		 return NULL;
-	 }
+	oc_malloc (resbuf, reslen + 1);
+	if ( resbuf == NULL ) {
+		ofree (tmpbuf);
+		return NULL;
+	}
 
-	 src = tmpbuf + tmplen - 1;
-	 tgt = resbuf + reslen;
-	 *tgt-- = 0;
+	src = tmpbuf + tmplen - 1;
+	tgt = resbuf + reslen;
+	*tgt-- = 0;
 
-	 if ( dec ) {
-		 while (isdigit ((int) *src)) {
-			 *tgt-- = *src--;
-		 }
+	if ( dec ) {
+		while (isdigit ((int) *src)) {
+			*tgt-- = *src--;
+		}
 
-		 *tgt-- = dec_point;  /* copy that dot */
-		 src--;
-	 }
+		*tgt-- = dec_point;  /* copy that dot */
+		src--;
+	}
 
-	 while( src >= tmpbuf ) {
-		 *tgt-- = *src--;
-		 if (thousand_sep && (++count % 3) == 0 && src >= tmpbuf) {
-			 *tgt-- = thousand_sep;
-		 }
-	 }
-	 if ( is_negative ) {
-		 *tgt-- = '-';
-	 }
+	while( src >= tmpbuf ) {
+		*tgt-- = *src--;
+		if (thousand_sep && (++count % 3) == 0 && src >= tmpbuf) {
+			*tgt-- = thousand_sep;
+		}
+	}
+	if ( is_negative ) {
+		*tgt-- = '-';
+	}
 
-	 ofree(tmpbuf);
+	ofree(tmpbuf);
 
-	 if (print) {
-		 printf ("%s", resbuf);
-		 ofree (resbuf);
-		 return NULL;
-	 } else {
-		 return resbuf;
-	 }
-}
+	if (print) {
+		printf ("%s", resbuf);
+		ofree (resbuf);
+		return NULL;
+	}
+	return resbuf;
+} // }}}
 
 /*
  * Case sensitive
