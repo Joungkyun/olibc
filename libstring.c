@@ -3,71 +3,12 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.34 2011-02-10 11:45:17 oops Exp $ */
+/* $Id: libstring.c,v 1.35 2011-02-11 13:27:29 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
 char * decode_race (char *domain, char *charset, int debug);
 char * encode_race (char *domain, char *charset, int debug);
-
-char _bin2hex (char *s) // {{{
-{
-	if ( ! strcmp ( s, "0000" ) ) return '0';
-	else if ( ! strcmp ( s, "0001" ) ) return '1';
-	else if ( ! strcmp ( s, "0010" ) ) return '2';
-	else if ( ! strcmp ( s, "0011" ) ) return '3';
-	else if ( ! strcmp ( s, "0100" ) ) return '4';
-	else if ( ! strcmp ( s, "0101" ) ) return '5';
-	else if ( ! strcmp ( s, "0110" ) ) return '6';
-	else if ( ! strcmp ( s, "0111" ) ) return '7';
-	else if ( ! strcmp ( s, "1000" ) ) return '8';
-	else if ( ! strcmp ( s, "1001" ) ) return '9';
-	else if ( ! strcmp ( s, "1010" ) ) return 'a';
-	else if ( ! strcmp ( s, "1011" ) ) return 'b';
-	else if ( ! strcmp ( s, "1100" ) ) return 'c';
-	else if ( ! strcmp ( s, "1101" ) ) return 'd';
-	else if ( ! strcmp ( s, "1110" ) ) return 'e';
-	else if ( ! strcmp ( s, "1111" ) ) return 'f';
-	else return 0;
-} // }}}
-
-char * _hex2bin (char c) { // {{{
-	static char h2b[5];
-
-	memset (h2b, 0, 5);
-
-	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
-		switch (c) {
-			case 'a' : memcpy (h2b, "1010", 4); break;
-			case 'b' : memcpy (h2b, "1011", 4); break;
-			case 'c' : memcpy (h2b, "1100", 4); break;
-			case 'd' : memcpy (h2b, "1101", 4); break;
-			case 'e' : memcpy (h2b, "1110", 4); break;
-			case 'f' : memcpy (h2b, "1111", 4); break;
-			case 'A' : memcpy (h2b, "1010", 4); break;
-			case 'B' : memcpy (h2b, "1011", 4); break;
-			case 'C' : memcpy (h2b, "1100", 4); break;
-			case 'D' : memcpy (h2b, "1101", 4); break;
-			case 'E' : memcpy (h2b, "1110", 4); break;
-			case 'F' : memcpy (h2b, "1111", 4); break;
-		}
-	} else {
-		switch (c) {
-			case '0' : memcpy (h2b, "0000", 4); break;
-			case '1' : memcpy (h2b, "0001", 4); break;
-			case '2' : memcpy (h2b, "0010", 4); break;
-			case '3' : memcpy (h2b, "0011", 4); break;
-			case '4' : memcpy (h2b, "0100", 4); break;
-			case '5' : memcpy (h2b, "0101", 4); break;
-			case '6' : memcpy (h2b, "0110", 4); break;
-			case '7' : memcpy (h2b, "0111", 4); break;
-			case '8' : memcpy (h2b, "1000", 4); break;
-			case '9' : memcpy (h2b, "1001", 4); break;
-		}
-	}
-
-	return h2b;
-} // }}}
 
 /**
  * @brief	print olibc version
@@ -260,25 +201,34 @@ char * addslashes (char * in, bool should_free) // {{{
 } // }}}
 
 /**
- * @brife	convert type casting to long from string
+ * @brief	convert type casting to long from string
  * @param[in]	s numeric string
  * @return	64bit long value
  */
-long long str2long (CChar *s) {
-	int len, i = 0, minus = 0, bufno = 0;
-	long long x = 1, res = 0;
-	char *buf;
+OLIBC_API
+Long64 str2long (CChar * src) // {{{
+{
+	int bufno = 0, i;
+	UInt len;
+	bool minus = false;
+	Long64 x = 1, res = 0;
+	char * buf;
 
 	/* removed blank charactor */
-	buf = strdup (s);
+	oc_strdup_r (buf, src, 0);
 	trim (buf);
 	len = strlen (buf);
 
-	/* minus value check */
-	if ( buf[0] == '-' ) minus = 1;
+	OC_DEBUG ("INPUT Trimed String: %s (%d byte)\n", buf, len);
 
-	for ( i = len - 1; i > -1; i-- ) {
+	/* minus value check */
+	if ( buf[0] == '-' ) minus = true;
+
+
+	len--;
+	for ( i=len; i>-1; i-- ) {
 		bufno = char2int (buf[i]);
+		OC_DEBUG ("    %2d: %d\n", i, bufno);
 
 		if ( bufno == 0 ) {
 			x *= 10;
@@ -286,19 +236,20 @@ long long str2long (CChar *s) {
 		}
 
 		if ( bufno > 0 ) {
-			res += bufno * x;
+			res += (bufno * x);
 			x *= 10;
 		}
+		OC_DEBUG ("    => Current : %lld   \n", res);
 	}
 
 	if (minus) res *= -1;
 	ofree (buf);
 
 	return res;
-}
+} // }}}
 
 /**
- * @brife	convert type casting to long from string
+ * @brief	convert type casting to long from string
  * @param[in]	s numeric string
  * @return	double value
  */
@@ -653,59 +604,375 @@ void strtoupper (char * str) // {{{
 		memset (str + i, toupper (str[i]), 1);
 } // }}}
 
-char * bin2hex (char *str) // {{{
+/*
+ * Heximal <-> Binary
+ */
+
+/**
+ * @brief	convert binary string to hex charactor
+ * @param	src 4byte binary string
+ * @return	hexical charactor [0-9a-f?]
+ *
+ * The _bin2hex() function convert 4byte binary string to
+ * hexcical charactor.
+ */
+char _bin2hex (CChar * src) // {{{
 {
-	int i, j, len;
-	char tmp[5];
-	static char buf[1024] = { 0, };
-
-	len = strlen (str);
-
-	for ( i = 0, j = 0; i < len; i += 4, j++ ) {
-		memset (tmp, 0, 5);
-		strncpy ( tmp, str + i, 4 );
-		if ( strlen (tmp) < 4 ) continue;
-
-		memset ( buf + j, _bin2hex (tmp), 1);
-	}
-
-	return buf;
+	if ( ! strcmp ( src, "0000" ) ) return '0';
+	else if ( ! strcmp (src, "0001") ) return '1';
+	else if ( ! strcmp (src, "0010") ) return '2';
+	else if ( ! strcmp (src, "0011") ) return '3';
+	else if ( ! strcmp (src, "0100") ) return '4';
+	else if ( ! strcmp (src, "0101") ) return '5';
+	else if ( ! strcmp (src, "0110") ) return '6';
+	else if ( ! strcmp (src, "0111") ) return '7';
+	else if ( ! strcmp (src, "1000") ) return '8';
+	else if ( ! strcmp (src, "1001") ) return '9';
+	else if ( ! strcmp (src, "1010") ) return 'a';
+	else if ( ! strcmp (src, "1011") ) return 'b';
+	else if ( ! strcmp (src, "1100") ) return 'c';
+	else if ( ! strcmp (src, "1101") ) return 'd';
+	else if ( ! strcmp (src, "1110") ) return 'e';
+	else if ( ! strcmp (src, "1111") ) return 'f';
+	else return '?';
 } // }}}
 
-char * hex2bin (char *str) // {{{
+/**
+ * @brief	convert binary strings to hex strings
+ * @param[in]	src binary string
+ * @param[out]	dst hexical string
+ * @return	length of dst
+ *
+ * The bin2hex_r() function converts binary string to hexical
+ * string.
+ *
+ * This function is thread safe, and must free return value.
+ */
+OLIBC_API
+ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
+{
+	int i, j, len;
+	char buf[5];
+
+	if ( src == NULL )
+		return 0;
+
+	if ( (len = strlen (src)) < 4 )
+		return 0;
+
+	oc_malloc_r (*dst, sizeof (char) * (len / 4 + 1), 0);
+
+	i = j = 0;
+	for ( ; i<len; i+=4, j++ ) {
+		memset (buf, 0, 5);
+		strncpy (buf, src + i, 4);
+		memset (*dst + j, _bin2hex (buf), 1);
+	}
+
+	return j;
+} // }}}
+
+/**
+ * @brief	convert binary strings to hex strings
+ * @param	src binary string
+ * @return	static string
+ *
+ * The bin2hex() function converts binary string to hexical
+ * string.
+ *
+ * The return value used static memory, so this function is
+ * not thread safe. If you want thread safe, use bin2hex_r.
+ *
+ * The argument length of bin2hex() is smaller than (1024 * 4).
+ */
+OLIBC_API
+char * bin2hex (CChar * src) // {{{
+{
+	static char dst[1024] = { 0, };
+	ULong32 len;
+	char * buf;
+
+	len = bin2hex_r (src, &buf);
+
+	if ( ! len )
+		return dst;
+
+	strncpy (dst, buf, len);
+	ofree (buf);
+	return dst;
+} // }}}
+
+/**
+ * @brief	convert hexical charactor to binary string
+ * @param	c	hexical charactor for converting
+ * @return	binary string or '...' on out of range.
+ */
+OLIBC_API
+char * _hex2bin (CChar c) { // {{{
+	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
+		switch (c) {
+			case 'a' : return "1010"; break;
+			case 'b' : return "1011"; break;
+			case 'c' : return "1100"; break;
+			case 'd' : return "1101"; break;
+			case 'e' : return "1110"; break;
+			case 'f' : return "1111"; break;
+			case 'A' : return "1010"; break;
+			case 'B' : return "1011"; break;
+			case 'C' : return "1100"; break;
+			case 'D' : return "1101"; break;
+			case 'E' : return "1110"; break;
+			case 'F' : return "1111"; break;
+		}
+	} else {
+		switch (c) {
+			case '0' : return "0000"; break;
+			case '1' : return "0001"; break;
+			case '2' : return "0010"; break;
+			case '3' : return "0011"; break;
+			case '4' : return "0100"; break;
+			case '5' : return "0101"; break;
+			case '6' : return "0110"; break;
+			case '7' : return "0111"; break;
+			case '8' : return "1000"; break;
+			case '9' : return "1001"; break;
+		}
+	}
+
+	return "....";
+} // }}}
+
+/**
+ * @brief	convert hexical string to binary string
+ * @param	src hexical string for converting
+ * @return	binary string or NULL
+ */
+OLIBC_API
+char * hex2bin (CChar * src) // {{{
 {
 	char *data;
-	int len = strlen (str), i, j;
+	UInt len, alloc, i, j;
+
+	if ( src == NULL )
+		return NULL;
+
+	if ( strlen (src) == 0 )
+		return NULL;
+
+	len = strlen (src);
+	alloc = (len * 4) + 1;
 
 	// if failed memory allocate, return NULL
-	oc_malloc_r (data, sizeof (char) * (len + 4), NULL);
-	memset (data, 0, sizeof (char) * (len + 4));
+	oc_malloc_r (data, sizeof (char) * alloc, NULL);
+	memset (data, 0, sizeof (char) * alloc);
 
-	for ( i = 0, j = 0; i < len; i++ ) {
-		memcpy (data + j, _hex2bin (str[i]), 4);
+	for ( i=0, j=0; i<len; i++ ) {
+		memcpy (data + j, _hex2bin (src[i]), 4);
 		j += 4;
 	}
 
 	return data;
 } // }}}
 
-int bin2dec (char *src) // {{{
-{
-	int i, ret = 0;
-	char var[2];
+/*
+ * Decimal <-> Binary
+ */
 
-	for(i=0 ; i<8 ; i++) {
-		sprintf(var, "%c", src[i]);
-		ret += atoi(var) << (7 - i);
+/**
+ * @brief	convert binary string to 32bit integer
+ * @param	src	binary string
+ * @return	32bit integer
+ */
+OLIBC_API
+UInt bin2dec (CChar * src) // {{{
+{
+	UInt len, i, ret = 0;
+	char var;
+
+	len = strlen (src);
+
+	for ( i=0 ; i<len ; i++ ) {
+		var = (src[i] == 0x30) ? 0 : 1;
+		ret += var << (len - 1 - i);
 	}
 
 	return ret;
 } // }}}
 
-bool is_ksc5601 (uint c1, uint c2) // {{{
+/**
+ * @brief	convert binary string to 64bit integer
+ * @param	src	binary string
+ * @return	64bit integer
+ */
+OLIBC_API
+ULong64 bin2long (CChar * src) // {{{
+{
+	ULong64 ret = 0;
+	UInt var, len;
+	char high[33] = { 0, };
+	char low[33]  = { 0, };
+	char * buf;
+	Bit64 v = { 0, 0 };
+	bool over32 = false, over32_high = false;
+
+	if ( (len = strlen (src)) > 32 ) {
+		UInt hlen = len - 32;
+		over32 = true;
+		memmove (high, src, hlen);
+		memmove (low,  src + hlen, 32);
+
+		OC_DEBUG ("SRC : %32s (length: %d)\n", src, len);
+		OC_DEBUG ("HIGH: %32s (length: %d)\n", high, hlen);
+		OC_DEBUG ("LOW : %32s (length: %d)\n", low, strlen (low));
+
+		buf = high;
+		len -= 32;
+	} else {
+		buf = (char *) src;
+	}
+
+b2l_low:
+	var = bin2dec (buf);
+
+	if ( over32 ) {
+		if ( over32_high == false ) {
+			over32_high = true;
+
+			v.high = (ULong32) var;
+			buf = low;
+			goto b2l_low;
+		}
+
+		v.low = (ULong32) var;
+		OC_DEBUG ("HIGH: %lu\n", v.high);
+		OC_DEBUG ("LOW : %lu\n", v.low);
+		ret = combined64_high_low (v);
+	}
+
+	return ret;
+} // }}}
+
+
+/* dec to binary template fucntion */
+UInt Forebyte2bin (ULong32 src, char ** dst, bool complete) // {{{
+{
+	ULong32 mask = 2147483648UL;
+	ULong32 m;
+	UInt len;
+
+	oc_malloc_r (*dst, sizeof (char) * 33, 0);
+	memset (*dst, 0, 32);
+
+	OC_DEBUG ("Buf No: %lu\n", src);
+
+	len = 0;
+	while ( mask > 0 ) {
+		m = (ULong32) src & (ULong32) mask;
+
+		if ( m ) {
+			memset ((*dst) + len, 49, 1);
+			len++;
+		} else {
+			if ( complete || len ) {
+				memset ((*dst) + len, 48, 1);
+				len++;
+			}
+		}
+
+		mask = mask >> 1;
+	}
+	memset ((*dst) + len, 0, 0);
+
+	return len;
+} // }}}
+
+/**
+ * @brief	convert 64bit integer to binary string
+ * @param[in]	src 64bit ingeter
+ * @param[out]	dst binary string
+ * @return	length of binary string
+ *
+ * Teh dec2bin() function convert 64bit integer to
+ * binary string.
+ *
+ * If return value is not 0, you must free dst.
+ */
+UInt long2bin (ULong64 dec, char ** dst) // {{{
+{
+	ULong64 tmp;
+	UInt len, buflen;
+	Bit64 v;
+	char * buf;
+	bool over32 = false, full_print = false;
+
+	if ( ! dec )
+		return 0;
+
+	if ( dec > 4294967295UL ) // 4byte ULONG_MAX
+		over32 = true;
+
+	len = buflen = 0;
+	oc_malloc_r (*dst, sizeof (char) * 65, 0);
+
+	v = devided64_high_low (dec);
+
+	tmp = over32 ? v.high : v.low;
+
+lowbit:
+	if ( (buflen = Forebyte2bin (tmp, &buf, full_print)) == 0 )
+		return 0;
+
+	OC_DEBUG ("res -> %s (%d)\n", buf, buflen);
+
+	memcpy (*dst + len, buf, buflen);
+	len += buflen;
+	ofree (buf);
+
+	if ( over32 == true ) {
+		over32 = false;
+		full_print = true;
+		tmp = (ULong64) v.low;
+		goto lowbit;
+	}
+
+	return len;
+} // }}}
+
+/**
+ * @brief	convert decimal string to binary
+ * @param[in]	src deciaml string
+ * @param[out]	dst binary string
+ * @return	length of binary string
+ *
+ * Teh dec2bin() function convert decimal string to
+ * binary string. This supports 64bit.
+ *
+ * If return value is not 0, you must free dst.
+ */
+UInt dec2bin (CChar * src, char ** dst) // {{{
+{
+	ULong64 dec;
+	if ( src == NULL )
+		return 0;
+
+	if ( strlen (src) == 0 )
+		return 0;
+
+	dec = strtoull (src, NULL, 10);
+
+	return long2bin (dec, dst);
+} // }}}
+
+/**
+ * @brief		check 2byte whether is ksc5601 or not.
+ * @param[in]	1st byte
+ * @param[in]	2st byte
+ * @return		bool
+ */
+bool is_ksc5601 (UInt c1, UInt c2) // {{{
 {
 	UChar *c = (UChar *) ((c1 << 8) | c2);
-	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c);
+	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, (int) c, (int) c1, (int) c2);
 
 	if ( ! (c1 & 0x80) )
 		return false;

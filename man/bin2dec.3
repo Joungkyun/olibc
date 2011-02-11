@@ -1,49 +1,64 @@
-.TH bin2dec(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH bin2dec(1) 2011-02-11 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man bin2dec.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2dec.3,v 1.4 2009-10-29 13:24:33 oops Exp $
+.\" 2011-02-11 JoungKyun Kim <htt://oops.org>
+.\" $Id: bin2dec.3,v 1.5 2011-02-11 13:27:29 oops Exp $
 .SH 이름
 bin2dec
 
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "int bin2dec (char *str);"
+.BI "unsigned int bin2dec (const char *str)"
+.BI "unsigned long long bin2long (const char *str)"
 
 .SH 라이브러리 링크
-.B gcc source -l liboc
+.B gcc source -loc
 .br
 
 또는
 
-.B gcc source -l libolibc
+.B gcc source -logc
 .br
 
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
+libogc를 정적으로 링크할 경우에는 LGPL2에 근거하여 사용이 가능하며, liboc를
+정적으로 링크할 경우에는 BPL에 근거한다.
 
 .SH 설명
 2진수 형태의 문자열을 십진수로 변환을 한다.
+.br
+.BI bin2dec()
+함수는 32bit까지 처리가 가능하며,
+.BI bin2long()
+함수는 64bit까지 처리가 가능하다.
+.BI bin2long()
+함수는 32/64bit machine의 호환을 위하여 64bit integer를 상위/하위 비트를
+나누어서 계산을 하므로 명확하게 32bit 범위의 수를 변환한 경우에는
+.BI bin2dec()
+함수를 사용하는 것이 좋다.
 
 
 .SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int x = 0;
+unsigned int x = 0;
+unsigned long long v = 0;
 char y = "11011000";
+char w = "1001010100000010111110010000000000";
 
 x = bin2dec (y);
+v = bin2long (w);
 
-printf ("%c\\n", x);
+printf ("%u\\n", x);
+printf ("%llu\\n", v);
 .fi
 
 .SH 참고
 hex2bin(1)
 
 .SH 작성
-2004.02.19 김정균 <http://oops.org>
+2011.02.11 김정균 <http://oops.org>
 
 .SH 버그
 버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.

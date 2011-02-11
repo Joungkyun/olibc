@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.11 2011-02-10 09:58:37 oops Exp $ */
+/* $Id: oc_common.h,v 1.12 2011-02-11 13:27:29 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -44,7 +44,13 @@
 #	endif
 #endif
 
-uint get_charcount (char *str, char *del);
+#include <limits.h>
+#include <errno.h>
+#include <olibc/oc_type.h>
+
+UInt get_charcount (char *str, char *del);
+Bit64 devided64_high_low (ULong64 v);
+ULong64 combined64_high_low (Bit64 v);
 
 #define oc_error_debug(fmt,...) \
 	fprintf (stderr, \
@@ -146,7 +152,7 @@ uint get_charcount (char *str, char *del);
 
 #define oc_strdup_originate(v, data, ret, result) \
 	{ \
-		oc_strdup (v, data, strlen (ret)); \
+		oc_strdup (v, data, strlen (data)); \
 		if ( v == NULL ) { \
 			if ( result == OC_DEF_RETURN ) \
 				return ret; \

@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.16 2011-02-10 11:45:17 oops Exp $ */
+/* $Id: libstring.h,v 1.17 2011-02-11 13:27:29 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -85,7 +85,7 @@ char * trim_r (char * str, bool should_free);
  * convert to long long type from string that composed int charactors
  *
  * this function valid until 19th */
-long long str2long (CChar * s);
+Long64 str2long (CChar * src);
 
 /* str2double follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -157,42 +157,56 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int p
  * convert string to low case
  *
  * this function convert original str */
-void strtolower (char *str);
+void strtolower (char * src);
 
 /* strtoupper follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert string to upper case
  *
  * this function convert original str */
-void strtoupper (char *str);
+void strtoupper (char * src);
+
+/* bin2hex_r follows BPL License v.1 <http://devel.oops.org/document/bpl>
+ * convert binary type strings to hexadecimal type string
+ *
+ * return value must freed memory */
+ULong32 bin2hex_r (CChar * src, char ** dst);
 
 /* bin2hex follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert binary type strings to hexadecimal type string
  *
  * this function convert original str */
-char * bin2hex (char *str);
+char * bin2hex (CChar * src);
 
 /* _bin2hex follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert binary type strings to hexadecimal charactor */
-char _bin2hex (char *s);
+char _bin2hex (CChar * src);
 
 /* hex2bin follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert binary type strings from hexadecimal type string
  *
  * this function convert original str */
-char * hex2bin (char *str);
+char * hex2bin (CChar * src);
 
 /* hex2bin follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert binary type strings from hexadecimal charactor */
-char * _hex2bin (char c);
+char * _hex2bin (CChar c);
 
-/* _bin2dec follows BPL License v.1 <http://devel.oops.org/document/bpl>
+/* bin2dec follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert to decimal number from binary type string */
-int bin2dec (char *src);
-#endif
+UInt bin2dec (CChar * src);
+
+ULong64 bin2long (CChar * src);
+
+/* convert 64bit integer to binary string */
+UInt long2bin (ULong64 dec, char ** dst);
+
+/* convert decmial string to binary string */
+UInt dec2bin (CChar * src, char ** dst);
 
 /* is_ksc5601 follows BPL License v.1
  * check ksc5601 range */
-bool is_ksc5601 (uint c1, uint c2);
+bool is_ksc5601 (UInt c1, UInt c2);
+#endif
 
 /*
  * Local variables:
