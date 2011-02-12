@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.18 2011-02-11 18:53:31 oops Exp $ */
+/* $Id: libstring.h,v 1.19 2011-02-12 15:06:59 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -152,7 +152,7 @@ char * human_size_r (double size, bool sub, bool unit);
  * print print  => convert value and return NULL
  *
  * return values must allocated memory */
-char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int print);
+char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool print);
 
 /* strtolower follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * convert string to low case
