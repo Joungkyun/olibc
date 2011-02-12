@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.52 2011-02-09 13:32:55 oops Exp $
+$Id: Changes,v 1.53 2011-02-12 18:02:23 oops Exp $
+
+* Sat, Feb 13 2011
+	- fixed trim that return 0 byte about 1byte string
 
 * Sun, Feb  8 2011
 	- add addslashes_r for binary safe
