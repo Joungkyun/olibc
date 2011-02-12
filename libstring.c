@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.42 2011-02-12 18:01:13 oops Exp $ */
+/* $Id: libstring.c,v 1.43 2011-02-12 18:13:16 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1015,7 +1015,11 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 	if ( strlen (src) == 0 )
 		return 0;
 
+#ifdef HAVE_STRTOULL
 	dec = strtoull (src, NULL, 10);
+#else
+	dec = (ULong64) str2long (src);
+#endif
 
 	return long2bin (dec, dst);
 } // }}}
