@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.45 2011-02-12 20:19:13 oops Exp $ */
+/* $Id: libstring.c,v 1.46 2011-02-12 20:42:28 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -624,15 +624,19 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool 
 OLIBC_API
 void strtolower (char * str) // {{{
 {
-	int i = 0;
 	int len;
 
 	if ( str == NULL )
 		return;
 
-	len = strlen (str);
-	for ( i=0; i<len; i++ )
-		memset (str + i, tolower (str[i]), 1);
+	if ( (len = strlen (str)) < 1 )
+		return;
+
+	while ( *str != 0 ) {
+		if ( *str >= 0x41 && *str <= 0x5a )
+			*str += 32;
+		str++;
+	}
 } // }}}
 
 /**
@@ -646,15 +650,19 @@ void strtolower (char * str) // {{{
 OLIBC_API
 void strtoupper (char * str) // {{{
 {
-	int i = 0;
 	int len;
 
 	if ( str == NULL )
 		return;
 
-	len = strlen (str);
-	for ( i = 0; i < len; i++ )
-		memset (str + i, toupper (str[i]), 1);
+	if ( (len = strlen (str)) < 1 )
+		return;
+
+	while ( *str != 0 ) {
+		if ( *str >= 0x61 && *str <= 0x7a )
+			*str += -32;
+		str++;
+	}
 } // }}}
 
 /*
