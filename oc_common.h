@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.14 2011-02-12 15:27:07 oops Exp $ */
+/* $Id: oc_common.h,v 1.15 2011-02-12 17:43:43 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -48,7 +48,7 @@
 #include <errno.h>
 #include <olibc/oc_type.h>
 
-UInt get_charcount (char *str, char *del);
+UInt get_charcount (CChar *str, CChar *del);
 Bit64 devided64_high_low (ULong64 v);
 ULong64 combined64_high_low (Bit64 v);
 
@@ -104,7 +104,8 @@ ULong64 combined64_high_low (Bit64 v);
 
 #define oc_strdup(v, val, size) \
 	{ \
-		oc_malloc(v, size + 1); \
+		OC_DEBUG ("strdup add size : %d + %d\n", size, (size < 4) ? 4 : 1); \
+		oc_malloc(v, size + ((size < 4) ? 4 : 1)); \
 		if ( v != NULL ) { \
 			memcpy (v, val, size); \
 			memset (v + size, 0, 1); \

@@ -1,4 +1,4 @@
-/* $Id: libarg.c,v 1.21 2011-02-10 11:45:17 oops Exp $ */
+/* $Id: libarg.c,v 1.22 2011-02-12 17:43:43 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
@@ -355,8 +355,18 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
 } // }}}
 
 /* must freed */
+/**
+ * @brief	Split a string by string
+ * @param[in]	src The input string.
+ * @param[out]	oargc number of return arraies
+ * @param[in]	delimiter The boundary string.
+ * @return		Returns an array
+ *
+ * Returns an array of strings, each of which is a substring of string
+ * formed by splitting it on boundaries formed by the string delimiter.
+ */
 OLIBC_API
-char ** split (CChar * stream, int * oargc, char * delimiter) // {{{
+char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 {
 	char ** sep;
 	char * buf;
@@ -364,24 +374,25 @@ char ** split (CChar * stream, int * oargc, char * delimiter) // {{{
 	int start, end;
 	int i, j, no;
 
-	if ( stream == NULL || delimiter == NULL ) {
-		*oargc = 0;
+	*oargc = 0;
+	if ( src == NULL || delimiter == NULL )
 		return NULL;
-	}
 
 	/* removed white space of front and end string */
-	oc_strdup_r (buf, stream, NULL);
+	oc_strdup_r (buf, src, NULL);
+	trim (buf);
 
 	len = strlen (buf);
 	dlen = strlen (delimiter);
 
 	if ( len < 1 || dlen < 1 ) {
-		*oargc = 0;
+		ofree (buf);
 		return NULL;
 	}
 
 	delno = get_charcount (buf, delimiter);
-	oc_malloc_r (sep, sizeof (char *) * (delno + 3), NULL);
+	delno++;
+	oc_malloc_r (sep, sizeof (char *) * (delno + 1), NULL);
 
 	start = 0;
 	end = 0;
@@ -401,21 +412,20 @@ char ** split (CChar * stream, int * oargc, char * delimiter) // {{{
 				}
 			}
 
-			if ( end > start && end - start != 0 ) {
+			if ( end > start ) {
 				if ( only_whitespace (buf + start, end - start) ) {
 					start = end + 1;
 					break;
 				}
 
-				oc_malloc (sep[no], sizeof (char) * (end - start + 2));
+				oc_strdup (sep[no], buf + start, end - start);
 				if ( sep[no] == NULL ) {
 					ofree (buf);
 					ofree_array (sep);
 					return NULL;
 				}
-				memset (sep[no], 0, end - start + 2);
-				memcpy (sep[no], buf + start, end - start);
 				trim (sep[no]);
+				OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
 
 				start = end + 1;
 				no++;
@@ -426,6 +436,8 @@ char ** split (CChar * stream, int * oargc, char * delimiter) // {{{
 
 	if ( end != len && ! only_whitespace (buf+ start, 0) ) {
 		oc_strdup (sep[no], buf + start, strlen (buf + start));
+		trim (sep[no]);
+		OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
 		no++;
 	}
 
@@ -439,30 +451,30 @@ char ** split (CChar * stream, int * oargc, char * delimiter) // {{{
 
 /* free argv_make array */
 OLIBC_API
-void ofree_array (char ** oargv) // {{{
+void ofree_array (char ** argv_array) // {{{
 {
 	int i = 0;
 
-	if ( oargv != NULL ) {
-		while ( oargv[i] != NULL ) {
-			ofree (oargv[i]);
+	if ( argv_array != NULL ) {
+		while ( argv_array[i] != NULL ) {
+			ofree (argv_array[i]);
 			i++;
 		}
-		ofree (oargv);
+		ofree (argv_array);
 	}
 } // }}}
 
 /* return number of white space */
 OLIBC_API
-int get_whitespace (CChar * stream) // {{{
+int get_whitespace (CChar * src) // {{{
 {
 	int no, i, len;
 
 	no = 0;
-	len = strlen (stream);
+	len = strlen (src);
 
 	for ( i = 0; i < len; i++ ) {
-		if ( isspace (stream[i]) ) no++;
+		if ( isspace (src[i]) ) no++;
 	}
 
 	return no;

@@ -1,4 +1,4 @@
-/* $Id: libarg.h,v 1.6 2011-02-10 11:45:17 oops Exp $ */
+/* $Id: libarg.h,v 1.7 2011-02-12 17:43:43 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -63,15 +63,15 @@ char ** argv_make (CChar * stream, int * oargc);
  * split function make array variables from string with each charactor of given string
  * See the man page split.1.
  * return value must free with ofree_array */
-char ** split (CChar * stream, int * oargc, char * delimiter);
+char ** split (CChar * src, int * oargc, CChar * delimiter);
 
 /* argv_free follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * argv_free freed return value of argv_make */
-void ofree_array (char ** stream);
+void ofree_array (char ** argv_array);
 
 /* unconvert_quoted_blank follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * get number of white space on strings */
-int get_whitespace (CChar * stream);
+int get_whitespace (CChar * src);
 
 #endif
 /*

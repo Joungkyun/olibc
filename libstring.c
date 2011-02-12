@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.40 2011-02-12 15:27:07 oops Exp $ */
+/* $Id: libstring.c,v 1.41 2011-02-12 17:43:43 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -31,7 +31,7 @@ void olibc_version (void) // {{{
 OLIBC_API
 void trim (char * str) // {{{
 {
-	int len = strlen (str);
+	int len;
 	int start = 0, end = 0, i = 0;
 
 	if ( str == NULL )
@@ -42,16 +42,16 @@ void trim (char * str) // {{{
 		return;
 
 	// get end
-	OC_DEBUG ("Get end point\n");
-	for ( i=len-1; i>0; i-- ) {
+	for ( i=len-1; i>=0; i-- ) {
 		OC_DEBUG("\t%4d : 0x%x\n", i, str[i]);
 		if ( ! isspace (str[i]) ) {
 			end = i;
 			break;
 		}
 	}
+	OC_DEBUG ("Get end point: %d\n", end);
 
-	if ( end == 0 ) {
+	if ( end < 0 ) {
 		memset (str, 0, 1);
 		return;
 	}
@@ -65,6 +65,7 @@ void trim (char * str) // {{{
 			break;
 		}
 	}
+	OC_DEBUG ("Get start point: %d\n", start);
 
 	if ( end < start ) {
 		oc_error ("end point is smaller than start point on trim function\n");

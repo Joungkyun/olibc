@@ -1,7 +1,7 @@
-/* $Id: libmisc.c,v 1.6 2011-02-11 13:27:29 oops Exp $ */
+/* $Id: libmisc.c,v 1.7 2011-02-12 17:43:43 oops Exp $ */
 #include <oc_common.h>
 
-UInt get_charcount (char * str, char * del)
+UInt get_charcount (CChar * str, CChar * del)
 {
 	UInt no, i, j, len, dlen;
 
