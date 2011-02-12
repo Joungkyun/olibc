@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.38 2011-02-11 19:26:37 oops Exp $ */
+/* $Id: libstring.c,v 1.39 2011-02-12 14:57:52 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -201,7 +201,7 @@ char * addslashes (char * in, bool should_free) // {{{
 } // }}}
 
 /**
- * @brief	convert type casting to long from string
+ * @brief	convert to 64bit integer from string
  * @param[in]	s numeric string
  * @return	64bit long value
  */
@@ -249,7 +249,7 @@ Long64 str2long (CChar * src) // {{{
 } // }}}
 
 /**
- * @brief	convert type casting to long from string
+ * @brief	convert type casting to double from string
  * @param[in]	s numeric string
  * @return	double value
  */
@@ -935,7 +935,7 @@ UInt Forebyte2bin (ULong32 src, char ** dst, bool complete) // {{{
  * @param[out]	dst binary string
  * @return	length of binary string
  *
- * Teh dec2bin() function convert 64bit integer to
+ * The long2bin() function convert 64bit integer to
  * binary string.
  *
  * If return value is not 0, you must free dst.
@@ -988,7 +988,7 @@ lowbit:
  * @param[out]	dst binary string
  * @return	length of binary string
  *
- * Teh dec2bin() function convert decimal string to
+ * The dec2bin() function convert decimal string to
  * binary string. This supports 64bit.
  *
  * If return value is not 0, you must free dst.
