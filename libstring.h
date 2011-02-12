@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.19 2011-02-12 15:06:59 oops Exp $ */
+/* $Id: libstring.h,v 1.20 2011-02-12 19:20:17 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -25,8 +25,6 @@
 #ifndef MAX
 #	define MAX(a, b)	(((a)>(b))?(a):(b))
 #endif
-
-extern CChar * stringprep_locale_charset_cache;
 
 void olibc_version (void);
 
@@ -92,7 +90,7 @@ Long64 str2long (CChar * src);
  * convert to long double type to string that compose int charactors and dot charactor
  *
  * this function valid unitil int 14th */
-long double str2double (char *s);
+long double str2double (CChar * src);
 
 /* char2int follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
@@ -129,7 +127,7 @@ int check_int (char c);
  *           WHITE       15
  *           BWHITE      16
  * noansi => don't operate this function */
-void setansi (FILE *stream, int color, int noansi);
+void setansi (FILE * stream, int color, bool noansi);
 
 /* human_size follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * returns auto convert with Byte/Bit unit with strings.

@@ -3,12 +3,12 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.43 2011-02-12 18:13:16 oops Exp $ */
+/* $Id: libstring.c,v 1.44 2011-02-12 19:20:17 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
-char * decode_race (char *domain, char *charset, int debug);
-char * encode_race (char *domain, char *charset, int debug);
+char * decode_race (char * domain, char * charset, int debug);
+char * encode_race (char * domain, char * charset, int debug);
 
 /**
  * @brief	print olibc version
@@ -96,7 +96,7 @@ OLIBC_API
 char * trim_r (char * str, bool should_free) // {{{
 {
 	int len;
-	char *buf;
+	char * buf;
 
 	if ( str == NULL )
 		return NULL;
@@ -135,8 +135,8 @@ OLIBC_API
 int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
-	UChar *source, *target;
-	UChar *end;
+	UChar * source, * target;
+	UChar * end;
 
 	if ( in == NULL || inlen < 1 )
 		return 0;
@@ -235,7 +235,6 @@ Long64 str2long (CChar * src) // {{{
 	/* minus value check */
 	if ( buf[0] == '-' ) minus = true;
 
-
 	len--;
 	for ( i=len; i>-1; i-- ) {
 		bufno = char2int (buf[i]);
@@ -262,18 +261,24 @@ Long64 str2long (CChar * src) // {{{
 
 /**
  * @brief	convert type casting to double from string
- * @param[in]	s numeric string
+ * @param[in]	src numeric string
  * @return	double value
  */
-long double str2double (char *s) {
+long double str2double (CChar * src) {
 	int len, i = 0, dotlen = 0;
 	int minus = 0, bufno = 0;
 	long double res = 0;
 	long long l = 0, x = 1;
 	float f = 0, y = 0.1;
-	char *buf, *dot;
+	char * buf, * dot;
 
-	buf = trim_r (s, 0);
+	if ( src == NULL )
+		return 0;
+
+	if ( strlen (src) == 0 )
+		return 0;
+
+	buf = trim_r (src, 0);
 	len = strlen (buf);
 
 	dot = (char *) strchr (buf, '.');
@@ -389,7 +394,7 @@ int check_int (char c) // {{{
  *     BWHITE   16
  */
 OLIBC_API
-void setansi (FILE *stream, int color, int noansi) // {{{
+void setansi (FILE * stream, int color, bool noansi) // {{{
 {
 	int ansi = 0;
 
@@ -547,8 +552,8 @@ char * human_size (double size, int sub, int unit) // {{{
 OLIBC_API
 char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool print) // {{{
 {
-	char *tmpbuf, *resbuf;
-	char *src, *tgt;  /* source, target */
+	char * tmpbuf, * resbuf;
+	char * src, * tgt;  /* source, target */
 	int tmplen, reslen = 0;
 	int count = 0;
 	int is_negative = 0;
@@ -805,7 +810,7 @@ char * _hex2bin (CChar c) { // {{{
 OLIBC_API
 char * hex2bin (CChar * src) // {{{
 {
-	char *data;
+	char * data;
 	UInt len, alloc, i, j;
 
 	if ( src == NULL )
@@ -1033,7 +1038,7 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 OLIBC_API
 bool is_ksc5601 (UInt c1, UInt c2) // {{{
 {
-	UChar *c = (UChar *) ((c1 << 8) | c2);
+	UChar * c = (UChar *) ((c1 << 8) | c2);
 	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, (int) c, (int) c1, (int) c2);
 
 	if ( ! (c1 & 0x80) )
