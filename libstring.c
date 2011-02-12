@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.39 2011-02-12 14:57:52 oops Exp $ */
+/* $Id: libstring.c,v 1.40 2011-02-12 15:27:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -42,7 +42,7 @@ void trim (char * str) // {{{
 		return;
 
 	// get end
-	OC_DEBUG ("%s\n", "Get end point");
+	OC_DEBUG ("Get end point\n");
 	for ( i=len-1; i>0; i-- ) {
 		OC_DEBUG("\t%4d : 0x%x\n", i, str[i]);
 		if ( ! isspace (str[i]) ) {
@@ -57,7 +57,7 @@ void trim (char * str) // {{{
 	}
 
 	// get start
-	OC_DEBUG ("%s\n", "Get start point");
+	OC_DEBUG ("Get start point\n");
 	for ( i=0; i<len; i++ ) {
 		OC_DEBUG("\t%4d : 0x%x\n", i, str[i]);
 		if ( ! isspace (str[i]) ) {
@@ -67,7 +67,7 @@ void trim (char * str) // {{{
 	}
 
 	if ( end < start ) {
-		oc_error ("%s\n", "end point is smaller than start point on trim function");
+		oc_error ("end point is smaller than start point on trim function\n");
 		exit (1);
 	}
 
@@ -208,6 +208,10 @@ char * addslashes (char * in, bool should_free) // {{{
 OLIBC_API
 Long64 str2long (CChar * src) // {{{
 {
+#ifdef HAVE_STRTOULL
+	OC_DEBUG ("USE strtoll\n");
+	return strtoll (src, NULL, 10);
+#else
 	int bufno = 0, i;
 	UInt len;
 	bool minus = false;
@@ -246,6 +250,7 @@ Long64 str2long (CChar * src) // {{{
 	ofree (buf);
 
 	return res;
+#endif
 } // }}}
 
 /**

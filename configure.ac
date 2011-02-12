@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.20 2011-02-10 11:45:17 oops Exp $
+# $Id: configure.ac,v 1.21 2011-02-12 15:27:07 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -163,7 +163,7 @@ AC_CHECK_SIZEOF(long)
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([gettimeofday memmove memset setlocale strchr strdup])
+AC_CHECK_FUNCS([strtoull gettimeofday setlocale memmove])
 
 AC_CONFIG_FILES([Makefile
                  man/Makefile

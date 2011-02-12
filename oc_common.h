@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.13 2011-02-11 18:53:31 oops Exp $ */
+/* $Id: oc_common.h,v 1.14 2011-02-12 15:27:07 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -52,39 +52,33 @@ UInt get_charcount (char *str, char *del);
 Bit64 devided64_high_low (ULong64 v);
 ULong64 combined64_high_low (Bit64 v);
 
-#define oc_error_debug(fmt,...) \
-	fprintf (stderr, \
-			"%s(%s:%d): " fmt, \
-			__func__, __FILE__, __LINE__, __VA_ARGS__ \
-	)
+#define oc_error_debug(...) \
+	{ \
+		fprintf (stderr, "DEBUG: %s(%s:%d): ", __func__, __FILE__, __LINE__); \
+		fprintf (stderr, __VA_ARGS__); \
+	};
 
 #ifdef __OCDEBUG__
-#	define OC_DEBUG(fmt,...) \
-		fprintf (stderr, \
-				 "DEBUG: %s(%s:%d): " fmt, \
-				 __func__, __FILE__, __LINE__, __VA_ARGS__ \
-		);
-#	define oc_error(fmt,...) \
-			oc_error_debug(fmt, __VA_ARGS__)
+	#define OC_DEBUG(...) oc_error_debug (__VA_ARGS__)
+	#define oc_error(...) oc_error_debug ( __VA_ARGS__)
 #else
-#	define OC_DEBUG(fmt,...)
-#	define oc_error(fmt,...) \
-			fprintf (stderr, "OC ERROR: " fmt, __VA_ARGS__)
+	#define OC_DEBUG(...)
+	#define oc_error(...) \
+		{ \
+			fprintf (stderr, "OC ERROR: "); \
+			fprintf (stderr, __VA_ARGS__); \
+		}
 #endif
 
 #ifdef __OCMEMDEBUG__
-#	define OC_MEM_DEBUG(fmt,...) \
-		fprintf (stderr, \
-				 "DEBUG: %s(%s:%d): " fmt, \
-				 __func__, __FILE__, __LINE__, __VA_ARGS__ \
-		);
+	#define OC_MEM_DEBUG(...) oc_error_debug (__VA_ARGS__)
 #else
-#	define OC_MEM_DEBUG(fmt,...)
+	#define OC_MEM_DEBUG(...)
 #endif
 
 #define ofree(v) \
 	{ \
-		OC_MEM_DEBUG ("%s%s\n", "Memory free", v == NULL ? ": NULL" : ""); \
+		OC_MEM_DEBUG ("Memory free%s\n", v == NULL ? ": NULL" : ""); \
 		if ( v != NULL ) { \
 			free (v); \
 		} \
@@ -92,14 +86,14 @@ ULong64 combined64_high_low (Bit64 v);
 
 #define oc_malloc(v, size) \
 	{ \
-		OC_MEM_DEBUG("%s\n", "Memory allocation"); \
+		OC_MEM_DEBUG("Memory allocation\n"); \
 		v = malloc (size); \
 	}
 	
 #define oc_realloc(v, size) \
 	{ \
 		void * ptr; \
-		OC_MEM_DEBUG("%s\n", "Memory reallocation"); \
+		OC_MEM_DEBUG("Memory reallocation\n"); \
 		if ( (ptr = realloc (v, size)) == NULL ) { \
 			ofree (v); \
 			v = NULL; \
