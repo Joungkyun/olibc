@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.44 2011-02-12 19:20:17 oops Exp $ */
+/* $Id: libstring.c,v 1.45 2011-02-12 20:19:13 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -242,6 +242,7 @@ Long64 str2long (CChar * src) // {{{
 
 		if ( bufno == 0 ) {
 			x *= 10;
+			//x = (x << 3) + (x << 1);
 			continue;
 		}
 
@@ -264,13 +265,14 @@ Long64 str2long (CChar * src) // {{{
  * @param[in]	src numeric string
  * @return	double value
  */
-long double str2double (CChar * src) {
-	int len, i = 0, dotlen = 0;
-	int minus = 0, bufno = 0;
-	long double res = 0;
-	long long l = 0, x = 1;
-	float f = 0, y = 0.1;
-	char * buf, * dot;
+OLIBC_API
+long double str2double (CChar * src) { // {{{
+	char * dot;
+	char * decimal_t, * fraction_t;
+	ULong64 decimal, fraction;
+	float fraction_f;
+	bool minus = false;
+	long double buf;
 
 	if ( src == NULL )
 		return 0;
@@ -278,59 +280,50 @@ long double str2double (CChar * src) {
 	if ( strlen (src) == 0 )
 		return 0;
 
-	buf = trim_r (src, 0);
-	len = strlen (buf);
+	if ( src[0] == '-' )
+		minus = true;
 
-	dot = (char *) strchr (buf, '.');
+	oc_strdup_r (decimal_t, src + minus, 0);
 
-	if ( buf[0] == '-' ) minus = 1;
-
-	if ( dot == NULL ) {
-		if ( minus ) l = str2long (buf + 1);
-		else l = str2long (buf);
+	if ( (dot = (char *) strrchr (decimal_t, '.')) == NULL ) {
+		oc_strdup (fraction_t, "", 0);
 	} else {
-		dotlen = strlen (dot);
-
-		if ( dotlen > 7 ) {
-			fprintf (stderr, "ERROR: float length is too long. max 6");
-			exit (1);
-		}
-
-		for ( i = len - dotlen + 1; i < len; i++ ) {
-			bufno = char2int (buf[i]);
-
-			if ( bufno == 0 ) {
-				y /= 10;
-				continue;
-			}
-
-			if ( bufno > 0 ) {
-				f += bufno * y;
-				y /= 10;
-			}
-		}
-
-		len = len - dotlen;
-		for ( i = len; i > -1; i-- ) {
-			bufno = char2int (buf[i]);
-			if ( bufno == 0 ) {
-				x *= 10;
-				continue;
-			}
-
-			if ( bufno > 0 ) {
-				l += bufno * x;
-				x *= 10;
-			}
-		}
+		oc_strdup (fraction_t, dot + 1, strlen (dot) - 1);
+		*dot = 0;
 	}
 
-	res = l + f;
-	if (minus) res *= -1;
-	ofree (buf);
+	if ( fraction_t == NULL ) {
+		ofree (decimal_t);
+		return 0;
+	}
 
-	return res;
-}
+	OC_DEBUG ("Decimal String  => %s\n", decimal_t);
+	OC_DEBUG ("Fraction String => %s\n", fraction_t);
+
+	decimal = str2long (decimal_t);
+	fraction = str2long (fraction_t);
+
+	ofree (decimal_t);
+	ofree (fraction_t);
+
+	OC_DEBUG ("Decimal Integer  => %lld\n", decimal);
+	OC_DEBUG ("Fraction Integer => %lld\n", fraction);
+
+	fraction_f = fraction;
+
+	while ( fraction_f > 1 ) {
+		fraction_f /= 10;
+		//OC_DEBUG ("----> %f\n", fraction_f);
+	}
+
+	OC_DEBUG ("Fraction floating => %f\n", fraction_f);
+
+	buf = (long double) decimal + fraction_f;
+	if ( minus )
+		buf *= -1;
+
+	return buf;
+} // }}}
 
 /**
  * @brief	convert casting type to int from char
