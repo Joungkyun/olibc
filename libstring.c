@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.41 2011-02-12 17:43:43 oops Exp $ */
+/* $Id: libstring.c,v 1.42 2011-02-12 18:01:13 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -66,6 +66,12 @@ void trim (char * str) // {{{
 		}
 	}
 	OC_DEBUG ("Get start point: %d\n", start);
+
+	// If case, exists only white space
+	if ( ! start && ! end && isspace (str[start]) ) {
+		memset (str, 0, 1);
+		return;
+	}
 
 	if ( end < start ) {
 		oc_error ("end point is smaller than start point on trim function\n");
