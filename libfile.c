@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.15 2011-02-13 11:28:34 oops Exp $ */
+/* $Id: libfile.c,v 1.16 2011-02-13 17:34:30 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -26,6 +26,7 @@
  * 				_IS_SOCK check whether is socket or not
  * @return	bool
  */
+OLIBC_API
 bool file_exists (CChar *path, int mode) // {{{
 {
 	struct stat f;
@@ -71,6 +72,7 @@ bool file_exists (CChar *path, int mode) // {{{
  *
  * The result of this function is must freed.
  */
+OLIBC_API
 char * fileread (CChar * path) // {{{
 {
 	FILE * fp;
@@ -118,6 +120,7 @@ char * fileread (CChar * path) // {{{
  *
  * The writefile() function is not binary safe.
  */
+OLIBC_API
 int writefile (CChar * filename, CChar * str, bool mode) // {{{
 {
 	struct stat s;
@@ -166,6 +169,7 @@ int writefile (CChar * filename, CChar * str, bool mode) // {{{
  *
  * The result of realpath_r() function is must free.
  */
+OLIBC_API
 char * realpath_r (CChar *path) // {{{
 {
 	struct stat f;

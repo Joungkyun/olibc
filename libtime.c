@@ -1,4 +1,4 @@
-/* $Id: libtime.c,v 1.5 2011-02-13 11:31:27 oops Exp $ */
+/* $Id: libtime.c,v 1.6 2011-02-13 17:34:30 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -7,9 +7,10 @@
 
 #include <libtime.h>
 
-#ifdef HAVE_SYS_TIME_H
+OLIBC_API
 double microtime (void) // {{{
 {
+#ifdef HAVE_SYS_TIME_H
 	struct timeval tp;
 	long sec = 0L;
 	double ret = 0;
@@ -24,13 +25,11 @@ double microtime (void) // {{{
 	}
 
 	return ret;
-} // }}}
 #else
-double microtime (void) // {{{
-{
-	fprintf (stderr, "ERROR: olibc compiled without sys/time.h\n");
-} // }}}
+	oc_error ("olibc compiled without sys/time.h\n");
+	return 0;
 #endif
+} // }}}
 
 /*
  * Local variables:
