@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.14 2011-02-13 11:07:57 oops Exp $ */
+/* $Id: libfile.c,v 1.15 2011-02-13 11:28:34 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -159,19 +159,30 @@ int writefile (CChar * filename, CChar * str, bool mode) // {{{
 	return 0;
 } // }}}
 
-char * realpath_r (char *path) // {{{
+/**
+ * @brief	get absolute path
+ * @param	path path for searching
+ * @return	string that memory allocated
+ *
+ * The result of realpath_r() function is must free.
+ */
+char * realpath_r (CChar *path) // {{{
 {
 	struct stat f;
-	int r;
-	short isdir;
+	size_t r;
+	bool isdir;
 	char filename[PATH_MAX + 1] = { 0, };
 	char dirpath[PATH_MAX + 1] = { 0, };
 	char curpath[PATH_MAX + 1] = { 0, };
 	char *buf;
 
+	if ( path == NULL )
+		return NULL;
+
+	// The given path is already real path.
 	if ( path[0] == '/' ) {
 		r = strlen (path);
-		buf = (char *) malloc (sizeof (char) * (r + 1));
+		oc_malloc (buf, sizeof (char) * (r + 4));
 		if ( buf == NULL ) {
 			errno = ENOMEM;
 			return NULL;
@@ -192,9 +203,9 @@ char * realpath_r (char *path) // {{{
 		return NULL;
 	}
 
-	isdir = ( ! S_ISDIR(f.st_mode) ) ? 0 : 1;
+	isdir = S_ISDIR (f.st_mode);
 
-	if ( ! isdir ) {
+	if ( isdir == false ) {
 		// if path is filename
 		if ( (buf = strrchr (path, '/')) == NULL ) {
 			strcpy (filename, path);
@@ -224,8 +235,12 @@ char * realpath_r (char *path) // {{{
 	if ( chdir (curpath) == -1 )
 		return NULL;
 
-	r = strlen (dirpath) + strlen (filename) + 2;
-	buf = (char *) malloc (sizeof (char) * r);
+	r = strlen (dirpath) + strlen (filename) + 4;
+	oc_malloc (buf, sizeof (char) * r);
+	if ( buf == NULL ) {
+		errno = ENOENT;
+		return NULL;
+	}
 	memset (buf, 0, r);
 
 	r = strlen (dirpath);

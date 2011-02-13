@@ -1,4 +1,4 @@
-/* $Id: libfile.h,v 1.8 2011-02-13 11:07:57 oops Exp $ */
+/* $Id: libfile.h,v 1.9 2011-02-13 11:28:34 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -49,7 +49,7 @@ int writefile(CChar *filename, CChar *str, bool mode);
  *
  * path     => search path
  */
-char * realpath_r (char *path);
+char * realpath_r (CChar *path);
 
 #endif
 /*
