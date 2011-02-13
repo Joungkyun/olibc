@@ -1,4 +1,4 @@
-/* $Id: libfile.h,v 1.6 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libfile.h,v 1.7 2011-02-13 10:06:13 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -25,7 +25,7 @@
  *         _IS_BDEV  : whether path is block device
  *         _IS_FIFO  : whether path is FIFO
  *         _SI_SOCK  : whether path is socket file */
-int file_exists (const char *path, int mode);
+bool file_exists (const char *path, int mode);
 
 /* fileread follow BPL License v.1 <http://devel.oops.org/document/bpl>
  * read file

@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.12 2011-02-10 09:54:16 oops Exp $ */
+/* $Id: libfile.c,v 1.13 2011-02-13 10:06:13 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -12,15 +12,30 @@
 #endif
 #endif
 
-int file_exists (const char *path, int mode) {
+/**
+ * @brief	Checks whether a file or directory exists
+ * @param	path Path to the file or directory
+ * @param	mode check conditions.
+ * 				_IS_NCHK check only exists
+ * 				_IS_FILE check whether is regular file or not
+ * 				_IS_DIR  check whether is regular directory or not
+ * 				_IS_SLINK check whether is symbolic link or not
+ * 				_IS_CDEV check whether is charactor device or not
+ * 				_IS_BDEV check whether is block device or not
+ * 				_IS_FIFO check whether is FIFO or not
+ * 				_IS_SOCK check whether is socket or not
+ * @return	bool
+ */
+bool file_exists (CChar *path, int mode) // {{{
+{
 	struct stat f;
 	int ret;
 
 	f.st_size = 0;
-	ret = stat (path, &f);
+	ret = lstat (path, &f);
 
 	if ( ret == -1 )
-		return 0;
+		return false;
 
 	switch ( mode ) {
 		case _IS_FILE :
@@ -45,9 +60,9 @@ int file_exists (const char *path, int mode) {
 			return S_ISSOCK (f.st_mode);
 			break;
 		default:
-			return 1;
+			return true;
 	}
-}
+} // }}}
 
 char * fileread (char * path) {
 	FILE *fp;
