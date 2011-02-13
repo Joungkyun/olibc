@@ -3,12 +3,9 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.46 2011-02-12 20:42:28 oops Exp $ */
+/* $Id: libstring.c,v 1.47 2011-02-13 17:35:42 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
-
-char * decode_race (char * domain, char * charset, int debug);
-char * encode_race (char * domain, char * charset, int debug);
 
 /**
  * @brief	print olibc version
