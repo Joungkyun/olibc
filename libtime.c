@@ -1,4 +1,4 @@
-/* $Id: libtime.c,v 1.4 2004-08-09 07:47:51 oops Exp $ */
+/* $Id: libtime.c,v 1.5 2011-02-13 11:31:27 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -8,7 +8,8 @@
 #include <libtime.h>
 
 #ifdef HAVE_SYS_TIME_H
-double microtime (void) {
+double microtime (void) // {{{
+{
 	struct timeval tp;
 	long sec = 0L;
 	double ret = 0;
@@ -23,11 +24,12 @@ double microtime (void) {
 	}
 
 	return ret;
-}
+} // }}}
 #else
-double microtime (void) {
+double microtime (void) // {{{
+{
 	fprintf (stderr, "ERROR: olibc compiled without sys/time.h\n");
-}
+} // }}}
 #endif
 
 /*
