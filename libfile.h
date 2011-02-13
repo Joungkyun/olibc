@@ -1,4 +1,4 @@
-/* $Id: libfile.h,v 1.7 2011-02-13 10:06:13 oops Exp $ */
+/* $Id: libfile.h,v 1.8 2011-02-13 11:07:57 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -32,7 +32,7 @@ bool file_exists (const char *path, int mode);
  *
  * path  => path of read file
  * return values must allocated memory */
-char * fileread (char * path);
+char * fileread (CChar * path);
 
 /* writefile follow BPL License v.1 <http://devel.oops.org/document/bpl>
  * write file
@@ -42,7 +42,7 @@ char * fileread (char * path);
  * mode     => write mode
  *             0 : new file
  *             1 : attach file */
-int writefile(char *filename, char *str, int mode);
+int writefile(CChar *filename, CChar *str, bool mode);
 
 /* writefile follow BPL License v.1 <http://devel.oops.org/document/bpl>
  * write file

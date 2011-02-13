@@ -1,4 +1,4 @@
-/* $Id: libfile.c,v 1.13 2011-02-13 10:06:13 oops Exp $ */
+/* $Id: libfile.c,v 1.14 2011-02-13 11:07:57 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -64,82 +64,100 @@ bool file_exists (CChar *path, int mode) // {{{
 	}
 } // }}}
 
-char * fileread (char * path) {
-	FILE *fp;
+/**
+ * @brief	read file
+ * @param	path file path
+ * @return	text
+ *
+ * The result of this function is must freed.
+ */
+char * fileread (CChar * path) // {{{
+{
+	FILE * fp;
 	size_t len = 0, length = 0;
-	char tmp[FILEBUF] = { 0, }, *text;
+	char tmp[FILEBUF] = { 0, }, * buf;
 	struct stat f;
 
-	if ((fp = fopen(path, "rb")) == NULL) {
-		fprintf(stderr, "ERROR: Can't open %s in read mode\n", path);
-		exit (1);
+	if ( lstat (path, &f) == -1 ) {
+		oc_error ("File not found : %s\n", path);
+		return NULL;
 	}
 
-	stat (path, &f);
-	if ( f.st_size < 1 )
+	if ( f.st_size < 1 ) {
+		OC_DEBUG ("The file(%s) is empty\n", path);
 		return NULL;
+	}
+
+	if ((fp = fopen(path, "rb")) == NULL) {
+		oc_error ("Can not open %s with read mode\n", path);
+		return NULL;
+	}
 
 	/* initialize tmp variavle */
-	text = malloc (sizeof (char) * (f.st_size + 1));
+	len = (f.st_size < 4) ? 4 : f.st_size;
+	oc_malloc_r (buf, sizeof (char) * (len + 1), NULL);
+	len = 0;
 
-	/* if failed memory allocation */
-	if ( text == NULL )
-		return NULL;
-
-	memset (tmp, 0, FILEBUF);
-	while ( (length = fread (tmp, sizeof (char), FILEBUF, fp)) > 0 ) {
-		memmove (text + len, tmp, length);
+	while ( (length = fread (tmp, sizeof (char), FILEBUF - 1, fp)) > 0 ) {
+		memmove (buf + len, tmp, length);
 		len += length;
 		memset (tmp, 0, FILEBUF);
 	}
-	memset (text + len, 0, 1);
+	memset (buf + len, 0, 1);
+	fclose (fp);
+
+	return buf;
+} // }}}
+
+/**
+ * @brief	write file
+ * @param	path of write
+ * @param	strings for write
+ * @param	mode bool. set true, append and set false, new file.
+ * @return	On success return 0, otherwise return -1.
+ *
+ * The writefile() function is not binary safe.
+ */
+int writefile (CChar * filename, CChar * str, bool mode) // {{{
+{
+	struct stat s;
+
+	FILE * fp;
+	char * act = "wb";
+	size_t len = 0;
+	int ret;
+
+	act = "wb";
+	if ( mode == true ) {
+		ret = stat (filename, &s);
+		act = (stat (filename, &s) < 0) ? "wb" : "ab";
+	}
+
+	if ( (fp = fopen (filename, act)) == NULL ) {
+		oc_error ("Can not open %s with write mode\n", filename);
+		return -1;
+	}
+
+	// On append, add line feed
+	if ( ! strcmp (act, "ab") ) {
+		if ( fwrite ("\n", sizeof (char), 1, fp) != 1 ) {
+			oc_error ("Writeing line feed failed: %s\n", filename);
+			fclose (fp);
+			return -1;
+		}
+	}
+
+	len = strlen (str);
+	if ( fwrite (str, sizeof(char), len, fp) != len ) {
+		fclose(fp);
+		oc_error ("Writeing failed: %s\n", filename);
+		return -1;
+	}
 
 	fclose (fp);
 
-	return text;
-}
-
-int writefile(char *filename, char *str, int mode) {
-	struct stat s;
-
-	FILE *fp;
-	unsigned char *act, *string;
-	int ret;
-
-	if ( mode == 1) {
-		ret = stat (filename, &s);
-
-		if (ret < 0) {
-			act = "wb";
-			string = strdup(str);
-		} else {
-			act = "ab";
-			string = (char *) malloc(strlen(str) + 32);
-			sprintf(string, "\n%s", str);
-		}
-	} else {
-		act = "wb";
-		string = strdup(str);
-	}
-
-	if ( (fp = fopen(filename, act)) == NULL ) {
-		fprintf (stderr, "ERROR: Can't open %s in write mode\n", filename);
-		ofree (string);
-		return -1;
-	}
-
-	if (fwrite(string, sizeof(char), strlen(string), fp) != strlen(string)) {
-		fclose(fp);
-		fprintf (stderr, "ERROR: writing to file %s\n", filename);
-		ofree (string);
-		return -1;
-	}
-
-	ofree(string);
-	fclose(fp);
-
 	return 0;
-}
+} // }}}
 
 char * realpath_r (char *path) // {{{
 {
