@@ -1,8 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.57 2011-02-13 11:29:24 oops Exp $
+$Id: Changes,v 1.58 2011-02-15 09:38:49 oops Exp $
 
-* Sat, Feb 14 2011
+* Tue, Feb 15 2011
+	- add charset_conv
+
+* Sat, Feb 12 2011
 	- fixed trim that return 0 byte about 1byte string
 	- thread safe about errno
 	- rewrite str2double, strtoupper, strtolower

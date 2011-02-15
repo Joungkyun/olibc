@@ -3,9 +3,13 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.47 2011-02-13 17:35:42 oops Exp $ */
+/* $Id: libstring.c,v 1.48 2011-02-15 09:38:49 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
+
+#ifdef HAVE_ICONV_H
+#include <iconv.h>
+#endif
 
 /**
  * @brief	print olibc version
@@ -1063,6 +1067,104 @@ bool is_ksc5601 (UInt c1, UInt c2) // {{{
 		return true;
 
 	return false;
+} // }}}
+
+size_t charset_conv_outplen (CChar * charset, size_t srclen)
+{
+	if ( ! strncmp (charset, "utf", 3) || ! strncmp (charset, "UTF", 3) )
+		return srclen * 2;
+	else if ( ! strncmp (charset, "ucs", 3) || ! strncmp (charset, "UCS", 3) )
+		return srclen * 2;
+
+	return srclen;
+}
+
+/**
+ * @brief	convert character set
+ * @param[in]	src source string
+ * @param[in]	from source character set
+ * @param[in]	to destination charactor set
+ */
+OLIBC_API
+char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
+{
+#ifdef HAVE_ICONV_H
+	iconv_t cd;
+	char * ibuf;
+	char * obuf, * obuf_t;
+	size_t err;
+
+	size_t ilen, olen;
+
+	if ( src == NULL || from == NULL || to == NULL )
+		return NULL;
+
+	if ( strcmp (from, to) == 0 ) {
+		oc_strdup_r (obuf, src, NULL);
+		return obuf;
+	}
+
+	cd = iconv_open (to, from);
+	if ( cd == (iconv_t) -1 ) {
+		oc_error ("Can not open iconv descriptor\n");
+		return NULL;
+	}
+
+	ilen = strlen (src) + 1;
+	oc_strdup_r (ibuf, src, NULL);
+
+	olen = olen_t = charset_conv_outplen (to, ilen);
+	oc_malloc (obuf, sizeof (char) * olen);
+	if ( obuf == NULL ) {
+		ofree (ibuf);
+		return NULL;
+	}
+	obuf_t = obuf;
+
+conv_retry:
+	OC_DEBUG ("SRC string: %s\n", ibuf);
+	OC_DEBUG ("DEST Size : %ld\n", olen_t);
+	err = iconv (cd, &ibuf, &ilen, &obuf_t, &olen);
+
+	if ( err == (size_t) -1 ) {
+		switch (errno) {
+			case EINVAL:
+				//oc_error ("Incomplete text, do not report an error\n");
+				goto skip_error;
+				break;
+			case E2BIG:
+				OC_DEBUG ("CONV Retry: E2BIG There is not sufficient room at *obuf_t\n");
+				olen *= 2;
+				olen_t = olen;
+				oc_remalloc (obuf, sizeof (char) * olen);
+				obuf_t = obuf + (obuf_t - obuf_t);
+				olen -= (obuf_t - obuf);
+
+				//oc_error ("There is not sufficient room at *obuf_t\n");
+				goto conv_retry;
+				break;
+			case EILSEQ:
+				oc_error ("An invalid multibyte sequence has been encountered in the input\n");
+				break;
+			default:
+				oc_error ("ERROR: encoding error with iconv\n");
+		}
+
+		ofree (obuf);
+		obuf = NULL;
+	}
+
+skip_error:
+	*obuf = 0;
+
+	ofree (ibuf);
+	iconv_close (cd);
+
+	return obuf;
+#else
+	oc_error ("Don't support iconv in current build\n");
+	return NULL;
+#endif
 } // }}}
 
 /*
