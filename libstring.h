@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.21 2011-02-15 09:38:49 oops Exp $ */
+/* $Id: libstring.h,v 1.22 2011-02-16 10:46:28 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -197,7 +197,7 @@ UInt bin2dec (CChar * src);
 ULong64 bin2long (CChar * src);
 
 /* convert 64bit integer to binary string */
-UInt long2bin (ULong64 dec, char ** dst);
+UInt long2bin (Long64 dec, char ** dst);
 
 /* convert decmial string to binary string */
 UInt dec2bin (CChar * src, char ** dst);

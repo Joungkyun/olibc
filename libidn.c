@@ -1,4 +1,4 @@
-/* $Id: libidn.c,v 1.4 2011-02-06 14:10:22 oops Exp $ */
+/* $Id: libidn.c,v 1.5 2011-02-16 10:46:28 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 
@@ -87,6 +87,7 @@ char * convert_punycode (char * domain, int mode, int debug) {
 	int dlen, rc;
 	char *p, *r;
 	uint32_t *q;
+	char *z;
 
 	if ( domain == NULL )
 		return conv;
@@ -105,16 +106,19 @@ char * convert_punycode (char * domain, int mode, int debug) {
 		conv[dlen -1] = 0;
 
 	if ( ! mode ) {
-		p = stringprep_locale_to_utf8 (conv);
+		//p = stringprep_locale_to_utf8 (conv);
+		p = charset_conv (domain, "EUC-KR", "UTF-8");
 		if ( p == NULL ) {
 			fprintf (stderr, "ERROR: %s: could not convert from %s to UTF-8.\n",
-				 	 conv, stringprep_locale_charset ());
+				 	 conv, charset_conv());
 
 			return conv;
 		}
 
 		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
 		ofree (p);
+
+		z = charset_conv (p, "UTF-8", "UCS-4BE");
 
 		if ( !q ) {
 			fprintf (stderr, "ERROR: %s: could not convert from UCS-4 to UTF-8.\n", conv);
@@ -123,8 +127,10 @@ char * convert_punycode (char * domain, int mode, int debug) {
 
 		if ( debug ) {
 			size_t i;
-			for ( i = 0; q[i]; i++ )
+			for ( i = 0; q[i]; i++ ) {
 				fprintf (stderr, "input[%d] = U+%04x\n", i, q[i] & 0xFFFF);
+				fprintf (stderr, "input[%d] = U+%04x\n", i, z[i] & 0xFFFF);
+			}
 		}
 
 		rc = idna_to_ascii_4z (q, &r, 0);
