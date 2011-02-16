@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.49 2011-02-16 10:45:06 oops Exp $ */
+/* $Id: libstring.c,v 1.50 2011-02-16 10:47:39 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1136,7 +1136,7 @@ conv_retry:
 				OC_DEBUG ("CONV Retry: E2BIG There is not sufficient room at *obuf_t\n");
 				olen *= 2;
 				olen_t = olen;
-				oc_remalloc (obuf, sizeof (char) * olen);
+				oc_realloc (obuf, sizeof (char) * olen);
 				obuf_t = obuf + (obuf_t - obuf_t);
 				olen -= (obuf_t - obuf);
 
