@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.48 2011-02-15 09:38:49 oops Exp $ */
+/* $Id: libstring.c,v 1.49 2011-02-16 10:45:06 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -960,7 +960,7 @@ UInt Forebyte2bin (ULong32 src, char ** dst, bool complete) // {{{
  * If return value is not 0, you must free dst.
  */
 OLIBC_API
-UInt long2bin (ULong64 dec, char ** dst) // {{{
+UInt long2bin (Long64 dec, char ** dst) // {{{
 {
 	ULong64 tmp;
 	UInt len, buflen;
@@ -994,7 +994,7 @@ lowbit:
 	if ( over32 == true ) {
 		over32 = false;
 		full_print = true;
-		tmp = (ULong64) v.low;
+		tmp = (Long64) v.low;
 		goto lowbit;
 	}
 
@@ -1015,7 +1015,7 @@ lowbit:
 OLIBC_API
 UInt dec2bin (CChar * src, char ** dst) // {{{
 {
-	ULong64 dec;
+	Long64 dec;
 	if ( src == NULL )
 		return 0;
 
@@ -1025,7 +1025,7 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 #ifdef HAVE_STRTOULL
 	dec = strtoull (src, NULL, 10);
 #else
-	dec = (ULong64) str2long (src);
+	dec = (Long64) str2long (src);
 #endif
 
 	return long2bin (dec, dst);
@@ -1094,7 +1094,7 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 	char * obuf, * obuf_t;
 	size_t err;
 
-	size_t ilen, olen;
+	size_t ilen, olen, olen_t;
 
 	if ( src == NULL || from == NULL || to == NULL )
 		return NULL;
