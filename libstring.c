@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.51 2011-02-16 10:58:53 oops Exp $ */
+/* $Id: libstring.c,v 1.52 2011-02-16 11:39:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1123,7 +1123,7 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 
 conv_retry:
 	OC_DEBUG ("SRC string: %s\n", ibuf);
-	OC_DEBUG ("DEST Size : %ld\n", olen_t);
+	OC_DEBUG ("DEST Size : %u\n", olen_t);
 	err = iconv (cd, &ibuf, &ilen, &obuf_t, &olen);
 
 	if ( err == (size_t) -1 ) {
@@ -1137,8 +1137,12 @@ conv_retry:
 				olen *= 2;
 				olen_t = olen;
 				oc_realloc (obuf, sizeof (char) * olen);
-				obuf_t = obuf + (obuf_t - obuf_t);
-				olen -= (obuf_t - obuf);
+
+				{
+					size_t used = obuf_t - obuf;
+					obuf_t = obuf + used;
+					olen += ((~used) + 1);
+				}
 
 				//oc_error ("There is not sufficient room at *obuf_t\n");
 				goto conv_retry;
