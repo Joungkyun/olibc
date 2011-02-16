@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.50 2011-02-16 10:47:39 oops Exp $ */
+/* $Id: libstring.c,v 1.51 2011-02-16 10:58:53 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -916,20 +916,20 @@ b2l_low:
 
 
 /* dec to binary template fucntion */
-UInt Forebyte2bin (ULong32 src, char ** dst, bool complete) // {{{
+UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 {
 	ULong32 mask = 2147483648UL;
-	ULong32 m;
+	Long32 m;
 	UInt len;
 
 	oc_malloc_r (*dst, sizeof (char) * 33, 0);
 	memset (*dst, 0, 32);
 
-	OC_DEBUG ("Buf No: %lu\n", src);
+	OC_DEBUG ("Buf No: %ld\n", src);
 
 	len = 0;
 	while ( mask > 0 ) {
-		m = (ULong32) src & (ULong32) mask;
+		m = (Long32) src & (Long32) mask;
 
 		if ( m ) {
 			memset ((*dst) + len, 49, 1);
@@ -1023,7 +1023,7 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 		return 0;
 
 #ifdef HAVE_STRTOULL
-	dec = strtoull (src, NULL, 10);
+	dec = strtoll (src, NULL, 10);
 #else
 	dec = (Long64) str2long (src);
 #endif
