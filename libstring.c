@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.52 2011-02-16 11:39:07 oops Exp $ */
+/* $Id: libstring.c,v 1.53 2011-02-17 08:12:58 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -468,7 +468,7 @@ void setansi (FILE * stream, int color, bool noansi) // {{{
  * This function is thread safe.
  */
 OLIBC_API
-char * human_size_r (double size, bool sub, bool unit) // {{{
+char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 {
 	char units[] = { 0, 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
 	UInt i = 0, dvd = 1024;
