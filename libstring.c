@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.54 2011-02-17 09:14:38 oops Exp $ */
+/* $Id: libstring.c,v 1.55 2011-02-17 10:27:35 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -484,23 +484,24 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 		dvd = 1000;
 
 	while ( size > dvd ) {
-		OC_DEBUG ("%llu / %d = ", size, dvd);
+		frac = size;
 
-		if ( dvd == 1024 ) {
-			// get rest and under decimal point with integer (2digits)
-			frac = (size & 0x03ff) * 100 >> 10;
+		if ( dvd == 1024 )
 			size >>= 10;
-		} else {
-			frac *= 1000;
+		else
 			size /= 1000;
-		}
-		OC_DEBUG ("%llu\n", size);
+
+		OC_DEBUG ("INT  PART: %llu / %d = %lld\n", frac, dvd, size);
 		i++;
 	}
 
 	// get rest and under decimal point with integer (2digits)
 	if ( dvd == 1000 )
-		frac = ((osize + (~(size * frac) + 1)) * 100) / frac;
+		frac = ((frac + (~(size * 1000) + 1)) * 100) / 1000;
+	else
+		frac = (frac & 0x03ff) * 100 >> 10;
+
+	OC_DEBUG ("FRAC PART: %lld\n", frac);
 
 	if ( sub ) {
 		char * BYTE_C;
