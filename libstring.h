@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.22 2011-02-16 10:46:28 oops Exp $ */
+/* $Id: libstring.h,v 1.23 2011-02-17 09:14:38 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -138,7 +138,7 @@ void setansi (FILE * stream, int color, bool noansi);
  *
  * return values must allocated memory */
 char * human_size (double size, int sub, int unit);
-char * human_size_r (double size, bool sub, bool unit);
+char * human_size_r (ULong64 size, bool sub, bool unit);
 
 /* numberFormat follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
  * return Format a number with grouped thousands with string

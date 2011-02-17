@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.53 2011-02-17 08:12:58 oops Exp $ */
+/* $Id: libstring.c,v 1.54 2011-02-17 09:14:38 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -472,7 +472,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 {
 	char units[] = { 0, 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
 	UInt i = 0, dvd = 1024;
-	double osize = size;
+	ULong64 osize = size, frac = 1;
 	char * buf;
 	char singular[2] = { 0, };
 
@@ -484,21 +484,35 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 		dvd = 1000;
 
 	while ( size > dvd ) {
-		size /= dvd;
+		OC_DEBUG ("%llu / %d = ", size, dvd);
+
+		if ( dvd == 1024 ) {
+			// get rest and under decimal point with integer (2digits)
+			frac = (size & 0x03ff) * 100 >> 10;
+			size >>= 10;
+		} else {
+			frac *= 1000;
+			size /= 1000;
+		}
+		OC_DEBUG ("%llu\n", size);
 		i++;
 	}
+
+	// get rest and under decimal point with integer (2digits)
+	if ( dvd == 1000 )
+		frac = ((osize + (~(size * frac) + 1)) * 100) / frac;
 
 	if ( sub ) {
 		char * BYTE_C;
 		BYTE_C = (char *) numberFormat (osize, 0, '.', ',', 0);
 		sprintf (
-			buf, "%.2f %c%c (%s B%s%s)",
-			size, units[i], unit ? 'b' : 'B',
+			buf, "%llu.%llu %c%c (%s B%s%s)",
+			size, frac, units[i], unit ? 'b' : 'B',
 			BYTE_C, unit ? "it" : "yte", singular
 		);
 		ofree (BYTE_C);
 	} else
-		sprintf (buf, "%.2f %c%c", size, units[i], unit ? 'b' : 'B');
+		sprintf (buf, "%llu.%llu %c%c", size, frac, units[i], unit ? 'b' : 'B');
 
 	return buf;
 } // }}}
