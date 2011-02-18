@@ -1,4 +1,4 @@
-/* $Id: libidn.h,v 1.4 2011-02-18 10:59:15 oops Exp $ */
+/* $Id: libidn.h,v 1.5 2011-02-18 18:08:32 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 
@@ -23,15 +23,6 @@
 #define BWHITE		16
 
 extern const char *stringprep_locale_charset_cache;
-
-/* convert_racecode follow BPL License v.1 <http://devel.oops.org/document/bpl>
- * encode and decode race code for multibyte domain (com/net/org)
- *
- * str   => original domain
- * mode  => 0 : encode to racecode
- *          1 : decode from racecode
- * debug => verbose mode */
-char * convert_racecode (char *str, int mode, int debug);
 
 /* convert_punycode follows GPL License v2
  * encode and decode punycode for local multibyte domain

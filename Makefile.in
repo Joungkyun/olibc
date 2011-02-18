@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.28 2011-02-12 18:14:12 oops Exp $
+# $Id: Makefile.in,v 1.29 2011-02-18 18:08:32 oops Exp $
 srcdir		= @srcdir@
 top_srcdir	= @top_srcdir@
 builddir	= @builddir@
@@ -27,12 +27,14 @@ LIBS		= @LIBS@
 #   -D__OCMEMDEBUG__    print memory allocation/free messages
 #
 DEFS		= -D_REENTRANT @DEFS@ $(CPPFLAGS)
-OBJECT		= libmisc.lo libidn.lo libstring.lo libpcre.lo libfile.lo libtime.lo libarg.lo _race.lo
+#OBJECT		= libmisc.lo libidn.lo libstring.lo libpcre.lo libfile.lo libtime.lo libarg.lo _race.lo
+OBJECT		= libmisc.lo libidn.lo libstring.lo libpcre.lo libfile.lo libtime.lo libarg.lo
 PCREOBJ		= pcrelib/get.lo pcrelib/maketables.lo pcrelib/pcre.lo pcrelib/study.lo
 IDNOBJ		= libidn/idna.lo libidn/nfkc.lo libidn/profiles.lo libidn/punycode.lo \
 		  libidn/stringprep.lo libidn/rfc3454.lo libidn/toutf8.lo
-OBOBJ		= libmisc.lo libstring.lo libpcre.lo libfile.lo libtime.lo libarg.lo
-OGOBJ		= libstring.lo libmisc.lo _race.lo libidn.lo
+BPLOBJ		= libmisc.lo libstring.lo libfile.lo libtime.lo libarg.lo
+#GPLOBJ		= _race.lo libpcre.lo libidn.lo
+GPLOBJ		= libpcre.lo libidn.lo
 HEADER_NAME	= olibc-config oc_common libfile libpcre libstring libtime libarg libidn
 
 SONAME_MAJOR	= @SONAME_MAJOR@
@@ -90,8 +92,8 @@ idn:
 
 libs:
 	$(LINK) -o lib$(PROG).la $(OBJECT) $(PCREOBJ) $(IDNOBJ) $(LDFALGS)
-	$(LINK) -o liboc.la $(OBOBJ) $(PCREOBJ)
-	$(LINK) -o libogc.la $(OGOBJ) $(IDNOBJ) $(LDFALGS)
+	$(LINK) -o liboc.la $(BPLOBJ) $(PCREOBJ)
+	$(LINK) -o libogc.la $(GPLOBJ) $(IDNOBJ) $(LDFALGS) -loc
 
 olibc-config:
 	for i in olibc ogc oc ; do \
@@ -131,3 +133,4 @@ clean:
 distclean: clean
 	-$(RM) -f olibc-config.h config.log config.status Makefile man/Makefile pcrelib/Makefile libidn/Makefile *~
 	-$(RM) -rf autom4te* libidn/idn-int.h stamp* .libs libtool libidn/.libs pcrelib/.libs olibc
+	-$(RM) -f pcrelib/chartables.c
