@@ -1,9 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.59 2011-02-18 18:08:32 oops Exp $
+$Id: Changes,v 1.60 2011-02-18 21:09:48 oops Exp $
 
 * Sat, Feb 19 2011
 	- remove convert_racecode api
+	- add is_utf8 api
 
 * Tue, Feb 15 2011
 	- add charset_conv

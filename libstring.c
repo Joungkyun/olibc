@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.56 2011-02-18 09:50:21 oops Exp $ */
+/* $Id: libstring.c,v 1.57 2011-02-18 21:09:48 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1080,6 +1080,95 @@ bool is_ksc5601 (UInt c1, UInt c2) // {{{
 		return true;
 	if ( (int) c >= 0xaca1 && (int) c <= 0xacf1 )
 		return true;
+
+	return false;
+} // }}}
+
+bool utf8_underbit_check (UCChar * s, UInt byte)
+{
+	UInt i;
+	for ( i=0; i<byte; i++ ) {
+		if ( *(s + i) >> 6 != 0x02 )
+			return false;
+	}
+
+	return true;
+}
+
+/**
+ * @brief		check whether is utf8 or not
+ * @param		strings for checking
+ * @return		bool
+ */
+OLIBC_API
+bool is_utf8 (UCChar * src) // {{{
+{
+	size_t len, byte2;
+	UCChar * s = str;
+	UChar byte2_check = 0;
+
+	len = byte2 = 0;
+	byte2_check = false;
+
+	if ( str == NULL )
+		return false;
+
+	len = strlen (str);
+	if ( len == 0 )
+		return true;
+
+	// check utf8 bom code
+	if ( s[0] == 0xef && s[1] == 0xbb && s[2] == 0xbf )
+		return true;
+
+again:
+	while ( *s && ! (*s & 0x80) )
+		s++;
+
+	if ( ! *s ) {
+		if ( byte2 ) return byte2;
+		return false;
+	}
+
+	// binary of utf8 first byte is must start 11
+	if ( (*s >> 6) != 0x03 )
+		return false;
+
+	// 2byte utf8 check
+	// EUC-KR "Jeong" has 2byte utf-8 format. (11000001 10100100)
+	// so, check next character
+	if ( (*s >> 5 ) == 0x06 ) {
+		byte2 = utf8_underbit_check (s + 1, 1);
+
+		if ( ! byte2_check && byte2 == true ) {
+			byte2_check = *s;
+			s += 2;
+			goto again;
+		} else if ( byte2_check && byte2 == true && byte2_check == *s ) {
+			/* 2th check is true and previous charactors is same current charactors, retry */
+			byte2_check = *s;
+			s += 2;
+			goto again;
+		}
+
+		return byte2;
+	}
+
+	// 3byte utf8 check
+	if ( (*s >> 4 ) == 0x0e )
+		return utf8_underbit_check (s + 1, 2);
+
+	// 4byte utf8 check
+	if ( (*s >> 3 ) == 0x1e )
+		return utf8_underbit_check (s + 1, 3);
+
+	// 5byte utf8 check
+	if ( (*s >> 2 ) == 0x3e )
+		return utf8_underbit_check (s + 1, 4);
+
+	// 6byte utf8 check
+	if ( (*s >> 1 ) == 0x7e )
+		return utf8_underbit_check (s + 1, 5);
 
 	return false;
 } // }}}

@@ -1,0 +1,68 @@
+/* $Id: oc_type.h.in,v 1.1 2011-02-18 21:09:48 oops Exp $ */
+
+#ifndef OC_TYPE_H
+#define OC_TYPE_H
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#ifndef OLIBC_CONFIG_H
+	/* The size of a `long', as computed by sizeof. */
+	#undef SIZEOF_LONG
+
+	/* Define to 1 if you have the <stdbool.h> header file. */
+	#undef HAVE_STDBOOL_H
+#endif
+
+typedef unsigned char UChar;
+typedef const char CChar;
+typedef const unsigned char UCChar;
+typedef unsigned short UShort;
+typedef unsigned int UInt;
+
+#if SIZEOF_LONG == 4
+typedef long Long;
+typedef long Long32;
+typedef long long Long64;
+typedef unsigned long ULong;
+typedef unsigned long ULong32;
+typedef unsigned long long ULong64;
+#else
+typedef int Long;
+typedef int Long32;
+typedef long Long64;
+typedef unsigned int ULong;
+typedef unsigned int ULong32;
+typedef unsigned long ULong64;
+#endif
+
+typedef struct {
+	ULong32 high;
+	ULong32 low;
+} Bit64;
+
+#ifdef HAVE_STDBOOL_H
+	#include <stdbool.h>
+#else
+	#define _STDBOOL_H
+	#ifndef __cplusplus
+
+		#define bool    _Bool
+		#define true    1
+		#define false   0
+
+	#else /* __cplusplus */
+
+		#define _Bool   bool
+		#define bool    bool
+		#define false   false
+		#define true    true
+
+	#endif
+	/* Signal that all the definitions are present.  */
+	#define __bool_true_false_are_defined   1
+#endif
+
+#endif

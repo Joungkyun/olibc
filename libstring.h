@@ -1,4 +1,4 @@
-/* $Id: libstring.h,v 1.23 2011-02-17 09:14:38 oops Exp $ */
+/* $Id: libstring.h,v 1.24 2011-02-18 21:09:48 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -205,6 +205,10 @@ UInt dec2bin (CChar * src, char ** dst);
 /* is_ksc5601 follows BPL License v.1
  * check ksc5601 range */
 bool is_ksc5601 (UInt c1, UInt c2);
+
+/* is_utf8 follows BPL License v.1
+ * check utf8 range */
+bool is_utf8 (UCChar * src);
 
 /* convert character set */
 char * charset_conv (CChar *src, CChar * from, CChar * to);
