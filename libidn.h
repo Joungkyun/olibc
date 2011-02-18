@@ -1,4 +1,4 @@
-/* $Id: libidn.h,v 1.3 2011-02-18 09:50:21 oops Exp $ */
+/* $Id: libidn.h,v 1.4 2011-02-18 10:59:15 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 
@@ -43,7 +43,7 @@ char * convert_racecode (char *str, int mode, int debug);
  *
  * return value => length of dst
  */
-UInt convert_punycode (CChar * src, UChar ** dst, bool mode);
+UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode);
 
 /* convert_punycode follows GPL License v2
  * encode and decode punycode for local multibyte domain
