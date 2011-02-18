@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.22 2011-02-16 10:46:28 oops Exp $
+# $Id: configure.ac,v 1.23 2011-02-18 11:00:39 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -35,12 +35,6 @@ LIBIDN_VERSION=0.3.7
 
 AC_ARG_WITH(iconv,
 [  --with-iconv=PATH     compiled with iconv library.])
-
-AC_ARG_WITH(idn,
-[  --with-idn=PATH     compiled with libidn library.])
-
-AC_ARG_WITH(pcre,
-[  --with-pcre=PATH     compiled with pcre library.])
 
 # Checks for programs.
 AC_PROG_CC
