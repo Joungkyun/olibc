@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.15 2011-02-12 17:43:43 oops Exp $ */
+/* $Id: oc_common.h,v 1.16 2011-02-18 09:50:21 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -81,6 +81,7 @@ ULong64 combined64_high_low (Bit64 v);
 		OC_MEM_DEBUG ("Memory free%s\n", v == NULL ? ": NULL" : ""); \
 		if ( v != NULL ) { \
 			free (v); \
+			v = NULL; \
 		} \
 	}
 

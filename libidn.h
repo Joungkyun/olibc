@@ -1,4 +1,4 @@
-/* $Id: libidn.h,v 1.2 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libidn.h,v 1.3 2011-02-18 09:50:21 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 
@@ -32,6 +32,18 @@ extern const char *stringprep_locale_charset_cache;
  *          1 : decode from racecode
  * debug => verbose mode */
 char * convert_racecode (char *str, int mode, int debug);
+
+/* convert_punycode follows GPL License v2
+ * encode and decode punycode for local multibyte domain
+ *
+ * src  => original domain
+ * dst  => converted domain (need free() after use)
+ * mode => false : encode to punycode
+ *         true  : decode from punycode
+ *
+ * return value => length of dst
+ */
+UInt convert_punycode (CChar * src, UChar ** dst, bool mode);
 
 /* convert_punycode follows GPL License v2
  * encode and decode punycode for local multibyte domain

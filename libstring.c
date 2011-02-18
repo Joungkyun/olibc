@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.55 2011-02-17 10:27:35 oops Exp $ */
+/* $Id: libstring.c,v 1.56 2011-02-18 09:50:21 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1119,12 +1119,6 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 		return obuf;
 	}
 
-	cd = iconv_open (to, from);
-	if ( cd == (iconv_t) -1 ) {
-		oc_error ("Can not open iconv descriptor\n");
-		return NULL;
-	}
-
 	ilen = strlen (src) + 1;
 	oc_strdup_r (ibuf, src, NULL);
 
@@ -1136,11 +1130,20 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 	}
 	obuf_t = obuf;
 
+	cd = iconv_open (to, from);
+	if ( cd == (iconv_t) -1 ) {
+		oc_error ("Can not open iconv descriptor\n");
+		return NULL;
+	}
+
+	OC_DEBUG ("INPUT     : %s\n", from);
+	OC_DEBUG ("OUTPUT    : %s\n", to);
 conv_retry:
 	OC_DEBUG ("SRC string: %s\n", ibuf);
 	OC_DEBUG ("DEST Size : %u\n", olen_t);
 	err = iconv (cd, &ibuf, &ilen, &obuf_t, &olen);
 
+	OC_DEBUG ("RET  SIZE : %d\n", err);
 	if ( err == (size_t) -1 ) {
 		switch (errno) {
 			case EINVAL:
@@ -1171,10 +1174,10 @@ conv_retry:
 
 		ofree (obuf);
 		obuf = NULL;
-	}
+	} else
+		*obuf = 0;
 
 skip_error:
-	*obuf = 0;
 
 	ofree (ibuf);
 	iconv_close (cd);

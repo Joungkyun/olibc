@@ -153,14 +153,10 @@ stringprep_convert (const char *str,
       return p;
     }
 
-  cd = iconv_open (to_codeset, from_codeset);
-
-  if (cd == (iconv_t) -1)
-    return NULL;
-
   p = (char *) malloc (strlen (str) + 1);
-  if (p == NULL)
+  if (p == NULL) {
     return NULL;
+  }
   strcpy (p, str);
   len = strlen (p);
   startp = p;
@@ -169,6 +165,18 @@ stringprep_convert (const char *str,
 
   outbytes_remaining = outbuf_size - 1;	/* -1 for nul */
   outp = dest = malloc (outbuf_size);
+  if ( outp == NULL ) {
+      free (p);
+      return NULL;
+  }
+
+  cd = iconv_open (to_codeset, from_codeset);
+
+  if (cd == (iconv_t) -1) {
+    free (p);
+    free (outp);
+    return NULL;
+  }
 
 again:
 

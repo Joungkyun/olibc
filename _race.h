@@ -1,9 +1,11 @@
 /*
  * Follow functions follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * $Id: _race.h,v 1.7 2004-02-18 16:17:15 oops Exp $
+ * $Id: _race.h,v 1.8 2011-02-18 09:50:21 oops Exp $
  */
 #ifndef __RACE_H
 #define __RACE_H
+
+#include "libstring.h"
 
 /* Define as const if the declaration of iconv() needs const. */
 #define ICONV_CONST
@@ -23,12 +25,6 @@ char * race_base32_encode (char *src);
 char * race_base32_decode (char *src);
 char en_base32 (char *src);
 char * de_base32 (char src);
-
-void strtolower (char *str);
-char * _hex2bin (char c);
-int bin2dec (char *src);
-char _bin2hex (char *s);
-char * bin2hex (char *s);
 #endif
 
 /*

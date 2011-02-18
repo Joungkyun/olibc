@@ -604,8 +604,10 @@ idna_to_unicode_4z4z (const uint32_t * input, uint32_t ** output, int flags)
       if (out)
 	{
 	  out = realloc (out, sizeof (out[0]) * (outlen + 1 + buflen + 1));
-	  if (!out)
+	  if (!out) {
+	    free (buf);
 	    return IDNA_MALLOC_ERROR;
+	  }
 	  out[outlen++] = 0x002E;	/* '.' (full stop) */
 	  memcpy (out + outlen, buf, sizeof (buf[0]) * buflen);
 	  outlen += buflen;
