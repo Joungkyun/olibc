@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.18 2011-02-12 15:27:07 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.19 2011-02-18 16:42:33 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 
@@ -9,6 +9,9 @@
 /* config.h:  a general config file */
 
 
+
+/* Define to 1 if you have the `bcopy' function. */
+#undef HAVE_BCOPY
 
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H
@@ -68,6 +71,9 @@
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strerror' function. */
+#undef HAVE_STRERROR
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
