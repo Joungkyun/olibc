@@ -1,4 +1,4 @@
-/* $Id: libidn.c,v 1.7 2011-02-18 18:08:32 oops Exp $ */
+/* $Id: libidn.c,v 1.8 2011-02-18 18:10:48 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 
@@ -76,6 +76,7 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
  *
  * dst argument is must freed with free()
  */
+OLIBC_API
 UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode) // {{{
 {
 #ifdef HAVE_LIBIDN
@@ -218,6 +219,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode) // {{{
  *
  * No thread safe.
  */
+OLIBC_API
 char * convert_punycode (char * domain, int mode, int debug) // {{{
 {
 	static char conv[512] = { 0, };
