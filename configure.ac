@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.23 2011-02-18 11:00:39 oops Exp $
+# $Id: configure.ac,v 1.24 2011-02-18 16:41:03 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -35,6 +35,9 @@ LIBIDN_VERSION=0.3.7
 
 AC_ARG_WITH(iconv,
 [  --with-iconv=PATH     compiled with iconv library.])
+
+AC_ARG_WITH(pcre,
+[  --with-pcre=PATH      compiled with pcre frontend api support. [[default: /usr]]])
 
 # Checks for programs.
 AC_PROG_CC
@@ -139,6 +142,52 @@ if test "x$with_iconv" != "x"; then
   fi
 fi
 
+#if test "x$with_pcre" != "x"; then
+#  SEARCHPATH="$with_pcre /usr /usr/local /opt"
+#
+#  for i in $SEARCHPATH
+#  do
+#    if test -f "$i/lib/libpcre.so" -o -f "$i/lib/libpcre.a"; then
+#      pcrelib="L$i/lib"
+#    elif test -f "$i/lib64/libpcre.so" -o -f "$i/lib64/libpcre.a"; then
+#      pcrelib="L$i/lib64"
+#    fi
+#  done
+#
+#  if test -z "$pcrelib"; then
+#    if test -f "/lib/libpcre.so" -o -f "/lib/libpcre.a"; then
+#      pcrelib="L/lib"
+#    elif test -f "/lib64/libpcre.so" -o -f "/lib64/libpcre.a"; then
+#      pcrelib="L/lib64"
+#    fi
+#  fi
+#
+#  libchk=`echo $LDFLAGS | ${GREP} "${pcrelib} "`
+#  if test -z "$libchk"; then
+#    LDFLAGS="-$pcrelib $LDFLAGS"
+#  fi
+#
+#
+#  for i in $SEARCHPATH
+#  do
+#    if test -f "$i/include/pcre/pcre.h"; then
+#      pcreinc="I$i/include/pcre"
+#    elif test -f "$i/include/pcre.h"; then
+#      pcreinc="I$i/include"
+#    fi
+#  done
+#
+#  libchk=`echo $LDFLAGS | ${GREP} "${pcreinc} "`
+#  if test -z "$pcreinc"; then
+#    CPPLFAGS="-${pcreinc} $CPPLFAGS"
+#  fi
+#fi
+#
+#AC_CHECK_LIB(
+#  pcre, pcre_compile,,
+#  [AC_MSG_ERROR([Can't not found pcre library (-lpcre)])]
+#)
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([langinfo.h libintl.h locale.h sys/time.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h stdbool.h])
@@ -163,7 +212,7 @@ AC_CHECK_SIZEOF(long)
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([strtoull gettimeofday setlocale memmove])
+AC_CHECK_FUNCS([strtoull gettimeofday setlocale memmove bcopy strerror])
 
 AC_CONFIG_FILES([Makefile
                  man/Makefile
