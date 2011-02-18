@@ -266,61 +266,6 @@ stringprep_4i (uint32_t * ucs4, size_t * len, size_t maxucs4len,
   return STRINGPREP_OK;
 }
 
-static int
-stringprep_4zi_1 (uint32_t * ucs4, size_t ucs4len, size_t maxucs4len,
-		  Stringprep_profile_flags flags,
-		  const Stringprep_profile * profile)
-{
-  int rc;
-
-  rc = stringprep_4i (ucs4, &ucs4len, maxucs4len, flags, profile);
-  if (rc != STRINGPREP_OK)
-    return rc;
-
-  if (ucs4len >= maxucs4len)
-    return STRINGPREP_TOO_SMALL_BUFFER;
-
-  ucs4[ucs4len] = 0;
-
-  return STRINGPREP_OK;
-}
-
-/**
- * stringprep_4zi:
- * @ucs4: input/output array with zero terminated string to prepare.
- * @maxucs4len: maximum length of input/output array.
- * @flags: stringprep profile flags, or 0.
- * @profile: pointer to stringprep profile to use.
- *
- * Prepare the input zero terminated UCS-4 string according to the
- * stringprep profile, and write back the result to the input string.
- *
- * Since the stringprep operation can expand the string, @maxucs4len
- * indicate how large the buffer holding the string is.  This function
- * will not read or write to code points outside that size.
- *
- * The @flags are one of Stringprep_profile_flags, or 0.
- *
- * The @profile contain the instructions to perform.  Your application
- * can define new profiles, possibly re-using the generic stringprep
- * tables that always will be part of the library, or use one of the
- * currently supported profiles.
- *
- * Return value: Returns %STRINGPREP_OK iff successful, or an error code.
- **/
-int
-stringprep_4zi (uint32_t * ucs4, size_t maxucs4len,
-		Stringprep_profile_flags flags,
-		const Stringprep_profile * profile)
-{
-  size_t ucs4len;
-
-  for (ucs4len = 0; ucs4len < maxucs4len && ucs4[ucs4len] != 0; ucs4len++)
-    ;
-
-  return stringprep_4zi_1 (ucs4, ucs4len, maxucs4len, flags, profile);
-}
-
 /**
  * stringprep:
  * @in: input/ouput array with string to prepare.
@@ -395,71 +340,6 @@ stringprep (char *in,
   free (utf8);
 
   return STRINGPREP_OK;
-}
-
-/**
- * stringprep_profile:
- * @in: input array with UTF-8 string to prepare.
- * @out: output variable with pointer to newly allocate string.
- * @profile: name of stringprep profile to use.
- * @flags: stringprep profile flags, or 0.
- *
- * Prepare the input zero terminated UTF-8 string according to the
- * stringprep profile, and return the result in a newly allocated
- * variable.
- *
- * Note that you must convert strings entered in the systems locale
- * into UTF-8 before using this function, see
- * stringprep_locale_to_utf8().
- *
- * The output @out variable must be deallocated by the caller.
- *
- * The @flags are one of Stringprep_profile_flags, or 0.
- *
- * The @profile specifies the name of the stringprep profile to use.
- * It must be one of the internally supported stringprep profiles.
- *
- * Return value: Returns %STRINGPREP_OK iff successful, or an error code.
- **/
-int
-stringprep_profile (const char *in,
-		    char **out,
-		    const char *profile,
-		    Stringprep_profile_flags flags)
-{
-  const Stringprep_profiles *p;
-  char *str = NULL;
-  size_t len = strlen (in) + 1;
-  int rc;
-
-  for (p = &stringprep_profiles[0]; p->name; p++)
-    if (strcmp (p->name, profile) == 0)
-      break;
-
-  if (!p || !p->name || !p->tables)
-    return STRINGPREP_UNKNOWN_PROFILE;
-
-  do
-    {
-      if (str)
-	free (str);
-      str = (char *) malloc (len);
-      if (str == NULL)
-	return STRINGPREP_MALLOC_ERROR;
-
-      strcpy (str, in);
-
-      rc = stringprep (str, len, flags, p->tables);
-      len += 50;
-    }
-  while (rc == STRINGPREP_TOO_SMALL_BUFFER);
-
-  if (rc == STRINGPREP_OK)
-    *out = str;
-  else
-    free (str);
-
-  return rc;
 }
 
 /*! \mainpage GNU Internationalized Domain Name Library

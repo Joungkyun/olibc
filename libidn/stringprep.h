@@ -176,11 +176,6 @@ extern "C"
 			 Stringprep_profile_flags flags,
 			 const Stringprep_profile * profile);
 
-  extern int stringprep_profile (const char *in,
-				 char **out,
-				 const char *profile,
-				 Stringprep_profile_flags flags);
-
   extern const char *stringprep_check_version (const char *req_version);
 
 /* Utility */
