@@ -71,25 +71,12 @@ extern "C"
   extern int idna_to_ascii_4z (const uint32_t * input,
 			       char **output, int flags);
 
-  extern int idna_to_ascii_8z (const char *input, char **output, int flags);
-
-  extern int idna_to_ascii_lz (const char *input, char **output, int flags);
-
 
   extern int idna_to_unicode_4z4z (const uint32_t * input,
 				   uint32_t ** output, int flags);
 
   extern int idna_to_unicode_8z4z (const char *input,
 				   uint32_t ** output, int flags);
-
-  extern int idna_to_unicode_8z8z (const char *input,
-				   char **output, int flags);
-
-  extern int idna_to_unicode_8zlz (const char *input,
-				   char **output, int flags);
-
-  extern int idna_to_unicode_lzlz (const char *input,
-				   char **output, int flags);
 
 #ifdef __cplusplus
 }
