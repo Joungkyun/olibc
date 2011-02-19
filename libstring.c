@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.57 2011-02-18 21:09:48 oops Exp $ */
+/* $Id: libstring.c,v 1.58 2011-02-19 10:56:10 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1104,7 +1104,7 @@ OLIBC_API
 bool is_utf8 (UCChar * src) // {{{
 {
 	size_t len, byte2;
-	UCChar * s = str;
+	UCChar * s = src;
 	UChar byte2_check = 0;
 
 	len = byte2 = 0;
