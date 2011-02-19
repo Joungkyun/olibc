@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.58 2011-02-19 10:56:10 oops Exp $ */
+/* $Id: libstring.c,v 1.59 2011-02-19 10:56:56 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1097,7 +1097,7 @@ bool utf8_underbit_check (UCChar * s, UInt byte)
 
 /**
  * @brief		check whether is utf8 or not
- * @param		strings for checking
+ * @param		src strings for checking
  * @return		bool
  */
 OLIBC_API
@@ -1110,10 +1110,10 @@ bool is_utf8 (UCChar * src) // {{{
 	len = byte2 = 0;
 	byte2_check = false;
 
-	if ( str == NULL )
+	if ( src == NULL )
 		return false;
 
-	len = strlen (str);
+	len = strlen (src);
 	if ( len == 0 )
 		return true;
 
