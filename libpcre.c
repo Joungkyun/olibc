@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.12 2011-02-10 09:54:16 oops Exp $ */
+/* $Id: libpcre.c,v 1.13 2011-02-19 14:38:43 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -7,87 +7,11 @@ int lib_preg_match (char *regex, char *subject);
 void lib_preg_parse (char *regex, char *pattern, int *option, int *study);
 static int lib_preg_get_backref(char **str, int *backref);
 
-/* follows PHP license 2.02 */
-char * preg_quote (char *str, char *delimiters) {
-	char *str_end,        /* End of the input string */
-	     *out_str,        /* Output string with quoted characters */
-	     *p,              /* Iterator for input string */
-	     *q,              /* Iterator for output string */
-	     delim_char=0,    /* Delimiter character to be quoted */
-	     c;               /* Current character */
-	int  quote_delim = 0; /* Whether to quote additional delim char */
-	int  reallocsize = 0;
-	int  chklen = 0, dellen = 0;
+#define DELIMITERS ".\\+*?[^]$(){}=!><|:"
+#define DELIMITERS_LEN 19
 
-	str_end = str + strlen(str);
-
-	if (delimiters == NULL)
-		dellen = 0;
-	else
-		dellen = strlen (delimiters);
-
-    /* Nothing to do if we got an empty string */
-	if (str == str_end) {
-		return ("");	// return empty_string
-	}
-
-	if ( dellen > 0 ) {
-		delim_char = delimiters[0];
-		quote_delim = 1;
-	}
-
-    /* Allocate enough memory so that even if each character
-       is quoted, we won't run out of room */
-	out_str = malloc(sizeof (char) * (strlen (str) + 33));
-	reallocsize = sizeof (char) * (strlen (str) + 32);
-
-    /* Go through the string and quote necessary characters */
-    for(p = str, q = out_str; p != str_end; p++) {
-        c = *p;
-        switch(c) {
-            case '.':
-            case '\\':
-            case '+':
-            case '*':
-            case '?':
-            case '[':
-            case '^':
-            case ']':
-            case '$':
-            case '(':
-            case ')':
-            case '{':
-            case '}':
-            case '=':
-            case '!':
-            case '>':
-            case '<':
-            case '|':
-            case ':':
-                *q++ = '\\';
-                *q++ = c;
-                break;
-
-            default:
-                if (quote_delim && c == delim_char)
-                    *q++ = '\\';
-                *q++ = c;
-                break;
-        }
-    }
-    *q = '\0';
-
-	chklen = strlen(out_str);
-
-	if ( chklen == reallocsize ) {
-		out_str = realloc (out_str, sizeof(char) * ( chklen + 32 ));
-		reallocsize += 32;
-	}
-
-	return out_str;
-}
-
-void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
+void lib_preg_parse (char *regex, char *pattern, int *option, int *study) // {{{
+{
 	int len = 0, i = 0, start = 0, end = 0, optlen = 0;
 	int preg_opt = 0, delnum = 0;
 	char delimiter = ' ', opt[16];
@@ -153,10 +77,10 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) {
 	}
 
 	*option = preg_opt;
-}
+} // }}}
 
-/* follows PHP license 2.02 */
-static int lib_preg_get_backref(char **str, int *backref) {
+static int lib_preg_get_backref(char **str, int *backref) // {{{
+{
 	register char in_brace = 0;
 	register char *walk = *str;
 
@@ -189,9 +113,10 @@ static int lib_preg_get_backref(char **str, int *backref) {
 	
 	*str = walk;
 	return 1;	
-}
+} // }}}
 
-int lib_preg_match (char *regex, char *subject) {
+int lib_preg_match (char *regex, char *subject) // {{{
+{
 	pcre *re = NULL;
 	pcre_extra *extra = NULL;
 	int preg_options = 0, *offsets, size_offsets;
@@ -230,7 +155,84 @@ int lib_preg_match (char *regex, char *subject) {
 	ofree(re);
 
 	return val;
-}
+} // }}}
+
+/**
+ * @brief	quoted pcre regex reserved word
+ * @param	src source string
+ * @param	delim user defined delimiters
+ * @return	quoted string
+ *
+ * The preg_quote() function returns allocated memory, so
+ * need memory free with free() function
+ */
+char * preg_quote (CChar *src, CChar *delim) // {{{
+{
+	char * delim_t, * buf;
+	UInt inlen, dellen, rlen;
+	char * outbuf, * ot;;
+
+	if ( src == NULL )
+		return NULL;
+
+	inlen = strlen (src);
+	dellen = delim ? strlen (delim) : 0;
+	dellen += 19;
+
+	oc_malloc_r (delim_t, sizeof (char) * dellen, NULL);
+	memcpy (delim_t, DELIMITERS, DELIMITERS_LEN);
+	memset (delim_t + dellen, 0, 1);
+
+	if ( dellen > 19 ) {
+		buf = delim_t + 19;
+		while ( *delim ) {
+			if ( strchr (delim_t, *delim) == NULL ) {
+				*buf = *delim;
+				buf++;
+			}
+			delim++;
+		}
+		*buf = 0;
+	}
+
+	OC_DEBUG ("DELIMETERS: %s\n", delim_t);
+
+	rlen = inlen + 8;
+	oc_malloc (outbuf, sizeof (char) * rlen);
+	if ( outbuf == NULL ) {
+		ofree (delim_t);
+		return NULL;
+	}
+
+	buf = src;
+	ot = outbuf;
+
+	inlen = 1;
+	while ( *buf ) {
+		char *p;
+		if ( (p = strchr (delim_t, *buf)) != NULL ) {
+			if ( rlen <= inlen ) {
+				rlen += 8;
+				oc_realloc (outbuf, sizeof (char) * rlen);
+				if ( outbuf == NULL ) {
+					ofree (delim_t);
+					ofree (outbuf);
+					return NULL;
+				}
+
+				ot = outbuf + inlen;
+			}
+			*ot++ = '\\';
+			inlen++;
+		}
+		*ot++ = *buf++;
+		inlen++;
+	}
+	*ot = 0;
+	ofree (delim_t);
+
+	return outbuf;
+} // }}}
 
 int preg_match (char *regex, char *subject) {
 	char *tmp;

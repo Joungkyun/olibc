@@ -1,4 +1,4 @@
-/* $Id: libpcre.h,v 1.4 2003-09-18 06:43:57 oops Exp $ */
+/* $Id: libpcre.h,v 1.5 2011-02-19 14:38:43 oops Exp $ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
@@ -15,7 +15,7 @@
  * delimiters is additional quoted charactors except default quoted charactor
  *
  * return value must free memory */
-char * preg_quote (char *string, char *delimiters);
+char * preg_quote (CChar * src, CChar * delim);
 
 /* preg_replace follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
  * Perform a regular expression search and replace
