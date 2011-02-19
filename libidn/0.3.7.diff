@@ -58,7 +58,7 @@ diff -urNp lib.new/Makefile.in lib/Makefile.in
 --- lib.new/Makefile.in	2004-08-07 05:26:15.000000000 +0900
 +++ lib/Makefile.in	2004-01-23 01:40:10.000000000 +0900
 @@ -1,40 +1,566 @@
--#$Id: 0.3.7.diff,v 1.1 2011-02-17 11:41:54 oops Exp $
+-#$Id: 0.3.7.diff,v 1.2 2011-02-19 17:02:59 oops Exp $
 -top_builddir	= ..
 -CC		= @CC@ -Wall
 -SHELL		= @SHELL@
@@ -661,42 +661,9 @@ diff -urNp lib.new/Makefile.in lib/Makefile.in
 +# Tell versions [3.59,3.63) of GNU make to not export all variables.
 +# Otherwise a system limit (for SysV at least) may be exceeded.
 +.NOEXPORT:
-diff -urNp lib.new/idna.c lib/idna.c
---- lib.new/idna.c	2004-02-04 14:33:15.000000000 +0900
-+++ lib/idna.c	2003-12-17 12:54:10.000000000 +0900
-@@ -20,7 +20,7 @@
-  */
- 
- #if HAVE_CONFIG_H
--# include <olibc-config.h>
-+# include "config.h"
- #endif
- 
- #include <stdlib.h>
-diff -urNp lib.new/idna.h lib/idna.h
---- lib.new/idna.h	2004-02-04 14:33:15.000000000 +0900
-+++ lib/idna.h	2003-12-17 12:54:10.000000000 +0900
-@@ -28,7 +28,7 @@ extern "C"
- #endif
- 
- #include <stddef.h>		/* size_t */
--#include "idn-int.h"		/* uint32_t */
-+#include <idn-int.h>		/* uint32_t */
- 
-   /* Error codes. */
-   typedef enum
 diff -urNp lib.new/nfkc.c lib/nfkc.c
 --- lib.new/nfkc.c	2004-02-04 14:33:15.000000000 +0900
 +++ lib/nfkc.c	2003-12-09 00:45:21.000000000 +0900
-@@ -20,7 +20,7 @@
-  */
- 
- #if HAVE_CONFIG_H
--# include <olibc-config.h>
-+# include "config.h"
- #endif
- 
- #include <stdlib.h>
 @@ -51,7 +51,7 @@
  #define g_malloc malloc
  #define g_free free
@@ -731,30 +698,9 @@ diff -urNp lib.new/punycode.h lib/punycode.h
  
    enum punycode_status
    {
-diff -urNp lib.new/stringprep.c lib/stringprep.c
---- lib.new/stringprep.c	2004-02-04 14:33:15.000000000 +0900
-+++ lib/stringprep.c	2003-11-09 11:15:00.000000000 +0900
-@@ -20,7 +20,7 @@
-  */
- 
- #if HAVE_CONFIG_H
--# include <olibc-config.h>
-+# include "config.h"
- #endif
- 
- #include <stdlib.h>
 diff -urNp lib.new/toutf8.c lib/toutf8.c
 --- lib.new/toutf8.c	2011-02-14 18:04:19.000000000 +0900
 +++ lib/toutf8.c	2003-10-17 07:04:09.000000000 +0900
-@@ -20,7 +20,7 @@
-  */
- 
- #if HAVE_CONFIG_H
--# include <olibc-config.h>
-+# include "config.h"
- #endif
- 
- #include <stdio.h>
 @@ -29,22 +29,12 @@
  
  #include "stringprep.h"

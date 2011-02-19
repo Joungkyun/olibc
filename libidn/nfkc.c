@@ -20,7 +20,7 @@
  */
 
 #if HAVE_CONFIG_H
-# include <olibc-config.h>
+# include <config.h>
 #endif
 
 #include <stdlib.h>
