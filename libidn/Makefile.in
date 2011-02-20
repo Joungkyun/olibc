@@ -1,39 +1,27 @@
-#$Id: Makefile.in,v 1.3 2004-08-06 20:26:15 oops Exp $
+#$Id: Makefile.in,v 1.4 2011-02-20 14:39:33 oops Exp $
 top_builddir	= ..
-CC		= @CC@ -Wall
+CC			= @CC@ -Wall
 SHELL		= @SHELL@
 LIBTOOL		= @LIBTOOL@
 CFLAGS		= @CFLAGS@
 LDFLAGS		= @LIBS@ @LDFLAGS@
 LIBS		= @LIBS@
-OBJECT		= idna.lo nfkc.lo profiles.lo punycode.lo stringprep.lo rfc3454.lo toutf8.lo
+IDNSRC		:= $(wildcard *.c)
+OBJECT		= $(IDNSRC:.c=.lo)
 CPPFLAGS	= -I. -I.. @CPPFLAGS@
 DEFS		= @DEFS@ $(CPPFLAGS)
 
 COMPILE		= $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(CFLAGS) -prefer-pic
-RM		= @RM@ -f
+RM			= @RM@ -f
 
-all: $(OBJECT)
+all: idn_prep $(OBJECT)
 
-idna.lo: idna.c stringprep.h punycode.h idna.h
-	$(COMPILE) -o $@ -c $<
+idn_prep:
+	if test ! -f config.h; then \
+		ln -sf ../olibc-config.h config.h; \
+	fi
 
-nfkc.lo: nfkc.c stringprep.h punycode.h idna.h gunidecomp.h gunicomp.h
-	$(COMPILE) -o $@ -c $<
-
-profiles.lo: profiles.c stringprep.h punycode.h idna.h
-	$(COMPILE) -o $@ -c $<
-
-punycode.lo: punycode.c stringprep.h punycode.h idna.h
-	$(COMPILE) -o $@ -c $<
-
-stringprep.lo: stringprep.c stringprep.h punycode.h idna.h
-	$(COMPILE) -o $@ -c $<
-
-rfc3454.lo: rfc3454.c stringprep.h
-	$(COMPILE) -o $@ -c $<
-
-toutf8.lo: toutf8.c stringprep.h punycode.h idna.h
+%.lo: %.c stringprep.h punycode.h idna.h gunidecomp.h gunicomp.h
 	$(COMPILE) -o $@ -c $<
 
 clean:

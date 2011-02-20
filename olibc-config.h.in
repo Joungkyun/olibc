@@ -1,5 +1,5 @@
 /* olibc-config.h.in.  Generated from configure.ac by autoheader.  */
-/* $Id: olibc-config.h.in,v 1.19 2011-02-18 16:42:33 oops Exp $ */
+/* $Id: olibc-config.h.in,v 1.20 2011-02-20 14:39:33 oops Exp $ */
 #ifndef OLIBC_CONFIG_H
 #define OLIBC_CONFIG_H
 

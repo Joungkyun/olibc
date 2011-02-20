@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.25 2011-02-18 16:42:33 oops Exp $
+# $Id: configure.ac,v 1.26 2011-02-20 14:39:33 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -216,6 +216,7 @@ AC_CHECK_FUNCS([strtoull gettimeofday setlocale memmove bcopy strerror])
 
 AC_CONFIG_FILES([Makefile
                  man/Makefile
+				 test/Makefile
                  pcrelib/Makefile
                  libidn/Makefile])
 AC_OUTPUT
