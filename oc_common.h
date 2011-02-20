@@ -1,4 +1,4 @@
-/* $Id: oc_common.h,v 1.16 2011-02-18 09:50:21 oops Exp $ */
+/* $Id: oc_common.h,v 1.17 2011-02-20 18:41:48 oops Exp $ */
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 
@@ -51,6 +51,8 @@
 UInt get_charcount (CChar *str, CChar *del);
 Bit64 devided64_high_low (ULong64 v);
 ULong64 combined64_high_low (Bit64 v);
+
+#define OC_LINEBUF 4096
 
 #define oc_error_debug(...) \
 	{ \

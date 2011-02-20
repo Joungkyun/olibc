@@ -1,11 +1,52 @@
-/* $Id: libpcre.c,v 1.14 2011-02-20 10:24:59 oops Exp $ */
+/* $Id: libpcre.c,v 1.15 2011-02-20 18:41:33 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
 #define DELIMITERS ".\\+*?[^]$(){}=!><|:"
 #define DELIMITERS_LEN 19
 
-bool lib_preg_parse (char * regex, char *pattern, int *option, int *study) // {{{
+typedef struct {
+	pcre		* re;
+	pcre_extra	* extra;
+	char		* regex;
+	char		* subject;
+	int			* offsets;
+	size_t		reglen;
+	size_t		subjlen;
+	int			size_offsets;
+} PregArg;
+
+bool libpreg_arg_init (PregArg ** pa) // {{{
+{
+	oc_malloc_r (*pa, sizeof (PregArg), false);
+
+	(*pa)->re           = NULL;
+	(*pa)->extra        = NULL;
+	(*pa)->regex        = NULL;
+	(*pa)->subject      = NULL;
+	(*pa)->offsets      = NULL;
+	(*pa)->reglen       = 0;
+	(*pa)->subjlen      = 0;
+	(*pa)->size_offsets = 0;
+
+	return true;
+} // }}}
+
+void libpreg_arg_free (PregArg ** pa) // {{{
+{
+	ofree ((*pa)->re);
+	ofree ((*pa)->extra);
+	ofree ((*pa)->offsets);
+	(*pa)->regex = NULL;
+	(*pa)->subject = NULL;
+	(*pa)->reglen = 0;
+	(*pa)->subjlen = 0;
+	(*pa)->size_offsets = 0;
+
+	ofree (*pa);
+} // }}}
+
+bool libpreg_parse (char * regex, char *pattern, int *option, int *study) // {{{
 {
 	int len, i, start, end;
 	int preg_opt = 0, delnum = 0;
@@ -77,7 +118,7 @@ bool lib_preg_parse (char * regex, char *pattern, int *option, int *study) // {{
 	return true;
 } // }}}
 
-static int lib_preg_get_backref (char ** str, int * backref) // {{{
+static int libpreg_get_backref (char ** str, int * backref) // {{{
 {
 	register char in_brace = 0;
 	register char *walk = *str;
@@ -113,6 +154,99 @@ static int lib_preg_get_backref (char ** str, int * backref) // {{{
 	return 1;	
 } // }}}
 
+bool libpreg_compile (PregArg ** pa) // {{{
+{
+	PregArg		* p;
+	int			preg_options,
+				study,
+				erroffset,
+				rc,
+				num_subpats;
+	CChar		* error;
+	char		* pattern = NULL;
+	UCChar		* tables = NULL;
+
+	p = *pa;
+	oc_malloc_r (pattern, sizeof (char) * (p->reglen + 1), false);
+	preg_options = study = 0;
+	erroffset = num_subpats = 0;
+	error = NULL;
+
+	/* parse delimiters and regex string and option */
+	if ( libpreg_parse (p->regex, pattern, &preg_options, &study) == false )
+		return false;
+
+#if HAVE_SETLOCALE
+	{
+		char * locale = setlocale (LC_CTYPE, NULL);
+
+		if ( strcmp (locale, "C") )
+			tables = pcre_maketables ();
+	}
+#endif
+
+	/* Compile pattern and display a warning if compilation failed. */
+	p->re = pcre_compile (pattern, preg_options, &error, &erroffset, tables);
+
+	OC_DEBUG ("Pattern: %s\n", pattern);
+	ofree (pattern);
+	ofree ((UChar *) tables);
+
+	if ( p->re == NULL ) {
+		oc_error ("Compilation failed: %s at offset %d\n", error, erroffset);
+		return false;
+	}
+
+	if ( study ) {
+		p->extra = pcre_study (p->re, 0, &error);
+		if ( error != NULL )
+			oc_error ("Error while studying pattern\n");
+		if ( p->extra )
+			p->extra->flags |= PCRE_EXTRA_MATCH_LIMIT | PCRE_EXTRA_MATCH_LIMIT_RECURSION;
+	}
+
+	rc = pcre_fullinfo (p->re, p->extra, PCRE_INFO_CAPTURECOUNT, &num_subpats);
+	if ( rc < 0 ) {
+		oc_error ("Internal pcre_fullinfo() error %d\n", rc);
+		return false;
+	}
+	num_subpats++;
+	p->size_offsets = num_subpats * 3;
+
+	return true;
+} // }}}
+
+int libpreg_execute (PregArg ** pa) // {{{
+{
+	PregArg		* p;
+	int			count;
+
+	p = *pa;
+
+	ofree (p->offsets);
+	oc_malloc_r (p->offsets, sizeof (int) * p->size_offsets, 0);
+	OC_DEBUG ("SUBJECT: %s\n", p->subject);
+
+	/* Execute the regular expression. */
+	count = pcre_exec(
+		p->re,
+		p->extra,
+		p->subject,
+		p->subjlen, 0, 0,
+		p->offsets,
+		p->size_offsets
+	);
+	OC_DEBUG ("Matched count : %d\n", count);
+	OC_DEBUG ("Offsets first : %d\n", p->offsets[0]);
+
+	if ( count == 0 ) {
+		oc_error ("Matched, but too many substings\n");
+		count = p->size_offsets / 3;
+	}
+
+	return count;
+} // }}}
+
 /**
  * @brief	Perform a regular expression match
  * @param	regex The pattern to search for, as a string.
@@ -129,10 +263,10 @@ static int lib_preg_get_backref (char ** str, int * backref) // {{{
  * matches[1] will have the text that matched the first captured
  * parenthesized subpattern, and so on.
  *
- * If return value is bigger than 0, matches is must memory freed
+ * If return value is bigger than 0, matches is must freed memory
  * with free() function.
  */
-int lib_preg_match (CChar * regex, CChar * subject, CChar *** matches) // {{{
+int libpreg_match (CChar * regex, CChar * subject, CChar *** matches) // {{{
 {
 	pcre		* re = NULL;
 	pcre_extra	* extra = NULL;
@@ -164,7 +298,7 @@ int lib_preg_match (CChar * regex, CChar * subject, CChar *** matches) // {{{
 
 	/* parse delimiters and regex string and option */
 	regex_t = (char *) regex;
-	if ( lib_preg_parse (regex_t, pattern, &preg_options, &study) == false ) {
+	if ( libpreg_parse (regex_t, pattern, &preg_options, &study) == false ) {
 		ofree (pattern);
 		return 0;
 	}
@@ -333,18 +467,34 @@ char * preg_quote (CChar * src, CChar * delim) // {{{
 
 /**
  * @brief	Perform a regular expression match
- * @param	regex The pattern to search for, as a string.
- * @param	subject The pattern to search for, as a string.
+ * @param	regex The pattern to search for, as a string
+ * @param	subject The input string
  * @return	bool
  */
 OLIBC_API
 bool preg_match (CChar * regex, CChar * subject) // {{{
 {
-	CChar	** matches;
+	PregArg	* pa;
 	int		count;
 
-	count = lib_preg_match (regex, subject, &matches);
-	ofree (matches);
+	if ( regex == NULL || subject == NULL )
+		return false;
+
+	if ( libpreg_arg_init (&pa) == false )
+		return false;
+
+	pa->regex = (char *) regex;
+	pa->reglen = strlen (regex);
+	pa->subject = (char *) subject;
+	pa->subjlen = strlen (subject);
+
+	if ( libpreg_compile (&pa) == false ) {
+		libpreg_arg_free (&pa);
+		return false;
+	}
+
+	count = libpreg_execute (&pa);
+	libpreg_arg_free (&pa);
 
 	return (count > 0) ? true : false;
 } // }}}
@@ -352,8 +502,8 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
 /**
  * @brief	Perform a regular expression match
  * @param	regex The pattern to search for, as a string.
- * @param	subject The pattern to search for, as a string.
- * @param	matches array of matching strings
+ * @param	subject The input string
+ * @param	matches array of matched strings
  * @return	returns the number of times pattern matches.
  *          returns 0, it's function failed, and returns -1, no matched.
  *
@@ -362,57 +512,187 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
  * matches[1] will have the text that matched the first captured
  * parenthesized subpattern, and so on.
  *
- * If return value is bigger than 0, matches is must memory freed
+ * If return value is bigger than 0, matches is must freed memory
  * with free() function.
  */
 OLIBC_API
 int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 {
-	return lib_preg_match (regex, subject, matches);
-} // }}}
+	PregArg	* pa;
+	int		count;
 
+	*matches = NULL;
 
-OLIBC_API
-char * preg_grep (char *regex, char *subject, int opt) // {{{
-{
-	char *token, *btoken;
-	char *bufstr, buf[4096], *str = NULL;
-	const char delimiters[] = "\n";
-	int retval = 0, len = 0, buflen = 0;
-	CChar ** matches = NULL;
+	if ( regex == NULL || subject == NULL )
+		return 0;
 
-	bufstr = strdup (subject);
-	token = strtok_r (bufstr, delimiters, &btoken);
+	if ( libpreg_arg_init (&pa) == false )
+		return 0;
 
-	while (token != NULL) {
-		memset (buf, 0, 4096);
-		sprintf (buf, "%s\n", token);
-		buflen = strlen (buf);
+	pa->regex = (char *) regex;
+	pa->reglen = strlen (regex);
+	pa->subject = (char *) subject;
+	pa->subjlen = strlen (subject);
 
-		retval = lib_preg_match (regex, buf, &matches);
-
-		/* print matched */
-		if ( opt )
-			retval = !retval ? 1 : 0;
-
-		if ( retval ) {
-			if ( len < 1 )
-				str = malloc (sizeof (char) * (buflen + 2));
-			else
-				str = realloc (str, sizeof (char) * (len + buflen + 2));
-
-			memcpy (str + len, buf, buflen);
-			len += buflen;
-			memset (str + len, 0, 1);
-		}
-
-		token = strtok_r (NULL, delimiters, &btoken);
+	if ( libpreg_compile (&pa) == false ) {
+		libpreg_arg_free (&pa);
+		return 0;
 	}
 
-	memset (str + len -1, 0, 1);
-	ofree (bufstr);
+	count = libpreg_execute (&pa);
+	if ( count == 0 ) {
+		libpreg_arg_free (&pa);
+		return 0;
+	}
 
-	return str;
+	if ( count > 0 ) {
+		int i;
+		const char ** stringlist;
+
+		if ( pcre_get_substring_list (subject, pa->offsets, count, &stringlist) < 0) {
+			libpreg_arg_free (&pa);
+			return 0;
+		}
+
+#ifdef __OCDEBUG__
+		for ( i=0; i<count; i++ )
+			OC_DEBUG ("Matched String[%d] : %s\n", i, (char *) stringlist[i]);
+#endif
+
+		*matches = stringlist;
+	}
+
+	libpreg_arg_free (&pa);
+	return count;
+} // }}}
+
+/**
+ * @brief	return matched line of given strings
+ * @param	regex The pattern to search for, as a string.
+ * @param	subject The input string
+ * @param	reverse Set true, returns unmatched line
+ * @return	matched string
+ *
+ * If return value is not NULL, it is must freed memory with
+ * free() function.
+ */
+OLIBC_API
+char * preg_grep (CChar *regex, CChar *subject, bool reverse) // {{{
+{
+	PregArg	* pa;
+	int		count    = 0,
+			linelen  = 0,
+			chklen   = OC_LINEBUF,
+			buflen   = 0,
+			last     = 0;
+	char	* buf    = NULL,
+			* buf_t  = NULL,
+			* start  = NULL,
+			* end    = NULL,
+			* subj,
+			* subj_p = NULL,
+			subj_t[OC_LINEBUF];
+
+	if ( regex == NULL || subject == NULL )
+		return NULL;
+
+	if ( libpreg_arg_init (&pa) == false )
+		return NULL;
+
+	pa->regex = (char *) regex;
+	pa->reglen = strlen (regex);
+
+	if ( libpreg_compile (&pa) == false ) {
+		libpreg_arg_free (&pa);
+		return NULL;
+	}
+
+	start = (char *) subject;
+	while ( (end = strchr (start, '\n')) != NULL ) {
+		linelen = end - start + 1;
+
+last_line:
+		if ( linelen == 0 ) {
+			start = end + 1;
+			continue;
+		}
+
+		if ( linelen > (OC_LINEBUF + (-1)) ) {
+			oc_strdup (subj_p, start, linelen + 1);
+			if ( subj_p == NULL ) {
+				libpreg_arg_free (&pa);
+				return NULL;
+			}
+			subj = subj_p;
+		} else {
+			memcpy (subj_t, start, linelen);
+			memset (subj_t + linelen, 0, 1);
+			subj = subj_t;
+		}
+
+		pa->subject = (char *) subj;
+		pa->subjlen = linelen;
+
+		count = libpreg_execute (&pa);
+		// regex fault
+		if ( count == 0 ) {
+			ofree (subj_p);
+			libpreg_arg_free (&pa);
+			return NULL;
+		}
+
+		if ( (count > 0 && reverse) || (count < 0 && ! reverse) )
+			goto skip_print;
+
+		if ( buflen == 0 ) {
+			oc_malloc (buf, sizeof (char) * chklen);
+			if ( buf == NULL ) {
+				ofree (subj_p);
+				libpreg_arg_free (&pa);
+				return NULL;
+			}
+		}
+
+		buf_t = buf + buflen;
+		buflen += linelen;
+
+		if ( buflen >= chklen ) {
+			chklen *= 2;
+			oc_realloc (buf, sizeof (char) * chklen);
+			if ( buf == NULL ) {
+				ofree (subj_p);
+				libpreg_arg_free (&pa);
+				return NULL;
+			}
+			buf_t = buf + buflen;
+		}
+
+		memcpy (buf_t, subj, linelen);
+
+skip_print:
+
+		ofree (subj_p);
+		if ( last ) break;
+
+		start = end + 1;
+	}
+
+	if ( ! last ) {
+		last++;
+		linelen = strlen (start);
+		if ( linelen > 0 )
+			goto last_line;
+	}
+
+	if ( buf != NULL ) {
+		int l = 0;
+		if ( *(buf + buflen - 1) == '\n' )
+			l = -1;
+		memset (buf + buflen + l, 0, 1);
+	}
+
+	libpreg_arg_free (&pa);
+	return buf;
 } // }}}
 
 OLIBC_API
@@ -474,7 +754,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 	oc_malloc_r (pattern, sizeof (char) * (strlen (regex) + 1), NULL);
 
 	/* parse delimiters and regex string and option */
-	if ( lib_preg_parse (regex, pattern, &preg_options, &study) == false ) {
+	if ( libpreg_parse (regex, pattern, &preg_options, &study) == false ) {
 		ofree (pattern);
 		return NULL;
 	}
@@ -568,7 +848,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 						walk_last = 0;
 						continue;
 					}
-					if (lib_preg_get_backref(&walk, &backref)) {
+					if (libpreg_get_backref(&walk, &backref)) {
 						if (backref < count)
 							new_len += offsets[(backref<<1)+1] - offsets[backref<<1];
 						continue;
@@ -603,7 +883,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 						walk_last = 0;
 						continue;
 					}
-					if (lib_preg_get_backref(&walk, &backref)) {
+					if (libpreg_get_backref(&walk, &backref)) {
 						if (backref < count) {
 							match_len = offsets[(backref<<1)+1] - offsets[backref<<1];
 							memcpy(walkbuf, subject + offsets[backref<<1], match_len);
