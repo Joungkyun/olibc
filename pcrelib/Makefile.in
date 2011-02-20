@@ -1,30 +1,30 @@
-# $Id: Makefile.in,v 1.2 2004-08-06 20:26:15 oops Exp $
+# $Id: Makefile.in,v 1.3 2011-02-20 10:32:14 oops Exp $
 top_builddir	= ..
-CC		= @CC@ -Wall
+CC			= @CC@ -Wall
 SHELL		= @SHELL@
 LIBTOOL		= @LIBTOOL@
 CFLAGS		= @CFLAGS@
 CPPFLAGS	= -I. -I.. @CPPFLAGS@
-DEFS		= -DHAVE_CONFIG_H -DSUPPORT_UTF8 -DLINK_SIZE=2 -DPOSIX_MALLOC_THRESHOLD=10 $(CPPFLAGS)
-PCREOBJ		= maketables.lo get.lo study.lo pcre.lo
-DESTDIR		=
+DEFS		= -DHAVE_CONFIG_H -DLINK_SIZE=2 -DPOSIX_MALLOC_THRESHOLD=10
+DEFS		+= $(CPPFLAGS)
+PCRESRC		:= $(wildcard *.c)
+PCREOBJ		:= $(PCRESRC:.c=.lo)
 
 COMPILE		= $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(DEFS) -prefer-pic
-RM		= @RM@ -f
+RM			= @RM@ -f
 
-all: $(PCREOBJ)
+all: pcre_prep $(PCREOBJ)
 
-maketables.lo: maketables.c
-	$(COMPILE) -o $@ -c $<
+pcre_prep:
+	if test ! -f config.h; then \
+		ln -sf ../olibc-config.h config.h; \
+	fi
 
-get.lo: get.c
-	$(COMPILE) -o $@ -c $<
-
-study.lo: study.c
-	$(COMPILE) -o $@ -c $<
-
-pcre.lo: pcre.c
+pcre_compile.lo: pcre_compile.c pcre.h pcre_internal.h
 	$(COMPILE) -prefer-pic -o $@ -c $<
+
+%.lo: %.c pcre.h pcre_internal.h
+	$(COMPILE) -o $@ -c $<
 
 clean:
 	-$(RM) *.o *.a *.lo .libs/*
