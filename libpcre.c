@@ -1,25 +1,23 @@
-/* $Id: libpcre.c,v 1.13 2011-02-19 14:38:43 oops Exp $ */
+/* $Id: libpcre.c,v 1.14 2011-02-20 10:24:59 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
-
-#ifdef HAVE_LIBPCRE
-int lib_preg_match (char *regex, char *subject);
-void lib_preg_parse (char *regex, char *pattern, int *option, int *study);
-static int lib_preg_get_backref(char **str, int *backref);
 
 #define DELIMITERS ".\\+*?[^]$(){}=!><|:"
 #define DELIMITERS_LEN 19
 
-void lib_preg_parse (char *regex, char *pattern, int *option, int *study) // {{{
+bool lib_preg_parse (char * regex, char *pattern, int *option, int *study) // {{{
 {
-	int len = 0, i = 0, start = 0, end = 0, optlen = 0;
+	int len, i, start, end;
 	int preg_opt = 0, delnum = 0;
-	char delimiter = ' ', opt[16];
+	char delimiter = ' ';
+	char * opt;
+
+	len = i = start = end = 0;
+
+	if ( regex == NULL )
+		return false;
 
 	len = strlen (regex);
-
-	memset (opt, 0, 16);
-	memset (pattern, 0, strlen (regex));
 
 	for ( i=0; i<len; i++ ) {
 		// check first delimiter
@@ -40,19 +38,17 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) // {{{
 	}
 
 	if ( delnum != 2 ) {
-		fprintf (stderr, "ERROR: wrong uses delimiters on regex rule\n");
-		ofree (pattern);
-		exit (1);
+		oc_error ("Wrong uses delimiters on regex rule\n");
+		return false;
 	}
 
 	memcpy (pattern, regex + start + 1, end - start - 1);
-	memset (pattern + end, 0, 1);
+	memset (pattern + (end - start -1), 0, 1);
 
-	strcpy (opt, regex + end + 1);
-	optlen = strlen (opt);
+	opt = regex + end + 1;
 
-	for ( i=0; i<optlen; i++ ) {
-		switch (opt[i]) {
+	while ( *opt ) {
+		switch (*opt) {
 			// Perl compatible options
 			case 'i' :	preg_opt |= PCRE_CASELESS;			break;
 			case 'm' :	preg_opt |= PCRE_MULTILINE;			break;
@@ -71,15 +67,17 @@ void lib_preg_parse (char *regex, char *pattern, int *option, int *study) // {{{
 			case '\n':
 						break;
 			default:
-				fprintf (stderr, "ERROR: Unknown modifier '%c'", opt[i]);
-				exit (1);
+				oc_error ("Unknown modifier '%c'", *opt);
+				return false;
 		}
+		opt++;
 	}
 
 	*option = preg_opt;
+	return true;
 } // }}}
 
-static int lib_preg_get_backref(char **str, int *backref) // {{{
+static int lib_preg_get_backref (char ** str, int * backref) // {{{
 {
 	register char in_brace = 0;
 	register char *walk = *str;
@@ -115,46 +113,140 @@ static int lib_preg_get_backref(char **str, int *backref) // {{{
 	return 1;	
 } // }}}
 
-int lib_preg_match (char *regex, char *subject) // {{{
+/**
+ * @brief	Perform a regular expression match
+ * @param	regex The pattern to search for, as a string.
+ * @param	subject The pattern to search for, as a string.
+ * @param	matches array of matching strings
+ * @return	returns the number of times pattern matches.
+ *          0: function failed
+ *          -1: no matched
+ *
+ * This function is privated.
+ * 
+ * The matches parameter is provided with the results of search.
+ * matches[0] will contain the text that matched the full pattern,
+ * matches[1] will have the text that matched the first captured
+ * parenthesized subpattern, and so on.
+ *
+ * If return value is bigger than 0, matches is must memory freed
+ * with free() function.
+ */
+int lib_preg_match (CChar * regex, CChar * subject, CChar *** matches) // {{{
 {
-	pcre *re = NULL;
-	pcre_extra *extra = NULL;
-	int preg_options = 0, *offsets, size_offsets;
-	int val = 0, subjlen = 0, study = 0, erroffset;
-	const char *error;
-	char *pattern = NULL;
-	unsigned const char *tables = NULL;
-#if HAVE_SETLOCALE
-	char			*locale = setlocale(LC_CTYPE, NULL);
+	pcre		* re = NULL;
+	pcre_extra	* extra = NULL;
+	int			preg_options,
+				* offsets,
+				size_offsets,
+				count,
+				subjlen,
+				study,
+				erroffset,
+				rc,
+				num_subpats;
+	CChar		* error;
+	char		* pattern = NULL,
+				* regex_t;
+	UCChar		* tables = NULL;
 
-	if ( strcmp (locale, "C") )
-		tables = pcre_maketables();
-#endif
+	count = subjlen = study = 0;
+	preg_options = erroffset = 0;
+	num_subpats = 0;
+	error = NULL;
+	*matches = NULL;
+
+	if ( regex == NULL || subject == NULL )
+		return 0;
 
 	subjlen = strlen (subject);
-	pattern = malloc (sizeof (char) * (strlen (regex) + 1));
+	oc_malloc_r (pattern, sizeof (char) * (strlen (regex) + 1), 0);
 
 	/* parse delimiters and regex string and option */
-	lib_preg_parse (regex, pattern, &preg_options, &study);
+	regex_t = (char *) regex;
+	if ( lib_preg_parse (regex_t, pattern, &preg_options, &study) == false ) {
+		ofree (pattern);
+		return 0;
+	}
+
+#if HAVE_SETLOCALE
+	{
+		char * locale = setlocale (LC_CTYPE, NULL);
+
+		if ( strcmp (locale, "C") )
+			tables = pcre_maketables ();
+	}
+#endif
 
 	/* Compile pattern and display a warning if compilation failed. */
 	re = pcre_compile (pattern, preg_options, &error, &erroffset, tables);
+
+	OC_DEBUG ("Pattern: %s\n", pattern);
+	ofree (pattern);
+	ofree ((UChar *) tables);
+
 	if ( re == NULL ) {
-		fprintf (stderr, "ERROR: Compilation failed: %s at offset %d", error, erroffset);
-		ofree (pattern);
-		exit (1);
+		oc_error ("Compilation failed: %s at offset %d\n", error, erroffset);
+		return 0;
 	}
 
-	size_offsets = (pcre_info(re, NULL, NULL) + 1) * 3;
-	offsets = (int *) malloc (3 * sizeof (int) );
+	if ( study ) {
+		extra = pcre_study (re, 0, &error);
+		if ( error != NULL )
+			oc_error ("Error while studying pattern\n");
+		if ( extra )
+			extra->flags |= PCRE_EXTRA_MATCH_LIMIT | PCRE_EXTRA_MATCH_LIMIT_RECURSION;
+	}
+
+	rc = pcre_fullinfo (re, extra, PCRE_INFO_CAPTURECOUNT, &num_subpats);
+	if ( rc < 0 ) {
+		oc_error ("Internal pcre_fullinfo() error %d\n", rc);
+		ofree (extra);
+		ofree (re);
+		return 0;
+	}
+	num_subpats++;
+	size_offsets = num_subpats * 3;
+
+	oc_malloc (offsets, sizeof (int) * size_offsets);
+	if ( offsets == NULL ) {
+		ofree (extra);
+		ofree (re);
+		return 0;
+	}
+
 	/* Execute the regular expression. */
-	if ((pcre_exec(re, extra, subject, subjlen, 0, 0, offsets, size_offsets)) > 0)
-		val = 1;
+	count = pcre_exec(re, extra, subject, subjlen, 0, 0, offsets, size_offsets);
+	OC_DEBUG ("Matched count : %d\n", count);
 
-	ofree(offsets);
-	ofree(re);
+	ofree (extra);
+	ofree (re);
 
-	return val;
+	if ( count == 0 ) {
+		oc_error ("Matched, but too many substings\n");
+		count = size_offsets / 3;
+	}
+
+	if ( count > 0 ) {
+		int i;
+		const char ** stringlist;
+
+		if ( pcre_get_substring_list (subject, offsets, count, &stringlist) < 0) {
+			ofree (offsets);
+			return 0;
+		}
+
+#ifdef __OCDEBUG__
+		for ( i=0; i<count; i++ )
+			OC_DEBUG ("Matched String[%d] : %s\n", i, (char *) stringlist[i]);
+#endif
+
+		*matches = stringlist;
+	}
+
+	ofree (offsets);
+
+	return count;
 } // }}}
 
 /**
@@ -166,11 +258,16 @@ int lib_preg_match (char *regex, char *subject) // {{{
  * The preg_quote() function returns allocated memory, so
  * need memory free with free() function
  */
-char * preg_quote (CChar *src, CChar *delim) // {{{
+OLIBC_API
+char * preg_quote (CChar * src, CChar * delim) // {{{
 {
-	char * delim_t, * buf;
-	UInt inlen, dellen, rlen;
-	char * outbuf, * ot;;
+	char	* delim_t,
+			* buf;
+	UInt	inlen,
+			dellen,
+			rlen;
+	char	* outbuf,
+			* ot;;
 
 	if ( src == NULL )
 		return NULL;
@@ -204,7 +301,7 @@ char * preg_quote (CChar *src, CChar *delim) // {{{
 		return NULL;
 	}
 
-	buf = src;
+	buf = (char *) src;
 	ot = outbuf;
 
 	inlen = 1;
@@ -220,7 +317,7 @@ char * preg_quote (CChar *src, CChar *delim) // {{{
 					return NULL;
 				}
 
-				ot = outbuf + inlen;
+				ot = outbuf + inlen - 1;
 			}
 			*ot++ = '\\';
 			inlen++;
@@ -234,30 +331,55 @@ char * preg_quote (CChar *src, CChar *delim) // {{{
 	return outbuf;
 } // }}}
 
-int preg_match (char *regex, char *subject) {
-	char *tmp;
-	int ret;
+/**
+ * @brief	Perform a regular expression match
+ * @param	regex The pattern to search for, as a string.
+ * @param	subject The pattern to search for, as a string.
+ * @return	bool
+ */
+OLIBC_API
+bool preg_match (CChar * regex, CChar * subject) // {{{
+{
+	CChar	** matches;
+	int		count;
 
-	tmp = malloc (sizeof (char) * (strlen (subject) + 1));
-	/* if failed memory allocation, return unmatched */
-	if ( tmp == NULL ) return 0;
+	count = lib_preg_match (regex, subject, &matches);
+	ofree (matches);
 
-	strcpy (tmp, subject);
+	return (count > 0) ? true : false;
+} // }}}
 
-	if ( lib_preg_match (regex, subject) )
-		ret = 1;
-	else
-		ret = 0;
+/**
+ * @brief	Perform a regular expression match
+ * @param	regex The pattern to search for, as a string.
+ * @param	subject The pattern to search for, as a string.
+ * @param	matches array of matching strings
+ * @return	returns the number of times pattern matches.
+ *          returns 0, it's function failed, and returns -1, no matched.
+ *
+ * The matches parameter is provided with the results of search.
+ * matches[0] will contain the text that matched the full pattern,
+ * matches[1] will have the text that matched the first captured
+ * parenthesized subpattern, and so on.
+ *
+ * If return value is bigger than 0, matches is must memory freed
+ * with free() function.
+ */
+OLIBC_API
+int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
+{
+	return lib_preg_match (regex, subject, matches);
+} // }}}
 
-	ofree (tmp);
-	return ret;
-}
 
-char * preg_grep (char *regex, char *subject, int opt) {
+OLIBC_API
+char * preg_grep (char *regex, char *subject, int opt) // {{{
+{
 	char *token, *btoken;
 	char *bufstr, buf[4096], *str = NULL;
 	const char delimiters[] = "\n";
 	int retval = 0, len = 0, buflen = 0;
+	CChar ** matches = NULL;
 
 	bufstr = strdup (subject);
 	token = strtok_r (bufstr, delimiters, &btoken);
@@ -267,7 +389,7 @@ char * preg_grep (char *regex, char *subject, int opt) {
 		sprintf (buf, "%s\n", token);
 		buflen = strlen (buf);
 
-		retval = lib_preg_match (regex, buf);
+		retval = lib_preg_match (regex, buf, &matches);
 
 		/* print matched */
 		if ( opt )
@@ -291,9 +413,11 @@ char * preg_grep (char *regex, char *subject, int opt) {
 	ofree (bufstr);
 
 	return str;
-}
+} // }}}
 
-char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no) {
+OLIBC_API
+char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no) // {{{
+{
 	int i, blen = 0;
 	char * buf[regarr_no];
 
@@ -307,12 +431,14 @@ char * preg_replace_arr (char *regex[], char *replace[], char *subject, int rega
 	}
 	
 	return buf[regarr_no - 1];
-}
+} // }}}
 
 /* follows PHP license 2.02
  * this function must free
  */
-char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
+OLIBC_API
+char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // {{{
+{
 	pcre			*re = NULL;			/* Compiled regular expression */
 	pcre_extra		*extra = NULL;		/* Holds results of studying */
 	int				 subjlen = 0;		/* subject length */
@@ -328,7 +454,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	int				 start_offset;		/* Where the new search starts */
 	int				 g_notempty=0;		/* If the match should not be empty */
 	int				 replace_len=0;		/* Length of replacement string */
-	int				 study = 0, erroffset, soptions = 0;
+	int				 study = 0, erroffset;
 	const char		*error;
 	char			*pattern = NULL,
 					*result,			/* Result of replacement */
@@ -345,10 +471,13 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 #endif
 
 	subjlen = strlen (subject);
-	pattern = malloc (sizeof (char) * (strlen (regex) + 1));
+	oc_malloc_r (pattern, sizeof (char) * (strlen (regex) + 1), NULL);
 
 	/* parse delimiters and regex string and option */
-	lib_preg_parse (regex, pattern, &preg_options, &study);
+	if ( lib_preg_parse (regex, pattern, &preg_options, &study) == false ) {
+		ofree (pattern);
+		return NULL;
+	}
 
 #if HAVE_SETLOCALE
 	if ( strcmp (locale, "C") )
@@ -358,23 +487,29 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	/* Compile pattern and display a warning if compilation failed. */
 	re = pcre_compile (pattern, preg_options, &error, &erroffset, tables);
 	if ( re == NULL ) {
-		fprintf (stderr, "ERROR: Compilation failed: %s at offset %d", error, erroffset);
+		oc_error ("Compilation failed: %s at offset %d", error, erroffset);
 		ofree (pattern);
-		exit (1);
+		ofree ((UChar *) tables);
+		return NULL;
 	}
 
 	/* If study option was specified, study the pattern and
 	 * store the result in extra for passing to pcre_exec. */
 	if ( study ) {
-		extra = pcre_study(re, soptions, &error);
+		extra = pcre_study(re, 0, &error);
 		if (error != NULL) {
-			fprintf (stderr, "ERROR: While studying pattern\n");
+			oc_error ("While studying pattern\n");
 			ofree (pattern);
-			exit (1);
+			ofree ((UChar *) tables);
+			ofree (re);
+			return NULL;
 		}
+		if ( extra )
+			extra->flags |= PCRE_EXTRA_MATCH_LIMIT | PCRE_EXTRA_MATCH_LIMIT_RECURSION;
 	}
 
 	ofree (pattern);
+	ofree ((UChar *) tables);
 
 	replace_len = strlen(replace);
 	replace_end = replace + replace_len;
@@ -382,9 +517,19 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	/* Calculate the size of the offsets array, and allocate memory for it. */
 	size_offsets = (pcre_info(re, NULL, NULL) + 1) * 3;
 	offsets = (int *) malloc (size_offsets * sizeof(int));
+	oc_malloc (offsets, sizeof (int) * size_offsets);
+	if ( offsets == NULL ) {
+		ofree (re);
+		return NULL;
+	}
 	
 	alloc_len = 2 * subjlen + 1;
-	result = malloc (alloc_len * sizeof(char));
+	oc_malloc (result, sizeof (char) * alloc_len);
+	if ( result == NULL ) {
+		ofree (offsets);
+		ofree (re);
+		return NULL;
+	}
 
 	/* Initialize */
 	match = NULL;
@@ -398,8 +543,11 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 
 		/* Check for too many substrings condition. */
 		if (count == 0) {
-			fprintf (stderr, "ERROR: Matched, but too many substrings\n");
-			exit (1);
+			oc_error ("Matched, but too many substrings\n");
+			ofree (offsets);
+			ofree (result);
+			ofree (re);
+			return NULL;
 		}
 
 		piece = subject + start_offset;
@@ -512,35 +660,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
 	ofree (re);
 
 	return result;
-}
-#else
-
-char * preg_quote (char *string, char *delimiters) {
-	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (1);
-}
-
-char * preg_replace (char *regex, char *replace, char *subject, int *retlen) {
-	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (1);
-}
-
-char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no) {
-	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (1);
-}
-
-char * preg_grep (char *regex, char *str, int opt) {
-	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (1);
-}
-
-int preg_match (char *regex, char *subject) {
-	fprintf (stderr, "ERROR: olibc compiled without pcre library\n");
-	exit (1);
-}
-
-#endif
+} // }}}
 
 /*
  * Local variables:

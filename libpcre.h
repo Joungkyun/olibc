@@ -1,4 +1,4 @@
-/* $Id: libpcre.h,v 1.5 2011-02-19 14:38:43 oops Exp $ */
+/* $Id: libpcre.h,v 1.6 2011-02-20 10:24:59 oops Exp $ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
@@ -53,7 +53,15 @@ char * preg_grep (char *regex, char *str, int opt);
  *
  * regex   => array of check regular expression
  * str     => original string */
-int preg_match (char *regex, char *subject);
+bool preg_match (CChar * regex, CChar * subject);
+
+/*
+ * returns regex matched count.
+ *
+ * regex   => array of check regular expression
+ * str     => original string
+ * matches => array of matched string */
+int preg_match_r (CChar * regex, CChar * subject, CChar *** matches);
 
 #endif
 /*
