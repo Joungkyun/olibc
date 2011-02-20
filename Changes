@@ -1,6 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.60 2011-02-18 21:09:48 oops Exp $
+$Id: Changes,v 1.61 2011-02-20 10:33:39 oops Exp $
+
+* Sun, Feb 20 2011
+	- fixed memory leak of preg_match
+	- add preg_match_r
+	- update exbeded pcre library to 8.12
 
 * Sat, Feb 19 2011
 	- remove convert_racecode api
