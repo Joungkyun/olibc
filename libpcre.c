@@ -5,11 +5,12 @@
  * This file includes extended pcre apis for easliy using of pcre library
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * @date	$Date: 2011-02-21 15:35:02 $
+ * @date	$Date: 2011-02-21 15:36:01 $
+ * @version	$Revision: 1.23 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.22 2011-02-21 15:35:02 oops Exp $ */
+/* $Id: libpcre.c,v 1.23 2011-02-21 15:36:01 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
