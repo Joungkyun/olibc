@@ -1,4 +1,4 @@
-/* $Id: libpcre.h,v 1.8 2011-02-21 08:17:51 oops Exp $ */
+/* $Id: libpcre.h,v 1.9 2011-02-21 11:09:02 oops Exp $ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
@@ -35,7 +35,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen);
  * replace => array of replacement string about regular expression
  * subject => original string
  * retlen  => number of regex array */
-char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no);
+char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no);
 
 /* preg_grep follows BPL License v.1 <http://devel.oops.org/document/bpl>
  * this function operated like system grep with pecre regular expression

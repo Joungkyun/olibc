@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.19 2011-02-21 10:46:46 oops Exp $ */
+/* $Id: libpcre.c,v 1.20 2011-02-21 11:09:02 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -680,21 +680,24 @@ skip_print:
 } // }}}
 
 OLIBC_API
-char * preg_replace_arr (char *regex[], char *replace[], char *subject, int regarr_no) // {{{
+char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no) // {{{
 {
 	int i, blen = 0;
 	char * buf[regarr_no];
+	char * subj;
 
 	for (i = 0; i<regarr_no; i++ ) {
-		if ( i == 0 )
-			buf[i] = (char *) preg_replace (regex[i], replace[i], subject, &blen);
-		else {
-			buf[i] = (char *) preg_replace (regex[i], replace[i], buf[i-1], &blen);
+		subj = (i > 0) ? buf[i-1] : subject;
+		buf[i] = preg_replace (*regex++, *replace++, subj, &blen);
+		if ( i > 0 )
 			ofree (buf[i-1]);
-		}
 	}
+
+	i--;
+	oc_strdup (subj, buf[i], strlen (buf[i]));
+	ofree (buf[i]);
 	
-	return buf[regarr_no - 1];
+	return subj;
 } // }}}
 
 /* follows PHP license 2.02
@@ -709,7 +712,6 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 				alloc_len,			/* Actual allocated length */
 				match_len,			/* Length of the current match */
 				backref,			/* Backreference number */
-				start_offset,		/* Where the new search starts */
 				replace_len = 0;	/* Length of replacement string */
 	char		* result,			/* Result of replacement */
 				* new_buf,			/* Temporary buffer for re-allocation */
