@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.59 2011-02-19 10:56:56 oops Exp $ */
+/* $Id: libstring.c,v 1.60 2011-02-21 04:40:51 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1185,9 +1185,16 @@ size_t charset_conv_outplen (CChar * charset, size_t srclen)
 
 /**
  * @brief	convert character set
- * @param[in]	src source string
- * @param[in]	from source character set
- * @param[in]	to destination charactor set
+ * @param	src source string
+ * @param	from source character set
+ * @param	to destination charactor set
+ * @return	string point of converted string
+ *
+ * The charset_conv function is convert string to to_charset
+ * from from_charset.
+ *
+ * If the return value is not NULL, you must freed memory of
+ * return point with free() function
  */
 OLIBC_API
 char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
@@ -1264,7 +1271,7 @@ conv_retry:
 		ofree (obuf);
 		obuf = NULL;
 	} else
-		*obuf = 0;
+		*obuf_t = 0;
 
 skip_error:
 
