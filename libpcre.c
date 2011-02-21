@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.20 2011-02-21 11:09:02 oops Exp $ */
+/* $Id: libpcre.c,v 1.21 2011-02-21 12:02:41 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -700,8 +700,22 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
 	return subj;
 } // }}}
 
-/* follows PHP license 2.02
- * this function must free
+/**
+ * @brief	Perform a regular expression search and replace
+ * @parm[in]	regex The pattern to search for. It can be either
+ *				a string or an array with strings.
+ * @param[in]	replace Will replacing string
+ * @param[in]	subject The input string
+ * @retlen[out]	retlen The length of returned string
+ * @return		The replaced string
+ *
+ * If matches are found, the new subject will be returned, otherwise
+ * will be returned NULL if an error occurred.
+ *
+ * If return value is not null, it is must freed memory with
+ * free() function
+ *
+ * This function is see also 'preg_replace of PHP'
  */
 OLIBC_API
 char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // {{{
