@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.16 2011-02-20 18:47:39 oops Exp $ */
+/* $Id: libpcre.c,v 1.17 2011-02-21 08:17:50 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -556,6 +556,116 @@ skip_print:
 	}
 
 	libpreg_arg_free (&pa);
+	return buf;
+} // }}}
+
+/**
+ * @brief	return matched line of given file
+ * @param	regex The pattern to search for, as a string.
+ * @param	path The input file
+ * @param	reverse Set true, returns unmatched line
+ * @return	matched string
+ *
+ * If return value is not NULL, it is must freed memory with
+ * free() function.
+ */
+OLIBC_API
+char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
+{
+	PregArg	* pa;
+	FILE	* fp;
+	struct	stat f;
+	int		count    = 0,
+			linelen  = 0,
+			chklen   = OC_LINEBUF,
+			buflen   = 0;
+	char	* buf    = NULL,
+			* buf_t  = NULL,
+			line[OC_LINEBUF];
+
+	if ( regex == NULL || path == NULL )
+		return NULL;
+
+	if ( lstat (path, &f) == -1 ) {
+		oc_error ("File not found: %s\n", path);
+		return NULL;
+	}
+
+	if ( f.st_size < 1 ) {
+		oc_error ("The file(%s) is empty\n", path);
+		return NULL;
+	}
+
+	if ((fp = fopen(path, "rb")) == NULL) {
+		oc_error ("Can not open %s with read mode\n", path);
+		return NULL;
+	}
+
+	if ( libpreg_arg_init (&pa) == false )
+		return NULL;
+
+	pa->regex = (char *) regex;
+	pa->reglen = strlen (regex);
+
+	if ( libpreg_compile (&pa) == false ) {
+		libpreg_arg_free (&pa);
+		fclose (fp);
+		return NULL;
+	}
+
+	while ( fgets (line, OC_LINEBUF, fp) != NULL ) {
+		linelen = strlen (line);
+		pa->subject = (char *) line;
+		pa->subjlen = linelen;
+
+		count = libpreg_execute (&pa);
+		// regex fault
+		if ( count == 0 ) {
+			libpreg_arg_free (&pa);
+			fclose (fp);
+			return NULL;
+		}
+
+		if ( (count > 0 && reverse) || (count < 0 && ! reverse) )
+			goto skip_print;
+
+		if ( buflen == 0 ) {
+			oc_malloc (buf, sizeof (char) * chklen);
+			if ( buf == NULL ) {
+				libpreg_arg_free (&pa);
+				fclose (fp);
+				return NULL;
+			}
+		}
+
+		buf_t = buf + buflen;
+		buflen += linelen;
+
+		if ( buflen >= chklen ) {
+			chklen *= 2;
+			oc_realloc (buf, sizeof (char) * chklen);
+			if ( buf == NULL ) {
+				libpreg_arg_free (&pa);
+				fclose (fp);
+				return NULL;
+			}
+			buf_t = buf + buflen;
+		}
+
+		memcpy (buf_t, line, linelen);
+skip_print:
+	}
+
+	fclose (fp);
+	libpreg_arg_free (&pa);
+
+	if ( buf != NULL ) {
+		int l = 0;
+		if ( *(buf + buflen - 1) == '\n' )
+			l = -1;
+		memset (buf + buflen + l, 0, 1);
+	}
+
 	return buf;
 } // }}}
 

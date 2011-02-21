@@ -1,4 +1,4 @@
-/* $Id: libpcre.h,v 1.7 2011-02-20 18:41:33 oops Exp $ */
+/* $Id: libpcre.h,v 1.8 2011-02-21 08:17:51 oops Exp $ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
@@ -46,6 +46,16 @@ char * preg_replace_arr (char *regex[], char *replace[], char *subject, int rega
  *
  * return value must free memory */
 char * preg_grep (CChar *regex, CChar *str, bool opt);
+
+/* preg_fgrep follows BPL License v.1 <http://devel.oops.org/document/bpl>
+ * this function operated like system grep with pecre regular expression
+ *
+ * regex   => array of check regular expression
+ * path    => input file
+ * opt     => same as -v option of system grep
+ *
+ * return value must free memory */
+char * preg_fgrep (CChar * regex, CChar * path, bool opt);
 
 /* preg_match follows BPL License v.1 <http://devel.oops.org/document/bpl>
  *
