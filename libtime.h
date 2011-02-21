@@ -1,11 +1,12 @@
-/* $Id: libtime.h,v 1.3 2011-02-10 09:41:59 oops Exp $ */
+/* $Id: libtime.h,v 1.4 2011-02-21 20:03:05 oops Exp $ */
 #ifndef LIBTIME_H
 #define LIBTIME_H
 
 #include <olibc/oc_type.h>
 
-/* microtim follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * get current microtime */
+/*
+ * Return current Unix timestamp with microseconds
+ */
 double microtime (void);
 
 #endif

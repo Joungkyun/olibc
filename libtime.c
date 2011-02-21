@@ -1,4 +1,15 @@
-/* $Id: libtime.c,v 1.6 2011-02-13 17:34:30 oops Exp $ */
+/** 
+ * @file	libtime.c
+ * @brief	Time API
+ *
+ * This file includes time apis for easliy using
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-21 20:03:05 $
+ * $Revision: 1.7 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libtime.c,v 1.7 2011-02-21 20:03:05 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -7,6 +18,15 @@
 
 #include <libtime.h>
 
+/**
+ * @brife Return current Unix timestamp with microseconds
+ * @param	void
+ * @return	double decimal : current Unix timestamp with microseconds
+ *
+ * microtime() returns the current Unix timestamp with microseconds.
+ * This function is only available on operating systems that
+ * support the gettimeofday() system call.
+ */
 OLIBC_API
 double microtime (void) // {{{
 {
