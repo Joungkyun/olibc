@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.18 2011-02-21 10:31:40 oops Exp $ */
+/* $Id: libpcre.c,v 1.19 2011-02-21 10:46:46 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -14,6 +14,9 @@ typedef struct {
 	size_t		reglen;
 	size_t		subjlen;
 	int			size_offsets;
+	int			g_notempty;
+	int			exoptions;
+	int			start_offset;
 } PregArg;
 
 bool libpreg_arg_init (PregArg ** pa) // {{{
@@ -28,6 +31,9 @@ bool libpreg_arg_init (PregArg ** pa) // {{{
 	(*pa)->reglen       = 0;
 	(*pa)->subjlen      = 0;
 	(*pa)->size_offsets = 0;
+	(*pa)->g_notempty   = 0;
+	(*pa)->exoptions    = 0;
+	(*pa)->start_offset = 0;
 
 	return true;
 } // }}}
@@ -216,23 +222,27 @@ bool libpreg_compile (PregArg ** pa) // {{{
 	return true;
 } // }}}
 
-int libpreg_execute (PregArg ** pa) // {{{
+int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
 {
 	PregArg		* p;
 	int			count;
 
 	p = *pa;
 
-	ofree (p->offsets);
-	oc_malloc_r (p->offsets, sizeof (int) * p->size_offsets, 0);
-	OC_DEBUG ("SUBJECT: %s\n", p->subject);
+	if ( cont_offset == true ) {
+		ofree (p->offsets);
+		oc_malloc_r (p->offsets, sizeof (int) * p->size_offsets, 0);
+		OC_DEBUG ("SUBJECT: %s\n", p->subject);
+	}
 
 	/* Execute the regular expression. */
 	count = pcre_exec(
 		p->re,
 		p->extra,
 		p->subject,
-		p->subjlen, 0, 0,
+		p->subjlen,
+		p->start_offset,
+		(p->exoptions)|(p->g_notempty),
 		p->offsets,
 		p->size_offsets
 	);
@@ -357,7 +367,7 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
 		return false;
 	}
 
-	count = libpreg_execute (&pa);
+	count = libpreg_execute (&pa, true);
 	libpreg_arg_free (&pa);
 
 	return (count > 0) ? true : false;
@@ -403,7 +413,7 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 		return 0;
 	}
 
-	count = libpreg_execute (&pa);
+	count = libpreg_execute (&pa, true);
 	if ( count == 0 ) {
 		libpreg_arg_free (&pa);
 		return 0;
@@ -497,7 +507,7 @@ last_line:
 		pa->subject = (char *) subj;
 		pa->subjlen = linelen;
 
-		count = libpreg_execute (&pa);
+		count = libpreg_execute (&pa, true);
 		// regex fault
 		if ( count == 0 ) {
 			ofree (subj_p);
@@ -618,7 +628,7 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 		pa->subject = (char *) line;
 		pa->subjlen = linelen;
 
-		count = libpreg_execute (&pa);
+		count = libpreg_execute (&pa, true);
 		// regex fault
 		if ( count == 0 ) {
 			libpreg_arg_free (&pa);
@@ -693,124 +703,80 @@ char * preg_replace_arr (char *regex[], char *replace[], char *subject, int rega
 OLIBC_API
 char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // {{{
 {
-	pcre			*re = NULL;			/* Compiled regular expression */
-	pcre_extra		*extra = NULL;		/* Holds results of studying */
-	int				 subjlen = 0;		/* subject length */
-	int			 	 exoptions = 0;		/* Execution options */
-	int			 	 preg_options = 0;	/* Custom preg options */
-	int			 	 count = 0;			/* Count of matched subpatterns */
-	int			 	*offsets;			/* Array of subpattern offsets */
-	int			 	 size_offsets;		/* Size of the offsets array */
-	int				 new_len;			/* Length of needed storage */
-	int				 alloc_len;			/* Actual allocated length */
-	int				 match_len;			/* Length of the current match */
-	int				 backref;			/* Backreference number */
-	int				 start_offset;		/* Where the new search starts */
-	int				 g_notempty=0;		/* If the match should not be empty */
-	int				 replace_len=0;		/* Length of replacement string */
-	int				 study = 0, erroffset;
-	const char		*error;
-	char			*pattern = NULL,
-					*result,			/* Result of replacement */
-					*new_buf,			/* Temporary buffer for re-allocation */
-					*walkbuf,			/* Location of current replacement in the result */
-					*walk,				/* Used to walk the replacement string */
-					*match,				/* The current match */
-					*piece,				/* The current piece of subject */
-					*replace_end=NULL,	/* End of replacement string */
-					 walk_last;			/* Last walked character */
-	unsigned const char *tables = NULL;
-#if HAVE_SETLOCALE
-	char			*locale = setlocale(LC_CTYPE, NULL);
-#endif
+	PregArg		* pa = null;
+	int			count = 0,			/* Count of matched subpatterns */
+				new_len,			/* Length of needed storage */
+				alloc_len,			/* Actual allocated length */
+				match_len,			/* Length of the current match */
+				backref,			/* Backreference number */
+				start_offset,		/* Where the new search starts */
+				replace_len = 0;	/* Length of replacement string */
+	char		* result,			/* Result of replacement */
+				* new_buf,			/* Temporary buffer for re-allocation */
+				* walkbuf,			/* Location of current replacement in the result */
+				* walk,				/* Used to walk the replacement string */
+				* match,			/* The current match */
+				* piece,			/* The current piece of subject */
+				* replace_end = null,	/* End of replacement string */
+				walk_last;			/* Last walked character */
 
-	subjlen = strlen (subject);
-	oc_malloc_r (pattern, sizeof (char) * (strlen (regex) + 1), NULL);
+	*retlen = 0;
 
-	/* parse delimiters and regex string and option */
-	if ( libpreg_parse (regex, pattern, &preg_options, &study) == false ) {
-		ofree (pattern);
+	if ( regex == null && subject == null )
+		return null;
+
+	if ( replace == null )
+		replace = "";
+
+	if ( libpreg_arg_init (&pa) == false )
+		return null;
+
+	pa->regex = (char *) regex;
+	pa->reglen = strlen (regex);
+	pa->subject = (char *) subject;
+	pa->subjlen = strlen (subject);
+
+	if ( libpreg_compile (&pa) == false ) {
+		libpreg_arg_free (&pa);
+		return null;
+	}
+
+	oc_malloc (pa->offsets, sizeof (int) * pa->size_offsets);
+	if ( pa->offsets == null ) {
+		libpreg_arg_free (&pa);
 		return NULL;
 	}
-
-#if HAVE_SETLOCALE
-	if ( strcmp (locale, "C") )
-		tables = pcre_maketables();
-#endif
-
-	/* Compile pattern and display a warning if compilation failed. */
-	re = pcre_compile (pattern, preg_options, &error, &erroffset, tables);
-	if ( re == NULL ) {
-		oc_error ("Compilation failed: %s at offset %d", error, erroffset);
-		ofree (pattern);
-		ofree ((UChar *) tables);
-		return NULL;
-	}
-
-	/* If study option was specified, study the pattern and
-	 * store the result in extra for passing to pcre_exec. */
-	if ( study ) {
-		extra = pcre_study(re, 0, &error);
-		if (error != NULL) {
-			oc_error ("While studying pattern\n");
-			ofree (pattern);
-			ofree ((UChar *) tables);
-			ofree (re);
-			return NULL;
-		}
-		if ( extra )
-			extra->flags |= PCRE_EXTRA_MATCH_LIMIT | PCRE_EXTRA_MATCH_LIMIT_RECURSION;
-	}
-
-	ofree (pattern);
-	ofree ((UChar *) tables);
 
 	replace_len = strlen(replace);
 	replace_end = replace + replace_len;
 
-	/* Calculate the size of the offsets array, and allocate memory for it. */
-	size_offsets = (pcre_info(re, NULL, NULL) + 1) * 3;
-	offsets = (int *) malloc (size_offsets * sizeof(int));
-	oc_malloc (offsets, sizeof (int) * size_offsets);
-	if ( offsets == NULL ) {
-		ofree (re);
-		return NULL;
-	}
-	
-	alloc_len = 2 * subjlen + 1;
+	alloc_len = 2 * pa->subjlen + 1;
 	oc_malloc (result, sizeof (char) * alloc_len);
 	if ( result == NULL ) {
-		ofree (offsets);
-		ofree (re);
+		libpreg_arg_free (&pa);
 		return NULL;
 	}
 
 	/* Initialize */
 	match = NULL;
-	*retlen = 0;
-	start_offset = 0;
 	
 	while (1) {
 		/* Execute the regular expression. */
-		count = pcre_exec(re, extra, subject, subjlen, start_offset,
-						  exoptions|g_notempty, offsets, size_offsets);
-
-		/* Check for too many substrings condition. */
-		if (count == 0) {
-			oc_error ("Matched, but too many substrings\n");
-			ofree (offsets);
+		if ( (count = libpreg_execute (&pa, true)) == 0 ) {
+			libpreg_arg_free (&pa);
 			ofree (result);
-			ofree (re);
-			return NULL;
+			return null;
 		}
+		/* the string was already proved to be valid UTF-8 */
+		pa->exoptions |= PCRE_NO_UTF8_CHECK;
 
-		piece = subject + start_offset;
+		piece = subject + pa->start_offset;
 
 		if (count > 0) {
 			/* Set the match location in subject */
-			match = subject + offsets[0];
+			match = subject + pa->offsets[0];
 
-			new_len = *retlen + offsets[0] - start_offset; /* part before the match */
+			new_len = *retlen + pa->offsets[0] - pa->start_offset; /* part before the match */
 			
 			/* do regular substitution */
 			walk = replace;
@@ -824,7 +790,7 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 					}
 					if (libpreg_get_backref(&walk, &backref)) {
 						if (backref < count)
-							new_len += offsets[(backref<<1)+1] - offsets[backref<<1];
+							new_len += pa->offsets[(backref<<1)+1] - pa->offsets[backref<<1];
 						continue;
 					}
 				}
@@ -859,8 +825,8 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 					}
 					if (libpreg_get_backref(&walk, &backref)) {
 						if (backref < count) {
-							match_len = offsets[(backref<<1)+1] - offsets[backref<<1];
-							memcpy(walkbuf, subject + offsets[backref<<1], match_len);
+							match_len = pa->offsets[(backref<<1)+1] - pa->offsets[backref<<1];
+							memcpy(walkbuf, subject + pa->offsets[backref<<1], match_len);
 							walkbuf += match_len;
 						}
 						continue;
@@ -878,13 +844,13 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 			   this is not necessarily the end. We need to advance
 			   the start offset, and continue. Fudge the offset values
 			   to achieve this, unless we're already at the end of the string. */
-			if (g_notempty != 0 && start_offset < subjlen) {
-				offsets[0] = start_offset;
-				offsets[1] = start_offset + 1;
+			if (pa->g_notempty != 0 && pa->start_offset < pa->subjlen) {
+				pa->offsets[0] = pa->start_offset;
+				pa->offsets[1] = pa->start_offset + 1;
 				memcpy(&result[*retlen], piece, 1);
 				(*retlen)++;
 			} else {
-				new_len = *retlen + subjlen - start_offset;
+				new_len = *retlen + pa->subjlen - pa->start_offset;
 				if (new_len + 1 > alloc_len) {
 					alloc_len = new_len + 1; /* now we know exactly how long it is */
 					new_buf = malloc (alloc_len * sizeof(char));
@@ -893,8 +859,8 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 					result = new_buf;
 				}
 				/* stick that last bit of string on our output */
-				memcpy(&result[*retlen], piece, subjlen - start_offset);
-				*retlen += subjlen - start_offset;
+				memcpy(&result[*retlen], piece, pa->subjlen - pa->start_offset);
+				*retlen += pa->subjlen - pa->start_offset;
 				result[*retlen] = '\0';
 				break;
 			}
@@ -904,14 +870,13 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 		   This turns out to be rather cunning. First we set PCRE_NOTEMPTY and try
 		   the match again at the same point. If this fails (picked up above) we
 		   advance to the next character. */
-		g_notempty = (offsets[1] == offsets[0])? PCRE_NOTEMPTY | PCRE_ANCHORED : 0;
+		pa->g_notempty = (pa->offsets[1] == pa->offsets[0])? PCRE_NOTEMPTY | PCRE_ANCHORED : 0;
 		
 		/* Advance to the next piece. */
-		start_offset = offsets[1];
+		pa->start_offset = pa->offsets[1];
 	}
 	
-	ofree (offsets);
-	ofree (re);
+	libpreg_arg_free (&pa);
 
 	return result;
 } // }}}
