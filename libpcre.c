@@ -1,4 +1,4 @@
-/* $Id: libpcre.c,v 1.17 2011-02-21 08:17:50 oops Exp $ */
+/* $Id: libpcre.c,v 1.18 2011-02-21 10:31:40 oops Exp $ */
 #include <oc_common.h>
 #include <libpcre.h>
 
@@ -108,7 +108,7 @@ bool libpreg_parse (char * regex, char *pattern, int *option, int *study) // {{{
 			case '\n':
 						break;
 			default:
-				oc_error ("Unknown modifier '%c'", *opt);
+				oc_error ("Unknown modifier '%c'\n", *opt);
 				return false;
 		}
 		opt++;
