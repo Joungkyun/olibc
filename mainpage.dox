@@ -1,0 +1,22 @@
+/*
+ * $Id: mainpage.dox,v 1.1 2011-02-21 15:35:02 oops Exp $
+ */
+/**
+ * @mainpage    OOPS high level c library
+ *
+ * @section     intro Intro
+ *  - This library is useful high level c api for easily c cording
+ *  - APIs list :
+ *   - <a href="libstring_8c.html">String API</a>
+ *   - <a href="libfile_8c.html">File API</a>
+ *   - <a href="libarg_8c.html">Command line argument API</a>
+ *   - <a href="libtime_8c.html">Time API</a>
+ *   - <a href="libpcre_8c.html">Extened Perl Compatible Regular Expression API</a>
+ *
+ * @section     Program Program Name
+ *  - olibc (OOPS C library)
+ *
+ * @section     MODIFYINFO Modify Info
+ *  - Written: JoungKyun.Kim
+ *  - Daate: 2011/02/21
+ */

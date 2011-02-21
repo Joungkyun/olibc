@@ -1,21 +1,40 @@
-/* $Id: libpcre.c,v 1.21 2011-02-21 12:02:41 oops Exp $ */
+/** 
+ * @file	libpcre.c
+ * @brief	Extended perl compatible regular expression API
+ *
+ * This file includes extended pcre apis for easliy using of pcre library
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * @date	$Date: 2011-02-21 15:35:02 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+
+/* $Id: libpcre.c,v 1.22 2011-02-21 15:35:02 oops Exp $ */
+
 #include <oc_common.h>
 #include <libpcre.h>
 
 #define DELIMITERS ".\\+*?[^]$(){}=!><|:"
 #define DELIMITERS_LEN 19
 
+/**
+ * @brief PCRE api structure
+ */
 typedef struct {
+	//! points to the compiled expression. Private member
 	pcre		* re;
+	//! passing additional data to pcre_exec(). Private member
 	pcre_extra	* extra;
-	char		* regex;
-	char		* subject;
-	int			* offsets;
-	size_t		reglen;
-	size_t		subjlen;
+	char		* regex;      //!< Regular expression pattern
+	char		* subject;    //!< Input stings
+	int			* offsets;    //!< Private member
+	size_t		reglen;       //!< Length of regex member
+	size_t		subjlen;      //!< Length of input stgings(subject)
+	//! Where to start in the subject string. Private member
 	int			size_offsets;
-	int			g_notempty;
-	int			exoptions;
+	int			g_notempty;   //!< Private member
+	int			exoptions;    //!< Private member
+	//! the number of elements in the vector. Private member
 	int			start_offset;
 } PregArg;
 

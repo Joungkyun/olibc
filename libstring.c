@@ -1,9 +1,11 @@
 /** 
  * @file	libstring.c
  * @brief	String API
+ *
+ * This file includes string apis for a convenient string handling.
  */
 
-/* $Id: libstring.c,v 1.61 2011-02-21 04:50:58 oops Exp $ */
+/* $Id: libstring.c,v 1.62 2011-02-21 15:35:02 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -13,7 +15,7 @@
 
 /**
  * @brief	print olibc version
- * @return	string
+ * @return	void
  */
 OLIBC_API
 void olibc_version (void) // {{{
@@ -210,7 +212,7 @@ char * addslashes (char * in, bool should_free) // {{{
 
 /**
  * @brief	convert to 64bit integer from string
- * @param[in]	s numeric string
+ * @param[in]	src numeric string
  * @return	64bit long value
  */
 OLIBC_API
@@ -965,7 +967,7 @@ UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 
 /**
  * @brief	convert 64bit integer to binary string
- * @param[in]	src 64bit ingeter
+ * @param[in]	dec 64bit ingeter
  * @param[out]	dst binary string
  * @return	length of binary string
  *

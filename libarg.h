@@ -1,13 +1,16 @@
-/* $Id: libarg.h,v 1.7 2011-02-12 17:43:43 oops Exp $ */
+/* $Id: libarg.h,v 1.8 2011-02-21 15:35:02 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
 #include <olibc/oc_type.h>
 
+/**
+ * @brief long option structure for o_getopt API
+ */
 struct o_option {
-	char * name;
-	int required;
-	int value;
+	char * name;	//!< long option name
+	int required;	//!< whether must need value or not
+	int value;		//!< short option that correspond to long option
 };
 
 #ifndef ARGLENGTH
@@ -23,21 +26,25 @@ struct o_option {
 #endif
 
 #ifndef LIBARG_SRC
-/* global variable of o_getopt function that have option argument */
+/**
+ * Value of current option. Use by o_getopt API
+ */
 extern char o_optarg[ARGLENGTH];
 
-/* global variable that length of option argument by o_getopt function */
+/**
+ * String length of o_optarg variable. Use by o_getopt API
+ */
 extern int o_optlen;
 
-/*
- * global variable of o_getopt function
- * this variable have value that removed option string by o_getopt function
- * and must need to free
+/**
+ * The o_cmdarg variable has command line arguments that
+ * removed option arguments. This variable called by o_getopt
+ * api and is must memory freed with free() function.
  */
 extern char ** o_cmdarg;
 
-extern int _ogetopt_cmd_int;
-extern int _ogetopt_chk_int;
+extern int _ogetopt_cmd_int; //!< Number of o_cmdarg array
+extern int _ogetopt_chk_int; //!< o_getopt internal global variable
 #endif
 
 /*

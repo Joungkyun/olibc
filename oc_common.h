@@ -1,4 +1,7 @@
-/* $Id: oc_common.h,v 1.18 2011-02-21 08:14:09 oops Exp $ */
+/*
+ * $Id: oc_common.h,v 1.19 2011-02-21 15:35:02 oops Exp $
+ */
+
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
 

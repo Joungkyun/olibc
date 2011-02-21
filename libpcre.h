@@ -1,4 +1,14 @@
-/* $Id: libpcre.h,v 1.9 2011-02-21 11:09:02 oops Exp $ */
+/** 
+ * @file	libpcre.h
+ * @brief	Extended perl compatible regular expression API header file.
+ *
+ * This file includes proto type of libpcre apis
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * @date	2011/02/21
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libpcre.h,v 1.10 2011-02-21 15:35:02 oops Exp $ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
