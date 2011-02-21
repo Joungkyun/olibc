@@ -1,6 +1,7 @@
-/* $Id: libidn.c,v 1.8 2011-02-18 18:10:48 oops Exp $ */
+/* $Id: libidn.c,v 1.9 2011-02-21 05:06:26 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
+#include <libstring.h>
 
 #include <idna.h>
 #include <punycode.h>
@@ -77,7 +78,7 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
  * dst argument is must freed with free()
  */
 OLIBC_API
-UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode) // {{{
+UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) // {{{
 {
 #ifdef HAVE_LIBIDN
 #ifdef HAVE_ICONV_H
@@ -104,11 +105,17 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode) // {{{
 		//
 		// Encoding mode
 		//
-		p = stringprep_locale_to_utf8 (*dst);
-		if ( p == NULL ) {
-			oc_error ("%s: could not convert from %s to UTF-8.\n",
-				 	 *dst, stringprep_locale_charset ());
+		if ( charset == NULL ) {
+			p = stringprep_locale_to_utf8 (*dst);
+			if ( p == NULL )
+				oc_error ("%s: could not convert from %s to UTF-8.\n",
+					 	 *dst, stringprep_locale_charset ());
+		} else {
+			p = charset_conv (*dst, charset, "UTF-8");
+			stringprep_locale_charset_cache = "UTF-8";
+		}
 
+		if ( p == NULL ) {
 			ofree (*dst);
 			return 0;
 		}
@@ -181,11 +188,17 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode) // {{{
 			return 0;
 		}
 
-		r = stringprep_utf8_to_locale (p);
+		if ( charset == NULL ) {
+			r = stringprep_utf8_to_locale (p);
+			if ( !r )
+				oc_error ("%s: could not convert from UTF-8 to %s.\n",
+						 *dst, stringprep_locale_charset ());
+		} else
+			r = charset_conv (p, "UTF-8", charset);
+
 		ofree (p);
-		if ( !r ) {
-			oc_error ("%s: could not convert from UTF-8 to %s.\n",
-					 *dst, stringprep_locale_charset ());
+
+		if ( ! r ) {
 			ofree (*dst);
 			return 0;
 		}
@@ -227,7 +240,7 @@ char * convert_punycode (char * domain, int mode, int debug) // {{{
 	UInt len;
 
 	mode = mode ? true : false;
-	len = convert_punycode_r (domain, &dst, mode);
+	len = convert_punycode_r (domain, &dst, mode, NULL);
 	if ( len == 0 || dst == NULL )
 		return conv;
 

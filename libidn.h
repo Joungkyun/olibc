@@ -1,4 +1,4 @@
-/* $Id: libidn.h,v 1.5 2011-02-18 18:08:32 oops Exp $ */
+/* $Id: libidn.h,v 1.6 2011-02-21 05:06:26 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 
@@ -34,7 +34,7 @@ extern const char *stringprep_locale_charset_cache;
  *
  * return value => length of dst
  */
-UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode);
+UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset);
 
 /* convert_punycode follows GPL License v2
  * encode and decode punycode for local multibyte domain
