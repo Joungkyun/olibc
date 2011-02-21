@@ -5,17 +5,19 @@
  * This file includes extended pcre apis for easliy using of pcre library
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * @date	$Date: 2011-02-21 15:36:01 $
- * @version	$Revision: 1.23 $
+ * $Date: 2011-02-21 16:00:14 $
+ * $Revision: 1.24 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.23 2011-02-21 15:36:01 oops Exp $ */
+/* $Id: libpcre.c,v 1.24 2011-02-21 16:00:14 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
 
+//! Default delimiters of preg_quote API
 #define DELIMITERS ".\\+*?[^]$(){}=!><|:"
+//! Length of DELIMITERS constant
 #define DELIMITERS_LEN 19
 
 /**
@@ -28,13 +30,14 @@ typedef struct {
 	pcre_extra	* extra;
 	char		* regex;      //!< Regular expression pattern
 	char		* subject;    //!< Input stings
-	int			* offsets;    //!< Private member
+	//! points to a vector of ints to be filled in with offsets. Private member
+	int			* offsets;
 	size_t		reglen;       //!< Length of regex member
 	size_t		subjlen;      //!< Length of input stgings(subject)
 	//! Where to start in the subject string. Private member
 	int			size_offsets;
-	int			g_notempty;   //!< Private member
-	int			exoptions;    //!< Private member
+	int			g_notempty;   //!< Private member. pcre_exec option bits.
+	int			exoptions;    //!< Private member. pcre_exec option bits.
 	//! the number of elements in the vector. Private member
 	int			start_offset;
 } PregArg;
