@@ -3,7 +3,7 @@
  * @brief	String API
  */
 
-/* $Id: libstring.c,v 1.60 2011-02-21 04:40:51 oops Exp $ */
+/* $Id: libstring.c,v 1.61 2011-02-21 04:50:58 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1201,7 +1201,7 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 {
 #ifdef HAVE_ICONV_H
 	iconv_t cd;
-	char * ibuf;
+	char * ibuf, * ibuf_t;
 	char * obuf, * obuf_t;
 	size_t err;
 
@@ -1217,6 +1217,7 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 
 	ilen = strlen (src) + 1;
 	oc_strdup_r (ibuf, src, NULL);
+	ibuf_t = ibuf;
 
 	olen = olen_t = charset_conv_outplen (to, ilen);
 	oc_malloc (obuf, sizeof (char) * olen);
@@ -1237,7 +1238,7 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 conv_retry:
 	OC_DEBUG ("SRC string: %s\n", ibuf);
 	OC_DEBUG ("DEST Size : %u\n", olen_t);
-	err = iconv (cd, &ibuf, &ilen, &obuf_t, &olen);
+	err = iconv (cd, &ibuf_t, &ilen, &obuf_t, &olen);
 
 	OC_DEBUG ("RET  SIZE : %d\n", err);
 	if ( err == (size_t) -1 ) {
