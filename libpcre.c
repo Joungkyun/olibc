@@ -10,12 +10,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 12:29:13 $
- * $Revision: 1.26 $
+ * $Date: 2011-02-22 17:49:08 $
+ * $Revision: 1.27 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.26 2011-02-22 12:29:13 oops Exp $ */
+/* $Id: libpcre.c,v 1.27 2011-02-22 17:49:08 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -47,7 +47,7 @@ typedef struct {
 	int			start_offset;
 } PregArg;
 
-/** @defgroup internalfunc Internal functions of olibc
+/** @defgroup pcre_internalfunc PCRE internal functions of olibc
  * @{
  */
 
@@ -351,16 +351,16 @@ int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
 	return count;
 } // }}}
 
-/** @} */ // end of internalfunc group
+/** @} */ // end of pcre_internalfunc group
 
 /**
  * @brief	Quote regular expression characters
  * @param	src The input string
- * @param	delim user defined delimiters
- * @return	The character point - The quoted strig
+ * @param	delim Add user defined delimiters
+ * @return	Character point of the quoted strig
  * @sa	DELIMITERS
  * @exception RETURNS
- *   When occurs internal error, preg_quote() returns null.<br>
+ *   When occurs internal error, preg_quote() returns null.<br />
  *   If the return character point is not null, you must free
  *   it's memory address with @e free()
  *
@@ -489,7 +489,7 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
  * @retval	0 Internal failed
  * @retval	-1 Failed to match
  * @exception PARAMETER
- *   When occurs internal error, matches argument has null point.<br>
+ *   When occurs internal error, matches argument has null point.<br />
  *   If the matches argument is not null, you must free
  *   it's memory address with @e free()
  *
@@ -550,14 +550,19 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 } // }}}
 
 /**
- * @brief	return matched line of given strings
+ * @brief	Return matched line of given strings
  * @param	regex The pattern to search for, as a string.
  * @param	subject The input string
  * @param	reverse Set true, returns unmatched line
- * @return	matched string
+ * @return	Charactor point of the matched lines
+ * @sa	preg_fgrep
+ * @exception RETURNS
+ *   When occurs internal error, preg_grep() returns null.<br />
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
  *
- * If return value is not NULL, it is must freed memory with
- * free() function.
+ * preg_grep() function searches the input string for lines containing
+ * a match to the given pcre regular expression pattern.
  */
 OLIBC_API
 char * preg_grep (CChar *regex, CChar *subject, bool reverse) // {{{
@@ -683,10 +688,15 @@ skip_print:
  * @param	regex The pattern to search for, as a string.
  * @param	path The input file
  * @param	reverse Set true, returns unmatched line
- * @return	matched string
+ * @return	Charactor point of the matched lines
+ * @sa	preg_grep
+ * @exception RETURNS
+ *   When occurs internal error, preg_fgrep() returns null.<br />
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
  *
- * If return value is not NULL, it is must freed memory with
- * free() function.
+ * preg_fgrep() function searches the input file for lines containing
+ * a match to the given pcre regular expression pattern.
  */
 OLIBC_API
 char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
@@ -788,6 +798,25 @@ skip_print:
 	return buf;
 } // }}}
 
+/**
+ * @brief	Perform a regular expression search and replace
+ * @param	regex The pattern array with strings to search for.
+ * @param	replace Will replacing array with strings.
+ * @param	subject The input string
+ * @param	regarr_no Length of regex and replace arrays.<br />
+ *          Length of regex array is must same length of replace array.
+ * @return		Charactor point of The replaced string
+ * @sa	preg_replace<br>
+ *      http://php.net/manual/en/function.preg-replace.php
+ * @exception RETURNS
+ *   When occurs internal error, preg_replace_arr() returns null.<br />
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
+ *
+ * <p>Searches subject for matches to pattern and replaces them with
+ * replacement. If matches are found, the new subject will be returned,
+ * otherwise will be returned NULL if an error occurred.</p>
+ */
 OLIBC_API
 char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no) // {{{
 {
@@ -811,20 +840,24 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
 
 /**
  * @brief	Perform a regular expression search and replace
- * @param[in]	regex The pattern to search for. It can be either
- *				a string or an array with strings.
+ * @param[in]	regex The pattern to search for.
  * @param[in]	replace Will replacing string
  * @param[in]	subject The input string
  * @param[out]	retlen The length of returned string
- * @return		The replaced string
+ * @return		Charactor point of The replaced string
+ * @sa	preg_replace_arr<br>
+ *      http://php.net/manual/en/function.preg-replace.php
+ * @exception RETURNS
+ *   When occurs internal error, preg_replace() returns null.<br />
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
  *
- * If matches are found, the new subject will be returned, otherwise
- * will be returned NULL if an error occurred.
+ * <p>The preg_replace() function is C API of PHP preg_replace() and
+ * use some of PHP preg_replace() code</p>
  *
- * If return value is not null, it is must freed memory with
- * free() function
- *
- * This function is see also 'preg_replace of PHP'
+ * <p>Searches subject for matches to pattern and replaces them with
+ * replacement. If matches are found, the new subject will be returned,
+ * otherwise will be returned NULL if an error occurred.</p>
  */
 OLIBC_API
 char * preg_replace (char * regex, char * replace, char * subject, int * retlen) // {{{

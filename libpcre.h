@@ -8,7 +8,29 @@
  * @date	2011/02/21
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libpcre.h,v 1.11 2011-02-22 12:29:13 oops Exp $ */
+/*
+ * $Id: libpcre.h,v 1.12 2011-02-22 17:49:08 oops Exp $
+ *
+ * Copyright (C) 2011 JoungKyun.Kim
+ *
+ * This file is part of olibc
+ *
+ * olibc is conditional free software; you can redistribute it and/or
+ * modify it under the terms of the LESSER BOB PLEASE LICENSE or
+ * the GNU Lesser General Public License as published by the Free Software
+ * Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * GNU Libidn is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with GNU Libidn; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
 
@@ -16,81 +38,12 @@
 #include <pcre.h>
 #endif
 
-/*
- * Quote regular expression characters
- *
- * default, if none delimiter, quoted
- * . \ + * ? [ ^ ] $ ( ) { } = ! > < | ,
- *
- * delimiters is additional quoted charactors except default quoted charactor
- *
- * Return value that is not NULL is must free memory
- */
 char * preg_quote (CChar * src, CChar * delim);
-
-/*
- * Perform a regular expression search and replace
- *
- * regex   => check regular expression
- * replace => replacement string about regular expression
- * subject => original string
- * retlen  => string length after convert
- *
- * return value must free memory
- * This code see also PHP's preg_replace.
- */
 char * preg_replace (char *regex, char *replace, char *subject, int *retlen);
-
-/* preg_replace follows PHP License 2.02 <http://www.php.net/license/2_02.txt>
- * support array with preg_replace
- *
- * regex   => array of check regular expression
- * replace => array of replacement string about regular expression
- * subject => original string
- * retlen  => number of regex array */
 char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no);
-
-/* preg_grep follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * this function operated like system grep with pecre regular expression
- *
- * regex   => array of check regular expression
- * str     => original string
- * opt     => same as -v option of system grep
- *
- * return value must free memory */
-char * preg_grep (CChar *regex, CChar *str, bool opt);
-
-/* preg_fgrep follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * this function operated like system grep with pecre regular expression
- *
- * regex   => array of check regular expression
- * path    => input file
- * opt     => same as -v option of system grep
- *
- * return value must free memory */
-char * preg_fgrep (CChar * regex, CChar * path, bool opt);
-
-/*
- * Searches subject for a match to the regular expression given
- * in regex.
- *
- * if regex matched, return true, nor unmatched, return false
- *
- * regex   => array of check regular expression
- * str     => original string
- */
+char * preg_grep (CChar * regex, CChar * subject, bool reverse);
+char * preg_fgrep (CChar * regex, CChar * path, bool reverse);
 bool preg_match (CChar * regex, CChar * subject);
-
-/*
- * returns regex matched count.
- *   >0  Success: value is the number of elements filled in
- *    0   Internal failed
- * 	 -1  Failed to match
- *
- * [in]  regex   => array of check regular expression
- * [in]  str     => original string
- * [out] matches => array of matched string
- */
 int preg_match_r (CChar * regex, CChar * subject, CChar *** matches);
 
 #endif
