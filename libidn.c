@@ -1,4 +1,29 @@
-/* $Id: libidn.c,v 1.9 2011-02-21 05:06:26 oops Exp $ */
+/** 
+ * @file	libidn.c
+ * @brief	IDN (Internationalized Doman Name) API
+ *
+ * This file includes idn apis for easliy using
+ * <p>
+ * IDN is used punycode that subscribed RFC4592, and this
+ * punycode apis is linking libidn library. So, pubycode apis
+ * of olibc is follows LGPL because libidn has LGPL license.
+ * <p>
+ * olibc has basically LBPL license, but the punycode
+ * apis don't have LBPL. Thus, olibc support libogc.so and
+ * libogc.a for LGPL punycode apis. Attention, liboc.so
+ * and liboc.a don't include punycode apis.
+ * <p>
+ * If you want to dynamic link, use libolibc.so. The libolibc.so
+ * has symbols of liboc and libogc. The libolibc.a don't support.
+ *
+ * @sa	http://www.gnu.org/software/libidn/
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.10 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libidn.c,v 1.10 2011-02-22 06:33:32 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>

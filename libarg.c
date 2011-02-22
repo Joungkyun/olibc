@@ -1,4 +1,15 @@
-/* $Id: libarg.c,v 1.22 2011-02-12 17:43:43 oops Exp $ */
+/** 
+ * @file	libarg.c
+ * @brief	Command line argument API
+ *
+ * This file includes command line argument apis for easliy using
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.23 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libarg.c,v 1.23 2011-02-22 06:33:32 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>

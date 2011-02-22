@@ -1,4 +1,15 @@
-/* $Id: _race.c,v 1.10 2004-08-09 07:47:51 oops Exp $ */
+/** 
+ * @file	_race.c
+ * @brief	Row-Based ASCII Compatible Encoding(RACE) API for IDN
+ *
+ * This file includes proto type of RACE code apis
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.11 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: _race.c,v 1.11 2011-02-22 06:33:32 oops Exp $ */
 #include <oc_common.h>
 #include <_race.h>
 

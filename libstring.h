@@ -1,4 +1,15 @@
-/* $Id: libstring.h,v 1.24 2011-02-18 21:09:48 oops Exp $ */
+/** 
+ * @file	libstring.h
+ * @brief	String API header file
+ *
+ * This file includes proto type of string apis
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.25 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libstring.h,v 1.25 2011-02-22 06:33:32 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 

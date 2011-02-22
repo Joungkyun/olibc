@@ -3,9 +3,14 @@
  * @brief	String API
  *
  * This file includes string apis for a convenient string handling.
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.63 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.62 2011-02-21 15:35:02 oops Exp $ */
+/* $Id: libstring.c,v 1.63 2011-02-22 06:33:32 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 

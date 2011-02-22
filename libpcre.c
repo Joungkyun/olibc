@@ -2,15 +2,20 @@
  * @file	libpcre.c
  * @brief	Extended perl compatible regular expression API
  *
- * This file includes extended pcre apis for easliy using of pcre library
+ * This file includes extended pcre apis for easliy
+ * using of pcre library
+ *
+ * This APIs are static linking PCRE library.
+ *
+ * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-21 16:00:14 $
- * $Revision: 1.24 $
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.25 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.24 2011-02-21 16:00:14 oops Exp $ */
+/* $Id: libpcre.c,v 1.25 2011-02-22 06:33:32 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>

@@ -1,6 +1,17 @@
+/** 
+ * @file	_race.h
+ * @brief	Row-Based ASCII Compatible Encoding(RACE) API for IDN
+ *
+ * This file includes time apis for easliy using
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.9 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
 /*
  * Follow functions follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * $Id: _race.h,v 1.8 2011-02-18 09:50:21 oops Exp $
+ * $Id: _race.h,v 1.9 2011-02-22 06:33:32 oops Exp $
  */
 #ifndef __RACE_H
 #define __RACE_H

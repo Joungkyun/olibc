@@ -1,4 +1,15 @@
-/* $Id: libfile.h,v 1.9 2011-02-13 11:28:34 oops Exp $ */
+/** 
+ * @file	libfile.h
+ * @brief	File API header file
+ *
+ * This file includes proto type of file apis
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.10 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libfile.h,v 1.10 2011-02-22 06:33:32 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 

@@ -1,4 +1,15 @@
-/* $Id: libfile.c,v 1.16 2011-02-13 17:34:30 oops Exp $ */
+/** 
+ * @file	libfile.c
+ * @brief	File API
+ *
+ * This file includes file apis for easliy using
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:33:32 $
+ * $Revision: 1.17 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libfile.c,v 1.17 2011-02-22 06:33:32 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
