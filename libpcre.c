@@ -10,12 +10,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.25 $
+ * $Date: 2011-02-22 12:29:13 $
+ * $Revision: 1.26 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.25 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libpcre.c,v 1.26 2011-02-22 12:29:13 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -29,24 +29,37 @@
  * @brief PCRE api structure
  */
 typedef struct {
-	//! points to the compiled expression. Private member
+	//! points to the compiled expression. Internal variable
 	pcre		* re;
-	//! passing additional data to pcre_exec(). Private member
+	//! passing additional data to pcre_exec(). Internal variable
 	pcre_extra	* extra;
 	char		* regex;      //!< Regular expression pattern
 	char		* subject;    //!< Input stings
-	//! points to a vector of ints to be filled in with offsets. Private member
+	//! points to a vector of ints to be filled in with offsets. Internal variable
 	int			* offsets;
 	size_t		reglen;       //!< Length of regex member
 	size_t		subjlen;      //!< Length of input stgings(subject)
-	//! Where to start in the subject string. Private member
+	//! Where to start in the subject string. Internal variable
 	int			size_offsets;
-	int			g_notempty;   //!< Private member. pcre_exec option bits.
-	int			exoptions;    //!< Private member. pcre_exec option bits.
-	//! the number of elements in the vector. Private member
+	int			g_notempty;   //!< pcre_exec option bits. Internal variable
+	int			exoptions;    //!< pcre_exec option bits. Internal variable
+	//! the number of elements in the vector. Internal variable
 	int			start_offset;
 } PregArg;
 
+/** @defgroup internalfunc Internal functions of olibc
+ * @{
+ */
+
+/**
+ * @brief	initialize PregArg structure
+ * @param	pa PCRE api structure
+ * @retval	true Success
+ * @retval	false Failure - failed memory allocated
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 bool libpreg_arg_init (PregArg ** pa) // {{{
 {
 	oc_malloc_r (*pa, sizeof (PregArg), false);
@@ -66,6 +79,12 @@ bool libpreg_arg_init (PregArg ** pa) // {{{
 	return true;
 } // }}}
 
+/**
+ * @brief	free memory of PregArg structure
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 void libpreg_arg_free (PregArg ** pa) // {{{
 {
 	ofree ((*pa)->re);
@@ -80,7 +99,22 @@ void libpreg_arg_free (PregArg ** pa) // {{{
 	ofree (*pa);
 } // }}}
 
-bool libpreg_parse (char * regex, char *pattern, int *option, int *study) // {{{
+/**
+ * @brief	parsing pcre pattern modifier
+ * @param[in]	regex The pattern to search for.
+ * @param[out]	pattern The regular expression after parse regex
+ * @param[out]	option Various option bits
+ * @param[out]	study whether call pcre_study() api. exsitance of S modifier
+ * @retval	true Success
+ * @retval	false Failure
+ *
+ * The libpreg_parse function is parsed given regex pattern to devide
+ * regular express pattern and pattern modifiers.
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
+bool libpreg_parse (char * regex, char * pattern, int * option, int * study) // {{{
 {
 	int len, i, start, end;
 	int preg_opt = 0, delnum = 0;
@@ -152,6 +186,12 @@ bool libpreg_parse (char * regex, char *pattern, int *option, int *study) // {{{
 	return true;
 } // }}}
 
+/**
+ * @brief	Cacualte back reference
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 static int libpreg_get_backref (char ** str, int * backref) // {{{
 {
 	register char in_brace = 0;
@@ -188,6 +228,15 @@ static int libpreg_get_backref (char ** str, int * backref) // {{{
 	return 1;	
 } // }}}
 
+/**
+ * @brief	Compile regular expression
+ * @param	pa PCRE api structure
+ * @retval	true Success
+ * @retval	false Failure
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 bool libpreg_compile (PregArg ** pa) // {{{
 {
 	PregArg		* p;
@@ -250,6 +299,23 @@ bool libpreg_compile (PregArg ** pa) // {{{
 	return true;
 } // }}}
 
+/**
+ * @brief	Execute a regular expression
+ * @param	pa PCRE api structure
+ * @param	cont_offset	Control offsets whether internal or external.
+ * @retval	"> 0" Success: value is the number of elements filled in
+ * @retval	0 Internal failed (memory allocated failed and so on..)
+ * @retval	-1 Failed to match
+ * @retval	"< -1" some kind of unexpected problem
+ *
+ * This function applies a compiled re to a subject string and
+ * picks out portions of the string if it matches. Two elements
+ * in the vector are set for each substring: the offsets to the
+ * start and end of the substring.
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
 {
 	PregArg		* p;
@@ -285,14 +351,21 @@ int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
 	return count;
 } // }}}
 
+/** @} */ // end of internalfunc group
+
 /**
- * @brief	quoted pcre regex reserved word
- * @param	src source string
+ * @brief	Quote regular expression characters
+ * @param	src The input string
  * @param	delim user defined delimiters
- * @return	quoted string
+ * @return	The character point - The quoted strig
+ * @sa	DELIMITERS
+ * @exception RETURNS
+ *   When occurs internal error, preg_quote() returns null.<br>
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
  *
- * The preg_quote() function returns allocated memory, so
- * need memory free with free() function
+ * If you set 2th arguments, preg_quote add this value to default
+ * delimiters
  */
 OLIBC_API
 char * preg_quote (CChar * src, CChar * delim) // {{{
@@ -371,7 +444,11 @@ char * preg_quote (CChar * src, CChar * delim) // {{{
  * @brief	Perform a regular expression match
  * @param	regex The pattern to search for, as a string
  * @param	subject The input string
- * @return	bool
+ * @retval	true Success
+ * @retval	false Failure
+ *
+ * Searches subject for a match to the regular expression given
+ * in regex.
  */
 OLIBC_API
 bool preg_match (CChar * regex, CChar * subject) // {{{
@@ -401,21 +478,25 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
 	return (count > 0) ? true : false;
 } // }}}
 
+
 /**
  * @brief	Perform a regular expression match
- * @param	regex The pattern to search for, as a string.
- * @param	subject The input string
- * @param	matches array of matched strings
- * @return	returns the number of times pattern matches.
- *          returns 0, it's function failed, and returns -1, no matched.
+ * @param[in]	regex The pattern to search for, as a string.
+ * @param[in]	subject The input string
+ * @param[out]	matches array of matched strings
+ * @return	returns the number of times @e regex matches.
+ * @retval	"> 0" Success: value is the number of elements filled in
+ * @retval	0 Internal failed
+ * @retval	-1 Failed to match
+ * @exception PARAMETER
+ *   When occurs internal error, matches argument has null point.<br>
+ *   If the matches argument is not null, you must free
+ *   it's memory address with @e free()
  *
  * The matches parameter is provided with the results of search.
  * matches[0] will contain the text that matched the full pattern,
  * matches[1] will have the text that matched the first captured
  * parenthesized subpattern, and so on.
- *
- * If return value is bigger than 0, matches is must freed memory
- * with free() function.
  */
 OLIBC_API
 int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
@@ -442,7 +523,7 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 	}
 
 	count = libpreg_execute (&pa, true);
-	if ( count == 0 ) {
+	if ( count == 0 || count < -1 ) {
 		libpreg_arg_free (&pa);
 		return 0;
 	}
@@ -730,11 +811,11 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
 
 /**
  * @brief	Perform a regular expression search and replace
- * @parm[in]	regex The pattern to search for. It can be either
+ * @param[in]	regex The pattern to search for. It can be either
  *				a string or an array with strings.
  * @param[in]	replace Will replacing string
  * @param[in]	subject The input string
- * @retlen[out]	retlen The length of returned string
+ * @param[out]	retlen The length of returned string
  * @return		The replaced string
  *
  * If matches are found, the new subject will be returned, otherwise
@@ -746,7 +827,7 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
  * This function is see also 'preg_replace of PHP'
  */
 OLIBC_API
-char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // {{{
+char * preg_replace (char * regex, char * replace, char * subject, int * retlen) // {{{
 {
 	PregArg		* pa = null;
 	int			count = 0,			/* Count of matched subpatterns */
@@ -924,6 +1005,17 @@ char * preg_replace (char *regex, char *replace, char *subject, int *retlen) // 
 
 	return result;
 } // }}}
+
+/**
+ * @example PregQuote.c
+ *   preg_quote() test file
+ * @example PregMatch.c
+ *   preg_match() and preg_match_r() test file
+ * @example PregGrep.c
+ *   preg_grep() and preg_fgrep() test file
+ * @example PregReplace.c
+ *   preg_replace() and preg_replace_arr test file
+ */
 
 /*
  * Local variables:

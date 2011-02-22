@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 07:38:03 $
- * $Revision: 1.5 $
+ * $Date: 2011-02-22 12:29:13 $
+ * $Revision: 1.6 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.5 2011-02-22 07:38:03 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.6 2011-02-22 12:29:13 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -50,9 +50,10 @@ typedef unsigned int ULong32;
 typedef unsigned long ULong64;
 #endif
 
+//! 64bit integer structure on 32bit
 typedef struct {
-	ULong32 high;
-	ULong32 low;
+	ULong32 high;	//!< high 32bit of 64bit ingeger
+	ULong32 low;	//!< low 32bit of 64bit ingeger
 } Bit64;
 
 #ifdef HAVE_STDBOOL_H

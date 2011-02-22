@@ -5,12 +5,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.63 $
+ * $Date: 2011-02-22 12:29:13 $
+ * $Revision: 1.64 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.63 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libstring.c,v 1.64 2011-02-22 12:29:13 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -131,7 +131,7 @@ char * trim_r (char * str, bool should_free) // {{{
  * @param	out converted binary data
  * @param	outlen length of converted data
  * @return	length of converted data
- * @seealso	addslashes
+ * @sa		addslashes
  *
  * convert binary data with * backslashes before characters that need
  * to be quoted in database queries etc. These characters are single
@@ -189,7 +189,7 @@ int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{
  * @param	in given string for qouting
  * @param	should_free bool / set true, free memory of in argument.
  * @return	point of result
- * @seealso	addslashes_r
+ * @sa		addslashes_r
  *
  * Returns a string with backslashes before characters that need
  * to be quoted in database queries etc. These characters are single
@@ -1055,8 +1055,8 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 
 /**
  * @brief		check 2byte whether is ksc5601 or not.
- * @param[in]	1st byte
- * @param[in]	2st byte
+ * @param[in]	c1 first byte of hangul
+ * @param[in]	c2 second byte of hangul
  * @return		bool
  */
 OLIBC_API

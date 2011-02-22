@@ -19,11 +19,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.10 $
+ * $Date: 2011-02-22 12:29:13 $
+ * $Revision: 1.11 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.10 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libidn.c,v 1.11 2011-02-22 12:29:13 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -273,6 +273,11 @@ char * convert_punycode (char * domain, int mode, int debug) // {{{
 	ofree (dst);
 	return conv;
 } // }}}
+
+/**
+ * @example punycode.c
+ *   convert_punycode() and convert_punycode_r() test file
+ */
 
 /*
  * Local variables:
