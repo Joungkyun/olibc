@@ -1,3 +1,21 @@
+/*
+ *  Copyright (C) 2011 JoungKyun.Kim
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ */
+
 /** 
  * @file	libidn.c
  * @brief	IDN (Internationalized Doman Name) API
@@ -19,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 12:29:13 $
- * $Revision: 1.11 $
+ * $Date: 2011-02-22 18:11:46 $
+ * $Revision: 1.12 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.11 2011-02-22 12:29:13 oops Exp $ */
+/* $Id: libidn.c,v 1.12 2011-02-22 18:11:46 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
