@@ -9,7 +9,7 @@
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 /*
- * $Id: libpcre.h,v 1.12 2011-02-22 17:49:08 oops Exp $
+ * $Id: libpcre.h,v 1.13 2011-02-22 18:31:11 oops Exp $
  *
  * Copyright (C) 2011 JoungKyun.Kim
  *
@@ -33,6 +33,8 @@
  */
 #ifndef LIBPCRE_H
 #define LIBPCRE_H
+
+#include <olibc/oc_type.h>
 
 #ifdef HAVE_LIBPCRE
 #include <pcre.h>
