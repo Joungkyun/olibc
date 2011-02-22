@@ -5,11 +5,11 @@
  * This file includes proto type of command line argument apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.9 $
+ * $Date: 2011-02-22 19:11:09 $
+ * $Revision: 1.10 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.h,v 1.9 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libarg.h,v 1.10 2011-02-22 19:11:09 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -37,58 +37,17 @@ struct o_option {
 #endif
 
 #ifndef LIBARG_SRC
-/**
- * Value of current option. Use by o_getopt API
- */
 extern char o_optarg[ARGLENGTH];
-
-/**
- * String length of o_optarg variable. Use by o_getopt API
- */
 extern int o_optlen;
-
-/**
- * The o_cmdarg variable has command line arguments that
- * removed option arguments. This variable called by o_getopt
- * api and is must memory freed with free() function.
- */
 extern char ** o_cmdarg;
-
-extern int _ogetopt_cmd_int; //!< Number of o_cmdarg array
-extern int _ogetopt_chk_int; //!< o_getopt internal global variable
+extern int _ogetopt_cmd_int;
+extern int _ogetopt_chk_int;
 #endif
 
-/*
- * This function is analogous with getopt function, but this function
- * has serveral features. see also man page or doc page
- *
- * This function basically support short and long option
- *
- * After use this function, must need to free global variable o_cmdarg
- * with ofree_array
- *
- * Before use this function, must init _ogetopt_chk_int = -1 and
- * _ogetopt_cmd_int = 0.
- */
 int o_getopt (int oargc, char ** oargv, CChar * opt, const struct o_option * longopt);
-
-/* argv_make follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * argv_make make array variables from string like argv
- * return value must free with ofree_array */
 char ** argv_make (CChar * stream, int * oargc);
-
-/* split follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * split function make array variables from string with each charactor of given string
- * See the man page split.1.
- * return value must free with ofree_array */
 char ** split (CChar * src, int * oargc, CChar * delimiter);
-
-/* argv_free follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * argv_free freed return value of argv_make */
 void ofree_array (char ** argv_array);
-
-/* unconvert_quoted_blank follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * get number of white space on strings */
 int get_whitespace (CChar * src);
 
 #endif

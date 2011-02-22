@@ -38,11 +38,11 @@
  * This file includes time apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.9 $
+ * $Date: 2011-02-22 19:11:09 $
+ * $Revision: 1.10 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.c,v 1.9 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: libtime.c,v 1.10 2011-02-22 19:11:09 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -82,6 +82,11 @@ double microtime (void) // {{{
 	return 0;
 #endif
 } // }}}
+
+/**
+ * @example microtime.c
+ *   microtime() test file
+ */
 
 /*
  * Local variables:

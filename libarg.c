@@ -38,25 +38,49 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.24 $
+ * $Date: 2011-02-22 19:11:09 $
+ * $Revision: 1.25 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.24 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: libarg.c,v 1.25 2011-02-22 19:11:09 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
 #include <libarg.h>
 
-int _ogetopt_chk_int = -1;
-int _ogetopt_cmd_int = 0;
+int _ogetopt_chk_int = -1; //!< Number of o_cmdarg array
+int _ogetopt_cmd_int = 0;  //!< o_getopt internal global variable
+//! String length of o_optarg variable. Use by o_getopt API
 int o_optlen;
-
+//! Value of current option. Use by o_getopt API
 char o_optarg[ARGLENGTH];
+
+/**
+ * The o_cmdarg variable has command line arguments that
+ * removed option arguments. This variable called by o_getopt
+ * api and is must memory freed with free() function.
+ */
 char ** o_cmdarg = NULL;
 
 void trim (char * str);
 
+/** @defgroup arg_internalfunc Argument API internal functions of olibc
+ * @{
+ */
+
+/**
+ * @brief	Check valid o_getopt long options
+ * @param	option The input long option name
+ * @param	options Array of valid o_getopt long options
+ * @return	Number of valid long option array.
+ * @retval	">=0" Number of array
+ * @retval     -1  Invalid long option
+ *
+ * Check valid long option, and returns valid long option array number.
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 int longopt_chk (const char * option, const struct o_option * options) // {{{
 {
 	int i = 0;
@@ -75,6 +99,18 @@ int longopt_chk (const char * option, const struct o_option * options) // {{{
 	return -1;
 } // }}}
 
+/**
+ * @brief	Check valid o_getopt short options
+ * @param	option The input short option charactor
+ * @param	options The valid option string
+ * @return  integer
+ * @retval	1 Valid option that has option value
+ * @retval	0 Valid option that don't have option value
+ * @retval	-1 Invalid option that don't have option value
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 int optvalue_chk (const char option, const char * options) // {{{
 {
 	int len = strlen (options);
@@ -96,6 +132,17 @@ int optvalue_chk (const char option, const char * options) // {{{
 	return val;
 } // }}}
 
+/**
+ * @brief Check whether is exist white space or not in given string
+ * @param	stream The input string
+ * @param	length The length of input string
+ * @return	bool
+ * @retval	true Exsits only white space
+ * @retval	false Don't exsit only white space
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 bool only_whitespace (const char * stream, int length) // {{{
 {
 	int i, len;
@@ -109,9 +156,20 @@ bool only_whitespace (const char * stream, int length) // {{{
 	return true;
 } // }}}
 
-/*
- * convert blank to special string
- * need freed
+/**
+ * @brief	Preserve white space in the quoted string
+ * @param	stream The input string
+ * @return	The charactor point of preserved string
+ * @exception RETURNS
+ *   When occurs internal error, convert_quoted_blank() returns null.<br />
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
+ *
+ * convert_quoted_blank() function replaced white space in quoted string
+ * to prserved from Internal Field Separator.
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
  */
 char * convert_quoted_blank (const char * stream) // {{{
 {
@@ -174,6 +232,21 @@ char * convert_quoted_blank (const char * stream) // {{{
 	return ret;
 } // }}}
 
+/**
+ * @brief	revoke replaced white space
+ * @param	stream The input string
+ * @return	The charactor point of revoked string
+ * @exception RETURNS
+ *   When occurs internal error, convert_unquoted_blank() returns null.<br />
+ *   If the return character point is not null, you must free
+ *   it's memory address with @e free()
+ *
+ * unconvert_quoted_blank() function revoked replaced white space by
+ * convert_quoted_blank() function
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
 /*
  * convert sepcail string to blank
  * need freed
@@ -203,6 +276,9 @@ char * unconvert_quoted_blank (const char * stream) // {{{
 
 	return ret;
 } // }}}
+
+/** @} */ // end of arg_internalfunc group
+
 
 OLIBC_API
 int o_getopt (int oargc, char ** oargv, const char * opt, const struct o_option * longopt) // {{{
