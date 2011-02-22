@@ -1,6 +1,16 @@
-/*
- * $Id: oc_common.h,v 1.19 2011-02-21 15:35:02 oops Exp $
+/** 
+ * @file	oc_common.h
+ * @brief	Common build environments for olibc
+ *
+ * This file includes common header files and declare
+ * proto type of internal apis.
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:44:10 $
+ * $Revision: 1.20 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
+/* $Id: oc_common.h,v 1.20 2011-02-22 06:44:10 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H

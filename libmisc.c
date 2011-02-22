@@ -1,4 +1,15 @@
-/* $Id: libmisc.c,v 1.7 2011-02-12 17:43:43 oops Exp $ */
+/** 
+ * @file	libmisc.c
+ * @brief	Internal AIPs for olibc
+ *
+ * This file includes internal apis of olibc
+ *
+ * @author	JoungKyun.Kim <http://oops.org>
+ * $Date: 2011-02-22 06:44:10 $
+ * $Revision: 1.8 $
+ * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ */
+/* $Id: libmisc.c,v 1.8 2011-02-22 06:44:10 oops Exp $ */
 #include <oc_common.h>
 
 UInt get_charcount (CChar * str, CChar * del)
