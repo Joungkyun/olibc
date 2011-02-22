@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.18 $
+ * $Date: 2011-02-22 18:29:00 $
+ * $Revision: 1.19 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.18 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: libfile.c,v 1.19 2011-02-22 18:29:00 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -121,7 +121,7 @@ char * fileread (CChar * path) // {{{
 {
 	FILE * fp;
 	size_t len = 0, length = 0;
-	char tmp[FILEBUF] = { 0, }, * buf;
+	char tmp[OC_FILEBUF] = { 0, }, * buf;
 	struct stat f;
 
 	if ( lstat (path, &f) == -1 ) {
@@ -144,10 +144,10 @@ char * fileread (CChar * path) // {{{
 	oc_malloc_r (buf, sizeof (char) * (len + 1), NULL);
 	len = 0;
 
-	while ( (length = fread (tmp, sizeof (char), FILEBUF - 1, fp)) > 0 ) {
+	while ( (length = fread (tmp, sizeof (char), OC_FILEBUF - 1, fp)) > 0 ) {
 		memmove (buf + len, tmp, length);
 		len += length;
-		memset (tmp, 0, FILEBUF);
+		memset (tmp, 0, OC_FILEBUF);
 	}
 	memset (buf + len, 0, 1);
 	fclose (fp);

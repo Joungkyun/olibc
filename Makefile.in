@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.32 2011-02-22 07:29:29 oops Exp $
+# $Id: Makefile.in,v 1.33 2011-02-22 18:29:00 oops Exp $
 srcdir			= @srcdir@
 top_srcdir		= @top_srcdir@
 builddir		= @builddir@
@@ -82,10 +82,8 @@ all: prepare pcre idn $(OBJECT) libs olibc-config
 prepare:
 	if test ! -d "olibc"; then \
 		$(MKDIR) olibc; \
-	fi
-	if test ! -L "olibc/oc_type.h"; then \
 		cd olibc; \
-		ln -sf ../oc_type.h ./oc_type.h; \
+		ln -sf ../*.h ./; \
 		cd -; \
 	fi
 
