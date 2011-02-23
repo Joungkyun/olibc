@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.26 2011-02-20 14:39:33 oops Exp $
+# $Id: configure.ac,v 1.27 2011-02-23 11:21:08 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -188,9 +188,13 @@ fi
 #  [AC_MSG_ERROR([Can't not found pcre library (-lpcre)])]
 #)
 
+AC_CHECK_LIB(rt, clock_gettime,,[])
+
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([langinfo.h libintl.h locale.h sys/time.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h stdbool.h])
+AC_CHECK_HEADERS([langinfo.h libintl.h locale.h time.h sys/time.h
+				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h
+				  iconv.h stdbool.h])
 
 if test "$GCC" = "yes"; then
 	GCC_MAJOR_VERSION=`$CC --version | $HEAD -n 1 | $PERL -pe 's|^([[^0-9]]*)([[0-9]]+)\..*|\2|g'`

@@ -38,49 +38,66 @@
  * This file includes time apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 19:11:09 $
- * $Revision: 1.10 $
+ * $Date: 2011-02-23 11:21:08 $
+ * $Revision: 1.11 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.c,v 1.10 2011-02-22 19:11:09 oops Exp $ */
+/* $Id: libtime.c,v 1.11 2011-02-23 11:21:08 oops Exp $ */
 #include <oc_common.h>
 
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
+#ifdef HAVE_LIBRT
+	#include <time.h>
+	#define oc_clock_gettime(x) clock_gettime (CLOCK_REALTIME, x)
+	typedef struct timespec oc_time_t;
+	#define DNSEC 1000000000
+#elif HAVE_GETTIMEOFDAY
+	#include <sys/time.h>
+	#define oc_clock_gettime(x) gettimeofday (x, '\0')
+	typedef struct timeval oc_time_t;
+	#define DNSEC 1000000
+#else
+	#define oc_clock_gettime(x) EFAULT
+	typedef long oc_time_t;
+	#define DNSEC 1000000
 #endif
 
 #include <libtime.h>
 
 /**
  * @brief Return current Unix timestamp with microseconds
- * @return	double decimal : current Unix timestamp with microseconds
+ * @return	double decimal : current Unix timestamp with microseconds<br />
+ *          If return value is 0, system can't support clock_gettime()
+ *          or gettimeofday() funtcion.
  *
  * microtime() returns the current Unix timestamp with microseconds.
  * This function is only available on operating systems that
- * support the gettimeofday() system call.
+ * support the gettimeofday() or clock_gettime() system call.
+ *
+ * If system enables to support system call gettimeofday and
+ * clock_gettime(), olibc use clock_gettime() system call.
  */
 OLIBC_API
 double microtime (void) // {{{
 {
-#ifdef HAVE_SYS_TIME_H
-	struct timeval tp;
+	oc_time_t tp;
+	long * tp_1;
 	long sec = 0L;
 	double ret = 0;
 	double msec = 0.0;
 
-	if ( gettimeofday ((struct timeval *) &tp, '\0') == 0) {
-		msec = (double) (tp.tv_usec / 1000000.00);
-		sec = tp.tv_sec;
+	tp_1 = (long *) &tp;
+
+	if ( oc_clock_gettime ((oc_time_t *) &tp) == 0) {
+		sec = *tp_1;
+		msec = (*(tp_1 + 1) / (double) DNSEC);
 
 		if (msec >= 1.0) msec -= (long) msec;
 		ret = sec + msec;
 	}
+	OC_DEBUG ("STRING: %lu.%lu\n", *tp_1, *(tp_1 + 1));
+	OC_DEBUG ("FLOAT : %.09f\n", ret);
 
 	return ret;
-#else
-	oc_error ("olibc compiled without sys/time.h\n");
-	return 0;
-#endif
 } // }}}
 
 /**
