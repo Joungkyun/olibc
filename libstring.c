@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.65 $
+ * $Date: 2011-02-24 20:13:07 $
+ * $Revision: 1.66 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.65 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: libstring.c,v 1.66 2011-02-24 20:13:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -62,12 +62,15 @@ void olibc_version (void) // {{{
 } // }}}
 
 /**
- * @brief	remove white space on behind and forward on strings.
- * @param	str given strings
+ * @brief	Remove white space on behind and forward on the string.
+ * @param	str The input string
  * @return	void
+ * @sa	trim_r
  *
- * trim is remove white space on behind and forward on string.
- * warn !! this function modified original variable !!
+ * The trim() is remove white space on behind and forward on the input string.
+ *
+ * @warning
+ * The trim() function modified original variable !!
  */ 
 OLIBC_API
 void trim (char * str) // {{{
@@ -125,13 +128,18 @@ void trim (char * str) // {{{
 } // }}}
 
 /**
- * @brief	remove white space on behind and forward on strings.
- * @param[in]	str given strings
- * @param[in]	should_free bool / set true, free memory of str argument.
- * @return		point of result
+ * @brief	Remove white space on behind and forward on strings.
+ * @param[in]	str The input string
+ * @param[in]	should_free bool<br />
+ *              Set true, Should be freed memory of str argument.
+ * @return		Pointer of result string
+ * @sa trim
+ * @exception RETURNS
+ *   When occurs internal error, trim_r() returns null.<br />
+ *   If the return string array pointer is not null, you must free
+ *   it's memory address with @e ofree()
  *
- * trim is remove white space on behind and forward on string.
- * Return point of this function is must freed.
+ * The trim_r() is remove white space on behind and forward on the input string.
  */ 
 OLIBC_API
 char * trim_r (char * str, bool should_free) // {{{
@@ -221,7 +229,7 @@ int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{
  * @brief	Quote string with slashes
  * @param	in given string for qouting
  * @param	should_free bool / set true, free memory of in argument.
- * @return	point of result
+ * @return	pointer of result
  * @sa		addslashes_r
  *
  * Returns a string with backslashes before characters that need
@@ -1228,13 +1236,13 @@ size_t charset_conv_outplen (CChar * charset, size_t srclen)
  * @param	src source string
  * @param	from source character set
  * @param	to destination charactor set
- * @return	string point of converted string
+ * @return	string pointer of converted string
  *
  * The charset_conv function is convert string to to_charset
  * from from_charset.
  *
  * If the return value is not NULL, you must freed memory of
- * return point with free() function
+ * return pointer with free() function
  */
 OLIBC_API
 char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{

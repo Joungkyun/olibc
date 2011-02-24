@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:29:00 $
- * $Revision: 1.19 $
+ * $Date: 2011-02-24 20:13:07 $
+ * $Revision: 1.20 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.19 2011-02-22 18:29:00 oops Exp $ */
+/* $Id: libfile.c,v 1.20 2011-02-24 20:13:07 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -69,6 +69,8 @@
  * 				_IS_FIFO check whether is FIFO or not
  * 				_IS_SOCK check whether is socket or not
  * @return	bool
+ * @retval	true Success
+ * @retval	false Failure
  */
 OLIBC_API
 bool file_exists (CChar *path, int mode) // {{{
@@ -298,6 +300,10 @@ char * realpath_r (CChar *path) // {{{
 
 	return buf;
 } // }}}
+
+/**
+ * @example fileExists.c
+ */
 
 /*
  * Local variables:

@@ -38,18 +38,19 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 19:11:09 $
- * $Revision: 1.25 $
+ * $Date: 2011-02-24 20:13:07 $
+ * $Revision: 1.26 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.25 2011-02-22 19:11:09 oops Exp $ */
+/* $Id: libarg.c,v 1.26 2011-02-24 20:13:07 oops Exp $ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
+#include <libstring.h>
 #include <libarg.h>
 
-int _ogetopt_chk_int = -1; //!< Number of o_cmdarg array
-int _ogetopt_cmd_int = 0;  //!< o_getopt internal global variable
+int _ogetopt_chk_int = -1; //!< o_getopt processing count
+int _ogetopt_cmd_int = 0;  //!< Number of o_cmdarg array
 //! String length of o_optarg variable. Use by o_getopt API
 int o_optlen;
 //! Value of current option. Use by o_getopt API
@@ -58,11 +59,9 @@ char o_optarg[ARGLENGTH];
 /**
  * The o_cmdarg variable has command line arguments that
  * removed option arguments. This variable called by o_getopt
- * api and is must memory freed with free() function.
+ * api and is must memory freed with @e ofree_array() function.
  */
 char ** o_cmdarg = NULL;
-
-void trim (char * str);
 
 /** @defgroup arg_internalfunc Argument API internal functions of olibc
  * @{
@@ -159,10 +158,10 @@ bool only_whitespace (const char * stream, int length) // {{{
 /**
  * @brief	Preserve white space in the quoted string
  * @param	stream The input string
- * @return	The charactor point of preserved string
+ * @return	The charactor pointer of preserved string
  * @exception RETURNS
  *   When occurs internal error, convert_quoted_blank() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * convert_quoted_blank() function replaced white space in quoted string
@@ -235,10 +234,10 @@ char * convert_quoted_blank (const char * stream) // {{{
 /**
  * @brief	revoke replaced white space
  * @param	stream The input string
- * @return	The charactor point of revoked string
+ * @return	The charactor pointer of revoked string
  * @exception RETURNS
  *   When occurs internal error, convert_unquoted_blank() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * unconvert_quoted_blank() function revoked replaced white space by
@@ -246,10 +245,6 @@ char * convert_quoted_blank (const char * stream) // {{{
  *
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
- */
-/*
- * convert sepcail string to blank
- * need freed
  */
 char * unconvert_quoted_blank (const char * stream) // {{{
 {
@@ -280,6 +275,41 @@ char * unconvert_quoted_blank (const char * stream) // {{{
 /** @} */ // end of arg_internalfunc group
 
 
+/**
+ * @brief	Parse command-line options
+ * @param	oargc Number of argv array
+ * @param	oargv Input the argv array
+ * @param	opt  The string containing the legitimate option characters.<br />
+ *               Same as 3th argument of getopt. See also 'man 3 getopt'
+ * @param	longopt The pointer to the first element of an array of struct
+ *               o_option declared in <olibc/libarg.h>.<br />
+ *               This is same as 4th argument of getopt_long. See also
+ *               'man 3 getopt_long'<br /><br />
+ *               If you don't want to use longopt, you can set NULL.
+ * @retval	charactor The option charactor
+ * @retval	-1 Close parsing
+ * @sa getopt(3) getopt_long(3) ofree_array argv_make
+ *
+ * The o_getopt() function parses the command-line arguments similarly
+ * getopt(1). Its arguents argc and argv are the argument count and array
+ * as passed to the main() function on program invocation.
+ *
+ * After parsing, o_cmdarg global array variable has rest arguments
+ * in the order except the option arguments.
+ *
+ * Before call o_getopt(), you need to initialize follow 2 variables.
+ *
+ * @code
+ * _ogetopt_cmd_int = 0; // Number of o_cmdarg array
+ * _ogetopt_chk_int = -1; // o_getopt processing count.
+ * @endcode
+ *
+ * After using variables of o_getopt, you must be freed memory of o_cmdarg
+ * variable with ofree_array() function.
+ *
+ * If option has values, this value is saved on o_optarg that size is 1024
+ * byte and o_optlen is allocated length of o_optarg variable.
+ */
 OLIBC_API
 int o_getopt (int oargc, char ** oargv, const char * opt, const struct o_option * longopt) // {{{
 {
@@ -403,8 +433,21 @@ retry:
 	return ret;
 } // }}}
 
-/*
- * build argv array variables. must freed
+/**
+ * @brief	Make string array with the input string using white space delimiters.
+ * @param[in]	stream	The input string
+ * @param[out]	oargc	Number of string arrays
+ * @return	Pointer of string array
+ * @sa ofree_array
+ * @exception RETURNS
+ *   When occurs internal error, argv_make() returns null.<br />
+ *   If the return string array pointer is not null, you must free
+ *   it's memory address with @e ofree_array()
+ *
+ * The argv_make() function make string array with white space delimiters
+ * from the input string.
+ *
+ * The white space in the quoted string is preserved.
  */
 OLIBC_API
 char ** argv_make (CChar * stream, int * oargc) // {{{
@@ -474,13 +517,17 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
 	return oargv;
 } // }}}
 
-/* must freed */
 /**
  * @brief	Split a string by string
  * @param[in]	src The input string.
- * @param[out]	oargc number of return arraies
+ * @param[out]	oargc Number of return arraies
  * @param[in]	delimiter The boundary string.
- * @return		Returns an array
+ * @return		The string array
+ * @sa	ofree_array
+ * @exception RETURNS
+ *   When occurs internal error, split() returns null.<br />
+ *   If the return string array pointer is not null, you must free
+ *   it's memory address with @e ofree_array()
  *
  * Returns an array of strings, each of which is a substring of string
  * formed by splitting it on boundaries formed by the string delimiter.
@@ -569,7 +616,15 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 	return sep;
 } // }}}
 
-/* free argv_make array */
+/**
+ * @brief	free memory that allocated by argv_make() function
+ * @param	argv_array Return array pointer of argv_make() function
+ * @return	void
+ * @sa	argv_make
+ *
+ * The ofree_array is freed memory that allocated by argv_make()
+ * function.
+ */
 OLIBC_API
 void ofree_array (char ** argv_array) // {{{
 {
@@ -585,6 +640,11 @@ void ofree_array (char ** argv_array) // {{{
 } // }}}
 
 /* return number of white space */
+/**
+ * @brief	Get number of white space
+ * @param	src The input string
+ * @return	Number of white space
+ */
 OLIBC_API
 int get_whitespace (CChar * src) // {{{
 {
@@ -599,6 +659,13 @@ int get_whitespace (CChar * src) // {{{
 
 	return no;
 } // }}}
+
+/**
+ * @example argvMake.c
+ * @example getWhitespace.c
+ * @example oGetopt.c
+ * @example split.c
+ */
 
 /*
  * Local variables:

@@ -2,14 +2,14 @@
 .\" Process with
 .\" nroff -man get_whitespace.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: get_whitespace.3,v 1.4 2011-02-06 17:12:16 oops Exp $
+.\" $Id: get_whitespace.3,v 1.5 2011-02-24 20:13:07 oops Exp $
 .SH 이름
 get_whitespace
 
 .SH 사용법
 .B #include <olibc/libarg.h>
 .sp
-.BI "char * get_whitespace (char *string);"
+.BI "int get_whitespace (char *string);"
 
 .SH 라이브러리 링크
 .B gcc source -loc
@@ -24,7 +24,7 @@ get_whitespace
 
 char * string = "a b c d e      f";
 
-printf ("## %d\n", get_whitespace (string));
+printf ("## %d\\n", get_whitespace (string));
 .fi
 
 .SH 작성

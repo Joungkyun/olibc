@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:29:00 $
- * $Revision: 1.29 $
+ * $Date: 2011-02-24 20:13:07 $
+ * $Revision: 1.30 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.29 2011-02-22 18:29:00 oops Exp $ */
+/* $Id: libpcre.c,v 1.30 2011-02-24 20:13:07 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -390,11 +390,11 @@ int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
  * @brief	Quote regular expression characters
  * @param	src The input string
  * @param	delim Add user defined delimiters
- * @return	Character point of the quoted strig
+ * @return	Character pointer of the quoted strig
  * @sa	DELIMITERS
  * @exception RETURNS
  *   When occurs internal error, preg_quote() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * If you set 2th arguments, preg_quote add this value to default
@@ -522,7 +522,7 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
  * @retval	0 Internal failed
  * @retval	-1 Failed to match
  * @exception PARAMETER
- *   When occurs internal error, matches argument has null point.<br />
+ *   When occurs internal error, matches argument has null pointer.<br />
  *   If the matches argument is not null, you must free
  *   it's memory address with @e free()
  *
@@ -586,11 +586,11 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
  * @param	regex The pattern to search for, as a string.
  * @param	subject The input string
  * @param	reverse Set true, returns unmatched line
- * @return	Charactor point of the matched lines
+ * @return	Charactor pointer of the matched lines
  * @sa	preg_fgrep
  * @exception RETURNS
  *   When occurs internal error, preg_grep() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * preg_grep() function searches the input string for lines containing
@@ -720,11 +720,11 @@ skip_print:
  * @param	regex The pattern to search for, as a string.
  * @param	path The input file
  * @param	reverse Set true, returns unmatched line
- * @return	Charactor point of the matched lines
+ * @return	Charactor pointer of the matched lines
  * @sa	preg_grep
  * @exception RETURNS
  *   When occurs internal error, preg_fgrep() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * preg_fgrep() function searches the input file for lines containing
@@ -837,12 +837,12 @@ skip_print:
  * @param	subject The input string
  * @param	regarr_no Length of regex and replace arrays.<br />
  *          Length of regex array is must same length of replace array.
- * @return		Charactor point of The replaced string
+ * @return		Charactor pointer of The replaced string
  * @sa	preg_replace<br>
  *      http://php.net/manual/en/function.preg-replace.php
  * @exception RETURNS
  *   When occurs internal error, preg_replace_arr() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * <p>Searches subject for matches to pattern and replaces them with
@@ -876,12 +876,12 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
  * @param[in]	replace Will replacing string
  * @param[in]	subject The input string
  * @param[out]	retlen The length of returned string
- * @return		Charactor point of The replaced string
+ * @return		Charactor pointer of The replaced string
  * @sa	preg_replace_arr<br>
  *      http://php.net/manual/en/function.preg-replace.php
  * @exception RETURNS
  *   When occurs internal error, preg_replace() returns null.<br />
- *   If the return character point is not null, you must free
+ *   If the return character pointer is not null, you must free
  *   it's memory address with @e free()
  *
  * <p>The preg_replace() function is C API of PHP preg_replace() and
@@ -1058,7 +1058,7 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 			
 		/* If we have matched an empty string, mimic what Perl's /g options does.
 		   This turns out to be rather cunning. First we set PCRE_NOTEMPTY and try
-		   the match again at the same point. If this fails (picked up above) we
+		   the match again at the same pointer. If this fails (picked up above) we
 		   advance to the next character. */
 		pa->g_notempty = (pa->offsets[1] == pa->offsets[0])? PCRE_NOTEMPTY | PCRE_ANCHORED : 0;
 		

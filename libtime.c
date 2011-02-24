@@ -38,11 +38,11 @@
  * This file includes time apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-23 11:21:08 $
- * $Revision: 1.11 $
+ * $Date: 2011-02-24 20:13:07 $
+ * $Revision: 1.12 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.c,v 1.11 2011-02-23 11:21:08 oops Exp $ */
+/* $Id: libtime.c,v 1.12 2011-02-24 20:13:07 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_LIBRT
@@ -73,7 +73,7 @@
  * This function is only available on operating systems that
  * support the gettimeofday() or clock_gettime() system call.
  *
- * If system enables to support system call gettimeofday and
+ * If system enables to support system call gettimeofday both and
  * clock_gettime(), olibc use clock_gettime() system call.
  */
 OLIBC_API
