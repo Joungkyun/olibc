@@ -5,11 +5,11 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.10 $
+ * $Date: 2011-02-25 17:39:52 $
+ * $Revision: 1.11 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.10 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libfile.h,v 1.11 2011-02-25 17:39:52 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -24,42 +24,11 @@
 #define _IS_FIFO	6
 #define _IS_SOCK	7
 
-/* file_exists follows BPL License v.1 <http://devel.oops.org/document/bpl>
- * check whether exists path
- * path => check file
- * int  =>
- *         _IS_NCHK  : whether exists path
- *         _IS_FILE  : whether path is regular file
- *         _IS_DIR   : whether path is directory
- *         _IS_SLINK : whether path is symbolic link
- *         _IS_CDEV  : whether path is character device
- *         _IS_BDEV  : whether path is block device
- *         _IS_FIFO  : whether path is FIFO
- *         _SI_SOCK  : whether path is socket file */
 bool file_exists (const char *path, int mode);
-
-/* fileread follow BPL License v.1 <http://devel.oops.org/document/bpl>
- * read file
- *
- * path  => path of read file
- * return values must allocated memory */
+// fileread is deprecated. replace with readfile
 char * fileread (CChar * path);
-
-/* writefile follow BPL License v.1 <http://devel.oops.org/document/bpl>
- * write file
- *
- * filename => write file name
- * str      => write context
- * mode     => write mode
- *             0 : new file
- *             1 : attach file */
-int writefile(CChar *filename, CChar *str, bool mode);
-
-/* writefile follow BPL License v.1 <http://devel.oops.org/document/bpl>
- * write file
- *
- * path     => search path
- */
+char * readfile (CChar * path);
+int writefile (CChar * path, CChar * data, bool mode);
 char * realpath_r (CChar *path);
 
 #endif

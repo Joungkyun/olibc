@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-24 20:13:07 $
- * $Revision: 1.20 $
+ * $Date: 2011-02-25 17:39:52 $
+ * $Revision: 1.21 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.20 2011-02-24 20:13:07 oops Exp $ */
+/* $Id: libfile.c,v 1.21 2011-02-25 17:39:52 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -73,10 +73,10 @@
  * @retval	false Failure
  */
 OLIBC_API
-bool file_exists (CChar *path, int mode) // {{{
+bool file_exists (CChar * path, int mode) // {{{
 {
-	struct stat f;
-	int ret;
+	struct	stat f;
+	int		ret;
 
 	f.st_size = 0;
 	ret = lstat (path, &f);
@@ -112,14 +112,20 @@ bool file_exists (CChar *path, int mode) // {{{
 } // }}}
 
 /**
- * @brief	read file
- * @param	path file path
- * @return	text
- *
- * The result of this function is must freed.
+ * @brief	Reads entire file into a string
+ * @param	path The filename being read.
+ * @return	read data or NULL on failure.
+ * @sa		writefile
+ * @exception RETURNS
+ *   When occurs internal error, fileread() returns null.<br />
+ *   If the return string array pointer is not null, you must free
+ *   it's memory address with @e free()
+ * @warning
+ *   The writefile() function is not binary safe. If you need binary
+ *   safe, use olibc >= 1.0.0
  */
 OLIBC_API
-char * fileread (CChar * path) // {{{
+char * readfile (CChar * path) // {{{
 {
 	FILE * fp;
 	size_t len = 0, length = 0;
@@ -158,48 +164,70 @@ char * fileread (CChar * path) // {{{
 } // }}}
 
 /**
- * @brief	write file
- * @param	path of write
- * @param	strings for write
- * @param	mode bool. set true, append and set false, new file.
- * @return	On success return 0, otherwise return -1.
- *
- * The writefile() function is not binary safe.
+ * @brief	Reads entire file into a string
+ * @param	path The filename being read.
+ * @return	read data or NULL on failure.
+ * @sa		readfile
+ * @exception RETURNS
+ *   When occurs internal error, fileread() returns null.<br />
+ *   If the return string array pointer is not null, you must free
+ *   it's memory address with @e free()
+ * @deprecated
+ *   This function is deprecated and removed next version.<br />
+ *   You can replace with readfile().
  */
 OLIBC_API
-int writefile (CChar * filename, CChar * str, bool mode) // {{{
+char * fileread (CChar * path) // {{{
 {
-	struct stat s;
+	return readfile (path);
+} // }}}
 
-	FILE * fp;
-	char * act = "wb";
-	size_t len = 0;
-	int ret;
+/**
+ * @brief	Write a string to a file
+ * @param	path Path to the file where to write the data.
+ * @param	data The data to write.
+ * @param	mode Bool. Set true, append and set false, new file.
+ * @return	On success return 0, otherwise return -1.
+ * @sa		readfile
+ *
+ * @warning
+ *   The writefile() function is not binary safe. If you need binary
+ *   safe, use olibc >= 1.0.0
+ */
+OLIBC_API
+int writefile (CChar * path, CChar * data, bool mode) // {{{
+{
+	struct	stat s;
+
+	FILE	* fp;
+	char	* act = "wb";
+	size_t	len = 0;
+	int		ret;
 
 	act = "wb";
 	if ( mode == true ) {
-		ret = stat (filename, &s);
-		act = (stat (filename, &s) < 0) ? "wb" : "ab";
+		ret = stat (path, &s);
+		act = (stat (path, &s) < 0) ? "wb" : "ab";
 	}
 
-	if ( (fp = fopen (filename, act)) == NULL ) {
-		oc_error ("Can not open %s with write mode\n", filename);
+	if ( (fp = fopen (path, act)) == NULL ) {
+		oc_error ("Can not open %s with write mode\n", path);
 		return -1;
 	}
 
 	// On append, add line feed
 	if ( ! strcmp (act, "ab") ) {
 		if ( fwrite ("\n", sizeof (char), 1, fp) != 1 ) {
-			oc_error ("Writeing line feed failed: %s\n", filename);
+			oc_error ("Writeing line feed failed: %s\n", path);
 			fclose (fp);
 			return -1;
 		}
 	}
 
-	len = strlen (str);
-	if ( fwrite (str, sizeof(char), len, fp) != len ) {
+	len = strlen (data);
+	if ( fwrite (data, sizeof(char), len, fp) != len ) {
 		fclose(fp);
-		oc_error ("Writeing failed: %s\n", filename);
+		oc_error ("Writeing failed: %s\n", path);
 		return -1;
 	}
 
@@ -209,22 +237,26 @@ int writefile (CChar * filename, CChar * str, bool mode) // {{{
 } // }}}
 
 /**
- * @brief	get absolute path
- * @param	path path for searching
- * @return	string that memory allocated
+ * @brief	Returns canonicalized absolute pathname
+ * @param	path The path being checked.
+ * @return	Returns the canonicalized absolute pathname or null on failure.
+ * @exception RETURNS
+ *   When occurs internal error, realpath_r() returns null.<br />
+ *   If the return string array pointer is not null, you must free
+ *   it's memory address with @e free()
  *
  * The result of realpath_r() function is must free.
  */
 OLIBC_API
-char * realpath_r (CChar *path) // {{{
+char * realpath_r (CChar * path) // {{{
 {
-	struct stat f;
-	size_t r;
-	bool isdir;
-	char filename[PATH_MAX + 1] = { 0, };
-	char dirpath[PATH_MAX + 1] = { 0, };
-	char curpath[PATH_MAX + 1] = { 0, };
-	char *buf;
+	struct	stat f;
+	size_t	r;
+	bool	isdir;
+	char	filename[PATH_MAX + 1] = { 0, },
+			dirpath[PATH_MAX + 1] = { 0, },
+			curpath[PATH_MAX + 1] = { 0, },
+			* buf;
 
 	if ( path == NULL )
 		return NULL;
@@ -303,6 +335,7 @@ char * realpath_r (CChar *path) // {{{
 
 /**
  * @example fileExists.c
+ * @example readfile.c
  */
 
 /*

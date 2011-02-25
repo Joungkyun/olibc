@@ -37,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.12 $
+ * $Date: 2011-02-25 17:39:52 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.12 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: libidn.c,v 1.13 2011-02-25 17:39:52 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -112,10 +112,10 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
 */
 
 /**
- * @brief	convert between punycode and international domain
- * @param	domain international domain for converting
+ * @brief	Convert between punycode and international domain
+ * @param	src International domain for converting
+ * @param	dst Save the punycode that fixed 
  * @param	mode encode(set 0) or decode(set 1)
- * @param	debug set 1, print debug messages
  * @return	return length of dst argument
  *
  * dst argument is must freed with free()
@@ -267,13 +267,14 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 } // }}}
 
 /**
- * @brief	convert between punycode and international domain
+ * @brief	Convert between punycode and international domain
  * @param	domain international domain for converting
  * @param	mode encode(set 0) or decode(set 1)
- * @param	debug deprecated (no action)
+ * @param	debug Deprecated (no action)
  * @return	converted string (static memory)
  *
- * No thread safe.
+ * @warning
+ *   The convert_punycode() funtion can not thread safe.
  */
 OLIBC_API
 char * convert_punycode (char * domain, int mode, int debug) // {{{
