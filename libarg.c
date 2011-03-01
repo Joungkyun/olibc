@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.27 $
+ * $Date: 2011-03-01 04:44:25 $
+ * $Revision: 1.28 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.27 2011-03-01 04:17:47 oops Exp $ */
+/* $Id: libarg.c,v 1.28 2011-03-01 04:44:25 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -168,8 +168,8 @@ bool only_whitespace (const char * stream, int length) // {{{
  * @return	The charactor pointer of preserved string
  * @exception RETURNS
  *   When occurs internal error, convert_quoted_blank() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * convert_quoted_blank() function replaced white space in quoted string
  * to prserved from Internal Field Separator.
@@ -247,8 +247,8 @@ char * convert_quoted_blank (const char * stream) // {{{
  * @return	The charactor pointer of revoked string
  * @exception RETURNS
  *   When occurs internal error, convert_unquoted_blank() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * unconvert_quoted_blank() function revoked replaced white space by
  * convert_quoted_blank() function
@@ -456,8 +456,8 @@ retry:
  * @sa ofree_array
  * @exception RETURNS
  *   When occurs internal error, argv_make() returns null.<br />
- *   If the return string array pointer is not null, you must free
- *   it's memory address with @e ofree_array()
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e ofree_array()
  *
  * The argv_make() function make string array with white space delimiters
  * from the input string. The last array element has NULL terminator.
@@ -545,8 +545,8 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
  * @sa	ofree_array
  * @exception RETURNS
  *   When occurs internal error, split() returns null.<br />
- *   If the return string array pointer is not null, you must free
- *   it's memory address with @e ofree_array()
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e ofree_array()
  *
  * Returns an array of strings, each of which is a substring of string
  * formed by splitting it on boundaries formed by the string delimiter.

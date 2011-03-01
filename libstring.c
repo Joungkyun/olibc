@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-24 20:13:07 $
- * $Revision: 1.66 $
+ * $Date: 2011-03-01 04:44:25 $
+ * $Revision: 1.67 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.66 2011-02-24 20:13:07 oops Exp $ */
+/* $Id: libstring.c,v 1.67 2011-03-01 04:44:25 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -136,8 +136,8 @@ void trim (char * str) // {{{
  * @sa trim
  * @exception RETURNS
  *   When occurs internal error, trim_r() returns null.<br />
- *   If the return string array pointer is not null, you must free
- *   it's memory address with @e ofree()
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * The trim_r() is remove white space on behind and forward on the input string.
  */ 

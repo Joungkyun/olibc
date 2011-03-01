@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.31 $
+ * $Date: 2011-03-01 04:44:25 $
+ * $Revision: 1.32 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.31 2011-03-01 04:17:47 oops Exp $ */
+/* $Id: libpcre.c,v 1.32 2011-03-01 04:44:25 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -398,8 +398,8 @@ int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
  * @sa	DELIMITERS
  * @exception RETURNS
  *   When occurs internal error, preg_quote() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * If you set 2th arguments, preg_quote add this value to default
  * delimiters
@@ -594,8 +594,8 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
  * @sa	preg_fgrep
  * @exception RETURNS
  *   When occurs internal error, preg_grep() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * preg_grep() function searches the input string for lines containing
  * a match to the given pcre regular expression pattern.
@@ -728,8 +728,8 @@ skip_print:
  * @sa	preg_grep
  * @exception RETURNS
  *   When occurs internal error, preg_fgrep() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * preg_fgrep() function searches the input file for lines containing
  * a match to the given pcre regular expression pattern.
@@ -846,8 +846,8 @@ skip_print:
  *      http://php.net/manual/en/function.preg-replace.php
  * @exception RETURNS
  *   When occurs internal error, preg_replace_arr() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * <p>Searches subject for matches to pattern and replaces them with
  * replacement. If matches are found, the new subject will be returned,
@@ -885,8 +885,8 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
  *      http://php.net/manual/en/function.preg-replace.php
  * @exception RETURNS
  *   When occurs internal error, preg_replace() returns null.<br />
- *   If the return character pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return character pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * <p>The preg_replace() function is C API of PHP preg_replace() and
  * use some of PHP preg_replace() code</p>

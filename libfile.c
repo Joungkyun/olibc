@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.22 $
+ * $Date: 2011-03-01 04:44:25 $
+ * $Revision: 1.23 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.22 2011-03-01 04:17:47 oops Exp $ */
+/* $Id: libfile.c,v 1.23 2011-03-01 04:44:25 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -118,8 +118,8 @@ bool file_exists (CChar * path, int mode) // {{{
  * @sa		writefile
  * @exception RETURNS
  *   When occurs internal error, fileread() returns null.<br />
- *   If the return string array pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  * @warning
  *   The writefile() function is not binary safe. If you need binary
  *   safe, use olibc >= 1.0.0
@@ -172,8 +172,8 @@ char * readfile (CChar * path) // {{{
  * @sa		readfile
  * @exception RETURNS
  *   When occurs internal error, fileread() returns null.<br />
- *   If the return string array pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  * @deprecated
  *   This function is deprecated and removed next version.<br />
  *   You can replace with readfile().
@@ -244,8 +244,8 @@ int writefile (CChar * path, CChar * data, bool mode) // {{{
  * @return	Returns the canonicalized absolute pathname or null on failure.
  * @exception RETURNS
  *   When occurs internal error, realpath_r() returns null.<br />
- *   If the return string array pointer is not null, you must free
- *   it's memory address with @e free()
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * The result of realpath_r() function is must free.
  */
