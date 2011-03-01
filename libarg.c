@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:35:56 $
- * $Revision: 1.29 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.30 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.29 2011-03-01 17:35:56 oops Exp $ */
+/* $Id: libarg.c,v 1.30 2011-03-01 17:42:26 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -66,7 +66,7 @@ char o_optarg[ARGLENGTH];
  * removed option arguments. This variable called by o_getopt
  * api and is must memory freed with @e ofree_array() function.
  */
-char ** o_cmdarg = NULL;
+char ** o_cmdarg = null;
 
 /** @defgroup arg_internalfunc Argument API internal functions of olibc
  * @{
@@ -194,7 +194,7 @@ char * convert_quoted_blank (const char * stream) // {{{
 	white = get_whitespace (stream);
 	size = sizeof (char) * ((white * 8) + len + 1);
 
-	oc_malloc_r (ret, size, NULL);
+	oc_malloc_r (ret, size, null);
 	memset  (ret, 0, size);
 
 	for ( i=0; i<len; i++ ) {
@@ -265,12 +265,12 @@ char * unconvert_quoted_blank (const char * stream) // {{{
 		size;
 
 	if ( ! stream || ! strlen (stream) )
-		return NULL;
+		return null;
 
 	len = stream ? strlen (stream) : 0;
 	size = sizeof (char) * (len + 1);
 
-	oc_malloc_r (ret, size, NULL);
+	oc_malloc_r (ret, size, null);
 	memset  (ret, 0, size);
 
 	for (i = 0, j = 0; i <len; i++, j++ ) {
@@ -345,7 +345,7 @@ retry:
 
 	if ( oargc < 2 ) return -1;
 
-	if ( longopt != NULL )
+	if ( longopt != null )
 	   	chklong = 1;
 
 	if ( _ogetopt_chk_int == 0 )
@@ -364,7 +364,7 @@ retry:
 		memset (longopt_sep_arg, 0, ARGLENGTH);
 
 		longopt_sep = strchr (x, '=');
-		if ( longopt_sep != NULL ) {
+		if ( longopt_sep != null ) {
 			strncpy (longopt_sep_arg, longopt_sep + 1, ARGLENGTH);
 			*longopt_sep = 0;
 		}
@@ -379,14 +379,14 @@ retry:
 			if ( longopt[longno].required == required_arguments ) {
 				memset (o_optarg, 0, ARGLENGTH);
 
-				if ( longopt_sep != NULL ) {
+				if ( longopt_sep != null ) {
 					/* if argument with equer (=) */
 					strncpy (o_optarg, longopt_sep_arg, ARGLENGTH);
 				} else {
 					/* elseif argument with white character */
 					opt_t++;
 	
-					if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
+					if ( *opt_t == null || ! strncmp ("-", *opt_t, 1) ) {
 						oc_error ("No value of %s optoin\n\n", x);
 					} else {
 						strncpy (o_optarg, *opt_t, ARGLENGTH);
@@ -410,7 +410,7 @@ retry:
 		if ( optargs_chk == 1 ) {
 			opt_t++;
 
-			if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {
+			if ( *opt_t == null || ! strncmp ("-", *opt_t, 1) ) {
 				oc_error ("No value of -%c optoin\n\n", x[1]);
 			} else {
 				strncpy (o_optarg, *opt_t, ARGLENGTH);
@@ -431,7 +431,7 @@ retry:
 			oc_realloc_die (o_cmdarg, sizeof (char *) * (_ogetopt_cmd_int + 1));
 		}
 
-		o_cmdarg[_ogetopt_cmd_int] = NULL;
+		o_cmdarg[_ogetopt_cmd_int] = null;
 
 		oc_malloc_die (o_cmdarg[_ogetopt_cmd_int - 1], sizeof (char) * (strlen (x) + 1));
 		strcpy (o_cmdarg[_ogetopt_cmd_int - 1], x);
@@ -478,47 +478,47 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
 	int		i,
 			white;
 
-	if ( stream == NULL ) return NULL;
-	if ( strlen (stream) < 1 ) return NULL;
+	if ( stream == null ) return null;
+	if ( strlen (stream) < 1 ) return null;
 
-	if ( (tmp = convert_quoted_blank (stream)) == NULL )
-		return NULL;
+	if ( (tmp = convert_quoted_blank (stream)) == null )
+		return null;
 
 	white = get_whitespace (tmp);
 
 	oc_malloc (oargv, (sizeof (char *) * (white + 2)));
-	if ( oargv ==  NULL) {
+	if ( oargv ==  null) {
 		ofree (tmp);
-		return NULL;
+		return null;
 	}
 
 	oc_malloc (sep, sizeof (char *) * (white + 2));
-	if ( sep == NULL ) {
+	if ( sep == null ) {
 		ofree (tmp);
 		ofree (oargv);
-		return NULL;
+		return null;
 	}
 	sep_t = sep;
 	tmp_t = tmp;
 
 	*oargc = i = 0;
-	while ( (*sep = strsep (&tmp_t, delimiters) ) != NULL ) {
+	while ( (*sep = strsep (&tmp_t, delimiters) ) != null ) {
 		if ( **sep != 0 ) {
-			if ( (tmparg = unconvert_quoted_blank (*sep)) == NULL ) {
-				oargv[i] = NULL;
+			if ( (tmparg = unconvert_quoted_blank (*sep)) == null ) {
+				oargv[i] = null;
 				ofree_array (oargv);
 				ofree (tmp);
 				ofree (sep_t);
-				return NULL;
+				return null;
 			}
 
 			oc_strdup (oargv[i], tmparg, strlen (tmparg));
-			if ( oargv[i] == NULL ) {
+			if ( oargv[i] == null ) {
 				ofree_array (oargv);
 				ofree (tmparg);
 				ofree (tmp);
 				ofree (sep_t);
-				return NULL;
+				return null;
 			}
 			ofree (tmparg);
 
@@ -530,7 +530,7 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
 	ofree (sep_t);
 	ofree (tmp);
 
-	oargv[i] = NULL;
+	oargv[i] = null;
 	*oargc = i;
 
 	return oargv;
@@ -566,11 +566,11 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 			no;
 
 	*oargc = 0;
-	if ( src == NULL || delimiter == NULL )
-		return NULL;
+	if ( src == null || delimiter == null )
+		return null;
 
 	/* removed white space of front and end string */
-	oc_strdup_r (buf, src, NULL);
+	oc_strdup_r (buf, src, null);
 	trim (buf);
 
 	len = strlen (buf);
@@ -578,12 +578,12 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 
 	if ( len < 1 || dlen < 1 ) {
 		ofree (buf);
-		return NULL;
+		return null;
 	}
 
 	delno = get_charcount (buf, delimiter);
 	delno++;
-	oc_malloc_r (sep, sizeof (char *) * (delno + 1), NULL);
+	oc_malloc_r (sep, sizeof (char *) * (delno + 1), null);
 
 	start = 0;
 	end = 0;
@@ -610,10 +610,10 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 				}
 
 				oc_strdup (sep[no], buf + start, end - start);
-				if ( sep[no] == NULL ) {
+				if ( sep[no] == null ) {
 					ofree (buf);
 					ofree_array (sep);
-					return NULL;
+					return null;
 				}
 				trim (sep[no]);
 				OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
@@ -634,7 +634,7 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 
 	ofree (buf);
 
-	sep[no] = NULL;
+	sep[no] = null;
 	*oargc = no;
 
 	return sep;
@@ -654,8 +654,8 @@ void ofree_array (char ** argv_array) // {{{
 {
 	int	i = 0;
 
-	if ( argv_array != NULL ) {
-		while ( argv_array[i] != NULL ) {
+	if ( argv_array != null ) {
+		while ( argv_array[i] != null ) {
 			ofree (argv_array[i]);
 			i++;
 		}

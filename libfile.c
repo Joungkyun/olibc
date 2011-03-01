@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:35:56 $
- * $Revision: 1.24 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.25 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.24 2011-03-01 17:35:56 oops Exp $ */
+/* $Id: libfile.c,v 1.25 2011-03-01 17:42:26 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -138,22 +138,22 @@ char * readfile (CChar * path) // {{{
 
 	if ( lstat (path, &f) == -1 ) {
 		oc_error ("File not found : %s\n", path);
-		return NULL;
+		return null;
 	}
 
 	if ( f.st_size < 1 ) {
 		OC_DEBUG ("The file(%s) is empty\n", path);
-		return NULL;
+		return null;
 	}
 
-	if ((fp = fopen(path, "rb")) == NULL) {
+	if ((fp = fopen(path, "rb")) == null) {
 		oc_error ("Can not open %s with read mode\n", path);
-		return NULL;
+		return null;
 	}
 
 	/* initialize tmp variavle */
 	len = (f.st_size < 4) ? 4 : f.st_size;
-	oc_malloc_r (buf, sizeof (char) * (len + 1), NULL);
+	oc_malloc_r (buf, sizeof (char) * (len + 1), null);
 	len = 0;
 
 	while ( (length = fread (tmp, sizeof (char), OC_FILEBUF - 1, fp)) > 0 ) {
@@ -216,7 +216,7 @@ int writefile (CChar * path, CChar * data, bool mode) // {{{
 		act = (stat (path, &s) < 0) ? "wb" : "ab";
 	}
 
-	if ( (fp = fopen (path, act)) == NULL ) {
+	if ( (fp = fopen (path, act)) == null ) {
 		oc_error ("Can not open %s with write mode\n", path);
 		return -1;
 	}
@@ -288,18 +288,18 @@ char * realpath_r (CChar * path) // {{{
 			curpath[PATH_MAX + 1] = { 0, },
 			* buf;
 
-	if ( path == NULL ) {
+	if ( path == null ) {
 		errno = ENOENT;
-		return NULL;
+		return null;
 	}
 
 	// The given path is already real path.
 	if ( path[0] == '/' ) {
 		r = strlen (path);
 		oc_malloc (buf, sizeof (char) * (r + 4));
-		if ( buf == NULL ) {
+		if ( buf == null ) {
 			errno = ENOMEM;
-			return NULL;
+			return null;
 		}
 		memcpy (buf, path, r);
 		memset (buf + r, 0, 1);
@@ -309,19 +309,19 @@ char * realpath_r (CChar * path) // {{{
 
 	if ( strlen (path) > PATH_MAX ) {
 		errno = ENAMETOOLONG;
-		return NULL;
+		return null;
 	}
 
 	if ( (r = stat (path, &f)) == -1 ) {
 		errno = ENOENT;
-		return NULL;
+		return null;
 	}
 
 	isdir = S_ISDIR (f.st_mode);
 
 	if ( isdir == false ) {
 		// if path is filename
-		if ( (buf = strrchr (path, '/')) == NULL ) {
+		if ( (buf = strrchr (path, '/')) == null ) {
 			strcpy (filename, path);
 			strcpy (dirpath, "./");
 		} else {
@@ -334,26 +334,26 @@ char * realpath_r (CChar * path) // {{{
 		strcpy (dirpath, path);
 
 	// save current directory
-	if ( getcwd (curpath, PATH_MAX) == NULL )
-		return NULL;
+	if ( getcwd (curpath, PATH_MAX) == null )
+		return null;
 
 	if ( chdir (dirpath) == -1 )
-		return NULL;
+		return null;
 
 	memset (dirpath, 0, PATH_MAX + 1);
-	if ( getcwd (dirpath, PATH_MAX) == NULL ) {
+	if ( getcwd (dirpath, PATH_MAX) == null ) {
 		chdir (curpath);
-		return NULL;
+		return null;
 	}
 
 	if ( chdir (curpath) == -1 )
-		return NULL;
+		return null;
 
 	r = strlen (dirpath) + strlen (filename) + 4;
 	oc_malloc (buf, sizeof (char) * r);
-	if ( buf == NULL ) {
+	if ( buf == null ) {
 		errno = ENOENT;
-		return NULL;
+		return null;
 	}
 	memset (buf, 0, r);
 

@@ -37,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-25 17:39:52 $
- * $Revision: 1.13 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.14 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.13 2011-02-25 17:39:52 oops Exp $ */
+/* $Id: libidn.c,v 1.14 2011-03-01 17:42:26 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -67,16 +67,16 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
 	l = i = j = 0;
 
 	p = charset_conv (s, from, "UCS-4");
-	if ( p == NULL )
+	if ( p == null )
 		p = charset_conv (s, "UTF-8", "UCS-4");
 
-	if ( p == NULL )
-		return NULL;
+	if ( p == null )
+		return null;
 
 	oc_malloc (z, sizeof (UInt) * (bsize + 1));
-	if ( z == NULL ) {
+	if ( z == null ) {
 		ofree (p);
-		return NULL;
+		return null;
 	}
 
 	buf = p;
@@ -92,9 +92,9 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
 		if ( l > 7 && (l & 0x07) == 0 ) {
 			bsize += 8;
 			oc_realloc (z, sizeof (UInt) * (bsize + 1));
-			if ( z == NULL ) {
+			if ( z == null ) {
 				ofree (p);
-				return NULL;
+				return null;
 			}
 		}
 
@@ -129,9 +129,9 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 	char *p, *r;
 	uint32_t *q;
 
-	*dst = NULL;
+	*dst = null;
 
-	if ( src == NULL || strlen (src) < 1 )
+	if ( src == null || strlen (src) < 1 )
 		return 0;
 
 	dlen = strlen (src);
@@ -140,7 +140,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 	// remove after newline
 	{
 		char * newline;
-		if ( (newline = strchr (*dst, '\n')) != NULL )
+		if ( (newline = strchr (*dst, '\n')) != null )
 			*newline = 0;
 	}
 
@@ -148,9 +148,9 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 		//
 		// Encoding mode
 		//
-		if ( charset == NULL ) {
+		if ( charset == null ) {
 			p = stringprep_locale_to_utf8 (*dst);
-			if ( p == NULL )
+			if ( p == null )
 				oc_error ("%s: could not convert from %s to UTF-8.\n",
 					 	 *dst, stringprep_locale_charset ());
 		} else {
@@ -158,12 +158,12 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 			stringprep_locale_charset_cache = "UTF-8";
 		}
 
-		if ( p == NULL ) {
+		if ( p == null ) {
 			ofree (*dst);
 			return 0;
 		}
 
-		q = stringprep_utf8_to_ucs4 (p, -1, NULL);
+		q = stringprep_utf8_to_ucs4 (p, -1, null);
 		ofree (p);
 
 		if ( !q ) {
@@ -223,7 +223,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 		}
 #endif
 
-		p = stringprep_ucs4_to_utf8 (q, -1, NULL, NULL);
+		p = stringprep_ucs4_to_utf8 (q, -1, null, null);
 		ofree (q);
 		if ( !p ) {
 			oc_error ("%s: could not convert from UCS-4 to UTF-8.\n", *dst);
@@ -231,7 +231,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 			return 0;
 		}
 
-		if ( charset == NULL ) {
+		if ( charset == null ) {
 			r = stringprep_utf8_to_locale (p);
 			if ( !r )
 				oc_error ("%s: could not convert from UTF-8 to %s.\n",
@@ -252,7 +252,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 	dlen = strlen (r);
 	oc_strdup (*dst, r, dlen);
 	ofree (r);
-	if ( *dst == NULL )
+	if ( *dst == null )
 		return 0;
 
 	return dlen;
@@ -284,8 +284,8 @@ char * convert_punycode (char * domain, int mode, int debug) // {{{
 	UInt len;
 
 	mode = mode ? true : false;
-	len = convert_punycode_r (domain, &dst, mode, NULL);
-	if ( len == 0 || dst == NULL )
+	len = convert_punycode_r (domain, &dst, mode, null);
+	if ( len == 0 || dst == null )
 		return conv;
 
 	oc_safe_cpy (conv, dst, 512);

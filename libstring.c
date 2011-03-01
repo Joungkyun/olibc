@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:35:56 $
- * $Revision: 1.68 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.69 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.68 2011-03-01 17:35:56 oops Exp $ */
+/* $Id: libstring.c,v 1.69 2011-03-01 17:42:26 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -186,7 +186,7 @@ void trim (char * str) // {{{
 		end = 0,
 		i = 0;
 
-	if ( str == NULL )
+	if ( str == null )
 		return;
 
 	len = strlen (str);
@@ -255,13 +255,13 @@ char * trim_r (char * str, bool should_free) // {{{
 	char	* buf;
 	int		len;
 
-	if ( str == NULL )
-		return NULL;
+	if ( str == null )
+		return null;
 
 	if ( (len = strlen (str)) == 0 ) {
 		if ( should_free )
 			ofree (str);
-		return NULL;
+		return null;
 	}
 
 	oc_strdup (buf, str, len);
@@ -301,7 +301,7 @@ bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {
 			* target,
 			* end;
 
-	if ( in == NULL || inlen < 1 )
+	if ( in == null || inlen < 1 )
 		return false;
 
 	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), false);
@@ -333,7 +333,7 @@ bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {
 	/*
 	// if you want to save memory
 	if ( *outlen < (inlen * 2) )
-		oc_realloc_r (*out, sizeof (char) * ((*outlen) + 1), NULL);
+		oc_realloc_r (*out, sizeof (char) * ((*outlen) + 1), null);
 	*/
 
 	return true;
@@ -362,11 +362,11 @@ char * addslashes (char * in, bool should_free) // {{{
 	size_t	outlen;
 	UChar	* out;
 
-	if ( in == NULL )
-		return NULL;
+	if ( in == null )
+		return null;
 
 	if ( addslashes_r ((UChar *) in, strlen (in), &out, &outlen) == false )
-		return NULL;
+		return null;
 
 	if ( should_free )
 		ofree (in);
@@ -387,7 +387,7 @@ Long64 str2long (CChar * src) // {{{
 {
 #ifdef HAVE_STRTOLL
 	OC_DEBUG ("USE strtoll\n");
-	return strtoll (src, NULL, 10);
+	return strtoll (src, null, 10);
 #else
 	int		bufno = 0,
 			i;
@@ -451,7 +451,7 @@ long double str2double (CChar * src) { // {{{
 	bool	minus = false;
 	double	buf;
 
-	if ( src == NULL )
+	if ( src == null )
 		return 0;
 
 	if ( strlen (src) == 0 )
@@ -462,14 +462,14 @@ long double str2double (CChar * src) { // {{{
 
 	oc_strdup_r (decimal_t, src + minus, 0);
 
-	if ( (dot = (char *) strrchr (decimal_t, '.')) == NULL ) {
+	if ( (dot = (char *) strrchr (decimal_t, '.')) == null ) {
 		oc_strdup (fraction_t, "", 0);
 	} else {
 		oc_strdup (fraction_t, dot + 1, strlen (dot) - 1);
 		*dot = 0;
 	}
 
-	if ( fraction_t == NULL ) {
+	if ( fraction_t == null ) {
 		ofree (decimal_t);
 		return 0;
 	}
@@ -662,7 +662,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 			dvd = 1024;
 
 	oc_safe_cpy (singular, (size > 2) ? "s" : "", 2);
-	oc_malloc_r (buf, sizeof (char) * 64, NULL);
+	oc_malloc_r (buf, sizeof (char) * 64, null);
 	memset (buf, 0, 64);
 
 	if ( ! unit )
@@ -769,7 +769,7 @@ char * numberFormat (double num, int dec, char dec_point, char thousand_sep, boo
 		num = -num;
 	}
 	dec = MAX (0, dec);
-	oc_malloc_r (tmpbuf, 1024, NULL);
+	oc_malloc_r (tmpbuf, 1024, null);
 
 	tmplen = sprintf (tmpbuf, "%.*f", dec, num);
 	if ( ! isdigit ((int) tmpbuf[0]) )
@@ -784,9 +784,9 @@ char * numberFormat (double num, int dec, char dec_point, char thousand_sep, boo
 		reslen++;
 
 	oc_malloc (resbuf, reslen + 1);
-	if ( resbuf == NULL ) {
+	if ( resbuf == null ) {
 		ofree (tmpbuf);
-		return NULL;
+		return null;
 	}
 
 	src = tmpbuf + tmplen - 1;
@@ -817,7 +817,7 @@ char * numberFormat (double num, int dec, char dec_point, char thousand_sep, boo
 	if (print) {
 		printf ("%s", resbuf);
 		ofree (resbuf);
-		return NULL;
+		return null;
 	}
 	return resbuf;
 } // }}}
@@ -842,7 +842,7 @@ void strtolower (char * str) // {{{
 {
 	int	len;
 
-	if ( str == NULL )
+	if ( str == null )
 		return;
 
 	if ( (len = strlen (str)) < 1 )
@@ -871,7 +871,7 @@ void strtoupper (char * str) // {{{
 {
 	int	len;
 
-	if ( str == NULL )
+	if ( str == null )
 		return;
 
 	if ( (len = strlen (str)) < 1 )
@@ -912,7 +912,7 @@ ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
 			len;
 	char	buf[5];
 
-	if ( src == NULL )
+	if ( src == null )
 		return 0;
 
 	if ( (len = strlen (src)) < 4 )
@@ -1023,17 +1023,17 @@ char * hex2bin (CChar * src) // {{{
 			i,
 			j;
 
-	if ( src == NULL )
-		return NULL;
+	if ( src == null )
+		return null;
 
 	if ( strlen (src) == 0 )
-		return NULL;
+		return null;
 
 	len = strlen (src);
 	alloc = (len * 4) + 1;
 
 	// if failed memory allocate, return NULL
-	oc_malloc_r (data, sizeof (char) * alloc, NULL);
+	oc_malloc_r (data, sizeof (char) * alloc, null);
 	memset (data, 0, sizeof (char) * alloc);
 
 	for ( i=0, j=0; i<len; i++ ) {
@@ -1156,7 +1156,7 @@ UInt long2bin (Long64 dec, char ** dst) // {{{
 	bool	over32 = false,
 			full_print = false;
 
-	*dst = NULL;
+	*dst = null;
 
 	if ( ! dec )
 		return 0;
@@ -1210,16 +1210,16 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 {
 	Long64	dec;
 
-	*dst = NULL;
+	*dst = null;
 
-	if ( src == NULL )
+	if ( src == null )
 		return 0;
 
 	if ( strlen (src) == 0 )
 		return 0;
 
 #ifdef HAVE_STRTOULL
-	dec = strtoll (src, NULL, 10);
+	dec = strtoll (src, null, 10);
 #else
 	dec = (Long64) str2long (src);
 #endif
@@ -1280,7 +1280,7 @@ bool is_utf8 (UCChar * src) // {{{
 	len = byte2 = 0;
 	byte2_check = false;
 
-	if ( src == NULL )
+	if ( src == null )
 		return false;
 
 	len = strlen (src);
@@ -1367,30 +1367,30 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 
 	size_t ilen, olen, olen_t;
 
-	if ( src == NULL || from == NULL || to == NULL )
-		return NULL;
+	if ( src == null || from == null || to == null )
+		return null;
 
 	if ( strcmp (from, to) == 0 ) {
-		oc_strdup_r (obuf, src, NULL);
+		oc_strdup_r (obuf, src, null);
 		return obuf;
 	}
 
 	ilen = strlen (src) + 1;
-	oc_strdup_r (ibuf, src, NULL);
+	oc_strdup_r (ibuf, src, null);
 	ibuf_t = ibuf;
 
 	olen = olen_t = charset_conv_outplen (to, ilen);
 	oc_malloc (obuf, sizeof (char) * olen);
-	if ( obuf == NULL ) {
+	if ( obuf == null ) {
 		ofree (ibuf);
-		return NULL;
+		return null;
 	}
 	obuf_t = obuf;
 
 	cd = iconv_open (to, from);
 	if ( cd == (iconv_t) -1 ) {
 		oc_error ("Can not open iconv descriptor\n");
-		return NULL;
+		return null;
 	}
 
 	OC_DEBUG ("INPUT     : %s\n", from);
@@ -1430,7 +1430,7 @@ conv_retry:
 		}
 
 		ofree (obuf);
-		obuf = NULL;
+		obuf = null;
 	} else
 		*obuf_t = 0;
 
@@ -1442,7 +1442,7 @@ skip_error:
 	return obuf;
 #else
 	oc_error ("Don't support iconv in current build\n");
-	return NULL;
+	return null;
 #endif
 } // }}}
 

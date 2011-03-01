@@ -38,18 +38,18 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.9 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.10 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.9 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: libmisc.c,v 1.10 2011-03-01 17:42:26 oops Exp $ */
 #include <oc_common.h>
 
 UInt get_charcount (CChar * str, CChar * del)
 {
 	UInt no, i, j, len, dlen;
 
-	if ( str == NULL || del == NULL )
+	if ( str == null || del == null )
 		return 0;
 
 	no = 0;

@@ -38,11 +38,11 @@
  * This file includes proto type of RACE code apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:35:56 $
- * $Revision: 1.15 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.16 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: _race.c,v 1.15 2011-03-01 17:35:56 oops Exp $ */
+/* $Id: _race.c,v 1.16 2011-03-01 17:42:26 oops Exp $ */
 #include <oc_common.h>
 #include <_race.h>
 
@@ -217,7 +217,7 @@ int string_convert (char * dest, char * src, char * from, char * to, int debug) 
 	il = len;
 	ol = len * 3;
 
-	if (src == NULL) {
+	if (src == null) {
 		fprintf (stderr, "ERROR: input data is nothing\n");
 		return 1;
 	}

@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:35:56 $
- * $Revision: 1.33 $
+ * $Date: 2011-03-01 17:42:26 $
+ * $Revision: 1.34 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.33 2011-03-01 17:35:56 oops Exp $ */
+/* $Id: libpcre.c,v 1.34 2011-03-01 17:42:26 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -97,11 +97,11 @@ bool libpreg_arg_init (PregArg ** pa) // {{{
 {
 	oc_malloc_r (*pa, sizeof (PregArg), false);
 
-	(*pa)->re           = NULL;
-	(*pa)->extra        = NULL;
-	(*pa)->regex        = NULL;
-	(*pa)->subject      = NULL;
-	(*pa)->offsets      = NULL;
+	(*pa)->re           = null;
+	(*pa)->extra        = null;
+	(*pa)->regex        = null;
+	(*pa)->subject      = null;
+	(*pa)->offsets      = null;
 	(*pa)->reglen       = 0;
 	(*pa)->subjlen      = 0;
 	(*pa)->size_offsets = 0;
@@ -123,8 +123,8 @@ void libpreg_arg_free (PregArg ** pa) // {{{
 	ofree ((*pa)->re);
 	ofree ((*pa)->extra);
 	ofree ((*pa)->offsets);
-	(*pa)->regex = NULL;
-	(*pa)->subject = NULL;
+	(*pa)->regex = null;
+	(*pa)->subject = null;
 	(*pa)->reglen = 0;
 	(*pa)->subjlen = 0;
 	(*pa)->size_offsets = 0;
@@ -160,7 +160,7 @@ bool libpreg_parse (char * regex, char * pattern, int * option, int * study) // 
 
 	len = i = start = end = 0;
 
-	if ( regex == NULL )
+	if ( regex == null )
 		return false;
 
 	len = strlen (regex);
@@ -283,14 +283,14 @@ bool libpreg_compile (PregArg ** pa) // {{{
 				rc,
 				num_subpats;
 	CChar		* error;
-	char		* pattern = NULL;
-	UCChar		* tables = NULL;
+	char		* pattern = null;
+	UCChar		* tables = null;
 
 	p = *pa;
 	oc_malloc_r (pattern, sizeof (char) * (p->reglen + 1), false);
 	preg_options = study = 0;
 	erroffset = num_subpats = 0;
-	error = NULL;
+	error = null;
 
 	/* parse delimiters and regex string and option */
 	if ( libpreg_parse (p->regex, pattern, &preg_options, &study) == false )
@@ -298,7 +298,7 @@ bool libpreg_compile (PregArg ** pa) // {{{
 
 #if HAVE_SETLOCALE
 	{
-		char * locale = setlocale (LC_CTYPE, NULL);
+		char * locale = setlocale (LC_CTYPE, null);
 
 		if ( strcmp (locale, "C") )
 			tables = pcre_maketables ();
@@ -312,14 +312,14 @@ bool libpreg_compile (PregArg ** pa) // {{{
 	ofree (pattern);
 	ofree ((UChar *) tables);
 
-	if ( p->re == NULL ) {
+	if ( p->re == null ) {
 		oc_error ("Compilation failed: %s at offset %d\n", error, erroffset);
 		return false;
 	}
 
 	if ( study ) {
 		p->extra = pcre_study (p->re, 0, &error);
-		if ( error != NULL )
+		if ( error != null )
 			oc_error ("Error while studying pattern\n");
 		if ( p->extra )
 			p->extra->flags |= PCRE_EXTRA_MATCH_LIMIT | PCRE_EXTRA_MATCH_LIMIT_RECURSION;
@@ -415,21 +415,21 @@ char * preg_quote (CChar * src, CChar * delim) // {{{
 	char	* outbuf,
 			* ot;;
 
-	if ( src == NULL )
-		return NULL;
+	if ( src == null )
+		return null;
 
 	inlen = strlen (src);
 	dellen = delim ? strlen (delim) : 0;
 	dellen += 19;
 
-	oc_malloc_r (delim_t, sizeof (char) * dellen, NULL);
+	oc_malloc_r (delim_t, sizeof (char) * dellen, null);
 	memcpy (delim_t, DELIMITERS, DELIMITERS_LEN);
 	memset (delim_t + dellen, 0, 1);
 
 	if ( dellen > 19 ) {
 		buf = delim_t + 19;
 		while ( *delim ) {
-			if ( strchr (delim_t, *delim) == NULL ) {
+			if ( strchr (delim_t, *delim) == null ) {
 				*buf = *delim;
 				buf++;
 			}
@@ -442,9 +442,9 @@ char * preg_quote (CChar * src, CChar * delim) // {{{
 
 	rlen = inlen + 8;
 	oc_malloc (outbuf, sizeof (char) * rlen);
-	if ( outbuf == NULL ) {
+	if ( outbuf == null ) {
 		ofree (delim_t);
-		return NULL;
+		return null;
 	}
 
 	buf = (char *) src;
@@ -453,14 +453,14 @@ char * preg_quote (CChar * src, CChar * delim) // {{{
 	inlen = 1;
 	while ( *buf ) {
 		char *p;
-		if ( (p = strchr (delim_t, *buf)) != NULL ) {
+		if ( (p = strchr (delim_t, *buf)) != null ) {
 			if ( rlen <= inlen ) {
 				rlen += 8;
 				oc_realloc (outbuf, sizeof (char) * rlen);
-				if ( outbuf == NULL ) {
+				if ( outbuf == null ) {
 					ofree (delim_t);
 					ofree (outbuf);
-					return NULL;
+					return null;
 				}
 
 				ot = outbuf + inlen - 1;
@@ -493,7 +493,7 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
 	PregArg	* pa;
 	int		count;
 
-	if ( regex == NULL || subject == NULL )
+	if ( regex == null || subject == null )
 		return false;
 
 	if ( libpreg_arg_init (&pa) == false )
@@ -541,9 +541,9 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 	PregArg	* pa;
 	int		count;
 
-	*matches = NULL;
+	*matches = null;
 
-	if ( regex == NULL || subject == NULL )
+	if ( regex == null || subject == null )
 		return 0;
 
 	if ( libpreg_arg_init (&pa) == false )
@@ -612,30 +612,30 @@ char * preg_grep (CChar *regex, CChar *subject, bool reverse) // {{{
 			chklen   = OC_LINEBUF,
 			buflen   = 0,
 			last     = 0;
-	char	* buf    = NULL,
-			* buf_t  = NULL,
-			* start  = NULL,
-			* end    = NULL,
+	char	* buf    = null,
+			* buf_t  = null,
+			* start  = null,
+			* end    = null,
 			* subj,
-			* subj_p = NULL,
+			* subj_p = null,
 			subj_t[OC_LINEBUF];
 
-	if ( regex == NULL || subject == NULL )
-		return NULL;
+	if ( regex == null || subject == null )
+		return null;
 
 	if ( libpreg_arg_init (&pa) == false )
-		return NULL;
+		return null;
 
 	pa->regex = (char *) regex;
 	pa->reglen = strlen (regex);
 
 	if ( libpreg_compile (&pa) == false ) {
 		libpreg_arg_free (&pa);
-		return NULL;
+		return null;
 	}
 
 	start = (char *) subject;
-	while ( (end = strchr (start, '\n')) != NULL ) {
+	while ( (end = strchr (start, '\n')) != null ) {
 		linelen = end - start + 1;
 
 last_line:
@@ -646,9 +646,9 @@ last_line:
 
 		if ( linelen > (OC_LINEBUF + (-1)) ) {
 			oc_strdup (subj_p, start, linelen + 1);
-			if ( subj_p == NULL ) {
+			if ( subj_p == null ) {
 				libpreg_arg_free (&pa);
-				return NULL;
+				return null;
 			}
 			subj = subj_p;
 		} else {
@@ -665,7 +665,7 @@ last_line:
 		if ( count == 0 ) {
 			ofree (subj_p);
 			libpreg_arg_free (&pa);
-			return NULL;
+			return null;
 		}
 
 		if ( (count > 0 && reverse) || (count < 0 && ! reverse) )
@@ -673,10 +673,10 @@ last_line:
 
 		if ( buflen == 0 ) {
 			oc_malloc (buf, sizeof (char) * chklen);
-			if ( buf == NULL ) {
+			if ( buf == null ) {
 				ofree (subj_p);
 				libpreg_arg_free (&pa);
-				return NULL;
+				return null;
 			}
 		}
 
@@ -686,10 +686,10 @@ last_line:
 		if ( buflen >= chklen ) {
 			chklen *= 2;
 			oc_realloc (buf, sizeof (char) * chklen);
-			if ( buf == NULL ) {
+			if ( buf == null ) {
 				ofree (subj_p);
 				libpreg_arg_free (&pa);
-				return NULL;
+				return null;
 			}
 			buf_t = buf + buflen;
 		}
@@ -711,7 +711,7 @@ skip_print:
 			goto last_line;
 	}
 
-	if ( buf != NULL ) {
+	if ( buf != null ) {
 		int l = 0;
 		if ( *(buf + buflen - 1) == '\n' )
 			l = -1;
@@ -747,30 +747,30 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 			linelen  = 0,
 			chklen   = OC_LINEBUF,
 			buflen   = 0;
-	char	* buf    = NULL,
-			* buf_t  = NULL,
+	char	* buf    = null,
+			* buf_t  = null,
 			line[OC_LINEBUF];
 
-	if ( regex == NULL || path == NULL )
-		return NULL;
+	if ( regex == null || path == null )
+		return null;
 
 	if ( lstat (path, &f) == -1 ) {
 		oc_error ("File not found: %s\n", path);
-		return NULL;
+		return null;
 	}
 
 	if ( f.st_size < 1 ) {
 		oc_error ("The file(%s) is empty\n", path);
-		return NULL;
+		return null;
 	}
 
-	if ((fp = fopen(path, "rb")) == NULL) {
+	if ((fp = fopen(path, "rb")) == null) {
 		oc_error ("Can not open %s with read mode\n", path);
-		return NULL;
+		return null;
 	}
 
 	if ( libpreg_arg_init (&pa) == false )
-		return NULL;
+		return null;
 
 	pa->regex = (char *) regex;
 	pa->reglen = strlen (regex);
@@ -778,10 +778,10 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 	if ( libpreg_compile (&pa) == false ) {
 		libpreg_arg_free (&pa);
 		fclose (fp);
-		return NULL;
+		return null;
 	}
 
-	while ( fgets (line, OC_LINEBUF, fp) != NULL ) {
+	while ( fgets (line, OC_LINEBUF, fp) != null ) {
 		linelen = strlen (line);
 		pa->subject = (char *) line;
 		pa->subjlen = linelen;
@@ -791,7 +791,7 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 		if ( count == 0 ) {
 			libpreg_arg_free (&pa);
 			fclose (fp);
-			return NULL;
+			return null;
 		}
 
 		if ( (count > 0 && reverse) || (count < 0 && ! reverse) )
@@ -799,10 +799,10 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 
 		if ( buflen == 0 ) {
 			oc_malloc (buf, sizeof (char) * chklen);
-			if ( buf == NULL ) {
+			if ( buf == null ) {
 				libpreg_arg_free (&pa);
 				fclose (fp);
-				return NULL;
+				return null;
 			}
 		}
 
@@ -812,10 +812,10 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 		if ( buflen >= chklen ) {
 			chklen *= 2;
 			oc_realloc (buf, sizeof (char) * chklen);
-			if ( buf == NULL ) {
+			if ( buf == null ) {
 				libpreg_arg_free (&pa);
 				fclose (fp);
-				return NULL;
+				return null;
 			}
 			buf_t = buf + buflen;
 		}
@@ -827,7 +827,7 @@ skip_print:
 	fclose (fp);
 	libpreg_arg_free (&pa);
 
-	if ( buf != NULL ) {
+	if ( buf != null ) {
 		int l = 0;
 		if ( *(buf + buflen - 1) == '\n' )
 			l = -1;
@@ -941,7 +941,7 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 	oc_malloc (pa->offsets, sizeof (int) * pa->size_offsets);
 	if ( pa->offsets == null ) {
 		libpreg_arg_free (&pa);
-		return NULL;
+		return null;
 	}
 
 	replace_len = strlen(replace);
@@ -949,13 +949,13 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 
 	alloc_len = 2 * pa->subjlen + 1;
 	oc_malloc (result, sizeof (char) * alloc_len);
-	if ( result == NULL ) {
+	if ( result == null ) {
 		libpreg_arg_free (&pa);
-		return NULL;
+		return null;
 	}
 
 	/* Initialize */
-	match = NULL;
+	match = null;
 	
 	while (1) {
 		/* Execute the regular expression. */
