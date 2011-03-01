@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:42:26 $
- * $Revision: 1.34 $
+ * $Date: 2011-03-01 17:50:42 $
+ * $Revision: 1.35 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.34 2011-03-01 17:42:26 oops Exp $ */
+/* $Id: libpcre.c,v 1.35 2011-03-01 17:50:42 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -93,7 +93,7 @@ typedef struct {
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-bool libpreg_arg_init (PregArg ** pa) // {{{
+static bool libpreg_arg_init (PregArg ** pa) // {{{
 {
 	oc_malloc_r (*pa, sizeof (PregArg), false);
 
@@ -118,7 +118,7 @@ bool libpreg_arg_init (PregArg ** pa) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-void libpreg_arg_free (PregArg ** pa) // {{{
+static void libpreg_arg_free (PregArg ** pa) // {{{
 {
 	ofree ((*pa)->re);
 	ofree ((*pa)->extra);
@@ -147,7 +147,7 @@ void libpreg_arg_free (PregArg ** pa) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-bool libpreg_parse (char * regex, char * pattern, int * option, int * study) // {{{
+static bool libpreg_parse (char * regex, char * pattern, int * option, int * study) // {{{
 {
 	char	delimiter = ' ';
 	char	* opt;
@@ -274,7 +274,7 @@ static int libpreg_get_backref (char ** str, int * backref) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-bool libpreg_compile (PregArg ** pa) // {{{
+static bool libpreg_compile (PregArg ** pa) // {{{
 {
 	PregArg		* p;
 	int			preg_options,
@@ -353,7 +353,7 @@ bool libpreg_compile (PregArg ** pa) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
+static int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
 {
 	PregArg		* p;
 	int			count;

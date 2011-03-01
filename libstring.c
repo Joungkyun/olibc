@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:42:26 $
- * $Revision: 1.69 $
+ * $Date: 2011-03-01 17:50:42 $
+ * $Revision: 1.70 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.69 2011-03-01 17:42:26 oops Exp $ */
+/* $Id: libstring.c,v 1.70 2011-03-01 17:50:42 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -63,7 +63,7 @@
  * @param[in]	complete Bool. Set true filled right blank to 0.
  * @return	The length of dst variable that has converted binary string
  */
-UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
+static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 {
 	ULong32	mask = 2147483648UL;
 	Long32	m;
@@ -103,7 +103,7 @@ UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
  * The _bin2hex() function convert 4byte binary string to
  * hexcical character.
  */
-char _bin2hex (CChar * src) // {{{
+static char _bin2hex (CChar * src) // {{{
 {
 	if ( ! strcmp ( src, "0000" ) ) return '0';
 	else if ( ! strcmp (src, "0001") ) return '1';
@@ -129,7 +129,7 @@ char _bin2hex (CChar * src) // {{{
  * @param	s The input string thst start 2th byte
  * @param	byte The type of byte
  */
-bool utf8_underbit_check (UCChar * s, UInt byte) // {{{
+static bool utf8_underbit_check (UCChar * s, UInt byte) // {{{
 {
 	UInt	i;
 	for ( i=0; i<byte; i++ ) {
@@ -145,7 +145,7 @@ bool utf8_underbit_check (UCChar * s, UInt byte) // {{{
  * @param	charset	The input character set
  * @param	srclen	The length of source string.
  */
-size_t charset_conv_outplen (CChar * charset, size_t srclen) // {{{
+static size_t charset_conv_outplen (CChar * charset, size_t srclen) // {{{
 {
 	if ( ! strncmp (charset, "utf", 3) || ! strncmp (charset, "UTF", 3) )
 		return srclen * 2;
