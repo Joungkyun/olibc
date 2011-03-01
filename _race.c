@@ -38,11 +38,11 @@
  * This file includes proto type of RACE code apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.13 $
+ * $Date: 2011-03-01 04:34:50 $
+ * $Revision: 1.14 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: _race.c,v 1.13 2011-03-01 04:17:47 oops Exp $ */
+/* $Id: _race.c,v 1.14 2011-03-01 04:34:50 oops Exp $ */
 #include <oc_common.h>
 #include <_race.h>
 
@@ -204,7 +204,7 @@ int string_convert (char * dest, char * src, char * from, char * to, int debug) 
 	iconv_t	cd;
 	char	* inbuf_p = src,
 			* outbuf_p = dest,
-			* buf[9];
+			buf[9];
 
 	size_t	il,
 			ol;
