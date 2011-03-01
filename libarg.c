@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:44:25 $
- * $Revision: 1.28 $
+ * $Date: 2011-03-01 17:35:56 $
+ * $Revision: 1.29 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.28 2011-03-01 04:44:25 oops Exp $ */
+/* $Id: libarg.c,v 1.29 2011-03-01 17:35:56 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -105,7 +105,7 @@ int longopt_chk (const char * option, const struct o_option * options) // {{{
 
 /**
  * @brief	Check valid o_getopt short options
- * @param	option The input short option charactor
+ * @param	option The input short option character
  * @param	options The valid option string
  * @return  integer
  * @retval	1 Valid option that has option value
@@ -165,7 +165,7 @@ bool only_whitespace (const char * stream, int length) // {{{
 /**
  * @brief	Preserve white space in the quoted string
  * @param	stream The input string
- * @return	The charactor pointer of preserved string
+ * @return	The character pointer of preserved string
  * @exception RETURNS
  *   When occurs internal error, convert_quoted_blank() returns null.<br />
  *   If the return character pointer is not null, the caller should
@@ -244,7 +244,7 @@ char * convert_quoted_blank (const char * stream) // {{{
 /**
  * @brief	revoke replaced white space
  * @param	stream The input string
- * @return	The charactor pointer of revoked string
+ * @return	The character pointer of revoked string
  * @exception RETURNS
  *   When occurs internal error, convert_unquoted_blank() returns null.<br />
  *   If the return character pointer is not null, the caller should
@@ -299,7 +299,7 @@ char * unconvert_quoted_blank (const char * stream) // {{{
  *               This is same as 4th argument of getopt_long. See also
  *               'man 3 getopt_long'<br /><br />
  *               If you don't want to use longopt, you can set NULL.
- * @retval	charactor The option charactor
+ * @retval	character The option character
  * @retval	-1 Close parsing
  * @sa getopt(3) getopt_long(3) ofree_array argv_make
  *
@@ -383,7 +383,7 @@ retry:
 					/* if argument with equer (=) */
 					strncpy (o_optarg, longopt_sep_arg, ARGLENGTH);
 				} else {
-					/* elseif argument with white charactor */
+					/* elseif argument with white character */
 					opt_t++;
 	
 					if ( *opt_t == NULL || ! strncmp ("-", *opt_t, 1) ) {

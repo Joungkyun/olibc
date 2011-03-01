@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:44:25 $
- * $Revision: 1.32 $
+ * $Date: 2011-03-01 17:35:56 $
+ * $Revision: 1.33 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.32 2011-03-01 04:44:25 oops Exp $ */
+/* $Id: libpcre.c,v 1.33 2011-03-01 17:35:56 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -574,8 +574,11 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 		}
 
 #ifdef __OCDEBUG__
-		for ( i=0; i<count; i++ )
-			OC_DEBUG ("Matched String[%d] : %s\n", i, (char *) stringlist[i]);
+		{
+			int	i;
+			for ( i=0; i<count; i++ )
+				OC_DEBUG ("Matched String[%d] : %s\n", i, (char *) stringlist[i]);
+		}
 #endif
 
 		*matches = stringlist;
@@ -590,7 +593,7 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
  * @param	regex The pattern to search for, as a string.
  * @param	subject The input string
  * @param	reverse Set true, returns unmatched line
- * @return	Charactor pointer of the matched lines
+ * @return	Character pointer of the matched lines
  * @sa	preg_fgrep
  * @exception RETURNS
  *   When occurs internal error, preg_grep() returns null.<br />
@@ -724,7 +727,7 @@ skip_print:
  * @param	regex The pattern to search for, as a string.
  * @param	path The input file
  * @param	reverse Set true, returns unmatched line
- * @return	Charactor pointer of the matched lines
+ * @return	Character pointer of the matched lines
  * @sa	preg_grep
  * @exception RETURNS
  *   When occurs internal error, preg_fgrep() returns null.<br />
@@ -841,7 +844,7 @@ skip_print:
  * @param	subject The input string
  * @param	regarr_no Length of regex and replace arrays.<br />
  *          Length of regex array is must same length of replace array.
- * @return		Charactor pointer of The replaced string
+ * @return		Character pointer of The replaced string
  * @sa	preg_replace<br>
  *      http://php.net/manual/en/function.preg-replace.php
  * @exception RETURNS
@@ -880,7 +883,7 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
  * @param[in]	replace Will replacing string
  * @param[in]	subject The input string
  * @param[out]	retlen The length of returned string
- * @return		Charactor pointer of The replaced string
+ * @return		Character pointer of The replaced string
  * @sa	preg_replace_arr<br>
  *      http://php.net/manual/en/function.preg-replace.php
  * @exception RETURNS

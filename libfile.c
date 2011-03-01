@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:44:25 $
- * $Revision: 1.23 $
+ * $Date: 2011-03-01 17:35:56 $
+ * $Revision: 1.24 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.23 2011-03-01 04:44:25 oops Exp $ */
+/* $Id: libfile.c,v 1.24 2011-03-01 17:35:56 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -52,7 +52,7 @@
 #ifdef _POSIX_PATH_MAX
 #define PATH_MAX _POSIX_PATH_MAX
 #else
-#define PATH_MAX 256
+#define PATH_MAX 256 //!< Be declared If undefined PATH_MAX and _POSIX_PATH_MAX
 #endif
 #endif
 
@@ -60,14 +60,16 @@
  * @brief	Checks whether a file or directory exists
  * @param	path Path to the file or directory
  * @param	mode check conditions.
- * 				_IS_NCHK check only exists
- * 				_IS_FILE check whether is regular file or not
- * 				_IS_DIR  check whether is regular directory or not
- * 				_IS_SLINK check whether is symbolic link or not
- * 				_IS_CDEV check whether is charactor device or not
- * 				_IS_BDEV check whether is block device or not
- * 				_IS_FIFO check whether is FIFO or not
- * 				_IS_SOCK check whether is socket or not
+ * @code
+ *   _IS_NCHK : check only exists
+ *   _IS_FILE : check whether is regular file or not
+ *   _IS_DIR : check whether is regular directory or not
+ *   _IS_SLINK : check whether is symbolic link or not
+ *   _IS_CDEV : check whether is character device or not
+ *   _IS_BDEV : check whether is block device or not
+ *   _IS_FIFO : check whether is FIFO or not
+ *   _IS_SOCK : check whether is socket or not
+ * @endcode
  * @return	bool
  * @retval	true Success
  * @retval	false Failure
@@ -177,6 +179,8 @@ char * readfile (CChar * path) // {{{
  * @deprecated
  *   This function is deprecated and removed next version.<br />
  *   You can replace with readfile().
+ *
+ * Alias of The readfile() funtion on 0.1.3
  */
 OLIBC_API
 char * fileread (CChar * path) // {{{
@@ -247,7 +251,31 @@ int writefile (CChar * path, CChar * data, bool mode) // {{{
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
- * The result of realpath_r() function is must free.
+ * The realpath_r() expands all symbolic links and resolves references to
+ * '/./', '/../' and extra '/' characters in the null terminated string
+ * named by path and returns the canonicalized absolute pathname in the
+ * buffer of size PATH_MAX. The resulting path will have no symbolic link,
+ * '/./' or '/../' components.
+ *
+ * If it returns NULL pointer, the global variable errno set follows:
+ *
+ * @code
+ *   ENOENT
+ *     The named file does not exist.
+ *   ENOMEM
+ *     The user memory cannot be mapped
+ *   ERANGE
+ *     Not enough space available for storing the path
+ *   EFAULT
+ *     Memory access violation occurs while copying
+ *   ENAMETOOLONG
+ *     A component of a pathname exceeded NAME_MAX characters, or an
+ *     entire pathname exceeded PATH_MAX characters.
+ * @endcode
+ *
+ * and so on.
+ *
+ * See also /usr/include/asm/errno.h
  */
 OLIBC_API
 char * realpath_r (CChar * path) // {{{
@@ -260,8 +288,10 @@ char * realpath_r (CChar * path) // {{{
 			curpath[PATH_MAX + 1] = { 0, },
 			* buf;
 
-	if ( path == NULL )
+	if ( path == NULL ) {
+		errno = ENOENT;
 		return NULL;
+	}
 
 	// The given path is already real path.
 	if ( path[0] == '/' ) {
@@ -338,6 +368,7 @@ char * realpath_r (CChar * path) // {{{
 /**
  * @example fileExists.c
  * @example readfile.c
+ * @example realpath_r.c
  */
 
 /*

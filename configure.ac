@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.27 2011-02-23 11:21:08 oops Exp $
+# $Id: configure.ac,v 1.28 2011-03-01 17:35:56 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -192,8 +192,8 @@ AC_CHECK_LIB(rt, clock_gettime,,[])
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([langinfo.h libintl.h locale.h time.h sys/time.h
-				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h
+AC_CHECK_HEADERS([langinfo.h libintl.h locale.h time.h sys/time.h \
+				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h \
 				  iconv.h stdbool.h])
 
 if test "$GCC" = "yes"; then
@@ -216,7 +216,7 @@ AC_CHECK_SIZEOF(long)
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([strtoull gettimeofday setlocale memmove bcopy strerror])
+AC_CHECK_FUNCS([strtoll gettimeofday setlocale memmove bcopy strerror])
 
 AC_CONFIG_FILES([Makefile
                  man/Makefile

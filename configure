@@ -8630,7 +8630,9 @@ fi
 
 
 
-for ac_header in langinfo.h libintl.h locale.h time.h sys/time.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h stdbool.h
+for ac_header in langinfo.h libintl.h locale.h time.h sys/time.h \
+				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h \
+				  iconv.h stdbool.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if eval "test \"\${$as_ac_Header+set}\" = set"; then
@@ -12671,7 +12673,7 @@ fi
 
 
 
-for ac_func in strtoull gettimeofday setlocale memmove bcopy strerror
+for ac_func in strtoll gettimeofday setlocale memmove bcopy strerror
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for $ac_func" >&5

@@ -38,18 +38,124 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:44:25 $
- * $Revision: 1.67 $
+ * $Date: 2011-03-01 17:35:56 $
+ * $Revision: 1.68 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.67 2011-03-01 04:44:25 oops Exp $ */
+/* $Id: libstring.c,v 1.68 2011-03-01 17:35:56 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
 #endif
+
+/** @defgroup string_internalfunc String API internal functions of olibc
+ * @{
+ */
+
+/* dec to binary template fucntion */
+/**
+ * @brief	convert binary to 4 byte string type
+ * @param[in]	src	The input binary
+ * @param[out]	dst	Converted binary string
+ * @param[in]	complete Bool. Set true filled right blank to 0.
+ * @return	The length of dst variable that has converted binary string
+ */
+UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
+{
+	ULong32	mask = 2147483648UL;
+	Long32	m;
+	UInt	len;
+
+	oc_malloc_r (*dst, sizeof (char) * 33, 0);
+	memset (*dst, 0, 32);
+
+	OC_DEBUG ("Buf No: %ld\n", src);
+
+	len = 0;
+	while ( mask > 0 ) {
+		m = (Long32) src & (Long32) mask;
+
+		if ( m ) {
+			memset ((*dst) + len, 49, 1);
+			len++;
+		} else {
+			if ( complete || len ) {
+				memset ((*dst) + len, 48, 1);
+				len++;
+			}
+		}
+
+		mask = mask >> 1;
+	}
+	memset ((*dst) + len, 0, 0);
+
+	return len;
+} // }}}
+
+/**
+ * @brief	convert binary string to hex character
+ * @param	src 4byte binary string
+ * @return	hexadecimal character [0-9a-f?]
+ *
+ * The _bin2hex() function convert 4byte binary string to
+ * hexcical character.
+ */
+char _bin2hex (CChar * src) // {{{
+{
+	if ( ! strcmp ( src, "0000" ) ) return '0';
+	else if ( ! strcmp (src, "0001") ) return '1';
+	else if ( ! strcmp (src, "0010") ) return '2';
+	else if ( ! strcmp (src, "0011") ) return '3';
+	else if ( ! strcmp (src, "0100") ) return '4';
+	else if ( ! strcmp (src, "0101") ) return '5';
+	else if ( ! strcmp (src, "0110") ) return '6';
+	else if ( ! strcmp (src, "0111") ) return '7';
+	else if ( ! strcmp (src, "1000") ) return '8';
+	else if ( ! strcmp (src, "1001") ) return '9';
+	else if ( ! strcmp (src, "1010") ) return 'a';
+	else if ( ! strcmp (src, "1011") ) return 'b';
+	else if ( ! strcmp (src, "1100") ) return 'c';
+	else if ( ! strcmp (src, "1101") ) return 'd';
+	else if ( ! strcmp (src, "1110") ) return 'e';
+	else if ( ! strcmp (src, "1111") ) return 'f';
+	else return '?';
+} // }}}
+
+/**
+ * @brief	check utf8 rest byte except 1st byte 
+ * @param	s The input string thst start 2th byte
+ * @param	byte The type of byte
+ */
+bool utf8_underbit_check (UCChar * s, UInt byte) // {{{
+{
+	UInt	i;
+	for ( i=0; i<byte; i++ ) {
+		if ( *(s + i) >> 6 != 0x02 )
+			return false;
+	}
+
+	return true;
+} // }}}
+
+/**
+ * @brief	Predict length of converted string per character set
+ * @param	charset	The input character set
+ * @param	srclen	The length of source string.
+ */
+size_t charset_conv_outplen (CChar * charset, size_t srclen) // {{{
+{
+	if ( ! strncmp (charset, "utf", 3) || ! strncmp (charset, "UTF", 3) )
+		return srclen * 2;
+	else if ( ! strncmp (charset, "ucs", 3) || ! strncmp (charset, "UCS", 3) )
+		return srclen * 2;
+
+	return srclen;
+} // }}}
+
+/** @} */ // end of string_internalfunc group
 
 /**
  * @brief	print olibc version
@@ -75,8 +181,10 @@ void olibc_version (void) // {{{
 OLIBC_API
 void trim (char * str) // {{{
 {
-	int len;
-	int start = 0, end = 0, i = 0;
+	int	len,
+		start = 0,
+		end = 0,
+		i = 0;
 
 	if ( str == NULL )
 		return;
@@ -144,8 +252,8 @@ void trim (char * str) // {{{
 OLIBC_API
 char * trim_r (char * str, bool should_free) // {{{
 {
-	int len;
-	char * buf;
+	char	* buf;
+	int		len;
 
 	if ( str == NULL )
 		return NULL;
@@ -167,30 +275,36 @@ char * trim_r (char * str, bool should_free) // {{{
 
 /**
  * @brief	Quote string with slashes
- * @param	in given binary data for qouting
- * @param	inlen length of given binary data
- * @param	out converted binary data
- * @param	outlen length of converted data
- * @return	length of converted data
+ * @param[in]	in The input binary data for qouting
+ * @param[in]	inlen length of given binary data
+ * @param[out]	out converted binary data
+ * @param[out]	outlen length of converted data
+ * @retval	true Success
+ * @retval	false Failure
  * @sa		addslashes
+ * @exception RETURNS
+ *   When occurs internal error, output parameter out has null value.<br />
+ *   If the out variable has not null, the caller should deallocate this
+ *   buffer using @e free()
  *
  * convert binary data with * backslashes before characters that need
  * to be quoted in database queries etc. These characters are single
- * quote ('), double quote ("), backslash (\) and Null byte (\0).
+ * quote ('), double quote ("), backslash (\) and Null byte (\\0).
  *
  * This is binary safe.
  */
 OLIBC_API
-int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{{
+bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
-	UChar * source, * target;
-	UChar * end;
+	UChar	* source,
+			* target,
+			* end;
 
 	if ( in == NULL || inlen < 1 )
-		return 0;
+		return false;
 
-	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), 0);
+	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), false);
 
 	source = in;
 	target = *out;
@@ -222,7 +336,7 @@ int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{
 		oc_realloc_r (*out, sizeof (char) * ((*outlen) + 1), NULL);
 	*/
 
-	return 1;
+	return true;
 } // }}}
 
 /**
@@ -231,6 +345,10 @@ int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{
  * @param	should_free bool / set true, free memory of in argument.
  * @return	pointer of result
  * @sa		addslashes_r
+ * @exception RETURNS
+ *   When occurs internal error, addslashes() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * Returns a string with backslashes before characters that need
  * to be quoted in database queries etc. These characters are single
@@ -241,13 +359,13 @@ int addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{
 OLIBC_API
 char * addslashes (char * in, bool should_free) // {{{
 {
-	size_t outlen;
-	UChar * out;
+	size_t	outlen;
+	UChar	* out;
 
 	if ( in == NULL )
 		return NULL;
 
-	if ( addslashes_r ((UChar *) in, strlen (in), &out, &outlen) == 0 )
+	if ( addslashes_r ((UChar *) in, strlen (in), &out, &outlen) == false )
 		return NULL;
 
 	if ( should_free )
@@ -258,23 +376,28 @@ char * addslashes (char * in, bool should_free) // {{{
 
 /**
  * @brief	convert to 64bit integer from string
- * @param[in]	src numeric string
+ * @param[in]	src The input numeric string
  * @return	64bit long value
+ *
+ * The str2long() function conveted string of numeric type to 64bit integer.
+ * If system support strtoll, the str2long() function use strtoll.
  */
 OLIBC_API
 Long64 str2long (CChar * src) // {{{
 {
-#ifdef HAVE_STRTOULL
+#ifdef HAVE_STRTOLL
 	OC_DEBUG ("USE strtoll\n");
 	return strtoll (src, NULL, 10);
 #else
-	int bufno = 0, i;
-	UInt len;
-	bool minus = false;
-	Long64 x = 1, res = 0;
-	char * buf;
+	int		bufno = 0,
+			i;
+	UInt	len;
+	bool	minus = false;
+	Long64	x = 1,
+			res = 0;
+	char	* buf;
 
-	/* removed blank charactor */
+	/* removed blank character */
 	oc_strdup_r (buf, src, 0);
 	trim (buf);
 	len = strlen (buf);
@@ -310,18 +433,23 @@ Long64 str2long (CChar * src) // {{{
 } // }}}
 
 /**
- * @brief	convert type casting to double from string
- * @param[in]	src numeric string
+ * @brief	convert to double from string
+ * @param[in]	src numeric string of double type
  * @return	double value
+ *
+ * The str2double() function conveted string of double numeric type
+ * to integer that casted double.
  */
 OLIBC_API
 long double str2double (CChar * src) { // {{{
-	char * dot;
-	char * decimal_t, * fraction_t;
-	ULong64 decimal, fraction;
-	float fraction_f;
-	bool minus = false;
-	long double buf;
+	char	* dot,
+			* decimal_t,
+			* fraction_t;
+	ULong64	decimal,
+			fraction;
+	float	fraction_f;
+	bool	minus = false;
+	double	buf;
 
 	if ( src == NULL )
 		return 0;
@@ -375,12 +503,13 @@ long double str2double (CChar * src) { // {{{
 } // }}}
 
 /**
- * @brief	convert casting type to int from char
- * @param	c	numeric charactor (character 0 - 9)
- * @return	int value (On fail, return -1)
- *
- * If given string is our of range between ascii 48 and 57,
- * return -1.
+ * @brief	convert to integer from char
+ * @param	c	The input numeric character (character 0 - 9)
+ * @return	integer
+ * @retval	-1 Failure
+ * @exception RETURNS
+ *   The input character is out of range between ascii 48 and 57,
+ *   the char2int() function returns -1.
  */
 OLIBC_API
 int char2int (CChar c) // {{{
@@ -392,11 +521,11 @@ int char2int (CChar c) // {{{
 } // }}}
 
 /**
- * @brief	check a ascii value of a charactor whether is between 48 and 57
- * @param	c a charactor for checking
+ * @brief	check the ascii value of a character whether is between 48 and 57
+ * @param	c A character for checking
  * @return	bool
  *
- * The check_int() function check whether a given charactor has value
+ * The check_int() function check whether a given character has value
  * between 48 and 57.
  */
 OLIBC_API
@@ -409,14 +538,15 @@ int check_int (char c) // {{{
 /**
  * @brief	Set ansi color
  * @param	stream stdin, stdout or stderr, and so on.
- * @param	color color constants
- * @param	noansi bool value. If not 0, this function don't opperate.
+ * @param	color olibc color constants
+ * @param	noansi bool. Set true, this function don't operate.
  * @return	void
  *
- * Set ansi color of printed string on a file stream. If you want to stop
+ * Print magic character of ansi color on the file stream. If you want to stop
  * ansi mode, recall this function with ENDANSI constant.
  *
  * Color constants:
+ * @code
  *     ENDANSI   0
  *     GRAY      1
  *     BGRAY     2
@@ -434,11 +564,12 @@ int check_int (char c) // {{{
  *     BCYAN    14
  *     WHITE    15
  *     BWHITE   16
+ * @endcode
  */
 OLIBC_API
 void setansi (FILE * stream, int color, bool noansi) // {{{
 {
-	int ansi = 0;
+	int	ansi = 0;
 
 	switch ( color ) {
 		case GRAY :
@@ -503,26 +634,32 @@ void setansi (FILE * stream, int color, bool noansi) // {{{
 
 /**
  * @brief	convert number to human readable
- * @param	size double number
- * @param	sub bool. set true, return with original size. ex, 'convert size (orignal size)'
- * @param	unit bool. set true, caculation with Byte, else with Bit.
+ * @param	size The input 64bit integer
+ * @param	sub Bool. Set true, return with original size.<br />
+ * 			For example, 'convert size (orignal size)'
+ * @param	unit Bool. Set true, caculation with Byte, else with Bit.
  * @return	formatted string by human read.
+ * @sa	human_size
+ * @exception RETURNS
+ *   When occurs internal error, human_size_r() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
  * The human_size_r() funtion convert to unit for human readable.
  * The return value support decimal porint under 2 digits.
- *
- * The return value is must freed.
  *
  * This function is thread safe.
  */
 OLIBC_API
 char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 {
-	char units[] = { 0, 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
-	UInt i = 0, dvd = 1024;
-	ULong64 osize = size, frac = 1;
-	char * buf;
-	char singular[2] = { 0, };
+	char	units[] = { 0, 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' },
+			singular[2] = { 0, };
+	char	* buf;
+	ULong64	osize = size,
+			frac = 1;
+	UInt	i = 0,
+			dvd = 1024;
 
 	oc_safe_cpy (singular, (size > 2) ? "s" : "", 2);
 	oc_malloc_r (buf, sizeof (char) * 64, NULL);
@@ -552,7 +689,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 	OC_DEBUG ("FRAC PART: %lld\n", frac);
 
 	if ( sub ) {
-		char * BYTE_C;
+		char	* BYTE_C;
 		BYTE_C = (char *) numberFormat (osize, 0, '.', ',', 0);
 		sprintf (
 			buf, "%llu.%llu %c%c (%s B%s%s)",
@@ -568,22 +705,25 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 
 /**
  * @brief	convert number to human readable
- * @param	size double number
- * @param	sub bool. set true, return with original size. ex, 'convert size (orignal size)'
- * @param	unit bool. set true, caculation with Byte, else with Bit.
+ * @param	size The input double integer
+ * @param	sub Set 1, return with original size.<br />
+ * 			For example, 'convert size (orignal size)'
+ * @param	unit Set 1, caculation with Byte, else with Bit.
  * @return	formatted string by human read.
+ * @sa	human_size_r
+ * @exception RETURNS
+ *   The human_size() function returns static memory address.<br />
+ *   So, this function is not thread safe. For thread safe, use
+ *   @e human_size_r() function.
  *
- * The human_size_r() funtion convert to unit for human readable.
+ * The human_size() funtion convert to unit for human readable.
  * The return value support decimal porint under 2 digits.
- *
- * This function is not thread safe, so use human_size_r function for
- * thread safe.
  */
 OLIBC_API
 char * human_size (double size, int sub, int unit) // {{{
 {
-	static char buf[1024] = { 0, };
-	char * tmp;
+	static char	buf[1024] = { 0, };
+	char		* tmp;
 
 	tmp = human_size_r (size, sub, unit);
 	oc_safe_cpy (buf, tmp, 1024);
@@ -594,35 +734,44 @@ char * human_size (double size, int sub, int unit) // {{{
 
 /**
  * @brief	Format a number with grouped thousands
- * @param	d The number being formatted.
+ * @param	num The number being formatted.
  * @param	dec Sets the number of decimal points.
  * @param	dec_point Sets the separator for the decimal point.
  * @param	thousand_sep Sets the thousands separator.
- * @param	print bool. if set true, don't free return value.
+ * @param	print Bool. if set true, returns null.
+ * @sa	http://php.net/manual/en/function.number-format.php
  * @return	formatted string
+ * @exception RETURNS
+ *   When occurs internal error, numberFormat() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
- * This function is formatted a number with grouped thousands.
- * See also http://php.net/manual/en/function.number-format.php
+ * @e Num will be formatted with @e dec decimals, @e dec_point instead
+ * of a dot (".") before the decimals and @e thousands_sep instead of
+ * a comma (",") between every group of thousands.
  *
- * This function is written with PHP (http://php.net).
+ * This function is written with number_format of PHP (http://php.net).
  */
 OLIBC_API
-char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool print) // {{{
+char * numberFormat (double num, int dec, char dec_point, char thousand_sep, bool print) // {{{
 {
-	char * tmpbuf, * resbuf;
-	char * src, * tgt;  /* source, target */
-	int tmplen, reslen = 0;
-	int count = 0;
-	int is_negative = 0;
+	char	* tmpbuf,
+			* resbuf,
+			* src,    // source
+			* tgt;    // target
+	int		tmplen,
+			reslen = 0,
+			count = 0,
+			is_negative = 0;
 
-	if (d < 0) {
+	if ( num < 0 ) {
 		is_negative = 1;
-		d = -d;
+		num = -num;
 	}
 	dec = MAX (0, dec);
 	oc_malloc_r (tmpbuf, 1024, NULL);
 
-	tmplen = sprintf (tmpbuf, "%.*f", dec, d);
+	tmplen = sprintf (tmpbuf, "%.*f", dec, num);
 	if ( ! isdigit ((int) tmpbuf[0]) )
 		return tmpbuf;
 
@@ -678,17 +827,20 @@ char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool 
  */
 
 /**
- * @brief	convert strings to lower case
- * @param	str strings
+ * @brief	Make a string lowercase
+ * @param	str The input string
  * @return	void
  *
- * The strtolower() function converts strings to lower case.
- * The given argument of strtolower is changed.
+ * @warning
+ *   The strtoupper() function changes input variable (@e src)!
+ *
+ * The strtolower() function converts @e str with all alphabetic
+ * characters converted to lowercase.
  */
 OLIBC_API
 void strtolower (char * str) // {{{
 {
-	int len;
+	int	len;
 
 	if ( str == NULL )
 		return;
@@ -704,17 +856,20 @@ void strtolower (char * str) // {{{
 } // }}}
 
 /**
- * @brief	convert strings to upper case
- * @param	str strings
+ * @brief	Make a string uppercase
+ * @param	str The input string
  * @return	void
  *
- * The strtoupper() function converts strings to upper case.
- * The given argument of strtoupper is changed.
+ * @warning
+ *   The strtoupper() function changes input variable (@e src)!
+ *
+ * The strtoupper() function converts @e str with alphabetic
+ * characters to uppercase.
  */
 OLIBC_API
 void strtoupper (char * str) // {{{
 {
-	int len;
+	int	len;
 
 	if ( str == NULL )
 		return;
@@ -734,50 +889,28 @@ void strtoupper (char * str) // {{{
  */
 
 /**
- * @brief	convert binary string to hex charactor
- * @param	src 4byte binary string
- * @return	hexical charactor [0-9a-f?]
+ * @brief	Convert binary data into hexadecimal representation
+ * @param[in]	src The input binary string
+ * @param[out]	dst hexadecimal string
+ * @return	length of @e dst
+ * @sa	bin2hex hex2bin
+ * @exception RETURNS
+ *   When occurs internal error, bin2hex_r() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
- * The _bin2hex() function convert 4byte binary string to
- * hexcical charactor.
- */
-char _bin2hex (CChar * src) // {{{
-{
-	if ( ! strcmp ( src, "0000" ) ) return '0';
-	else if ( ! strcmp (src, "0001") ) return '1';
-	else if ( ! strcmp (src, "0010") ) return '2';
-	else if ( ! strcmp (src, "0011") ) return '3';
-	else if ( ! strcmp (src, "0100") ) return '4';
-	else if ( ! strcmp (src, "0101") ) return '5';
-	else if ( ! strcmp (src, "0110") ) return '6';
-	else if ( ! strcmp (src, "0111") ) return '7';
-	else if ( ! strcmp (src, "1000") ) return '8';
-	else if ( ! strcmp (src, "1001") ) return '9';
-	else if ( ! strcmp (src, "1010") ) return 'a';
-	else if ( ! strcmp (src, "1011") ) return 'b';
-	else if ( ! strcmp (src, "1100") ) return 'c';
-	else if ( ! strcmp (src, "1101") ) return 'd';
-	else if ( ! strcmp (src, "1110") ) return 'e';
-	else if ( ! strcmp (src, "1111") ) return 'f';
-	else return '?';
-} // }}}
-
-/**
- * @brief	convert binary strings to hex strings
- * @param[in]	src binary string
- * @param[out]	dst hexical string
- * @return	length of dst
- *
- * The bin2hex_r() function converts binary string to hexical
+ * The bin2hex_r() function converts binary string to hexadecimal
  * string.
  *
- * This function is thread safe, and must free return value.
+ * This function is thread safe.
  */
 OLIBC_API
 ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
 {
-	int i, j, len;
-	char buf[5];
+	int		i,
+			j,
+			len;
+	char	buf[5];
 
 	if ( src == NULL )
 		return 0;
@@ -798,24 +931,25 @@ ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
 } // }}}
 
 /**
- * @brief	convert binary strings to hex strings
- * @param	src binary string
- * @return	static string
+ * @brief	Convert binary data into hexadecimal representation
+ * @param	src The input binary string
+ * @sa	bin2hex_r hex2bin
+ * @return	hexadecimal string
  *
- * The bin2hex() function converts binary string to hexical
+ * @warning
+ *   The return value used static memory, so this function is
+ *   not thread safe. If you want thread safe, use bin2hex_r().<br /><br />
+ *   The argument @e src length of bin2hex() is smaller then 4096.
+ *
+ * The bin2hex() function converts binary string to hexadecimal
  * string.
- *
- * The return value used static memory, so this function is
- * not thread safe. If you want thread safe, use bin2hex_r.
- *
- * The argument length of bin2hex() is smaller than (1024 * 4).
  */
 OLIBC_API
 char * bin2hex (CChar * src) // {{{
 {
-	static char dst[1024] = { 0, };
-	ULong32 len;
-	char * buf;
+	static char	dst[1024] = { 0, };
+	ULong32		len;
+	char		* buf;
 
 	len = bin2hex_r (src, &buf);
 
@@ -828,12 +962,15 @@ char * bin2hex (CChar * src) // {{{
 } // }}}
 
 /**
- * @brief	convert hexical charactor to binary string
- * @param	c	hexical charactor for converting
- * @return	binary string or '...' on out of range.
+ * @brief	Convert hexadecimal character to binary string
+ * @param	c	hexadecimal character for converting
+ * @return	binary string
+ * @sa	hex2bin bin2hex bin2hex_r
+ * @retval	'....' out of range
  */
 OLIBC_API
-char * _hex2bin (CChar c) { // {{{
+char * _hex2bin (CChar c) // {{{
+{
 	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
 		switch (c) {
 			case 'a' : return "1010"; break;
@@ -868,15 +1005,23 @@ char * _hex2bin (CChar c) { // {{{
 } // }}}
 
 /**
- * @brief	convert hexical string to binary string
- * @param	src hexical string for converting
- * @return	binary string or NULL
+ * @brief	Convert hexadecimal string to binary string
+ * @param	src hexadecimal string for converting
+ * @return	binary string
+ * @sa	_hex2bin bin2hex bin2hex_r
+ * @exception RETURNS
+ *   When occurs internal error, hex2bin() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  */
 OLIBC_API
 char * hex2bin (CChar * src) // {{{
 {
-	char * data;
-	UInt len, alloc, i, j;
+	char	* data;
+	UInt	len,
+			alloc,
+			i,
+			j;
 
 	if ( src == NULL )
 		return NULL;
@@ -904,15 +1049,19 @@ char * hex2bin (CChar * src) // {{{
  */
 
 /**
- * @brief	convert binary string to 32bit integer
- * @param	src	binary string
+ * @brief	Convert binary string to 32bit integer
+ * @param	src	The input binary string
+ * @sa	dec2bin bin2long long2bin
  * @return	32bit integer
+ * @warning
+ *   The bin2long() function don't support negative.
  */
 OLIBC_API
 UInt bin2dec (CChar * src) // {{{
 {
-	UInt len, i, ret = 0;
-	char var;
+	UInt	len, i,
+			ret = 0;
+	char	var;
 
 	len = strlen (src);
 
@@ -925,23 +1074,28 @@ UInt bin2dec (CChar * src) // {{{
 } // }}}
 
 /**
- * @brief	convert binary string to 64bit integer
- * @param	src	binary string
+ * @brief	Convert binary string to 64bit integer
+ * @param	src	The input binary string
+ * @sa	long2bin bin2dec dec2bin
  * @return	64bit integer
+ * @warning
+ *   The bin2long() function don't support negative.
  */
 OLIBC_API
 ULong64 bin2long (CChar * src) // {{{
 {
-	ULong64 ret = 0;
-	UInt var, len;
-	char high[33] = { 0, };
-	char low[33]  = { 0, };
-	char * buf;
-	Bit64 v = { 0, 0 };
-	bool over32 = false, over32_high = false;
+	ULong64	ret = 0;
+	UInt	var,
+			len;
+	char	high[33] = { 0, },
+			low[33]  = { 0, };
+	char	* buf;
+	Bit64	v = { 0, 0 };
+	bool	over32 = false,
+			over32_high = false;
 
 	if ( (len = strlen (src)) > 32 ) {
-		UInt hlen = len - 32;
+		UInt	hlen = len - 32;
 		over32 = true;
 		memmove (high, src, hlen);
 		memmove (low,  src + hlen, 32);
@@ -957,6 +1111,7 @@ ULong64 bin2long (CChar * src) // {{{
 	}
 
 b2l_low:
+	OC_DEBUG ("BUF: %s (length: %d)\n", buf, strlen (buf));
 	var = bin2dec (buf);
 
 	if ( over32 ) {
@@ -974,62 +1129,34 @@ b2l_low:
 		ret = combined64_high_low (v);
 	}
 
-	return ret;
-} // }}}
-
-
-/* dec to binary template fucntion */
-UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
-{
-	ULong32 mask = 2147483648UL;
-	Long32 m;
-	UInt len;
-
-	oc_malloc_r (*dst, sizeof (char) * 33, 0);
-	memset (*dst, 0, 32);
-
-	OC_DEBUG ("Buf No: %ld\n", src);
-
-	len = 0;
-	while ( mask > 0 ) {
-		m = (Long32) src & (Long32) mask;
-
-		if ( m ) {
-			memset ((*dst) + len, 49, 1);
-			len++;
-		} else {
-			if ( complete || len ) {
-				memset ((*dst) + len, 48, 1);
-				len++;
-			}
-		}
-
-		mask = mask >> 1;
-	}
-	memset ((*dst) + len, 0, 0);
-
-	return len;
+	return over32 ? ret : var;
 } // }}}
 
 /**
- * @brief	convert 64bit integer to binary string
- * @param[in]	dec 64bit ingeter
- * @param[out]	dst binary string
- * @return	length of binary string
+ * @brief	Convert 64bit integer to binary string
+ * @param[in]	dec The input 64bit ingeter
+ * @param[out]	dst The converted binary string
+ * @return	Length of binary string
+ * @sa	dec2bin bin2long bin2dec
+ * @exception RETURNS
+ *   When occurs internal error, long2bin() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
- * The long2bin() function convert 64bit integer to
- * binary string.
- *
- * If return value is not 0, you must free dst.
+ * The long2bin() function convert 64bit integer to binary string.
  */
 OLIBC_API
 UInt long2bin (Long64 dec, char ** dst) // {{{
 {
-	ULong64 tmp;
-	UInt len, buflen;
-	Bit64 v;
-	char * buf;
-	bool over32 = false, full_print = false;
+	ULong64	tmp;
+	UInt	len,
+			buflen;
+	Bit64	v;
+	char	* buf;
+	bool	over32 = false,
+			full_print = false;
+
+	*dst = NULL;
 
 	if ( ! dec )
 		return 0;
@@ -1065,20 +1192,26 @@ lowbit:
 } // }}}
 
 /**
- * @brief	convert decimal string to binary
- * @param[in]	src deciaml string
- * @param[out]	dst binary string
- * @return	length of binary string
+ * @brief	Convert decimal string to binary
+ * @param[in]	src The input deciaml string
+ * @param[out]	dst The converted binary string
+ * @return	Length of binary string
+ * @sa	long2bin bin2dec bin2long
+ * @exception RETURNS
+ *   When occurs internal error, dec2bin() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
- * The dec2bin() function convert decimal string to
- * binary string. This supports 64bit.
- *
- * If return value is not 0, you must free dst.
+ * The dec2bin() function convert decimal string to binary string.
+ * This supports 64bit.
  */
 OLIBC_API
 UInt dec2bin (CChar * src, char ** dst) // {{{
 {
-	Long64 dec;
+	Long64	dec;
+
+	*dst = NULL;
+
 	if ( src == NULL )
 		return 0;
 
@@ -1095,15 +1228,15 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 } // }}}
 
 /**
- * @brief		check 2byte whether is ksc5601 or not.
- * @param[in]	c1 first byte of hangul
- * @param[in]	c2 second byte of hangul
- * @return		bool
+ * @brief	Check 2byte whether is ksc5601 or not.
+ * @param	c1 The first byte of hangul
+ * @param	c2 The second byte of hangul
+ * @return	bool
  */
 OLIBC_API
 bool is_ksc5601 (UInt c1, UInt c2) // {{{
 {
-	UChar * c = (UChar *) ((c1 << 8) | c2);
+	UChar	* c = (UChar *) ((c1 << 8) | c2);
 	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, (int) c, (int) c1, (int) c2);
 
 	if ( ! (c1 & 0x80) )
@@ -1132,20 +1265,9 @@ bool is_ksc5601 (UInt c1, UInt c2) // {{{
 	return false;
 } // }}}
 
-bool utf8_underbit_check (UCChar * s, UInt byte)
-{
-	UInt i;
-	for ( i=0; i<byte; i++ ) {
-		if ( *(s + i) >> 6 != 0x02 )
-			return false;
-	}
-
-	return true;
-}
-
 /**
- * @brief		check whether is utf8 or not
- * @param		src strings for checking
+ * @brief		Check whether is utf8 or not
+ * @param		src The string for checking
  * @return		bool
  */
 OLIBC_API
@@ -1193,7 +1315,7 @@ again:
 			s += 2;
 			goto again;
 		} else if ( byte2_check && byte2 == true && byte2_check == *s ) {
-			/* 2th check is true and previous charactors is same current charactors, retry */
+			/* 2th check is true and previous characters is same current characters, retry */
 			byte2_check = *s;
 			s += 2;
 			goto again;
@@ -1221,28 +1343,18 @@ again:
 	return false;
 } // }}}
 
-size_t charset_conv_outplen (CChar * charset, size_t srclen)
-{
-	if ( ! strncmp (charset, "utf", 3) || ! strncmp (charset, "UTF", 3) )
-		return srclen * 2;
-	else if ( ! strncmp (charset, "ucs", 3) || ! strncmp (charset, "UCS", 3) )
-		return srclen * 2;
-
-	return srclen;
-}
-
 /**
- * @brief	convert character set
- * @param	src source string
- * @param	from source character set
- * @param	to destination charactor set
- * @return	string pointer of converted string
+ * @brief	Convert character set
+ * @param	src The input source string
+ * @param	from The input source character set
+ * @param	to The destination character set
+ * @return	The pointer of converted string
+ * @exception RETURNS
+ *   When occurs internal error, charset_conv() returns null.<br />
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
- * The charset_conv function is convert string to to_charset
- * from from_charset.
- *
- * If the return value is not NULL, you must freed memory of
- * return pointer with free() function
+ * The charset_conv() function is convert string to @e to from @e from
  */
 OLIBC_API
 char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
@@ -1333,6 +1445,19 @@ skip_error:
 	return NULL;
 #endif
 } // }}}
+
+/**
+ * @example trim.c
+ * @example addslashes.c
+ * @example str2long.c
+ * @example setansi.c
+ * @example humanSize.c
+ * @example caseSensitive.c
+ * @example binhex.c
+ * @example bindec.c
+ * @example charset.c
+ * @example CharsetConv.c
+ */
 
 /*
  * Local variables:

@@ -38,11 +38,11 @@
  * This file includes proto type of RACE code apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:34:50 $
- * $Revision: 1.14 $
+ * $Date: 2011-03-01 17:35:56 $
+ * $Revision: 1.15 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: _race.c,v 1.14 2011-03-01 04:34:50 oops Exp $ */
+/* $Id: _race.c,v 1.15 2011-03-01 17:35:56 oops Exp $ */
 #include <oc_common.h>
 #include <_race.h>
 
@@ -176,7 +176,7 @@ char * encode_race (char * domain, char * charset, int debug) // {{{
 		fprintf (stderr, "ERROR: Race code compress failed\n");
 		return "";
 	} else if ( comlen > 72 ) {
-		fprintf (stderr, "ERROR: Compress string is bigger than 72 charactors\n");
+		fprintf (stderr, "ERROR: Compress string is bigger than 72 characters\n");
 		return "";
 	}
 
@@ -223,7 +223,7 @@ int string_convert (char * dest, char * src, char * from, char * to, int debug) 
 	}
 
 	if ( ! strcmp (to, from) ) {
-		fprintf (stderr, "ERROR: original charactor set sames convert charactor set\n");
+		fprintf (stderr, "ERROR: original character set sames convert character set\n");
 		strcpy (outbuf_p, src);
 		return 1;
 	}

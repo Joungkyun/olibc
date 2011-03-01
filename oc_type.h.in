@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:29:00 $
- * $Revision: 1.7 $
+ * $Date: 2011-03-01 17:35:56 $
+ * $Revision: 1.8 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.7 2011-02-22 18:29:00 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.8 2011-03-01 17:35:56 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -33,32 +33,32 @@
 	#undef HAVE_STDBOOL_H
 #endif
 
-typedef unsigned char UChar;
-typedef const char CChar;
-typedef const unsigned char UCChar;
-typedef unsigned short UShort;
-typedef unsigned int UInt;
+typedef unsigned char UChar;        //!< unsigned char
+typedef const char CChar;           //!< const char
+typedef const unsigned char UCChar; //!< const unsigned char
+typedef unsigned short UShort;      //!< unsigned short
+typedef unsigned int UInt;          //!< unsigned int
 
 #if SIZEOF_LONG == 4
-typedef long Long;
-typedef long Long32;
-typedef long long Long64;
-typedef unsigned long ULong;
-typedef unsigned long ULong32;
-typedef unsigned long long ULong64;
+typedef long Long;                  //!< 4byte(32bit) integer
+typedef long Long32;                //!< 4byte(32bit) integer
+typedef long long Long64;           //!< 8byte(64bit) integer
+typedef unsigned long ULong;        //!< 4byte(32bit) unsigned integer
+typedef unsigned long ULong32;      //!< 4byte(32bit) unsigned integer
+typedef unsigned long long ULong64; //!< 8byte(64bit) unsigned integer
 #else
-typedef int Long;
-typedef int Long32;
-typedef long Long64;
-typedef unsigned int ULong;
-typedef unsigned int ULong32;
-typedef unsigned long ULong64;
+typedef int Long;                   //!< 4byte(32bit) integer
+typedef int Long32;                 //!< 4byte(32bit) integer
+typedef long Long64;                //!< 8byte(64bit) integer
+typedef unsigned int ULong;         //!< 4byte(32bit) unsigned integer
+typedef unsigned int ULong32;       //!< 4byte(32bit) unsigned integer
+typedef unsigned long ULong64;      //!< 8byte(64bit) unsigned integer
 #endif
 
 //! 64bit integer structure on 32bit
 typedef struct {
-	ULong32 high;	//!< high 32bit of 64bit ingeger
-	ULong32 low;	//!< low 32bit of 64bit ingeger
+	ULong32 high;                   //!< high 32bit of 64bit ingeger
+	ULong32 low;                    //!< low 32bit of 64bit ingeger
 } Bit64;
 
 #ifdef HAVE_STDBOOL_H

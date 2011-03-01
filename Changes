@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.62 2011-02-20 18:41:33 oops Exp $
+$Id: Changes,v 1.63 2011-03-01 17:35:56 oops Exp $
+
+* Wed, Mar  2 2011
+	- fixed long2bin that returns 0 when input argument is smaller than
+	  max of 32bit integer
 
 * Sun, Feb 20 2011
 	- fixed memory leak of preg_match
