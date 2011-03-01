@@ -5,11 +5,11 @@
  * This file includes proto type of command line argument apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 19:11:09 $
- * $Revision: 1.10 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.11 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.h,v 1.10 2011-02-22 19:11:09 oops Exp $ */
+/* $Id: libarg.h,v 1.11 2011-03-01 04:17:47 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -37,11 +37,11 @@ struct o_option {
 #endif
 
 #ifndef LIBARG_SRC
-extern char o_optarg[ARGLENGTH];
-extern int o_optlen;
-extern char ** o_cmdarg;
-extern int _ogetopt_cmd_int;
-extern int _ogetopt_chk_int;
+extern char	o_optarg[ARGLENGTH];
+extern int	o_optlen;
+extern char	** o_cmdarg;
+extern int	_ogetopt_cmd_int;
+extern int	_ogetopt_chk_int;
 #endif
 
 int o_getopt (int oargc, char ** oargv, CChar * opt, const struct o_option * longopt);

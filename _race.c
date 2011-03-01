@@ -38,11 +38,11 @@
  * This file includes proto type of RACE code apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 18:11:46 $
- * $Revision: 1.12 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: _race.c,v 1.12 2011-02-22 18:11:46 oops Exp $ */
+/* $Id: _race.c,v 1.13 2011-03-01 04:17:47 oops Exp $ */
 #include <oc_common.h>
 #include <_race.h>
 
@@ -60,11 +60,15 @@ char ansien[] = "[7;0m";
 int  unbuflen = 0;
 char *extension[] = { "com", "net", "org", "info", "biz", "name" };
 
-char * decode_race (char *domain, char *charset, int debug) {
-	char name[BUFSIZ];
-	char dedomain[1024], backupstr[1024], uncompress[1024];
-	int i = 0, len = 0;
-	static char redomain[1024];
+char * decode_race (char * domain, char * charset, int debug) // {{{
+{
+	static char	redomain[1024];
+	char		name[BUFSIZ],
+				dedomain[1024],
+				backupstr[1024],
+				uncompress[1024];
+	int			i = 0,
+				len = 0;
 
 	memset (redomain, 0, 1024);
 	len = strlen (domain);
@@ -109,13 +113,19 @@ char * decode_race (char *domain, char *charset, int debug) {
 	sprintf (redomain, "%s", dedomain);
 
 	return redomain;
-}
+} // }}}
 
-char * encode_race (char *domain, char *charset, int debug) {
-	char name[BUFSIZ];
-	char utf16str[1024], backupstr[1024], compress[1024];
-	int i = 0, yes = 0, len = 0, comlen = 0;
-	static char endomain[1024];
+char * encode_race (char * domain, char * charset, int debug) // {{{
+{
+	static char	endomain[1024];
+	char		name[BUFSIZ],
+				utf16str[1024],
+				backupstr[1024],
+				compress[1024];
+	int			i = 0,
+				yes = 0,
+				len = 0,
+				comlen = 0;
 
 	memset (endomain, 0, 1024);
 	len = strlen (domain);
@@ -174,10 +184,11 @@ char * encode_race (char *domain, char *charset, int debug) {
 	sprintf (endomain, "%s%s", RacePrefix, race_base32_encode (compress));
 
 	return endomain;
-}
+} // }}}
 
-int permit_extension (char *tail) {
-	int i = 0;
+int permit_extension (char * tail) // {{{
+{
+	int	i = 0;
 
 	for ( i=0; i<3; i++) {
 		if ( ! strncmp (extension[i], tail, 3) ) {
@@ -186,17 +197,19 @@ int permit_extension (char *tail) {
 	}
 
 	return 0;
-}
+} // }}}
 
-int string_convert (char *dest, char *src, char *from, char *to, int debug) {
-	iconv_t cd;
-	char * inbuf_p = src;
-	char * outbuf_p = dest;
-	char buf[9];
+int string_convert (char * dest, char * src, char * from, char * to, int debug) // {{{
+{
+	iconv_t	cd;
+	char	* inbuf_p = src,
+			* outbuf_p = dest,
+			* buf[9];
 
-	size_t il;
-	size_t ol;
-	int err, len;
+	size_t	il,
+			ol;
+	int		err,
+			len;
 
     if ( strcmp (from, "UTF-16BE") ) len = strlen (src);
 	else len = unbuflen * 2;
@@ -274,11 +287,16 @@ int string_convert (char *dest, char *src, char *from, char *to, int debug) {
 	}
 
 	return 0;
-}
+} // }}}
 
-void race_uncompress (char *ret, char *src, int retsize) {
-	int i = 0, len = 0, buflen = 0, retlen = 0;
-	char tmp[9], buf[1024];
+void race_uncompress (char * ret, char * src, int retsize) // {{{
+{
+	char	tmp[9],
+			buf[1024];
+	int		i = 0,
+			len = 0,
+			buflen = 0,
+			retlen = 0;
 
 	memset (tmp, 0, sizeof (tmp));
 	memset (ret, 0, retlen);
@@ -327,15 +345,17 @@ void race_uncompress (char *ret, char *src, int retsize) {
 #endif
 
 	unbuflen = buflen - 1;
-}
+} // }}}
 
-char * race_compress (char *src, int len) {
-	int i = 0;
-	int simple = 0, outlen = 0;
-	static char outputstr[1024];
-	char buf[BUFSIZ];
+char * race_compress (char * src, int len) // {{{
+{
+	static char	outputstr[1024];
+	char		buf[BUFSIZ];
+	int			i = 0,
+				simple = 0,
+				outlen = 0;
 #if DEBUGARG
-	int j=0;
+	int			j = 0;
 #endif
 
 	memset (buf, 0, BUFSIZ);
@@ -413,11 +433,12 @@ char * race_compress (char *src, int len) {
 #endif
 
 	return outputstr;
-}
+} // }}}
 
-int utf16_length (char *src) {
-	int i = 0;
-	static int ulen = 0;
+int utf16_length (char * src) // {{{
+{
+	static int	ulen = 0;
+	int			i = 0;
 
 	for ( i=0; i<strlen(src); i++ ) {
 		if ( src[i] & 0x80 ) {
@@ -428,11 +449,12 @@ int utf16_length (char *src) {
 	}
 
 	return ulen;
-}
+} // }}}
 
-int race_check_same (const char *src, int len) {
-	int i = 0;
-	static int same = 1;
+int race_check_same (const char * src, int len) // {{{
+{
+	static int	same = 1;
+	int			i = 0;
 
 	for ( i=0; i<len-1; i+=2 ) {
 		if ((src[i] & 0x000000ff) != (src[i+2] & 0x000000ff)) {
@@ -442,11 +464,12 @@ int race_check_same (const char *src, int len) {
 	}
 
 	return same;
-}
+} // }}}
 
-int race_check_simple (const char *src, int len) {
-	int i = 0;
-	static int secondval = 0;
+int race_check_simple (const char * src, int len) // {{{
+{
+	static int	secondval = 0;
+	int			i = 0;
 
 	for ( i=0; i<len-1; i+=2) {
 		if ( secondval == 0 && src[i] != 0x0000)
@@ -456,13 +479,19 @@ int race_check_simple (const char *src, int len) {
 	}
 
 	return secondval;
-}
+} // }}}
 
-char * race_base32_encode (char *src) {
-	int i = 0, j = 0, slen = 0, buflen = 0;
-	int buf1len = 0, retlen = 0;
-	char buf[1024], buf1[6];
-	static char ret[1024];
+char * race_base32_encode (char * src) // {{{
+{
+	static char	ret[1024];
+	char		buf[1024],
+				buf1[6];
+	int			i = 0,
+				j = 0,
+				slen = 0,
+				buflen = 0,
+				buf1len = 0,
+				retlen = 0;
 
 	memset (ret, 0, 1024);
 	memset (buf, 0, 1024);
@@ -508,11 +537,15 @@ char * race_base32_encode (char *src) {
 #endif
 
 	return ret;
-}
+} // }}}
 
-char * race_base32_decode (char *src) {
-	int i = 0, len = 0, retlen = 0, setlen = 0;
-	static char ret[1024];
+char * race_base32_decode (char * src) // {{{
+{
+	static char	ret[1024];
+	int			i = 0,
+				len = 0,
+				retlen = 0,
+				setlen = 0;
 
 	memset (ret, 0, 1024);
 
@@ -539,9 +572,10 @@ char * race_base32_decode (char *src) {
 #endif
 
 	return ret;
-}
+} // }}}
 
-char en_base32 (char *src) {
+char en_base32 (char * src) // {{{
+{
 	if ( ! strcmp (src, "00000") ) return 'a';
 	else if ( ! strcmp (src, "00001") ) return 'b';
 	else if ( ! strcmp (src, "00010") ) return 'c';
@@ -576,9 +610,10 @@ char en_base32 (char *src) {
 	else if ( ! strcmp (src, "11111") ) return '7';
 
 	return 0;
-}
+} // }}}
 
-char *de_base32 (char src) {
+char * de_base32 (char src) // {{{
+{
 	if ( src == 'a' ) return "00000";
 	else if ( src == 'b' ) return "00001";
 	else if ( src == 'c' ) return "00010";
@@ -613,17 +648,19 @@ char *de_base32 (char src) {
 	else if ( src == '7' ) return "11111";
 
 	return "00000";
-}
+} // }}}
 
 # else
 
-char * encode_race (char *domain, char *charset, int debug) {
-	fprintf (stderr, "ERROR: compiled without iconv\n");
+char * encode_race (char * domain, char * charset, int debug)
+{
+	oc_error ("compiled without iconv\n");
 	return domain;
 }
 
-char * decode_race (char *domain, char *charset, int debug) {
-	fprintf (stderr, "ERROR: compiled without iconv\n");
+char * decode_race (char * domain, char * charset, int debug)
+{
+	oc_error ("compiled without iconv\n");
 	return domain;
 }
 #endif

@@ -38,11 +38,16 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-24 20:13:07 $
- * $Revision: 1.26 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.27 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.26 2011-02-24 20:13:07 oops Exp $ */
+/* $Id: libarg.c,v 1.27 2011-03-01 04:17:47 oops Exp $ */
+
+/**
+ * If this constants is not defined, declare extern global variables
+ * in libarg.h
+ */
 #define LIBARG_SRC
 
 #include <oc_common.h>
@@ -82,7 +87,7 @@ char ** o_cmdarg = NULL;
  */
 int longopt_chk (const char * option, const struct o_option * options) // {{{
 {
-	int i = 0;
+	int	i = 0;
 
 	while ( 1 ) {
 		if ( options[i].value == 0 )
@@ -112,8 +117,9 @@ int longopt_chk (const char * option, const struct o_option * options) // {{{
  */
 int optvalue_chk (const char option, const char * options) // {{{
 {
-	int len = strlen (options);
-	int i, val = -1;
+	int	len = strlen (options);
+	int	i,
+		val = -1;
 
 	for ( i=0; i<len; i++ ) {
 		if ( options[i] == option && options[i+1] == ':' ) {
@@ -144,7 +150,8 @@ int optvalue_chk (const char option, const char * options) // {{{
  */
 bool only_whitespace (const char * stream, int length) // {{{
 {
-	int i, len;
+	int	i,
+		len;
 
 	len = length ? length : strlen (stream);
 
@@ -172,12 +179,15 @@ bool only_whitespace (const char * stream, int length) // {{{
  */
 char * convert_quoted_blank (const char * stream) // {{{
 {
-	int len, newlen;
-	int white, i, size;
-	int squote = 0;
-	int dquote = 0;
-	int openquote = 0;
-	char * ret;
+	char	* ret;
+	int		len,
+			newlen,
+			white,
+			i,
+			size,
+			squote = 0,
+			dquote = 0,
+			openquote = 0;
 
 	newlen = 0;
 	len = strlen (stream);
@@ -248,8 +258,11 @@ char * convert_quoted_blank (const char * stream) // {{{
  */
 char * unconvert_quoted_blank (const char * stream) // {{{
 {
-	int i, j, len, size;
 	char * ret;
+	int i,
+		j,
+		len,
+		size;
 
 	if ( ! stream || ! strlen (stream) )
 		return NULL;
@@ -313,14 +326,16 @@ char * unconvert_quoted_blank (const char * stream) // {{{
 OLIBC_API
 int o_getopt (int oargc, char ** oargv, const char * opt, const struct o_option * longopt) // {{{
 {
-	char ** opt_t;
-	char * x;
-	int ret;
-	int cint, arglen;
-	int optargs_chk;
-	int chklong, longno;
-	char * longopt_sep;
-	char longopt_sep_arg[ARGLENGTH];
+	char	** opt_t;
+	char	* x;
+	char	* longopt_sep;
+	char	longopt_sep_arg[ARGLENGTH];
+	int		ret,
+			cint,
+			arglen,
+			optargs_chk,
+			chklong,
+			longno;
 
 retry:
 	/* init argument string length */
@@ -445,19 +460,23 @@ retry:
  *   it's memory address with @e ofree_array()
  *
  * The argv_make() function make string array with white space delimiters
- * from the input string.
+ * from the input string. The last array element has NULL terminator.
  *
  * The white space in the quoted string is preserved.
  */
 OLIBC_API
 char ** argv_make (CChar * stream, int * oargc) // {{{
 {
-	CChar delimiters[] = " \n\t";
-	char ** oargv;
-	char ** sep, ** sep_t;
+	CChar	delimiters[] = " \n\t";
+	char	** oargv;
+	char	** sep,
+			** sep_t;
 
-	char * tmp, * tmp_t, * tmparg;
-	int i, white;
+	char	* tmp,
+			* tmp_t,
+			* tmparg;
+	int		i,
+			white;
 
 	if ( stream == NULL ) return NULL;
 	if ( strlen (stream) < 1 ) return NULL;
@@ -535,11 +554,16 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
 OLIBC_API
 char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 {
-	char ** sep;
-	char * buf;
-	int delno, len, dlen;
-	int start, end;
-	int i, j, no;
+	char	** sep;
+	char	* buf;
+	int		delno,
+			len,
+			dlen,
+			start,
+			end,
+			i,
+			j,
+			no;
 
 	*oargc = 0;
 	if ( src == NULL || delimiter == NULL )
@@ -628,7 +652,7 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 OLIBC_API
 void ofree_array (char ** argv_array) // {{{
 {
-	int i = 0;
+	int	i = 0;
 
 	if ( argv_array != NULL ) {
 		while ( argv_array[i] != NULL ) {
@@ -648,7 +672,9 @@ void ofree_array (char ** argv_array) // {{{
 OLIBC_API
 int get_whitespace (CChar * src) // {{{
 {
-	int no, i, len;
+	int	no,
+		i,
+		len;
 
 	no = 0;
 	len = strlen (src);

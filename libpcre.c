@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-24 20:13:07 $
- * $Revision: 1.30 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.31 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.30 2011-02-24 20:13:07 oops Exp $ */
+/* $Id: libpcre.c,v 1.31 2011-03-01 04:17:47 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -149,10 +149,14 @@ void libpreg_arg_free (PregArg ** pa) // {{{
  */
 bool libpreg_parse (char * regex, char * pattern, int * option, int * study) // {{{
 {
-	int len, i, start, end;
-	int preg_opt = 0, delnum = 0;
-	char delimiter = ' ';
-	char * opt;
+	char	delimiter = ' ';
+	char	* opt;
+	int		len,
+			i,
+			start,
+			end,
+			preg_opt = 0,
+			delnum = 0;
 
 	len = i = start = end = 0;
 
@@ -227,8 +231,8 @@ bool libpreg_parse (char * regex, char * pattern, int * option, int * study) // 
  */
 static int libpreg_get_backref (char ** str, int * backref) // {{{
 {
-	register char in_brace = 0;
-	register char *walk = *str;
+	register char	in_brace = 0;
+	register char	* walk = *str;
 
 	if (walk[1] == 0)
 		return 0;

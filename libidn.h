@@ -5,11 +5,11 @@
  * This file includes proto type of idn apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-25 17:39:52 $
- * $Revision: 1.8 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.9 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.h,v 1.8 2011-02-25 17:39:52 oops Exp $ */
+/* $Id: libidn.h,v 1.9 2011-03-01 04:17:47 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 
@@ -33,7 +33,7 @@
 #define WHITE		15
 #define BWHITE		16
 
-extern const char *stringprep_locale_charset_cache;
+extern const char * stringprep_locale_charset_cache;
 UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset);
 char * convert_punycode (char * domain, int mode, int debug);
 #endif

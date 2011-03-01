@@ -38,11 +38,11 @@
  * This file includes time apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-24 20:13:07 $
- * $Revision: 1.12 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.c,v 1.12 2011-02-24 20:13:07 oops Exp $ */
+/* $Id: libtime.c,v 1.13 2011-03-01 04:17:47 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_LIBRT
@@ -79,11 +79,11 @@
 OLIBC_API
 double microtime (void) // {{{
 {
-	oc_time_t tp;
-	long * tp_1;
-	long sec = 0L;
-	double ret = 0;
-	double msec = 0.0;
+	oc_time_t	tp;
+	long		* tp_1,
+				sec = 0L;
+	double		ret = 0,
+				msec = 0.0;
 
 	tp_1 = (long *) &tp;
 

@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.25 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.26 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.25 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libstring.h,v 1.26 2011-03-01 04:17:47 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -222,7 +222,7 @@ bool is_ksc5601 (UInt c1, UInt c2);
 bool is_utf8 (UCChar * src);
 
 /* convert character set */
-char * charset_conv (CChar *src, CChar * from, CChar * to);
+char * charset_conv (CChar * src, CChar * from, CChar * to);
 #endif
 
 /*

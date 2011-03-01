@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-25 17:39:52 $
- * $Revision: 1.21 $
+ * $Date: 2011-03-01 04:17:47 $
+ * $Revision: 1.22 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.21 2011-02-25 17:39:52 oops Exp $ */
+/* $Id: libfile.c,v 1.22 2011-03-01 04:17:47 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -127,10 +127,12 @@ bool file_exists (CChar * path, int mode) // {{{
 OLIBC_API
 char * readfile (CChar * path) // {{{
 {
-	FILE * fp;
-	size_t len = 0, length = 0;
-	char tmp[OC_FILEBUF] = { 0, }, * buf;
-	struct stat f;
+	FILE	* fp;
+	char	tmp[OC_FILEBUF] = { 0, },
+			* buf;
+	size_t	len = 0,
+			length = 0;
+	struct	stat f;
 
 	if ( lstat (path, &f) == -1 ) {
 		oc_error ("File not found : %s\n", path);
