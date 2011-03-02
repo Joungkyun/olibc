@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:50:42 $
- * $Revision: 1.70 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.71 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.70 2011-03-01 17:50:42 oops Exp $ */
+/* $Id: libstring.c,v 1.71 2011-03-02 17:22:04 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -242,8 +242,8 @@ void trim (char * str) // {{{
  *              Set true, Should be freed memory of str argument.
  * @return		Pointer of result string
  * @sa trim
- * @exception RETURNS
- *   When occurs internal error, trim_r() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, trim_r() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -282,10 +282,10 @@ char * trim_r (char * str, bool should_free) // {{{
  * @retval	true Success
  * @retval	false Failure
  * @sa		addslashes
- * @exception RETURNS
- *   When occurs internal error, output parameter out has null value.<br />
- *   If the out variable has not null, the caller should deallocate this
- *   buffer using @e free()
+ * @exception DEALLOCATE
+ *   When occurs internal error, 2th argument @e out of addslashes() has
+ *   null value. If the @e out argument has not null, the caller should deallocate
+ *   this buffer using @e free()
  *
  * convert binary data with * backslashes before characters that need
  * to be quoted in database queries etc. These characters are single
@@ -345,8 +345,8 @@ bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {
  * @param	should_free bool / set true, free memory of in argument.
  * @return	pointer of result
  * @sa		addslashes_r
- * @exception RETURNS
- *   When occurs internal error, addslashes() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, addslashes() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -506,10 +506,11 @@ long double str2double (CChar * src) { // {{{
  * @brief	convert to integer from char
  * @param	c	The input numeric character (character 0 - 9)
  * @return	integer
- * @retval	-1 Failure
- * @exception RETURNS
+ * @code
  *   The input character is out of range between ascii 48 and 57,
  *   the char2int() function returns -1.
+ * @endcode
+ * @retval	-1 Failure
  */
 OLIBC_API
 int char2int (CChar c) // {{{
@@ -640,8 +641,8 @@ void setansi (FILE * stream, int color, bool noansi) // {{{
  * @param	unit Bool. Set true, caculation with Byte, else with Bit.
  * @return	formatted string by human read.
  * @sa	human_size
- * @exception RETURNS
- *   When occurs internal error, human_size_r() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, human_size_r() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -711,7 +712,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
  * @param	unit Set 1, caculation with Byte, else with Bit.
  * @return	formatted string by human read.
  * @sa	human_size_r
- * @exception RETURNS
+ * @exception THREADSAFE
  *   The human_size() function returns static memory address.<br />
  *   So, this function is not thread safe. For thread safe, use
  *   @e human_size_r() function.
@@ -741,8 +742,8 @@ char * human_size (double size, int sub, int unit) // {{{
  * @param	print Bool. if set true, returns null.
  * @sa	http://php.net/manual/en/function.number-format.php
  * @return	formatted string
- * @exception RETURNS
- *   When occurs internal error, numberFormat() returns null.<br />
+ * @exception DEALLOCATE 
+ *   When occurs internal error, numberFormat() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -894,9 +895,9 @@ void strtoupper (char * str) // {{{
  * @param[out]	dst hexadecimal string
  * @return	length of @e dst
  * @sa	bin2hex hex2bin
- * @exception RETURNS
- *   When occurs internal error, bin2hex_r() returns null.<br />
- *   If the return string array pointer is not null, the caller should
+ * @exception DEALLOCATE
+ *   When occurs internal error, 2th argument @e dst has null.
+ *   If the 2th argument @e est has string array pointer, the caller should
  *   deallocate this buffer using @e free()
  *
  * The bin2hex_r() function converts binary string to hexadecimal
@@ -936,7 +937,7 @@ ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
  * @sa	bin2hex_r hex2bin
  * @return	hexadecimal string
  *
- * @warning
+ * @exception THREADSAFE
  *   The return value used static memory, so this function is
  *   not thread safe. If you want thread safe, use bin2hex_r().<br /><br />
  *   The argument @e src length of bin2hex() is smaller then 4096.
@@ -1009,8 +1010,8 @@ char * _hex2bin (CChar c) // {{{
  * @param	src hexadecimal string for converting
  * @return	binary string
  * @sa	_hex2bin bin2hex bin2hex_r
- * @exception RETURNS
- *   When occurs internal error, hex2bin() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, hex2bin() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  */
@@ -1138,8 +1139,8 @@ b2l_low:
  * @param[out]	dst The converted binary string
  * @return	Length of binary string
  * @sa	dec2bin bin2long bin2dec
- * @exception RETURNS
- *   When occurs internal error, long2bin() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, long2bin() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -1197,10 +1198,10 @@ lowbit:
  * @param[out]	dst The converted binary string
  * @return	Length of binary string
  * @sa	long2bin bin2dec bin2long
- * @exception RETURNS
- *   When occurs internal error, dec2bin() returns null.<br />
- *   If the return string array pointer is not null, the caller should
- *   deallocate this buffer using @e free()
+ * @exception DEALLOCATE
+ *   When occurs internal error, 2th argument @e dst of dec2bin() has
+ *   null value. If the @e dst argument has not null, the caller should deallocate
+ *   this buffer using @e free()
  *
  * The dec2bin() function convert decimal string to binary string.
  * This supports 64bit.
@@ -1349,8 +1350,8 @@ again:
  * @param	from The input source character set
  * @param	to The destination character set
  * @return	The pointer of converted string
- * @exception RETURNS
- *   When occurs internal error, charset_conv() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, charset_conv() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -1448,15 +1449,25 @@ skip_error:
 
 /**
  * @example trim.c
+ *   The example for trim() and trim_r() api
  * @example addslashes.c
+ *   The example for addslashes() api
  * @example str2long.c
+ *   The example for str2long(), str2double(), char2int() and check_int() api
  * @example setansi.c
+ *   The example for setansi() api
  * @example humanSize.c
+ *   The example for numberFormat(), human_size() and human_size_r() api
  * @example caseSensitive.c
+ *   The example for strtoupper() and strtolower() api
  * @example binhex.c
+ *   The example for bin2hex(), bin2hex_r() and hex2bin() api
  * @example bindec.c
+ *   The example for dec2bin(), long2bin(), bin2dec() and bin2long() api
  * @example charset.c
+ *   The example for is_ksc5601() and is_utf8() api
  * @example CharsetConv.c
+ *   The example for charset_conv() api
  */
 
 /*

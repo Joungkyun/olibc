@@ -38,11 +38,11 @@
  * This file includes time apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.13 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.14 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.c,v 1.13 2011-03-01 04:17:47 oops Exp $ */
+/* $Id: libtime.c,v 1.14 2011-03-02 17:22:04 oops Exp $ */
 #include <oc_common.h>
 
 #ifdef HAVE_LIBRT
@@ -102,7 +102,7 @@ double microtime (void) // {{{
 
 /**
  * @example microtime.c
- *   microtime() test file
+ *   The example for microtime() api
  */
 
 /*

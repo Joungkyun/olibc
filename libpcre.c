@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:50:42 $
- * $Revision: 1.35 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.36 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.35 2011-03-01 17:50:42 oops Exp $ */
+/* $Id: libpcre.c,v 1.36 2011-03-02 17:22:04 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -396,9 +396,9 @@ static int libpreg_execute (PregArg ** pa, bool cont_offset) // {{{
  * @param	delim Add user defined delimiters
  * @return	Character pointer of the quoted strig
  * @sa	DELIMITERS
- * @exception RETURNS
- *   When occurs internal error, preg_quote() returns null.<br />
- *   If the return character pointer is not null, the caller should
+ * @exception DEALLOCATE
+ *   When occurs internal error, preg_quote() returns null.
+ *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
  * If you set 2th arguments, preg_quote add this value to default
@@ -525,10 +525,10 @@ bool preg_match (CChar * regex, CChar * subject) // {{{
  * @retval	"> 0" Success: value is the number of elements filled in
  * @retval	0 Internal failed
  * @retval	-1 Failed to match
- * @exception PARAMETER
- *   When occurs internal error, matches argument has null pointer.<br />
- *   If the matches argument is not null, you must free
- *   it's memory address with @e free()
+ * @exception DEALLOCATE
+ *   When occurs internal error, 3th argument @e matches of preg_match_r() has
+ *   null value. If the @e matches argument has not null, the caller should deallocate
+ *   this buffer using @e free()
  *
  * The matches parameter is provided with the results of search.
  * matches[0] will contain the text that matched the full pattern,
@@ -595,8 +595,8 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
  * @param	reverse Set true, returns unmatched line
  * @return	Character pointer of the matched lines
  * @sa	preg_fgrep
- * @exception RETURNS
- *   When occurs internal error, preg_grep() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, preg_grep() returns null.
  *   If the return character pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -729,8 +729,8 @@ skip_print:
  * @param	reverse Set true, returns unmatched line
  * @return	Character pointer of the matched lines
  * @sa	preg_grep
- * @exception RETURNS
- *   When occurs internal error, preg_fgrep() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, preg_fgrep() returns null.
  *   If the return character pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -847,8 +847,8 @@ skip_print:
  * @return		Character pointer of The replaced string
  * @sa	preg_replace<br>
  *      http://php.net/manual/en/function.preg-replace.php
- * @exception RETURNS
- *   When occurs internal error, preg_replace_arr() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, preg_replace_arr() returns null.
  *   If the return character pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -886,8 +886,8 @@ char * preg_replace_arr (char ** regex, char ** replace, char * subject, int reg
  * @return		Character pointer of The replaced string
  * @sa	preg_replace_arr<br>
  *      http://php.net/manual/en/function.preg-replace.php
- * @exception RETURNS
- *   When occurs internal error, preg_replace() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, preg_replace() returns null.
  *   If the return character pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -1080,13 +1080,13 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 
 /**
  * @example PregQuote.c
- *   preg_quote() test file
+ *   The exmaple for preg_quote() api
  * @example PregMatch.c
- *   preg_match() and preg_match_r() test file
+ *   The exmaple for preg_match() and preg_match_r() api
  * @example PregGrep.c
- *   preg_grep() and preg_fgrep() test file
+ *   The exmaple for preg_grep() and preg_fgrep() api
  * @example PregReplace.c
- *   preg_replace() and preg_replace_arr test file
+ *   The exmaple for preg_replace() and preg_replace_arr() api
  */
 
 /*

@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:42:26 $
- * $Revision: 1.25 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.26 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.25 2011-03-01 17:42:26 oops Exp $ */
+/* $Id: libfile.c,v 1.26 2011-03-02 17:22:04 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -118,8 +118,8 @@ bool file_exists (CChar * path, int mode) // {{{
  * @param	path The filename being read.
  * @return	read data or NULL on failure.
  * @sa		writefile
- * @exception RETURNS
- *   When occurs internal error, fileread() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, fileread() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  * @warning
@@ -172,8 +172,8 @@ char * readfile (CChar * path) // {{{
  * @param	path The filename being read.
  * @return	read data or NULL on failure.
  * @sa		readfile
- * @exception RETURNS
- *   When occurs internal error, fileread() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, fileread() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  * @deprecated
@@ -246,8 +246,8 @@ int writefile (CChar * path, CChar * data, bool mode) // {{{
  * @brief	Returns canonicalized absolute pathname
  * @param	path The path being checked.
  * @return	Returns the canonicalized absolute pathname or null on failure.
- * @exception RETURNS
- *   When occurs internal error, realpath_r() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, realpath_r() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -367,8 +367,11 @@ char * realpath_r (CChar * path) // {{{
 
 /**
  * @example fileExists.c
+ *   The example for file_exists() api
  * @example readfile.c
+ *   The example for readfile(), writefile() api
  * @example realpath_r.c
+ *   The example for relapath_r() api
  */
 
 /*

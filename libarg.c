@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:50:42 $
- * $Revision: 1.31 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.32 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.31 2011-03-01 17:50:42 oops Exp $ */
+/* $Id: libarg.c,v 1.32 2011-03-02 17:22:04 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -166,8 +166,8 @@ static bool only_whitespace (const char * stream, int length) // {{{
  * @brief	Preserve white space in the quoted string
  * @param	stream The input string
  * @return	The character pointer of preserved string
- * @exception RETURNS
- *   When occurs internal error, convert_quoted_blank() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, convert_quoted_blank() returns null.
  *   If the return character pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -245,8 +245,8 @@ static char * convert_quoted_blank (const char * stream) // {{{
  * @brief	revoke replaced white space
  * @param	stream The input string
  * @return	The character pointer of revoked string
- * @exception RETURNS
- *   When occurs internal error, convert_unquoted_blank() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, convert_unquoted_blank() returns null.
  *   If the return character pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
@@ -454,8 +454,8 @@ retry:
  * @param[out]	oargc	Number of string arrays
  * @return	Pointer of string array
  * @sa ofree_array
- * @exception RETURNS
- *   When occurs internal error, argv_make() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, argv_make() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e ofree_array()
  *
@@ -543,8 +543,8 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
  * @param[in]	delimiter The boundary string.
  * @return		The string array
  * @sa	ofree_array
- * @exception RETURNS
- *   When occurs internal error, split() returns null.<br />
+ * @exception DEALLOCATE
+ *   When occurs internal error, split() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e ofree_array()
  *
@@ -688,9 +688,13 @@ int get_whitespace (CChar * src) // {{{
 
 /**
  * @example argvMake.c
+ *   The example for argv_make() api
  * @example getWhitespace.c
+ *   The example for get_whitespace() api
  * @example oGetopt.c
+ *   The example for o_getopt() api
  * @example split.c
+ *   The exmaple for split() api
  */
 
 /*

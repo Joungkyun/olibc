@@ -37,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:42:26 $
- * $Revision: 1.14 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.15 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.14 2011-03-01 17:42:26 oops Exp $ */
+/* $Id: libidn.c,v 1.15 2011-03-02 17:22:04 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -113,12 +113,19 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
 
 /**
  * @brief	Convert between punycode and international domain
- * @param	src International domain for converting
- * @param	dst Save the punycode that fixed 
- * @param	mode encode(set 0) or decode(set 1)
- * @return	return length of dst argument
+ * @param[in]	src International domain for converting
+ * @param[out]	dst Save the punycode that fixed 
+ * @param[in]	mode Encode(set 0) or decode(set 1)
+ * @param[in]	charset Character set of 1st @e src argument
+ * @return	Returns length of dst argument
+ * @sa	convert_punycode
+ * @exception DEALLOCATE
+ *   When occurs internal error, 2th argument @e dst of convert_punycode_r() has
+ *   null value. If the @e dst argument has not null, the caller should deallocate
+ *   this buffer using @e free()
  *
- * dst argument is must freed with free()
+ * The convert_punycode_r() api convert to punycode from international domain
+ * or convert to international domain from punycode.
  */
 OLIBC_API
 UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) // {{{
@@ -268,13 +275,19 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 
 /**
  * @brief	Convert between punycode and international domain
- * @param	domain international domain for converting
+ * @param	domain International domain for converting
  * @param	mode encode(set 0) or decode(set 1)
  * @param	debug Deprecated (no action)
+ * @sa	convert_punycode_r
  * @return	converted string (static memory)
  *
  * @warning
- *   The convert_punycode() funtion can not thread safe.
+ *   The convert_punycode() returns static allocated memory, so this
+ *   api is not thread safe. If you want to thread safe, use convert_punycode_r()
+ *   api.
+ *
+ * The convert_punycode_r() api convert to punycode from international domain
+ * or convert to international domain from punycode.
  */
 OLIBC_API
 char * convert_punycode (char * domain, int mode, int debug) // {{{
@@ -295,7 +308,7 @@ char * convert_punycode (char * domain, int mode, int debug) // {{{
 
 /**
  * @example punycode.c
- *   convert_punycode() and convert_punycode_r() test file
+ *   The example for convert_punycode() and convert_punycode_r() api
  */
 
 /*

@@ -38,14 +38,24 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:42:26 $
- * $Revision: 1.10 $
+ * $Date: 2011-03-02 17:22:04 $
+ * $Revision: 1.11 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.10 2011-03-01 17:42:26 oops Exp $ */
+/* $Id: libmisc.c,v 1.11 2011-03-02 17:22:04 oops Exp $ */
 #include <oc_common.h>
 
-UInt get_charcount (CChar * str, CChar * del)
+/** @defgroup global_internalfunc Global internal functions of olibc
+ * @{
+ */
+
+/**
+ * @brief	Get number of delimiters in the input string
+ * @param	str The input string
+ * @param	del	The input delimiters
+ * @return	Number of delimiters in the input string
+ */
+UInt get_charcount (CChar * str, CChar * del) // {{{
 {
 	UInt no, i, j, len, dlen;
 
@@ -68,10 +78,10 @@ UInt get_charcount (CChar * str, CChar * del)
 	}
 
 	return no;
-}
+} // }}}
 
 /**
- * @brief	devided 64bit to high and low bit.
+ * @brief	Devided 64bit to high and low bit.
  * @param	v 64bit ingeger
  * @return	Bit64 struct
  */
@@ -92,9 +102,9 @@ Bit64 devided64_high_low (ULong64 v) // {{{
 } // }}}
 
 /**
- * @brief	combined to 64bit integer with 32bit high and low bit.
+ * @brief	Combined to 64bit integer with 32bit high and low bit.
  * @param	v struct of 23bit high and low bit
- * @return	64bit iterger
+ * @return	64bit interger
  */
 ULong64 combined64_high_low (Bit64 v) // {{{
 {
@@ -103,6 +113,8 @@ ULong64 combined64_high_low (Bit64 v) // {{{
 
 	return ((ULong64) v.high << 32) | v.low;
 } // }}}
+
+/** @} */ // end of global_internalfunc
 
 /*
  * Local variables:
