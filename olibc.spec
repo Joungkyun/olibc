@@ -7,13 +7,13 @@ Name: olibc
 Version: %{major}.%{minor}.%{rev}
 Release: 1
 Epoch: 21
-Copyright: BPL/LGPL
+License: BPL/LGPL
 Group: System Environment/Libraries
-Source0: ftp://mirror.oops.org/pub/Linux/OOPS/Source/olibc/%{name}-%{version}.tar.bz2
+Source0: http://mirror.oops.org/pub/oops/olibc/%{name}-%{version}.tar.bz2
 URL: http://devel.oops.org
 Buildroot: /var/tmp/%{name}-%{version}-root
 
-Packager: JoungKyun Kim <http://oops.org>
+Packager: JoungKyun.Kim <http://oops.org>
 Vendor: OOPS Development ORG
 
 %description
@@ -38,34 +38,21 @@ olibc-devel 패키지는 olibc 라이브러리를 이용하여 개발을 하기 위한 목적
 코드와 헤더 파일들을 포함하고 있다.
 
 %prep
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 %setup -q
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" \
 CXXFLAGS="$RPM_OPT_FLAGS" \
 FFLAGS="$RPM_OPT_FLAGS" \
-./configure i686-annyung-linux \
-            --prefix=/usr \
-            --exec-prefix=/usr \
-            --bindir=/usr/bin \
-            --sbindir=/usr/sbin \
-            --sysconfdir=/etc \
-            --datadir=/usr/share \
-            --includedir=/usr/include/olibc \
-            --libdir=/usr/lib \
-            --libexecdir=/usr/libexec \
-            --localstatedir=/var \
-            --sharedstatedir=/usr/com \
-            --mandir=/usr/share/man \
-            --infodir=/usr/share/info
-make
+%{configure} --includedir=%{_includedir}/olibc
+%{__make}
 
 %install
-make DESTDIR=${RPM_BUILD_ROOT} install
+make DESTDIR=%{buildroot} install
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
 %post
 /sbin/ldconfig
@@ -78,84 +65,75 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/oc-config
 %{_bindir}/ogc-config
 %{_bindir}/olibc-config
-%{_libdir}/libolibc.so.%{version}
-%{_libdir}/libogc.so.%{version}
-%{_libdir}/liboc.so.%{version}
-%{_libdir}/libolibc.so.%{major}
-%{_libdir}/libogc.so.%{major}
-%{_libdir}/liboc.so.%{major}
+%{_libdir}/*.so.*
 %{_mandir}/ko/man1/*.1.*
 
 %files devel
 %defattr(0644,root,root,0755)
-%{_libdir}/libolibc.so
-%{_libdir}/libogc.so
-%{_libdir}/liboc.so
-%{_libdir}/libolibc.a
-%{_libdir}/libogc.a
-%{_libdir}/liboc.a
+%{_libdir}/*.so
+%{_libdir}/*.a
 %{_libdir}/*.la
 %{_includedir}/olibc/*.h
 
 %changelog
-* Fri Jun  9 2006 JoungKyun Kim <http://oops.org>
+* Thu Mar  3 2011 JoungKyun.Kim <http://oops.org> 0.1.3-1
 - update version 0.1.3
 
-* Thu Sep  1 2005 JoungKyun Kim <http://oops.org> 19:0.1.2-1
+* Thu Sep  1 2005 JoungKyun.Kim <http://oops.org> 0.1.2-1
 - fixed  CAN-2005-2491 in pcrelib under 0.1.1
 - update 0.1.2
 
-* Mon Aug  9 2004 JoungKyun Kim <http://oops.org> 0.1.1-1
+* Mon Aug  9 2004 JoungKyun.Kim <http://oops.org> 0.1.1-1
 - update 0.1.1
 
-* Fri Feb 20 2004 JoungKyun Kim <http://oops.org> 0.1.0-1,17
+* Fri Feb 20 2004 JoungKyun.Kim <http://oops.org> 0.1.0-1
 - update 0.1.0
 
-* Thu Feb  5 2004 JoungKyun Kim <http://oops.org> 0.0.8-1,16
+* Thu Feb  5 2004 JoungKyun.Kim <http://oops.org> 0.0.8-1
 - update 0.0.8
 
-* Fri Nov 10 2003 JoungKyun Kim <http://oops.org> 0.0.7-1,15
+* Fri Nov 10 2003 JoungKyun.Kim <http://oops.org> 0.0.7-1
 - update 0.0.7
 
-* Fri Nov 10 2003 JoungKyun Kim <http://oops.org> 0.0.6-1,14
+* Fri Nov 10 2003 JoungKyun.Kim <http://oops.org> 0.0.6-1
 - update 0.0.6
 
-* Fri Nov  7 2003 JoungKyun Kim <http://oops.org> 0.0.5-1,13
+* Fri Nov  7 2003 JoungKyun.Kim <http://oops.org> 0.0.5-1
 - update 0.0.5
 
-* Sat Sep 27 2003 JoungKyun Kim <http://oops.org> 0.0.4-2,11
+* Sat Sep 27 2003 JoungKyun.Kim <http://oops.org> 0.0.4-2
 - added official patch 1
 
-* Fri Sep 26 2003 JoungKyun Kim <http://oops.org> 0.0.4-1,10
+* Fri Sep 26 2003 JoungKyun.Kim <http://oops.org> 0.0.4-1
 - update 0.0.4
 
-* Thu Sep 25 2003 JoungKyun Kim <http://oops.org> 0.0.3-3,9
+* Thu Sep 25 2003 JoungKyun.Kim <http://oops.org> 0.0.3-3
 - fixed tmp variable reset size
 
-* Sat Sep 20 2003 JoungKyun Kim <http://oops.org> 0.0.3-2,8
+* Sat Sep 20 2003 JoungKyun.Kim <http://oops.org> 0.0.3-2
 - added official patch 1
   this bug is seriously --; (str2long, str2double)
 
-* Sat Sep 20 2003 JoungKyun Kim <http://oops.org> 0.0.3-1,7
+* Sat Sep 20 2003 JoungKyun.Kim <http://oops.org> 0.0.3-1
 - update 0.0.3
 
-* Thu Sep 18 2003 JoungKyun Kim <http://oops.org> 0.0.2-5,6
+* Thu Sep 18 2003 JoungKyun.Kim <http://oops.org> 0.0.2-5
 - added second official patch
 
-* Sun Sep 14 2003 JoungKyun Kim <http://oops.org> 0.0.2-4,5
+* Sun Sep 14 2003 JoungKyun.Kim <http://oops.org> 0.0.2-4
 - fixed lib_preg_match bug
 
-* Wed Sep 10 2003 JoungKyun Kim <http://oops.org> 0.0.2-3,4
+* Wed Sep 10 2003 JoungKyun.Kim <http://oops.org> 0.0.2-3
 - changed don't memory free return value of convert_punyconv
 
-* Tue Sep  9 2003 JoungKyun Kim <http://oops.org> 0.0.2-2,3
+* Tue Sep  9 2003 JoungKyun.Kim <http://oops.org> 0.0.2-2
 - fixed trash print
 
-* Tue Sep  9 2003 JoungKyun Kim <http://oops.org> 0.0.2-1,2
+* Tue Sep  9 2003 JoungKyun.Kim <http://oops.org> 0.0.2-1
 - 0.0.2 release
 - added internal libidn
 - added internal pcrelib
 
-* Tue Sep  9 2003 JoungKyun Kim <http://oops.org> 0.0.1-1,1
+* Tue Sep  9 2003 JoungKyun.Kim <http://oops.org> 0.0.1-1
 - first build
 
