@@ -12775,7 +12775,7 @@ fi
 done
 
 
-                                                  ac_config_files="$ac_config_files Makefile man/Makefile test/Makefile pcrelib/Makefile libidn/Makefile"
+                                                  ac_config_files="$ac_config_files Makefile man/Makefile sample/Makefile pcrelib/Makefile libidn/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -13331,7 +13331,7 @@ do
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
-  "test/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
+  "sample/Makefile" ) CONFIG_FILES="$CONFIG_FILES sample/Makefile" ;;
   "pcrelib/Makefile" ) CONFIG_FILES="$CONFIG_FILES pcrelib/Makefile" ;;
   "libidn/Makefile" ) CONFIG_FILES="$CONFIG_FILES libidn/Makefile" ;;
   "$ac_stdint_h" ) CONFIG_COMMANDS="$CONFIG_COMMANDS $ac_stdint_h" ;;
