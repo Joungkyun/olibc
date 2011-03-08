@@ -1,10 +1,10 @@
-.TH char2int(1) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
+.TH char2int(3) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man char2int.1
+.\" nroff -man char2int.3
 .\" 2011-02-10 JoungKyun.Kim <htt://oops.org>
-.\" $Id: char2int.3,v 1.1 2011-02-09 17:28:35 oops Exp $
+.\" $Id: char2int.3,v 1.2 2011-03-08 17:25:52 oops Exp $
 .SH 이름
-char2int - 캐릭터를 숫자로 변환
+char2int \- numeric 문자를 정수형으로 변환
 
 .SH 사용법
 .B #include <olibc/libstring.h>
@@ -12,19 +12,28 @@ char2int - 캐릭터를 숫자로 변환
 .BI "int char2int(char c);"
 
 .SH 라이브러리 링크
-.B gcc source -loc
+.B \-loc
+or
+.B \-lolibc
 .br
 
+.B libolibc.so
 또는
-
-.B gcc source -logc 
-.br
-
-libogc를 정적으로 링크할 경우에는 LGPL2에 근거하여 사용이 가능하며,
-liboc를 정적으로 링크할 경우에는 BPL 에 근거한다.
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
 
 .SH 설명
-ascii 48에서 57까지의 문자를 int 형으로 변환한다.
+ascii 48에서 57까지의 문자를 정수형으로 변환한다. 이 api는
+.B atoi()
+api와 유사하게 작동 한다.
 
 .TP
 .B char c
@@ -32,7 +41,7 @@ ascii 48에서 57까지의 문자를 int 형으로 변환한다.
 정수로 변경 할 캐릭터를 지정한다.
 
 .SH 반환값
-정수값. 지정한 문자가 아스키 48-57 범위 밖일 경우 -1을 반환한다.
+정수값. 지정한 문자가 아스키 48\-57 범위 밖일 경우 \-1을 반환한다.
 
 .SH 예제
 .nf
@@ -42,7 +51,7 @@ int main (void) {
     char *str = "123";
     int no = 0, i = 0, x = 1, res = 0;
 
-    for (i=strlen(str) - 1; i >= 0; i--) {
+    for (i=strlen(str) \- 1; i >= 0; i\-\-) {
         if ( (no = char2int (str[i])) > 0 ) {
             res += (no * x);
             x *= 10;
@@ -56,10 +65,10 @@ int main (void) {
 .fi
 
 .SH 참조
-check_int(1) str2double(1) str2long(1)
+check_int(3) str2double(3) str2long(3)
 
 .SH 작성
-2011.02.10 김정균
+김정균 <http://oops.org>
 
 .SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+버그가 발견이 되면 http://oops.org/ 로 리포팅을 부탁한다.

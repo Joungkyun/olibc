@@ -1,28 +1,46 @@
-.TH strtoupper(1) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
+.TH strtoupper(3) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man strtoupper.1
+.\" nroff -man strtoupper.3
 .\" 2011-02-10 JoungKyun.Kim <htt://oops.org>
-.\" $Id: strtoupper.3,v 1.5 2011-02-09 17:28:35 oops Exp $
+.\" $Id: strtoupper.3,v 1.6 2011-03-08 17:28:58 oops Exp $
 .SH NAME
 strtoupper \- convert a upper case to upper case
 
 .SH USAGE
 .B #include <olibc/libstring.h>
 .sp
-.BI "void strtoupper (char *str);"
+.BI "void strtoupper (char * str);"
 
 .SH Link library
-.B gcc source -loc
-.br
+.B \-loc
 or
-.B gcc source -logc 
+.B \-lolibc
 .br
 
-If link with -logc, this object is follows LGPL2, but link with -loc, object is
-follows BPL.
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.Bliboc.so
+or
+.B liboc.a
+that follows BSD license.
 
 .SH DESCRIPTION
-The strtoupper() function converts strings to upper case.
+The
+.BI strtoupper()
+function converts strings to upper case.
+
+.TP
+.B char * str
+.br
+The input string
+
+.TP
 The given argument of strtoupper is changed.
 
 .SH "RETURN VALUE"
@@ -42,10 +60,10 @@ int main (void) {
 .fi
 
 .SH "SEE ALSO"
-strtoupper(1)
+strtoupper(3)
 
 .SH AUTHOR
-Thu, 10 Feb 2011 JoungKyun.Kim
+JoungKyun.Kim <http://oops.org/>
 
 .SH BUGS
 Please report bug on QnA bulletin board on http://oops.org/

@@ -1,8 +1,8 @@
-.TH strtoupper(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH strtoupper(1) 2011-03-09 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man strtoupper.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: strtoupper.3,v 1.1 2011-02-09 17:28:35 oops Exp $
+.\" nroff -man strtoupper.3
+.\" 2011-03-09 JoungKyun Kim <htt://oops.org>
+.\" $Id: strtoupper.3,v 1.2 2011-03-08 17:25:52 oops Exp $
 .SH 이름
 strtoupper \- 문자열의 소문자를 대문자로 변경
 
@@ -12,19 +12,31 @@ strtoupper \- 문자열의 소문자를 대문자로 변경
 .BI "void strtoupper (char *str);"
 
 .SH 라이브러리 링크
-.B gcc source -loc
+.B \-loc
+or
+.B \-lolibc
 .br
 
+.B libolibc.so
 또는
-
-.B gcc source -logc
-.br
-
-libogc를 정적으로 링크할 경우에는 LGPL2에 근거하여 사용이 가능하며, liboc를
-정적으로 링크할 경우에는 BPL에 근거한다.
+.B libolibc.a
+에는 
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
 
 .SH 설명
 문자열을 소문자로 변경한다.
+
+.TP
+.B char * str
+.br
+변환할 문자열
 
 주의할 것은 원본 str 을 변형한다는 것이다.
 
@@ -45,10 +57,10 @@ int main (void) {
 .fi
 
 .SH 참고
-strtolower(1)
+strtolower(3)
 
 .SH 작성
-2004.02.19 김정균 <http://oops.org>
+김정균 <http://oops.org>
 
 .SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+버그가 발견이 되면 http://oops.org/ 로 리포팅을 부탁한다.

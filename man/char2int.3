@@ -1,49 +1,64 @@
-.TH char2int(1) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
+.TH char2int(3) 2011-02-10 "Linux Manpage" "OOPS C Library's Manual"
 .\" Process with
-.\" nroff -man char2int.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: char2int.3,v 1.5 2011-02-09 17:28:35 oops Exp $
+.\" nroff -man char2int.3
+.\" 2011-03-04 JoungKyun Kim <htt://oops.org>
+.\" $Id: char2int.3,v 1.6 2011-03-08 17:28:58 oops Exp $
 .SH NAME
-char2int \- convert a charactor to an integer
+char2int \- convert to integer from char
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "int char2int(char c);"
+.BI "int char2int (char c);"
 
 .SH Link library
-.B gcc source -loc
-.br
+.B \-loc
 or
-.B gcc source -logc 
+.B \-lolibc
 .br
 
-If link with -logc, this object is follows LGPL2, but link with -loc, object is
-follows BPL.
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.Bliboc.so
+or
+.B liboc.a
+that follows BSD license.
 
 .SH DESCRIPTION
 The
 .BI char2int()
-function convert a given charactor to an integer.
+api convert to integer a character that is ascii between 48 and 57.
+This api is similar the
+.BI atoi()
+api.
 
 .TP
 .B char c
 .br
-A character taht is ascii range between 48 and 57.
+The input numeric character (character 0 \- 9)
 
 .SH "RETURN VALUE"
 Return an integer. If a charactor is out of ascii range between 48 and 57,
-return -1.
+return \-1.
 
 .SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
 int main (void) {
-    char *str = "123";
-    int no = 0, i = 0, x = 1, res = 0;
+    char * str = "123";
+    int no = 0,
+        i = 0,
+        x = 1,
+        res = 0;
 
-    for (i=strlen(str) - 1; i >= 0; i--) {
+    for ( i=strlen(str) \- 1; i >= 0; i\-\- ) {
         if ( (no = char2int (str[i])) > 0 ) {
             res += (no * x);
             x *= 10;
@@ -56,10 +71,10 @@ int main (void) {
 .fi
 
 .SH "SEE ALSO"
-check_int(1) str2double(1) str2long(1)
+check_int(3) str2double(3) str2long(3)
 
 .SH AUTHOR
-Thu, 10 Feb 2011 JoungKyun.Kim
+JoungKyun.Kim <http://oops.org>
 
 .SH BUGS
 Please report bug on QnA bulletin board on http://oops.org/

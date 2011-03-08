@@ -1,28 +1,45 @@
-.TH strtolower(1) 2011-02-10 "Linux Manpage" "OOPS Library's Manual"
+.TH strtolower(3) 2011-03-09 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man strtolower.1
+.\" nroff -man strtolower.3
 .\" 2011-02-10 JoungKyun.Kim <htt://oops.org>
-.\" $Id: strtolower.3,v 1.5 2011-02-09 17:28:35 oops Exp $
+.\" $Id: strtolower.3,v 1.6 2011-03-08 17:28:58 oops Exp $
 .SH NAME
 strtolower \- convert a upper case to lower case
 
 .SH USAGE
 .B #include <olibc/libstring.h>
 .sp
-.BI "void strtolower (char *str);"
+.BI "void strtolower (char * str);"
 
 .SH Link library
-.B gcc source -loc
-.br
+.B \-loc
 or
-.B gcc source -logc 
+.B \-lolibc
 .br
 
-If link with -logc, this object is follows LGPL2, but link with -loc, object is
-follows BPL.
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.Bliboc.so
+or
+.B liboc.a
+that follows BSD license.
 
 .SH DESCRIPTION
-The strtolower() function converts strings to lower case.
+The
+.BI strtolower()
+function converts strings to lower case.
+
+.TP
+.B char * str
+The input string
+
+.TP
 The given argument of strtolower is changed.
 
 .SH "RETURN VALUE"
@@ -42,10 +59,10 @@ int main (void) {
 .fi
 
 .SH "SEE ALSO"
-strtoupper(1)
+strtoupper(3)
 
 .SH AUTHOR
-Thu, 10 Feb 2011 JoungKyun.Kim
+JoungKyun.Kim <http://oops.org>
 
 .SH BUGS
 Please report bug on QnA bulletin board on http://oops.org/
