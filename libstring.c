@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.71 $
+ * $Date: 2011-03-08 17:31:25 $
+ * $Revision: 1.72 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.71 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: libstring.c,v 1.72 2011-03-08 17:31:25 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -511,6 +511,10 @@ long double str2double (CChar * src) { // {{{
  *   the char2int() function returns -1.
  * @endcode
  * @retval	-1 Failure
+ * @sa	check_int str2double str2long
+ *
+ * The char2int() api convert to integer a character that is
+ * ascii between 48 and 57. This api is similar the atoi() api.
  */
 OLIBC_API
 int char2int (CChar c) // {{{

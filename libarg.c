@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.32 $
+ * $Date: 2011-03-08 17:31:25 $
+ * $Revision: 1.33 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.32 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: libarg.c,v 1.33 2011-03-08 17:31:25 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -304,8 +304,8 @@ static char * unconvert_quoted_blank (const char * stream) // {{{
  * @sa getopt(3) getopt_long(3) ofree_array argv_make
  *
  * The o_getopt() function parses the command-line arguments similarly
- * getopt(1). Its arguents argc and argv are the argument count and array
- * as passed to the main() function on program invocation.
+ * getopt_long(3). Its arguments argc and argv are the argument count and
+ * array as passed to the main() function on program invocation.
  *
  * After parsing, o_cmdarg global array variable has rest arguments
  * in the order except the option arguments.

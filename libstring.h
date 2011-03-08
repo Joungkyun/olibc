@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 17:37:15 $
- * $Revision: 1.28 $
+ * $Date: 2011-03-08 17:31:25 $
+ * $Revision: 1.29 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.28 2011-03-01 17:37:15 oops Exp $ */
+/* $Id: libstring.h,v 1.29 2011-03-08 17:31:25 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -61,7 +61,6 @@ void strtoupper (char * src);
 
 ULong32 bin2hex_r (CChar * src, char ** dst);
 char * bin2hex (CChar * src);
-char _bin2hex (CChar * src);
 char * hex2bin (CChar * src);
 char * _hex2bin (CChar c);
 UInt bin2dec (CChar * src);
