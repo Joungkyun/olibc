@@ -1,70 +1,89 @@
-.TH addslashes(1) 2004-02-19 "Linux Manpage" "OOPS C Library's Manual"
+.TH addslashes(3) 2011-03-09 "Linux Manpage" "OOPS C Library's Manual"
 .\" Process with
 .\" nroff -man addslashes.3
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: addslashes.3,v 1.5 2011-02-09 13:32:12 oops Exp $
-.SH 이름
-addslashes
+.\" 2011-03-09 JoungKyun Kim <htt://oops.org>
+.\" $Id: addslashes.3,v 1.6 2011-03-08 17:50:28 oops Exp $
+.SH NAME
+addslashes \- Quote string with slashes
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * addslashes(char *str, int should_free);"
+.BI "char * addslashes (char * in, bool should_free);"
 
-.SH 라이브러리 링크
-.B gcc source -loc
+.SH Link library
+.B \-loc
+or
+.B \-lolibc
 .br
 
-또는
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.B liboc.so
+or
+.B liboc.a
+that follows BSD license.
 
-.B gcc source -logc
-.br
+.SH DESCRIPTION
+Returns a string with backslashes before characters that need
+to be quoted in database queries etc. These characters are single
+ quote ('), double quote ("), backslash (\\).
 
-libogc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
+This is not binary safe. If you want to binary safe, use
+.B addslashes_r.
 
-.SH 설명
-데이터 베이스 쿼리와 같이 인용된 부분 앞에 백슬래쉬를 붙여 반환한다. 이런 문자에는
-작은 따옴표 ('), 큰 따옴표 ("), 백슬래쉬 (\\), 그리고 NULL (null byte)이 있다.
-
-이 함수는 php 의 addslashes 와 동일하게 작동을 한다.
+This function has same operation with addslashes() of PHP.
 
 .TP
-.B str
+.B in
 .br
-변환할 원본 문자열이 들어 있는 변수를 지정한다.
+The given string for qouting
 
 .TP
 .B should_free
 .br
-1 을 지정을 하면
-.B addslashes
-함수 내부에서 str 을 메모리 해제(free)를 시도한다. 0 을 지정하면 아무런 작동을 하지
-않는다.
+bool / set true, free memory of in argument into
+.B addslashes().
 
-.SH 반환값
-이 함수가 리턴한 값은 메모리 해제(free)를 해 줘야 한다.
+.SH "RETURN VALUE"
+The point of quoted string. When occurs internal error,
+.B addslashes()
+returns null. If the return string array pointer is not null, the caller should
+deallocate this buffer using
+.B free()
 
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
-char *buf;
-char *str;
+int main (void) {
+    char * buf;
+    char * str;
 
-str= malloc (sizeof (char) * 32);
-strcpy (str, "abc'def'gh\\"ij\\"klmn");
+    str = malloc (sizeof (char) * 32);
+    strcpy (str, "abc'def'gh\\"ij\\"klmn");
 
-/* str 변수는 addslashes 함수 내부에서 메모리 해제가 된다 */
-buf = addslashes (str, 1);
-printf ("%s\\n", buf);
+    // free memory str variabl into addslashes()
+    buf = addslashes (str, 1);
+    printf ("%s\\n", buf);
 
-free (buf);
+    free (buf);
+
+    return 0;
+}
 .fi
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH "SLL ALSO"
+addslashs_r(3)
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
