@@ -1,6 +1,6 @@
-# $Id: Makefile.in,v 1.4 2011-02-18 18:08:32 oops Exp $
+# $Id: Makefile.in,v 1.5 2011-03-08 17:31:13 oops Exp $
 top_builddir	= ..
-CC		= @CC@
+CC			= @CC@
 CFLAGS		=
 DESTDIR		=
 SHELL		= @SHELL@
@@ -10,7 +10,7 @@ VERSION		= @PACKAGE_VERSION@
 
 LIBTOOL		= @LIBTOOL@
 INSTALL		= @INSTALL@
-LS		= @LS@
+LS			= @LS@
 GZIP		= @GZIP@
 MKDIR		= @MKDIR@ -p
 
@@ -22,9 +22,9 @@ D_LIBTOOL	= $(LIBTOOL) --mode=install @INSTALL_DATA@
 
 install:
 	$(MKDIR) $(DESTDIR)$(mandir)/ko/man1
-	for i in `$(LS) *.1`; do \
-		if test "$i" = "convert_racecode.1"; then \
+	for i in `$(LS) *.3`; do \
+		if test "$i" = "convert_racecode.3"; then \
 			continue; \
 		fi; \
-		$(D_LIBTOOL) $$i $(DESTDIR)$(mandir)/ko/man1/ ;\
+		$(D_LIBTOOL) $$i $(DESTDIR)$(mandir)/ko/man3/ ;\
 	done
