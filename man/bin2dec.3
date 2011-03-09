@@ -1,64 +1,88 @@
-.TH bin2dec(1) 2011-02-11 "Linux Manpage" "OOPS Library's Manual"
+.TH bin2dec(3) 2011-03-10 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man bin2dec.1
-.\" 2011-02-11 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2dec.3,v 1.5 2011-02-11 13:27:29 oops Exp $
-.SH 이름
-bin2dec
+.\" nroff -man bin2dec.3
+.\" 2011-03-10 JoungKyun Kim <htt://oops.org>
+.\" $Id: bin2dec.3,v 1.6 2011-03-09 17:32:23 oops Exp $
+.SH NAME
+bin2dec \- Convert binary string to 32bit integer
+.br
+bin2long \- Convert binary string to 64bit integer
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "unsigned int bin2dec (const char *str)"
-.BI "unsigned long long bin2long (const char *str)"
+.BI "unsigned int bin2dec (const char * str)"
+.br
+.BI "unsigned long long bin2long (const char * str)"
 
-.SH 라이브러리 링크
-.B gcc source -loc
+.SH Link library
+.B \-loc
+or
+.B \-lolibc
 .br
 
-또는
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.B liboc.so
+or
+.B liboc.a
+that follows BSD license.
 
-.B gcc source -logc
-.br
-
-libogc를 정적으로 링크할 경우에는 LGPL2에 근거하여 사용이 가능하며, liboc를
-정적으로 링크할 경우에는 BPL에 근거한다.
-
-.SH 설명
-2진수 형태의 문자열을 십진수로 변환을 한다.
-.br
+.SH DESCRIPTION
+The
 .BI bin2dec()
-함수는 32bit까지 처리가 가능하며,
+and
 .BI bin2long()
-함수는 64bit까지 처리가 가능하다.
-.BI bin2long()
-함수는 32/64bit machine의 호환을 위하여 64bit integer를 상위/하위 비트를
-나누어서 계산을 하므로 명확하게 32bit 범위의 수를 변환한 경우에는
+functions are convert binary numeric string to decimal integer.
+
+The
 .BI bin2dec()
-함수를 사용하는 것이 좋다.
+function convert 32bit integer and, the
+.BI bin2long()
+function convert 64bit integer. The
+.BI bin2long()
+function caculate 64bit integer with high bit and low bit for 32 bit and
+64bit compatibility. So for cleary 32bit range integer, use the
+.BI bin2dec()
+function.
 
+The
+.BI bin2dec()
+and
+.BI bin2long()
+functions don't support negative integer.
 
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
-unsigned int x = 0;
-unsigned long long v = 0;
-char y = "11011000";
-char w = "1001010100000010111110010000000000";
+int main (void) {
+    unsigned int x = 0;
+    unsigned long long v = 0;
+    char y = "11011000";
+    char w = "1001010100000010111110010000000000";
 
-x = bin2dec (y);
-v = bin2long (w);
+    x = bin2dec (y);
+    v = bin2long (w);
 
-printf ("%u\\n", x);
-printf ("%llu\\n", v);
+    printf ("%u\\n", x);
+    printf ("%llu\\n", v);
+
+    return 0;
+}
 .fi
 
-.SH 참고
-hex2bin(1)
+.SH "SEE ALSO"
+hex2bin(3)
 
-.SH 작성
-2011.02.11 김정균 <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
