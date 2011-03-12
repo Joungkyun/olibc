@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-09 17:32:22 $
- * $Revision: 1.73 $
+ * $Date: 2011-03-12 17:26:14 $
+ * $Revision: 1.74 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.73 2011-03-09 17:32:22 oops Exp $ */
+/* $Id: libstring.c,v 1.74 2011-03-12 17:26:14 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -901,7 +901,7 @@ void strtoupper (char * str) // {{{
  * @sa	bin2hex hex2bin
  * @exception DEALLOCATE
  *   When occurs internal error, 2th argument @e dst has null.
- *   If the 2th argument @e est has string array pointer, the caller should
+ *   If the 2th argument @e dst has string array pointer, the caller should
  *   deallocate this buffer using @e free()
  *
  * The bin2hex_r() function converts binary string to hexadecimal
