@@ -1,40 +1,49 @@
-.TH check_int(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH check_int(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man check_int.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: check_int.3,v 1.5 2011-02-09 17:28:35 oops Exp $
-.SH 이름
-check_int
+.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
+.\" $Id: check_int.3,v 1.6 2011-03-14 04:29:54 oops Exp $
+.SH NAME
+check_int \- check the ascii value of a character whether is between 48 and 57
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "int check_int(char c);"
+.BI "int check_int (char c);"
 
-.SH 라이브러리 링크
-.B gcc source -l liboc
+.SH Link library
+.B \-loc
+or
+.B \-lolibc
 .br
 
-또는
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.B liboc.so
+or
+.B liboc.a
+that follows BSD license.
 
-.B gcc source -l libolibc
-.br
-
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
-
-.SH 설명
-해당 캐릭터가 정수인지 아닌지를 체크한다.
+.SH DESCRIPTION
+The
+.BI check_int()
+function check whether a given character has value between 48 and 57.
 
 .TP
 .B c
 .br
-캐릭터를 지정한다.
+A character for checking
 
-.SH 반환값
-정수이면 1을 반환하고, 아니면 0을 반환한다.
+.SH "RETURN VALUE"
+The input character is integer, return 1, otherwise returns 0.
 
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
@@ -42,7 +51,7 @@ int main (void) {
     char *str = "12c3";
     int i = 0;
 
-    for (i=strlen(str) - 1; i >= 0; i--) {
+    for (i=strlen (str) - 1; i >= 0; i--) {
         if ( check_int (str[i]) ) {
             printf ("%c is int\\n", str[i]);
         } else {
@@ -54,11 +63,11 @@ int main (void) {
 }
 .fi
 
-.SH 참조
-char2int(1) str2double(1) str2long(1)
+.SH "SEE ALSO"
+char2int(3) str2double(3) str2long(3)
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
