@@ -1,0 +1,92 @@
+.TH convert_punycode(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man convert_punycode.3
+.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
+.\" $Id: convert_punycode.3,v 1.1 2011-03-14 04:57:26 oops Exp $
+.SH 이름
+convert_punycode \- 다국어 도메인을 변환
+.br
+convert_punycode_r
+
+.SH 사용법
+.B #include <olibc/libidn.h>
+.sp
+.BI "char * convert_punycode (char * domain, int mode, int debug);"
+.br
+.BI "unsigned int convert_punycode_r (const char * src, unsigned char ** dst, bool mode, const char * charset)"
+
+.SH 라이브러리 링크
+.B \-logc
+or
+.B \-lolibc
+.br
+
+.B libogc
+또는
+.B libolibc library
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를 링크하려면 LGPL2를 충족해야 한다.
+
+.SH 설명
+.BI convert_punycode()
+API는
+.B "IDN (International Domain Name)"
+을 구현하기 위한 punycode 변환을 위하여 사용이 된다.
+
+.TP
+.B domain
+.br
+변환할
+.B IDN
+을 지정
+
+.TP
+.B mode
+.br
+encoding시에 0, decoding시에 1을 지정한다.
+
+.TP
+.B debug
+.br
+debug 옵션.
+.B Deprecated.
+0.1.3 부터는 API호환을 위하여 존재만 하며, 빌드시에 -D__OCDEBUG__ 를 이용하도록 한다.
+
+.SH 반환값
+변환된 문자열의 포인트를 반환한다.
+.BI convert_punycode
+API는 static으로 할당된 memory의 pointer를 할당하기 때문에 thread safe하지 못하다. thread safe를 원한다면 convert_punycode_r() API를 사용하라.
+
+.SH 예제
+.nf
+#include <olibc/libidn.h>
+
+int main (void) {
+    char x[32] = "한글도메인.kr";
+    char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
+
+    printf ("%s\\n", convert_punycode (x, 0, 1));
+    printf ("%s\\n", convert_punycode (y, 1, 1));
+
+    len = convert_punycode_r (x, &buf, 0, "EUC-KR");
+    if ( buf != NULL ) {
+        printf ("%s\\n", buf);
+        free (buf);
+    }
+
+    len = convert_punycode_r (y, &buf, 0, "EUC-KR");
+    if ( buf != NULL ) {
+        printf ("%s\\n", buf);
+        free (buf);
+    }
+
+    return 0;
+}
+.fi
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.

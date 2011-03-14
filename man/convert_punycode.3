@@ -1,65 +1,93 @@
-.TH convert_punycode(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH convert_punycode(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man convert_punycode.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: convert_punycode.3,v 1.7 2009-10-29 13:24:33 oops Exp $
-.SH 이름
-convert_punycode
+.\" nroff -man convert_punycode.3
+.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
+.\" $Id: convert_punycode.3,v 1.8 2011-03-14 04:57:26 oops Exp $
+.SH NAME
+convert_punycode \- Convert between punycode and international domain.
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libidn.h>
 .sp
 .BI "char * convert_punycode (char * domain, int mode, int debug);"
+.br
+.BI "unsigned int convert_punycode_r (const char * src, unsigned char ** dst, bool mode, const char * charset)"
 
 .SH 라이브러리 링크
-.B gcc source -l libogc
+.B \-logc
+or
+.B \-lolibc
 .br
 
-또는
+The libraries are include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
 
-.B gcc source -l libolibc
-.br
-
-libogc 나 libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거한다.
-
-.SH 설명
-convert_punycode 함수는 com/net/org 에 사용이 되는 muitibyte 도메인의 punycode 변환을
-위하여 사용이 된다.
-
-이 함수를 사용하기 위해서는 olibc 빌드시에 iconv library 를 link 해 줘야 한다.
+.SH DESCRIPTION
+These apis convert to punycode from international domain or
+convert to international domain from punycode
 
 .TP
 .B domain
 .br
-변환할 멀티바이트/punycode 도메인을 지정
+International domain for converting
 
 .TP
 .B mode
 .br
-0 을 지정하면, 멀티바이트 도메인을 punycode 로 변환하며, 1을 지정하면 punycode 도메인을
-멀티바이트 도메인으로 변환한다.
+encode(set 0) or decode(set 1)
 
 .TP
 .B debug
 .br
-debug 옵션
+Deprecated (no action). For debugging, use -D__OCDEBUG__ on build time.
 
-.SH 예제
+.SH "RETURN VALUE"
+The 
+.BI convert_punycode() 
+returns static allocated memory, so this api is not thread safe. 
+If you want to thread safe, use 
+.BI convert_punycode_r().
+
+The
+.BI convert_punycode_r() return length of 2th argument. When The
+.BI convert_punycode_r()
+api occurs internal error, 2th argument dst has null value. If the
+dst argument has not null, the caller should deallocate this buffer
+using
+.BI free().
+
+.SH EXAMPLE
 .nf
 #include <olibc/libidn.h>
 
-char x[32] = "한글도메인.kr";
-char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
+int main (void) {
+    char x[32] = "한글도메인.kr";
+    char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
+	char * buf;
+    unsigned int len;
 
-printf ("%s\\n", convert_punycode (x, 0, 1));
-printf ("%s\\n", convert_punycode (y, 1, 1));
+    printf ("%s\\n", convert_punycode (x, 0, 1));
+    printf ("%s\\n", convert_punycode (y, 1, 1));
+
+    len = convert_punycode_r (x, &buf, 0, "EUC-KR");
+    if ( buf != NULL ) {
+        printf ("%s\\n", buf);
+        free (buf);
+    }
+
+    len = convert_punycode_r (y, &buf, 0, "EUC-KR");
+    if ( buf != NULL ) {
+        printf ("%s\\n", buf);
+        free (buf);
+    }
+
+    return 0;
+}
 .fi
 
-.SH 참조
-convert_punycode(1)
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
-
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
