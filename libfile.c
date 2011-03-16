@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.26 $
+ * $Date: 2011-03-16 11:36:40 $
+ * $Revision: 1.27 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.26 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: libfile.c,v 1.27 2011-03-16 11:36:40 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -119,11 +119,11 @@ bool file_exists (CChar * path, int mode) // {{{
  * @return	read data or NULL on failure.
  * @sa		writefile
  * @exception DEALLOCATE
- *   When occurs internal error, fileread() returns null.
+ *   When occurs internal error, readfile() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  * @warning
- *   The writefile() function is not binary safe. If you need binary
+ *   The readfile() function is not binary safe. If you need binary
  *   safe, use olibc >= 1.0.0
  */
 OLIBC_API
