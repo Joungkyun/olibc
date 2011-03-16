@@ -1,44 +1,59 @@
-.TH writefile(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH writefile(3) 2011-03-16 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man writefile.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.SH ¿Ã∏ß
-writefile
+.\" nroff -man writefile.3
+.\" 2011-03-16 JoungKyun Kim <htt://oops.org>
+.SH Ïù¥Î¶Ñ
+writefile \- Write a string to a file.
 
-.SH ªÁøÎπ˝
+.SH SYNOPSIS
 .B #include <olibc/libfile.h>
 .sp
 .BI "int writefile (const char * path, const char * data, bool mode);"
 
-.SH ∂Û¿Ã∫Í∑Ø∏Æ ∏µ≈©
+.SH "Link library"
 .B \-loc
 or
 .B \-lolibc
 .br
 
 .B libolibc.so
-∂«¥¬
+and
 .B libolibc.a
-ø°¥¬
-.BI "LGPL2 symbol"
-¿Ã ∆˜«‘µ«æÓ ¿÷¿∏π«∑Œ ¿Ã ∂Û¿Ã∫Í∑Ø∏Æ∏¶
-∏µ≈©«œ∑¡∏È LGPL2¿« øµ«‚¿ª πﬁ¥¬¥Ÿ. idn∞¸∑√ api∏¶ ªÁøÎ«œ¡ˆ æ ∞Ì, BSD ∂Û¿ÃºæΩ∫¿« ¿˚øÎ¿ª
-ø¯«—¥Ÿ∏È
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
 .B liboc.so
-≥™
+or
 .B liboc.a
-∏¶ ¿ÃøÎ«ÿæﬂ «—¥Ÿ.
+that follows BSD license.
 
-.SH º≥∏Ì
-str ¿ª filename ø° ±‚∑œ«—¥Ÿ. mode ∞° 1 ¿Ã∏È, filename ¿Ã ¡∏¿Á«“ ∞ÊøÏ
-«ÿ¥Á ∆ƒ¿œø° ¿ÃæÓº≠ ¿€º∫¿ª «œ∏Á, 0 ¿Ã∞≈≥™ «ÿ¥Á ∆ƒ¿œ¿Ã æ¯¿∏∏È, filename
-¿ª ªı∑Œ ±‚∑œ«—¥Ÿ.
+.SH DESCRIPTION
+Write a string to a file.
 
-.SH π›»Ø∞™
-¿Ã «‘ºˆ¥¬ ±‚∑œø° º∫∞¯«ﬂ¿ª ∞ÊøÏ 0¿ª π›»Ø«œ∏Á, Ω«∆–«ﬂ¿ª ∞ÊøÏ -1 ¿ª π›»Ø
-«—¥Ÿ.
+The
+.BI writefile()
+api is not binary safe. If you need binary safe, use olibc >= 1.0.0
 
-.SH øπ¡¶
+.TP
+.B path
+.br
+Path to the file where to write the data.
+
+.TP
+.B data
+.br
+The data to write.
+
+.TP
+.B mode
+Bool. Set true, append and set false, new file.
+
+.SH "RETURN VALUE"
+On success return 0, otherwise return -1.
+
+.SH EXAMPLE
 .nf
 #include <olibc/libfile.h>
 
@@ -52,8 +67,11 @@ int main (void) {
 }
 .fi
 
-.SH ¿€º∫
-2004.02.19 ±Ë¡§±’ <http://oops.org>
+.SH "SEE ALSO"
+readfile(3), fileread(3)
 
-.SH πˆ±◊
-πˆ±◊∞° πﬂ∞ﬂ¿Ã µ«∏È http://oops.org ∑Œ ∏Æ∆˜∆√¿ª ∫Œ≈π«—¥Ÿ.
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
+
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
