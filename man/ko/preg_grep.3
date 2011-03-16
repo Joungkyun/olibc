@@ -1,0 +1,89 @@
+.TH preg_grep(3) 2011-03-17 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man preg_grep.3
+.\" 2011-03-17 JoungKyun Kim <htt://oops.org>
+.\" $Id: preg_grep.3,v 1.1 2011-03-16 15:50:56 oops Exp $
+.SH 이름
+preg_grep \- 문자열에서 정규식과 매치되는 라인을 반환
+.br
+preg_fgrep \- 파일 내용중 정규식과 매치되는 라인을 반환
+
+.SH 사용법
+.B #include <olibc/libpcre.h>
+.sp
+.BI "char * preg_grep (const char * regex, const char * subject, bool reverse);"
+.br
+.BI "char * preg_fgrep (const char * regex, const char * path, bool reverse);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+.B preg_grep()
+api는 subject에서
+.B perl
+호환 정규식(PCRE)과 매치되는 라인을 반환하거나 매치되지 않는 라인을 반환할 수 있다.
+
+.B preg_fgrep()
+api는 subject 대신 주어진 path의 파일의 내용을 읽어서 반환을 한다.
+
+.TP
+.B regex
+.br
+체크할 정규식을 지정
+
+.TP
+.B subject/path
+.br
+검사할 문자열 또는 파일 경로
+
+.TP
+.B reverse
+.br
+false를 지정하면, 정규식과 매치되는 행만 반환을 하며, true 로 지정이 되면
+.B grep -v
+와 같이 매치하지 않는 행만 반환을 한다.
+
+.SH 반환값
+행 단위로 반환이 되며, 마지막 행의 \\n 은 삭제가 된다.
+
+이 함수가 리턴한 값은 메모리 해제(free)를 해 줘야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libpcre.h>
+
+int main (void) {
+	char *buf;
+	char *string = "asdf\\nqwer\\n123AsdFasdf\\n";
+
+	buf = preg_grep ("/ASDF/i", string, 0);
+	printf ("%s\\n", buf);
+
+	free (buf);
+
+	return 0;
+}
+.fi
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.

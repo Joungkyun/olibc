@@ -1,0 +1,90 @@
+.TH preg_match(3) 2011-03-17 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man preg_match.3
+.\" 2011-03-17 JoungKyun Kim <htt://oops.org>
+.\" $Id: preg_match.3,v 1.1 2011-03-16 15:50:56 oops Exp $
+.SH 이름
+preg_match \- 정규표현식 매치를 수행
+.br
+preg_match_r \- 정규표현식 매치를 수행하고, 매치된 문자열을 저장
+
+.SH 사용법
+.B #include <olibc/libpcre.h>
+.sp
+.BI "int preg_match (const char * regex, const char * subject);"
+.br
+.BI "int preg_match_r (const char * regex, const char * subject, const char *** matched);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+주어진 문자열에서 정규식과 매치가 되는 문자열을 마치면 1을 반환하고 중지한다.
+
+.BI preg_match_r()
+은 검색의 결과를 제공한다. matches[0]은 전체 패턴과 매치된 문자열을 포함하며
+matches[1]은 첫번째 서브패턴과 매치되는 문자열이 저장이 된다.
+.BI preg_match_r()
+의 3번째 인자의 값이 NULL이 아니라면
+.BI free()
+api를 이용하여 메모리를 해제해 줘야 한다.
+
+.TP
+.B regex
+.br
+체크할 정규식을 지정
+
+.TP
+.B subject
+.br
+검사할 문자열
+
+.TP
+.B matches of preg_match_r()
+.br
+매치된 문자열 배열
+
+.SH 반환값
+성공시에 1, 실패시에 0을 반환한다.
+
+.SH 예제
+.nf
+#include <olibc/libpcre.h>
+
+int main (void) {
+    char * x = "abcd1234\\\\n6943Aaa";
+    char ** matches;
+    printf ("%d\\n", preg_match ("/[0-9][a-z]/i", x));
+
+    if ( preg_match_r ("/([3])([A])([a])/", x, &matches) ) {
+        int i;
+        for ( i=0; i<4; i++ )
+            printf ("%s\\n", matches[i]);
+    }
+
+    return 0;
+}
+
+.fi
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
