@@ -1,81 +1,95 @@
-.TH preg_grep(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH preg_grep(3) 2011-03-17 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man preg_grep.3
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: preg_grep.3,v 1.5 2011-03-16 11:17:40 oops Exp $
-.SH 이름
-preg_grep
+.\" 2011-03-17 JoungKyun Kim <htt://oops.org>
+.\" $Id: preg_grep.3,v 1.6 2011-03-16 15:18:06 oops Exp $
+.SH NAME
+preg_grep \- Return matched line of given strings. 
+.br
+preg_fgrep \- return matched line of given file.
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libpcre.h>
 .sp
-.BI "char * preg_grep (char *regex, char *str, int opt);"
+.BI "char * preg_grep (const char * regex, const char * subject, bool reverse);"
+.br
+.BI "char * preg_fgrep (const char * regex, const char * path, bool reverse);"
 
-.SH 라이브러리 링크
+.SH "Link library"
 .B \-loc
 or
 .B \-lolibc
 .br
 
 .B libolibc.so
-또는
+and
 .B libolibc.a
-에는
-.BI "LGPL2 symbol"
-이 포함되어 있으므로 이 라이브러리를
-링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
-원한다면
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
 .B liboc.so
-나
+or
 .B liboc.a
-를 이용해야 한다.
+that follows BSD license.
 
-.SH 설명
-.B preg_grep
-함수는 시스템의 grep 과 비슷하게 작동을 한다. 하지만 정규식은
-.B perl 호환 정규식
-이 적용이 된다.
+.SH DESCRIPTION
+The
+.BI preg_grep()
+api searches the input string for lines containing a match to the given pcre
+regular expression pattern.
 
-.B preg_grep
-함수는 지정된 정규식과 매치되는 행을 출력하거나 하지 않을 수 있다.
+The
+.BI preg_fgrep()
+api returns with given path instead of subject of the
+.BI preg_grep().
 
 .TP
 .B regex
 .br
-체크할 정규식을 지정
+The pattern to search for, as a string.
 
 .TP
-.B str
+.B subject/path
 .br
-검사할 문자열
+The input string or the input path.
 
 .TP
-.B opt
+.B reverse
 .br
-0 을 지정하면, 정규식과 매치되는 행만 반환을 하며, 1 로 지정이 되면
-.B grep -v
-와 같이 매치하지 않는 행만 반환을 한다.
+Set true, returns unmatched line.
 
-.SH 반환값
-행 단위로 반환이 되며, 마지막 행의 \\n 은 삭제가 된다.
+.SH "RETURN VALUE"
+Character pointer of the matched lines. The last new line(\\n) is removed.
 
-이 함수가 리턴한 값은 메모리 해제(free)를 해 줘야 한다.
+When occurs internal error,
+.BI preg_grep()
+and
+.BI preg_fgrep()
+return null. If the return character pointer is not null, the caller should
+deallocate this buffer using
+.BI free().
 
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libpcre.h>
 
-char *buf;
-char *string = "asdf\\nqwer";
+int main (void) {
+	char *buf;
+	char *string = "asdf\\nqwer\\n123AsdFasdf\\n";
 
-buf = preg_grep ("/ASDF/i", string, 0);
-printf ("%s\\n", buf);
+	buf = preg_grep ("/ASDF/i", string, 0);
+	printf ("%s\\n", buf);
 
-free (buf);
+	free (buf);
+
+	return 0;
+}
 .fi
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
