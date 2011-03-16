@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man readfile.3
 .\" 2011-03-16 JoungKyun Kim <htt://oops.org>
-.\" $Id: readfile.3,v 1.1 2011-03-16 11:35:16 oops Exp $
+.\" $Id: readfile.3,v 1.2 2011-03-16 11:42:38 oops Exp $
 .SH 이름
 readfile \- 파일을 읽는다.
 .br
@@ -53,7 +53,7 @@ int main (void) {
     char *text;
     char *path = "/etc/hosts";
 
-    text = fileread (path);
+    text = readfile (path);
     printf ("%s\\n", text);
     free (text);
 
