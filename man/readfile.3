@@ -1,0 +1,74 @@
+.TH readfile(3) 2011-03-16 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man readfile.3
+.\" 2011-03-16 JoungKyun Kim <htt://oops.org>
+.\" $Id: readfile.3,v 1.1 2011-03-16 11:35:16 oops Exp $
+.SH NAME
+readfile \- Reads entire file into a string.
+.br
+fileread \- alias of readfile
+
+.SH SYNOPSIS
+.B #include <olibc/libfile.h>
+.sp
+.BI "char * fileread (const char * path);"
+.br
+.BI "char * readfile (const char * path);"
+
+.SH "Link library"
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.B liboc.so
+or
+.B liboc.a
+that follows BSD license.
+
+.SH DESCRIPTION
+Reads entire file into a string.
+
+.SH "RETURN VALUE"
+Read data or NULL on failure. When occurs internal error,
+.BI readfile()
+returns null. If the return string array pointer is not null,
+the caller should deallocate this buffer using
+.BI free().
+
+The
+.BI fileread()
+api is deprecated on 0.1.3 and removed to next version.
+
+.SH EXAMPLE
+.nf
+#include <olibc/libfile.h>
+
+int main (void) {
+    char *text;
+    char *path = "/etc/hosts";
+
+    text = fileread (path);
+    printf ("%s\\n", text);
+    free (text);
+
+    return 0;
+}
+.fi
+
+.SH "SEE ALSO"
+writefile(3)
+
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
+
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
