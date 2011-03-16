@@ -1,0 +1,88 @@
+.TH realpath_r(3) 2011-03-16 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man realpath_r.3
+.\" 2011-03-16 JoungKyun Kim <htt://oops.org>
+.\" $Id: realpath_r.3,v 1.1 2011-03-16 12:10:59 oops Exp $
+.SH 이름
+realpath_r \- 절대경로를 반환
+
+.SH 사용법
+.B #include <olibc/libfile.h>
+.sp
+.BI "char * realpath_r (const char * path);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+.BI realpath_r()
+api는 모든 심볼릭 링크와 '/./', '/../' 등을 포함하고 있는 문자열을 절대 경로로
+확장한다. 
+
+.TP
+.B path
+.br
+절대 경로를 찾을 경로를 지정
+
+.SH 반환값
+주어진 경로의 절대 경로를 반환 한다.
+
+NULL 포인터가 반환이 될 경우 다음의 errno가 설정이 된다.
+
+.TP
+.B ENOENT
+파일이 너무 길거나, 파일명이 주어지지 않음
+.TP
+.B ENOMEM
+커널 메모리가 부족 함
+.TP
+.B ERANGE
+경로를 저장할 공간이 충분치 않음
+.TP
+.B EFAULT
+접근할 수 없는 메모리 주소를 가리킴
+.TP
+.B ENAMETOOLONG
+경로의 길이가 NAME_MAX에 도달했거나, PATH_MAX에 도달했을 경우
+
+.TP
+반환 값은 내부적으로 malloc을 이용하기 때문에 꼭 메로리 해제를 해 주어야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libfile.h>
+
+int main (void) {
+    char *path = realpath_r ("../../some.file");
+    if ( path != NULL ) {
+        printf ("Absolute path is %s\\n", path);
+        free (path);
+    } else {
+        fprintf ("ERROR: %s\\n", strerror (errno));
+    }
+
+    return 0;
+}
+.fi
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
