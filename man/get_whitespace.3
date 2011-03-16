@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man get_whitespace.1
 .\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: get_whitespace.3,v 1.5 2011-02-24 20:13:07 oops Exp $
+.\" $Id: get_whitespace.3,v 1.6 2011-03-16 11:17:40 oops Exp $
 .SH 이름
 get_whitespace
 
@@ -12,8 +12,23 @@ get_whitespace
 .BI "int get_whitespace (char *string);"
 
 .SH 라이브러리 링크
-.B gcc source -loc
+.B \-loc
+or
+.B \-lolibc
 .br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
 
 .SH 설명
 문자열에 포함이 되어 있는 white space 문자 수를 반환한다.

@@ -8,19 +8,26 @@ writefile
 .SH 사용법
 .B #include <olibc/libfile.h>
 .sp
-.BI "int writefile (char * filename, char * str, int mode);"
+.BI "int writefile (const char * path, const char * data, bool mode);"
 
 .SH 라이브러리 링크
-.B gcc source -l liboc
+.B \-loc
+or
+.B \-lolibc
 .br
 
+.B libolibc.so
 또는
-
-.B gcc source -l libolibc
-.br
-
-libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
-정적으로 링크할 경우에는 BPL 에 근거한다.
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
 
 .SH 설명
 str 을 filename 에 기록한다. mode 가 1 이면, filename 이 존재할 경우
@@ -35,10 +42,14 @@ str 을 filename 에 기록한다. mode 가 1 이면, filename 이 존재할 경우
 .nf
 #include <olibc/libfile.h>
 
-char *text = "asdf";
-char *path = "/etc/hosts";
+int main (void) {
+    char *text = "asdf";
+    char *path = "/etc/hosts";
 
-printf ("%d\\n", writefile (path, text, 0));
+    printf ("%d\\n", writefile (path, text, 0));
+
+    return 0;
+}
 .fi
 
 .SH 작성
