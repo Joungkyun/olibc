@@ -1,0 +1,93 @@
+.TH numberFormat(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man numberFormat.3
+.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
+.\" $Id: numberFormat.3,v 1.1 2011-03-18 10:00:56 oops Exp $
+.SH 이름
+numberFormat \- 수에 자리점을 삽입
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool print);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고,
+BSD 라이센스의 적용을 원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+숫자에 읽기 쉽도록 자리수를 나누어, 문자열로 반환한다.
+
+.TP
+.B d
+.br
+변환할 원형 숫자를 지정한다.
+
+.TP
+.B dec
+.br
+소수점의 자리수를 지정
+
+.TP
+.B dec_point
+.br
+소수점을 표시할 캐릭터를 지정
+
+.TP
+.B thousand_sep
+.br  
+자리수를 표시할 캐릭터를 지정
+
+.TP
+.B print
+.br
+1로 지정을 하면, 출력을 하고 NULL 을 반환
+
+.SH 반환값
+자리수를 구분한 문자열로 반환. 내부 에러가 발생할 경우 NULL을 반환한다.
+반환값이 NULL이 아닐 경우
+.BI free()
+api를 이용하여 메모리를 해제해 주어야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+int main (void) {
+    double no = 123456789;
+    char *data;
+
+    data = malloc(128);
+
+    strcpy (data, numberFormat(no,1,0));
+
+    printf ("%s\\n", data);
+    free (data);
+
+    return 0;
+}
+.fi
+
+.SH 참조
+human_size(3), human_size_r(3)
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
