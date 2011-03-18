@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-12 17:26:14 $
- * $Revision: 1.74 $
+ * $Date: 2011-03-18 16:25:21 $
+ * $Revision: 1.75 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.74 2011-03-12 17:26:14 oops Exp $ */
+/* $Id: libstring.c,v 1.75 2011-03-18 16:25:21 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1149,9 +1149,9 @@ b2l_low:
  *   deallocate this buffer using @e free()
  *
  * @warning
- *    The bin2long() function caculate 64bit integer with high and
+ *    The long2bin() function caculate 64bit integer with high and
  *    low bit for 32bit and 64bit compatibility. So, for cleary 32bit
- *    range integer, use the bin2dec() function.
+ *    range integer, use the dec2bin() function.
  *
  * The long2bin() function convert 64bit integer to binary string.
  */
