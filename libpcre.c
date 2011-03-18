@@ -43,18 +43,18 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.36 $
+ * $Date: 2011-03-18 05:15:53 $
+ * $Revision: 1.37 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.36 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: libpcre.c,v 1.37 2011-03-18 05:15:53 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
 
 //! Default delimiters of preg_quote API
-#define DELIMITERS ".\\+*?[^]$(){}=!><|:"
+#define DELIMITERS ".\\+*?[^]$(){}=!><|:-"
 //! Length of DELIMITERS constant
 #define DELIMITERS_LEN 19
 
