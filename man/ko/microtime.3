@@ -1,0 +1,62 @@
+.TH microtime(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man microtime.3
+.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
+.\" $Id: microtime.3,v 1.1 2011-03-18 06:21:01 oops Exp $
+.SH 이름
+microtime \- 현재의 마이크로 초를 구한다.
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "double microtime (void);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고,
+BSD 라이센스의 적용을 원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+현재의 microtime 을 구한다. 빌드시에
+.BI clock_gettime()
+api를 이용하고
+.B realtime kernel
+이 지원 된다면 나노초를 지원을 한다.
+
+.BI clock_gettime()
+과
+.BI gettimeofday()
+를 지원하지 않는 시스템에서는 지원 하지 않는다.
+
+.SH 반환값
+더블타입의 현재 마이크로 초
+
+.SH 예제
+.nf
+#include <olibc/libtime.h>
+
+int main (void) {
+    printf ("%f\\n", microtime());
+    return 0;
+}
+.fi
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
