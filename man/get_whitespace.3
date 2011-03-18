@@ -1,49 +1,52 @@
-.TH get_whitespace(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH get_whitespace(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man get_whitespace.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: get_whitespace.3,v 1.6 2011-03-16 11:17:40 oops Exp $
-.SH 이름
-get_whitespace
+.\" nroff -man get_whitespace.3
+.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
+.\" $Id: get_whitespace.3,v 1.7 2011-03-18 06:06:42 oops Exp $
+.SH NAME
+get_whitespace \- number of white space.
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libarg.h>
 .sp
-.BI "int get_whitespace (char *string);"
+.BI "int get_whitespace (const char * string);"
 
-.SH 라이브러리 링크
+.SH "Link library"
 .B \-loc
 or
 .B \-lolibc
 .br
 
 .B libolibc.so
-또는
+and
 .B libolibc.a
-에는
-.BI "LGPL2 symbol"
-이 포함되어 있으므로 이 라이브러리를
-링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
-원한다면
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
 .B liboc.so
-나
+or
 .B liboc.a
-를 이용해야 한다.
+that follows BSD license.
 
-.SH 설명
-문자열에 포함이 되어 있는 white space 문자 수를 반환한다.
+.SH DESCRIPTION
+Get number of white space
 
-.SH 예제
+.SH EXAMPLE
 .nf
 #include <olibc/libarg.h>
 
-char * string = "a b c d e      f";
+int main (void) {
+    char * string = "a b c d e      f";
 
-printf ("## %d\\n", get_whitespace (string));
+    printf ("## %d\\n", get_whitespace (string));
+    return 0;
+}
 .fi
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/

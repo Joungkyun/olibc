@@ -1,47 +1,49 @@
-.TH ofree_array(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
+.TH ofree_array(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man ofree_array.1
-.\" 2004-02-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: ofree_array.3,v 1.5 2011-03-16 11:17:40 oops Exp $
-.SH 이름
-ofree_array
+.\" nroff -man ofree_array.3
+.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
+.\" $Id: ofree_array.3,v 1.6 2011-03-18 06:02:20 oops Exp $
+.SH NAME
+ofree_array - free memory of null terminating array
 
-.SH 사용법
+.SH SYNOPSIS
 .B #include <olibc/libarg.h>
 .sp
-.BI "char * ofree_array (char **array);"
+.BI "char * ofree_array (char ** array);"
 
-.SH 라이브러리 링크
+.SH "Link library"
 .B \-loc
 or
 .B \-lolibc
 .br
 
 .B libolibc.so
-또는
+and
 .B libolibc.a
-에는
-.BI "LGPL2 symbol"
-이 포함되어 있으므로 이 라이브러리를
-링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
-원한다면
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
 .B liboc.so
-나
+or
 .B liboc.a
-를 이용해야 한다.
+that follows BSD license.
 
-.SH 설명
-메모리가 할당된 배열에 대해서 메모리를 해제 시킨다. 이 함수를 사용하기 위해서는
-마지막 배열이 NULL 값을 가지고 있어야 한다.
+.SH DESCRIPTION
+Free memory of null termination array that is created by the
+.BI argv_make()
+api.
 
-.SH 예제
-argv_make 문서를 참고한다.
+.SH EXAMPLE
+See also
+.B man 3 argv_make
 
-.SH 참고
-argv_make(1)
+.SH "SEE ALSO"
+argv_make(3)
 
-.SH 작성
-2004.02.19 김정균 <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH 버그
-버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/

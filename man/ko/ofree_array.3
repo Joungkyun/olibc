@@ -1,0 +1,49 @@
+.TH ofree_array(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man ofree_array.3
+.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
+.\" $Id: ofree_array.3,v 1.1 2011-03-18 06:02:20 oops Exp $
+.SH 이름
+ofree_array - null terminating된 배열의 메모리를 해제
+
+.SH 사용법
+.B #include <olibc/libarg.h>
+.sp
+.BI "char * ofree_array (char ** array);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고,
+BSD 라이센스의 적용을 원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+.BI argv_make()
+api에 의해 할당된 배열의 메모리나 또는
+.B null terminating
+된 배열의 메모리를 해제한다.
+
+.SH 예제
+argv_make(3) man page를 참고한다.
+
+.SH 참고
+argv_make(3)
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
