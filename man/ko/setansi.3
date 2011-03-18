@@ -2,50 +2,49 @@
 .\" Process with
 .\" nroff -man setansi.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.8 2011-03-18 16:18:45 oops Exp $
-.SH NAME
-setansi \- Set ansi color
+.\" $Id: setansi.3,v 1.1 2011-03-18 16:18:45 oops Exp $
+.SH 이름
+setansi \- ansi 색상 설정
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
 .BI "void setansi (FILE * stream, int color, bool noansi);"
 
-.SH "Link library"
+.SH 라이브러리 링크
 .B \-loc
 or
 .B \-lolibc
 .br
 
 .B libolibc.so
-and
+또는
 .B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고,
+BSD 라이센스의 적용을 원한다면
 .B liboc.so
-or
+나
 .B liboc.a
-that follows BSD license.
+를 이용해야 한다.
 
-.SH DESCRIPTION
-Print magic character of ansi color on the file stream. If you want to stop
-ansi mode, recall this function with
-.B ENDANSI
-constant.
+.SH 설명
+파일 스트림의 출력 문자열의 색상을 지정한다. 이 함수를 사용한 후에,
+다시 ENDANSI 상수를 이용하여 재호출을 해 줘야 한다.
 
 .TP
 .B stream
 .br
-.B stdin, stdout or stderr,
-and so on.
+색상을 출력할
+.B 표준출력/표준에러/파일스트림
+을 지정한다.
 
 .TP
 .B color
 .br
-olibc color constants. See also follows:
+다음의 상수를 참고한다.
 
 .B ENDANSI 0
 .br
@@ -84,12 +83,12 @@ olibc color constants. See also follows:
 .TP
 .B noansi
 .br
-Set true, this function don't operate.
+true로 설정이 되면, 이 함수는 아무런 작동을 하지 않는다.
 
-.SH "RETURN VALUE"
+.SH 반환값
 없음
 
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
@@ -107,8 +106,8 @@ int main (void) {
 }
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+김정균 <http://oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://oops.org 로 리포팅을 부탁한다.
