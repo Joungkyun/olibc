@@ -1,0 +1,113 @@
+.TH long2bin(3) 2011-03-19 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man long2bin.3
+.\" 2011-03-19 JoungKyun Kim <htt://oops.org>
+.\" $Id: long2bin.3,v 1.1 2011-03-18 16:52:20 oops Exp $
+.SH 이름
+long2bin \- 64bit 정수를 2진수 문자열로 변환
+.br
+dec2bin \- 10진수 문자열을 2진수 문자열로 변환
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "unsigned int long2bin (long long src, char ** dst);"
+.sp
+.BI "unsigned int dec2bin (const char * src, char ** dst);"
+
+.SH 라이브러리 링크
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+또는
+.B libolibc.a
+에는
+.BI "LGPL2 symbol"
+이 포함되어 있으므로 이 라이브러리를
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
+원한다면
+.B liboc.so
+나
+.B liboc.a
+를 이용해야 한다.
+
+.SH 설명
+.BI long2bin()
+api는 64bit 정수를 2진수 문자열로 변환한다.
+
+.BI long2bin()
+api는 32bit와 64bit 호환을 위하여 64bit 정수를 상위비트/하위비트로 쪼개어
+계산을 한다. 명확하게 32bit 범위의 정수일 경우
+.BI dec2bin()
+api를 이용하는 것을 권장한다.
+
+.TP
+.B src
+.br
+입력된 64bit 정수
+
+.TP
+.B dst
+.br
+변환된 이진수 문자열
+
+.PP
+.BI dec2bin()
+api는 10진수 문자열을 이진수 문자열로 변환을 한다.
+
+.TP
+.B dec
+.br
+입력할 10진수 문자열
+
+.TP
+.B dst
+.br
+변환된 이진수 문자열
+
+.SH 반환값
+변환된 이진수 문자열의 길이. 내부 에러가 발생했을 경우 두번째 파라미터
+.B dst
+는 NULL값을 가진다. 만약
+.B dst
+의 값이 NULL이 아닐 경우, 반드시
+.BI free()
+api로 메모리를 해제해 줘야 한다.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+int main (void) {
+    long long src = 1000;
+    char    * dec = "1000";
+    char    * dst;
+    unsigned int len;
+
+    len = long2bin (src, &dst);
+    if ( dst != null ) {
+        printf ("%s\\n", dst);
+        free (dst);
+    }
+
+    len = dec2bin (dec, &dst);
+    if ( dst != null ) {
+        printf ("%s\\n", dst);
+        free (dst);
+    }
+}
+
+.fi
+
+.SH 참조
+bin2long(3), bin2dec(3)
+
+.SH 작성
+김정균 <http://oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://oops.org/ 로 리포팅을 부탁한다.
+
