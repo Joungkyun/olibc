@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man addslashes.3
 .\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: addslashes.3,v 1.8 2011-03-16 11:35:16 oops Exp $
+.\" $Id: addslashes.3,v 1.9 2011-03-18 06:25:23 oops Exp $
 .SH NAME
 addslashes \- Quote string with slashes
 
@@ -10,6 +10,8 @@ addslashes \- Quote string with slashes
 .B #include <olibc/libstring.h>
 .sp
 .BI "char * addslashes (char * in, bool should_free);"
+.br
+.BI "bool addslashes_r (const char * in, size_t inlen, unsigned char ** out, size_t * outlen);"
 
 .SH "Link library"
 .B \-loc
@@ -36,7 +38,7 @@ to be quoted in database queries etc. These characters are single
  quote ('), double quote ("), backslash (\\).
 
 This is not binary safe. If you want to binary safe, use
-.B addslashes_r.
+.B addslashes_r().
 
 This function has same operation with addslashes() of PHP.
 
@@ -54,8 +56,8 @@ bool / set true, free memory of in argument into
 .SH "RETURN VALUE"
 The point of quoted string. When occurs internal error,
 .B addslashes()
-returns null. If the return string array pointer is not null, the caller should
-deallocate this buffer using
+returns null. If the return string array pointer is not null,
+the caller should deallocate this buffer using
 .B free()
 
 .SH EXAMPLE
@@ -78,9 +80,6 @@ int main (void) {
     return 0;
 }
 .fi
-
-.SH "SEE ALSO"
-addslashs_r(3)
 
 .SH AUTHOR
 JoungKyun.Kim <http://oops.org>
