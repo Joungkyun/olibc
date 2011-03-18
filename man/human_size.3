@@ -1,86 +1,101 @@
-.TH human_size(1) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH human_size(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man human_size.1
+.\" nroff -man human_size.3
 .\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: human_size.3,v 1.6 2011-03-18 06:54:04 oops Exp $
-.SH ÀÌ¸§
-human_size
+.\" $Id: human_size.3,v 1.7 2011-03-18 09:05:18 oops Exp $
+.SH NAME
+human_size \- convert number to human readable
+.br
+human_size_r
 
-.SH »ç¿ë¹ý
+.SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * human_size (double size, int sub, int unit);;"
+.BI "char * human_size (double size, int sub, int unit);"
+.br
+.BI "char * human_size_r (ULong64 size, bool sub, bool unit);"
 
-.SH ¶óÀÌºê·¯¸® ¸µÅ©
+.SH "Link library"
 .B \-loc
 or
 .B \-lolibc
 .br
 
 .B libolibc.so
-¶Ç´Â
+and
 .B libolibc.a
-¿¡´Â
-.BI "LGPL2 symbol"
-ÀÌ Æ÷ÇÔµÇ¾î ÀÖÀ¸¹Ç·Î ÀÌ ¶óÀÌºê·¯¸®¸¦
-¸µÅ©ÇÏ·Á¸é LGPL2ÀÇ ¿µÇâÀ» ¹Þ´Â´Ù. idn°ü·Ã api¸¦ »ç¿ëÇÏÁö ¾Ê°í, BSD ¶óÀÌ¼¾½ºÀÇ Àû¿ëÀ»
-¿øÇÑ´Ù¸é
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
 .B liboc.so
-³ª
+or
 .B liboc.a
-¸¦ ÀÌ¿ëÇØ¾ß ÇÑ´Ù.
+that follows BSD license.
 
-.SH ¼³¸í
-¼ýÀÚ¸¦ ÀÐ±â ½¬¿î ´ÜÀ§·Î È¯»êÀ» ÇÏ¿© ¹®ÀÚ¿­·Î ¹ÝÈ¯À» ÇÑ´Ù. ¹ÝÈ¯°ªÀº ¼Ò¼öÁ¡ 2 ÀÚ¸®¿¡¼­
-Àß¸°´Ù.
+.SH DESCRIPTION
+.BI human_size()
+ì™€
+.BI human_size_r()
+apis are convert to unit for human readable. The return value
+support decimal porint under 2 digits.
 
-ÇöÀç Áö¿øµÇ´Â ´ÜÀ§´Â byte ¿Í bit ÀÌ´Ù.
+Now, these apis are supported byte and bit unit.
 
 .TP
 .B size
 .br
-º¯È¯ÇÒ ¼ö¸¦ ÁöÁ¤ÇÑ´Ù.
+The input 64bit integer
 
 .TP
 .B sub
 .br
-1 ·Î ÁöÁ¤À» ÇÏ¸é,
-.B 117.74 MB (123,456,789 Bytes)
-¿Í °°ÀÌ ¿øº» ¼ö¸¦ °°ÀÌ ¹ÝÈ¯À» ÇÑ´Ù.
+Set 1, return with original size with 3 digit format.
 
 .TP
 .B unit
 .br
-Byte ¿Í Bit ¸¦ ÁöÁ¤ÇÑ´Ù.
-.B 0
-À» ÁöÁ¤ÇÏ¸é
-.B Bit
-,
-.B 1
-À» ÁöÁ¤ÇÏ¸é
-.B Byte
-·Î °è»êÀÌ µÈ´Ù.
+Set 1, caculation with Byte, else with Bit.
 
-.SH ¹ÝÈ¯°ª
-Byte ´ÜÀ§¿Í Bit ´ÜÀ§¸¦ ÀÚµ¿À¸·Î º¯È¯À» ÇÏ¿© ¹®ÀÚ¿­·Î ¹ÝÈ¯À» ÇÑ´Ù.
+.SH "RETURN VALUE"
+strping pointer of formatted string by human read.
 
-.SH ¿¹Á¦
+.BI humna_size()
+api returns static memory, so it is not thread safe. If you
+want to thread safe, use
+.BI humna_size_r()
+api.
+
+When
+.BI human_size_r()
+api  occurs internal error,
+.BI human_size_r() returns null. If the return string array
+pointer is not null, the caller should deallocate this buffer
+using
+.BI free().
+
+.SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
-double no = 123456789;
-char *data;
+int main (void) {
+    double no = 123456789;
+    char *data;
 
-data = malloc(128);
+    printf ("%s\\n", human_size (no, 1, 0));
 
-strcpy (data, human_size(no,1,0));
+    data = human_size_r ((unsigned long long) no, 1, 0);
+    printf ("%s\\n", data);
+    if ( data != null )
+        free (data);
 
-printf ("%s\\n", data);
-free (data);
+    return 0;
+}
 .fi
 
-.SH ÀÛ¼º
-2004.02.19 ±èÁ¤±Õ <http://oops.org>
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
 
-.SH ¹ö±×
-¹ö±×°¡ ¹ß°ßÀÌ µÇ¸é http://oops.org ·Î ¸®Æ÷ÆÃÀ» ºÎÅ¹ÇÑ´Ù.
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
