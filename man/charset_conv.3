@@ -1,0 +1,90 @@
+.TH charset_conv(3) 2011-03-21 "Linux Manpage" "OOPS C Library's Manual"
+.\" Process with
+.\" nroff -man charset_conv.3
+.\" 2011-03-21 JoungKyun Kim <htt://oops.org>
+.\" $Id: charset_conv.3,v 1.1 2011-03-21 07:26:26 oops Exp $
+.SH NAME
+charset_conv \- Convert character set
+
+.SH SYNOPSIS
+.B #include <olibc/libstring.h>
+.sp
+.BI "char * charset_conv (const char *src, const char * from, const char * to)"
+
+.SH "Link library"
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.B liboc.so
+or
+.B liboc.a
+that follows BSD license.
+
+.SH DESCRIPTION
+The
+.BI charset_conv()
+api is convert string to to_charset from from_charset
+
+.TP
+.B src
+.br
+The input source string
+
+.TP
+.B from
+.br
+The input source character set
+
+.TP
+.B to
+.br
+The destination character set
+
+.SH "RETURN VALUE"
+The pointer of converted string. When occurs internal error,
+.BI charset_conv()
+returns null. If the return string array pointer is not null,
+the caller should deallocate this buffer using
+.BI free().
+
+.SH EXAMPLE
+.nf
+#include <olibc/libstring.h>
+
+int main (void) {
+    unsigned char src[5] = { 0, };
+    char * p;
+
+    // follow is EUC-KR "한글"
+    sprintf (src, "%c%c%c%c", 0xc7, 0xd1, 0xb1, 0xdb);
+
+    // convert EUC-KR to UTF-8
+    p = charset_conv (src, "EUC-KR", "UTF-8");
+    if ( p == null ) {
+        printf ("failed\\n");
+        exit (1);
+    }
+
+    printf ("%s\\n", p);
+    free (p);
+}
+.fi
+
+.SH "SEE ALSO"
+is_utf8(3), is_ksc5601(3)
+
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
+
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
