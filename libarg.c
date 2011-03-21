@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-08 17:31:25 $
- * $Revision: 1.33 $
+ * $Date: 2011-03-21 07:25:47 $
+ * $Revision: 1.34 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.33 2011-03-08 17:31:25 oops Exp $ */
+/* $Id: libarg.c,v 1.34 2011-03-21 07:25:47 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -576,6 +576,7 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 	len = strlen (buf);
 	dlen = strlen (delimiter);
 
+	// todo: if dlen < 1, return whole src with 1 array.
 	if ( len < 1 || dlen < 1 ) {
 		ofree (buf);
 		return null;
