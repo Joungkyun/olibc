@@ -1,0 +1,102 @@
+.TH is_utf8(3) 2011-03-21 "Linux Manpage" "OOPS C Library's Manual"
+.\" Process with
+.\" nroff -man is_utf8.3
+.\" 2011-03-21 JoungKyun Kim <htt://oops.org>
+.\" $Id: is_utf8.3,v 1.1 2011-03-21 06:44:53 oops Exp $
+.SH NAME
+is_utf8 \- Check whether is utf8 or not
+.br
+is_ksc5601 \- Check 2byte whether is ksc5601 or not.
+
+.SH SYNOPSIS
+.B #include <olibc/libstring.h>
+.sp
+.BI "bool is_utf8 (unsigned const char * src);"
+.br
+.BI "bool is_ksc5601 (UInt c1, UInt c2);"
+
+.SH "Link library"
+.B \-loc
+or
+.B \-lolibc
+.br
+
+.B libolibc.so
+and
+.B libolibc.a
+include
+.B "LGPL2 symbols,"
+so links this library, your object or binary is follows LGPL2.
+If you don't need idn library and, don't want LGPL 2 effects,
+use
+.B liboc.so
+or
+.B liboc.a
+that follows BSD license.
+
+.SH DESCRIPTION
+The
+.BI is_utf8()
+api is checked source string whether is utf8 or not.
+
+.TP
+.B src
+.br
+The string for checking
+
+.TP
+The
+.BI is_ksc5601()
+api is check 2byte whether is ksc5601 or not.
+
+.TP
+.B c1
+.br
+The first byte of hangul
+
+.TP
+.B c2
+.br
+The second byte of hangul
+
+.SH "RETURN VALUE"
+bool
+
+.SH EXAMPLE
+.nf
+#include <olibc/libstring.h>
+
+int main (void) {
+    unsigned char euc[5] = { 0, };
+    unsigned char utf[7] = { 0, };
+
+    // hangul jeong
+    sprintf (euc, "%c%c", 0xc1, 0xa4);
+    sprintf (utf, "%c%c%c", 0xec, 0xa0, 0x95);
+
+    /*
+     * is_ksc5601 test
+     */
+
+    if ( is_ksc5601 (ecu[0], euc[1]) )
+        pritnf ("Yes hangul\\n");
+    else
+        pritnf ("No hangul\\n");
+
+    if ( is_utf8 (utf) )
+        pritnf ("Yes utf8\\n");
+    else
+        pritnf ("No utf8\\n");
+
+    return 0;
+}
+.fi
+
+.SH "SEE ALSO"
+charset_conv(3)
+
+.SH AUTHOR
+JoungKyun.Kim <http://oops.org>
+
+.SH BUGS
+Please report bug on QnA bulletin board on http://oops.org/
