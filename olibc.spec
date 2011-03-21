@@ -62,21 +62,21 @@ make DESTDIR=%{buildroot} install
 
 %files
 %defattr(0755,root,root)
-%{_bindir}/oc-config
-%{_bindir}/ogc-config
-%{_bindir}/olibc-config
 %{_libdir}/*.so.*
-%{_mandir}/ko/man1/*.1.*
 
 %files devel
 %defattr(0644,root,root,0755)
+%{_bindir}/oc-config
+%{_bindir}/ogc-config
+%{_bindir}/olibc-config
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_includedir}/olibc/*.h
+%{_mandir}/ko/man1/*.3.*
 
 %changelog
-* Thu Mar  3 2011 JoungKyun.Kim <http://oops.org> 0.1.3-1
+* Thu Mar 21 2011 JoungKyun.Kim <http://oops.org> 0.1.3-1
 - update version 0.1.3
 
 * Thu Sep  1 2005 JoungKyun.Kim <http://oops.org> 0.1.2-1
