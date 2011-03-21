@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.36 2011-03-02 17:45:05 oops Exp $
+# $Id: Makefile.in,v 1.37 2011-03-21 06:52:11 oops Exp $
 srcdir			= @srcdir@
 top_srcdir		= @top_srcdir@
 builddir		= @builddir@
@@ -95,7 +95,7 @@ idn:
 
 libs:
 	$(LINK) -o lib$(PROG).la $(OBJECT) $(PCREOBJ) $(IDNOBJ) $(LDFLAGS)
-	$(LINK) -o liboc.la $(BPLOBJ) $(PCREOBJ)
+	$(LINK) -o liboc.la $(BPLOBJ) $(PCREOBJ) $(LDFLAGS)
 	$(LINK) -o libogc.la $(GPLOBJ) $(IDNOBJ) $(LDFLAGS) -loc
 
 olibc-config:
