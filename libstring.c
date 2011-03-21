@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-18 16:25:21 $
- * $Revision: 1.75 $
+ * $Date: 2011-03-21 07:24:56 $
+ * $Revision: 1.76 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.75 2011-03-18 16:25:21 oops Exp $ */
+/* $Id: libstring.c,v 1.76 2011-03-21 07:24:56 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1144,9 +1144,9 @@ b2l_low:
  * @return	Length of binary string
  * @sa	dec2bin bin2long bin2dec
  * @exception DEALLOCATE
- *   When occurs internal error, long2bin() returns null.
- *   If the return string array pointer is not null, the caller should
- *   deallocate this buffer using @e free()
+ *   When occurs internal error, 2th argument @e dst of long2bin() has
+ *   null value. If the @e dst argument has not null, the caller should deallocate
+ *   this buffer using @e free()
  *
  * @warning
  *    The long2bin() function caculate 64bit integer with high and
