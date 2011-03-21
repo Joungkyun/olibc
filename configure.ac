@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.29 2011-03-02 17:45:06 oops Exp $
+# $Id: configure.ac,v 1.30 2011-03-21 13:04:29 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -20,7 +20,7 @@ AC_SUBST(SONAME_REVISION)
 
 SONAME_MAJOR=0
 SONAME_MINOR=1
-SONAME_REVISION=2
+SONAME_REVISION=3
 SONAME_VERSION=$SONAME_MAJOR.$SONAME_MINOR.$SONAME_REVISION
 
 SONAME_VALUE=$(($SONAME_MAJOR + $SONAME_MINOR))
