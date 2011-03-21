@@ -1,5 +1,5 @@
 /*
- * $Id: mainpage.dox,v 1.2 2011-03-01 03:47:26 oops Exp $
+ * $Id: mainpage.dox,v 1.3 2011-03-21 06:47:05 oops Exp $
  */
 /**
  * @mainpage    OOPS high level c library
@@ -12,11 +12,12 @@
  *   - <a href="libarg_8c.html">Command line argument API</a>
  *   - <a href="libtime_8c.html">Time API</a>
  *   - <a href="libpcre_8c.html">Extened Perl Compatible Regular Expression API</a>
+ *   - <a href="libidn_8c.html">IDN API</a>
  *
  * @section     Program Program Name
  *  - olibc (OOPS C library)
  *
  * @section     MODIFYINFO Modify Info
  *  - Written: JoungKyun.Kim
- *  - Date: 2011/02/22
+ *  - Date: 2011/03/21
  */
