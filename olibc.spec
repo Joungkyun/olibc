@@ -73,7 +73,8 @@ make DESTDIR=%{buildroot} install
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_includedir}/olibc/*.h
-%{_mandir}/ko/man1/*.3.*
+%{_mandir}/man3/*.3.*
+%{_mandir}/ko/man3/*.3.*
 
 %changelog
 * Thu Mar 21 2011 JoungKyun.Kim <http://oops.org> 0.1.3-1
