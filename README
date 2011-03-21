@@ -1,12 +1,14 @@
-$Id: README,v 1.4 2009-10-29 13:24:33 oops Exp $
+$Id: README,v 1.5 2011-03-21 14:47:31 oops Exp $
 olibc - oops C library
 
-작성: 김정균 2003.09.09 http://oops.org
+JoungKyun.Kim 2011/03/21 http://oops.org
 
-olibc 는 C 프로그래밍을 간편하게 도와주는 high level 의 함수이다. olibc 의 함수들에
-대해서는 doc 디렉토리의 file.txt, preg.txt, string.txt, time.txt 를 참고를 한다. 또
-한, 함수들은 man 함수이름 으로 사용법을 숙지할 수 있다.
+The olibc library is high level api for you easily c programing. See also
+sample code in sample/ directory and man pages.
 
-olibc 를 이용을 하여 개발을 할 경우에는 olibc-config 를 실행을 하여, 필요한 library
-를 link 해 줘야 한다. olibc-config --libs 를 실행을 하면 필요한 link 목록을 확인할
-수 있다.
+When you developed with olibc, you can use olibc-config or oc-config or
+ogc-config. If you link olibc, you cat use follow command.
+
+oc-config --libs
+
+See also 'oc-config --help' command
