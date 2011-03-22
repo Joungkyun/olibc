@@ -5,11 +5,11 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.12 $
+ * $Date: 2011-03-22 15:52:53 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.12 2011-03-01 04:17:47 oops Exp $ */
+/* $Id: libfile.h,v 1.13 2011-03-22 15:52:53 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -24,12 +24,12 @@
 #define _IS_FIFO	6
 #define _IS_SOCK	7
 
-bool file_exists (const char * path, int mode);
+extern bool file_exists (const char * path, int mode);
 // fileread is deprecated. replace with readfile
-char * fileread (CChar * path);
-char * readfile (CChar * path);
-int writefile (CChar * path, CChar * data, bool mode);
-char * realpath_r (CChar * path);
+extern char * fileread (CChar * path);
+extern char * readfile (CChar * path);
+extern int writefile (CChar * path, CChar * data, bool mode);
+extern char * realpath_r (CChar * path);
 
 #endif
 /*

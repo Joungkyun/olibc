@@ -9,7 +9,7 @@
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 /*
- * $Id: libpcre.h,v 1.14 2011-03-01 04:17:47 oops Exp $
+ * $Id: libpcre.h,v 1.15 2011-03-22 15:52:53 oops Exp $
  *
  * Copyright (C) 2011 JoungKyun.Kim
  *
@@ -40,13 +40,13 @@
 #include <pcre.h>
 #endif
 
-char * preg_quote (CChar * src, CChar * delim);
-char * preg_replace (char * regex, char * replace, char * subject, int * retlen);
-char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no);
-char * preg_grep (CChar * regex, CChar * subject, bool reverse);
-char * preg_fgrep (CChar * regex, CChar * path, bool reverse);
-bool preg_match (CChar * regex, CChar * subject);
-int preg_match_r (CChar * regex, CChar * subject, CChar *** matches);
+extern char * preg_quote (CChar * src, CChar * delim);
+extern char * preg_replace (char * regex, char * replace, char * subject, int * retlen);
+extern char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no);
+extern char * preg_grep (CChar * regex, CChar * subject, bool reverse);
+extern char * preg_fgrep (CChar * regex, CChar * path, bool reverse);
+extern bool preg_match (CChar * regex, CChar * subject);
+extern int preg_match_r (CChar * regex, CChar * subject, CChar *** matches);
 
 #endif
 /*

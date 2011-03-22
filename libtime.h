@@ -5,11 +5,11 @@
  * This file includes proto type of time apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-02-22 06:33:32 $
- * $Revision: 1.5 $
+ * $Date: 2011-03-22 15:52:53 $
+ * $Revision: 1.6 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.h,v 1.5 2011-02-22 06:33:32 oops Exp $ */
+/* $Id: libtime.h,v 1.6 2011-03-22 15:52:53 oops Exp $ */
 #ifndef LIBTIME_H
 #define LIBTIME_H
 
@@ -18,7 +18,7 @@
 /*
  * Return current Unix timestamp with microseconds
  */
-double microtime (void);
+extern double microtime (void);
 
 #endif
 /*
