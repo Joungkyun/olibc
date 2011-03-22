@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-22 11:16:28 $
- * $Revision: 1.35 $
+ * $Date: 2011-03-22 15:43:59 $
+ * $Revision: 1.36 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.35 2011-03-22 11:16:28 oops Exp $ */
+/* $Id: libarg.c,v 1.36 2011-03-22 15:43:59 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -85,7 +85,7 @@ char ** o_cmdarg = null;
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-static int longopt_chk (const char * option, const struct o_option * options) // {{{
+static int longopt_chk (CChar * option, const struct o_option * options) // {{{
 {
 	int	i = 0;
 
@@ -115,7 +115,7 @@ static int longopt_chk (const char * option, const struct o_option * options) //
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-static int optvalue_chk (const char option, const char * options) // {{{
+static int optvalue_chk (CChar option, CChar * options) // {{{
 {
 	int	len = strlen (options);
 	int	i,
@@ -148,7 +148,7 @@ static int optvalue_chk (const char option, const char * options) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-static bool only_whitespace (const char * stream, int length) // {{{
+static bool only_whitespace (CChar * stream, CInt length) // {{{
 {
 	int	i,
 		len;
@@ -177,7 +177,7 @@ static bool only_whitespace (const char * stream, int length) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-static char * convert_quoted_blank (const char * stream) // {{{
+static char * convert_quoted_blank (CChar * stream) // {{{
 {
 	char	* ret;
 	int		len,
@@ -256,7 +256,7 @@ static char * convert_quoted_blank (const char * stream) // {{{
  * This api is only internal. If you build with over gcc4,
  * you cannot access this api.
  */
-static char * unconvert_quoted_blank (const char * stream) // {{{
+static char * unconvert_quoted_blank (CChar * stream) // {{{
 {
 	char * ret;
 	int i,
