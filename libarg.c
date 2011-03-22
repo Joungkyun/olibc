@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-21 07:25:47 $
- * $Revision: 1.34 $
+ * $Date: 2011-03-22 11:16:28 $
+ * $Revision: 1.35 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.34 2011-03-21 07:25:47 oops Exp $ */
+/* $Id: libarg.c,v 1.35 2011-03-22 11:16:28 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -324,7 +324,7 @@ static char * unconvert_quoted_blank (const char * stream) // {{{
  * byte and o_optlen is allocated length of o_optarg variable.
  */
 OLIBC_API
-int o_getopt (int oargc, char ** oargv, const char * opt, const struct o_option * longopt) // {{{
+int o_getopt (int oargc, char ** oargv, CChar * opt, const struct o_option * longopt) // {{{
 {
 	char	** opt_t;
 	char	* x;
