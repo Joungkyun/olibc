@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-18 05:15:53 $
- * $Revision: 1.37 $
+ * $Date: 2011-03-22 16:11:18 $
+ * $Revision: 1.38 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.37 2011-03-18 05:15:53 oops Exp $ */
+/* $Id: libpcre.c,v 1.38 2011-03-22 16:11:18 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -566,7 +566,7 @@ int preg_match_r (CChar * regex, CChar * subject, CChar *** matches) // {{{
 	}
 
 	if ( count > 0 ) {
-		const char ** stringlist;
+		CChar ** stringlist;
 
 		if ( pcre_get_substring_list (subject, pa->offsets, count, &stringlist) < 0) {
 			libpreg_arg_free (&pa);
