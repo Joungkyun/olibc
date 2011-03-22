@@ -14,7 +14,7 @@ int main (void) {
 	int ok = 0;
 
 	// declare long options
-	static struct o_option longopt[] = {
+	static o_option longopt[] = {
 		{ "append", required_arguments, 'a' },
 		{ "best", no_arguments, 'b' },
 		{ 0, 0, 0 }

@@ -2,14 +2,14 @@
 .\" Process with
 .\" nroff -man o_getopt.1
 .\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: o_getopt.3,v 1.1 2011-03-08 17:50:07 oops Exp $
+.\" $Id: o_getopt.3,v 1.2 2011-03-22 16:05:11 oops Exp $
 .SH 이름
 o_getopt
 
 .SH 사용법
 .B #include <olibc/libarg.h>
 .sp
-.BI "o_getopt (int argc, char **argv, const char *opt, const struct o_option, *longopt);"
+.BI "o_getopt (int argc, const char **argv, const char *opt, const o_option, *longopt);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -101,18 +101,18 @@ struct 를 지정한다.
 longopt 의 struct 구조는 다음과 같다.
 
 .nf
-struct o_option {
+typedef struct {
     char *name;     // long 옵션 이름
     int required    // 옵션의 값이 있어야 하는지 여부
     int value       // long 옵션과 대응될 shot 옵션
-};
+} o_option;
 .fi
 
 
 예를 들어, -b 옵션이 옵션값이 필요하고, long 옵션 --best 를 -b 에 매치할 경우에는
 
 .nf
-strcut o_option longopt[] = {
+static o_option longopt[] = {
     { "best", required_arguments, 'b' }
 };
 .fi
@@ -161,7 +161,7 @@ int main (int argc, char **argv) {
     char app[1024];
     int  bestopt = 0;
 
-    static struct o_option longopt[] = {
+    static o_option longopt[] = {
         { "append", required_arguments, 'a' },
         { "best", no_arguments, 'b' },
         { 0, 0, 0 }
@@ -172,7 +172,7 @@ int main (int argc, char **argv) {
     _ogetopt_chk_int = -1;
 
     /* 옵션 값을 파싱 */
-    while ( (opt = o_getopt (argc, argv, "a:b", longopt)) != -1 ) {
+    while ( (opt = o_getopt (argc, (const char **) argv, "a:b", longopt)) != -1 ) {
        switch (opt) {
            case 'a' :
               if ( o_optlen > 0 ) {

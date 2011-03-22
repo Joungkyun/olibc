@@ -5,11 +5,11 @@
  * This file includes proto type of command line argument apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-22 15:49:31 $
- * $Revision: 1.13 $
+ * $Date: 2011-03-22 16:05:11 $
+ * $Revision: 1.14 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.h,v 1.13 2011-03-22 15:49:31 oops Exp $ */
+/* $Id: libarg.h,v 1.14 2011-03-22 16:05:11 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -18,11 +18,11 @@
 /**
  * @brief long option structure for o_getopt API
  */
-struct o_option {
+typedef struct {
 	char * name;	//!< long option name
 	int required;	//!< whether must need value or not
 	int value;		//!< short option that correspond to long option
-};
+} o_option;
 
 #ifndef ARGLENGTH
 #define ARGLENGTH 1024
@@ -45,8 +45,8 @@ extern int	_ogetopt_chk_int;
 #endif
 
 extern int o_getopt (
-	int oargc, const char ** oargv,
-	const char * opt, const struct o_option * longopt
+	int oargc, CChar ** oargv,
+	CChar * opt, const o_option * longopt
 );
 extern char ** argv_make (CChar * stream, int * oargc);
 extern char ** split (CChar * src, int * oargc, CChar * delimiter);
