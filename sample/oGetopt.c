@@ -26,7 +26,7 @@ int main (void) {
 
 	oc_test_banner ("o_getopt");
 
-	while ( (opt = o_getopt (argc, argv, "a:b", longopt)) != -1 ) {
+	while ( (opt = o_getopt (argc, (const char **) argv, "a:b", longopt)) != -1 ) {
 		switch (opt) {
 			case 'a' :
 				if ( o_optlen > 0 )

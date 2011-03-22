@@ -5,11 +5,11 @@
  * This file includes proto type of command line argument apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-22 15:43:59 $
- * $Revision: 1.12 $
+ * $Date: 2011-03-22 15:49:31 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.h,v 1.12 2011-03-22 15:43:59 oops Exp $ */
+/* $Id: libarg.h,v 1.13 2011-03-22 15:49:31 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
@@ -44,11 +44,14 @@ extern int	_ogetopt_cmd_int;
 extern int	_ogetopt_chk_int;
 #endif
 
-int o_getopt (int oargc, char ** oargv, const char * opt, const struct o_option * longopt);
-char ** argv_make (CChar * stream, int * oargc);
-char ** split (CChar * src, int * oargc, CChar * delimiter);
-void ofree_array (char ** argv_array);
-int get_whitespace (CChar * src);
+extern int o_getopt (
+	int oargc, const char ** oargv,
+	const char * opt, const struct o_option * longopt
+);
+extern char ** argv_make (CChar * stream, int * oargc);
+extern char ** split (CChar * src, int * oargc, CChar * delimiter);
+extern void ofree_array (char ** argv_array);
+extern int get_whitespace (CChar * src);
 
 #endif
 /*
