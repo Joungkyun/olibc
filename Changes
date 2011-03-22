@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.66 2011-03-21 14:24:45 oops Exp $
+$Id: Changes,v 1.67 2011-03-22 11:18:28 oops Exp $
+
+* Tue, Mar 22 2011
+	- redefine type declare with stdint
 
 * Mon, Mar 21 2011
 	- start 1.0 branch
