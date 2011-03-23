@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-16 11:36:40 $
- * $Revision: 1.27 $
+ * $Date: 2011-03-23 12:19:35 $
+ * $Revision: 1.28 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.27 2011-03-16 11:36:40 oops Exp $ */
+/* $Id: libfile.c,v 1.28 2011-03-23 12:19:35 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -165,27 +165,6 @@ char * readfile (CChar * path) // {{{
 	fclose (fp);
 
 	return buf;
-} // }}}
-
-/**
- * @brief	Reads entire file into a string
- * @param	path The filename being read.
- * @return	read data or NULL on failure.
- * @sa		readfile
- * @exception DEALLOCATE
- *   When occurs internal error, fileread() returns null.
- *   If the return string array pointer is not null, the caller should
- *   deallocate this buffer using @e free()
- * @deprecated
- *   This function is deprecated and removed next version.<br />
- *   You can replace with readfile().
- *
- * Alias of The readfile() funtion on 0.1.3
- */
-OLIBC_API
-char * fileread (CChar * path) // {{{
-{
-	return readfile (path);
 } // }}}
 
 /**

@@ -5,11 +5,11 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-22 16:11:18 $
- * $Revision: 1.14 $
+ * $Date: 2011-03-23 12:19:35 $
+ * $Revision: 1.15 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.14 2011-03-22 16:11:18 oops Exp $ */
+/* $Id: libfile.h,v 1.15 2011-03-23 12:19:35 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -25,8 +25,6 @@
 #define _IS_SOCK	7
 
 extern bool file_exists (CChar * path, int mode);
-// fileread is deprecated. replace with readfile
-extern char * fileread (CChar * path);
 extern char * readfile (CChar * path);
 extern int writefile (CChar * path, CChar * data, bool mode);
 extern char * realpath_r (CChar * path);

@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.67 2011-03-22 11:18:28 oops Exp $
+$Id: Changes,v 1.68 2011-03-23 12:19:35 oops Exp $
+
+* Wed, Mar 23 2011
+	- removed fileread api. use readfile api
 
 * Tue, Mar 22 2011
 	- redefine type declare with stdint
