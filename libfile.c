@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-23 12:40:54 $
- * $Revision: 1.29 $
+ * $Date: 2011-03-23 12:42:31 $
+ * $Revision: 1.30 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.29 2011-03-23 12:40:54 oops Exp $ */
+/* $Id: libfile.c,v 1.30 2011-03-23 12:42:31 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -196,15 +196,6 @@ bool writefile (CChar * path, CChar * data, size_t size, bool mode) // {{{
 	if ( (fp = fopen (path, act)) == null ) {
 		oc_error ("Can not open %s with write mode\n", path);
 		return -1;
-	}
-
-	// On append, add line feed
-	if ( ! strcmp (act, "ab") ) {
-		if ( fwrite ("\n", sizeof (char), 1, fp) != 1 ) {
-			oc_error ("Writeing line feed failed: %s\n", path);
-			fclose (fp);
-			return -1;
-		}
 	}
 
 	if ( fwrite (data, sizeof(char), size, fp) != size) {
