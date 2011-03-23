@@ -3,12 +3,12 @@
 .\" nroff -man writefile.3
 .\" 2011-03-16 JoungKyun Kim <htt://oops.org>
 .SH 이름
-writefile \- Write a string to a file.
+writefile \- Writes data to a file.
 
 .SH SYNOPSIS
 .B #include <olibc/libfile.h>
 .sp
-.BI "int writefile (const char * path, const char * data, bool mode);"
+.BI "size_t writefile (const char * path, const char * data, size_t size, bool mode);"
 
 .SH "Link library"
 .B \-loc
@@ -30,11 +30,11 @@ or
 that follows BSD license.
 
 .SH DESCRIPTION
-Write a string to a file.
+Writes data to a file.
 
 The
 .BI writefile()
-api is not binary safe. If you need binary safe, use olibc >= 1.0.0
+api is binary safe.
 
 .TP
 .B path
@@ -47,11 +47,16 @@ Path to the file where to write the data.
 The data to write.
 
 .TP
+.B size
+.br
+The length of data
+
+.TP
 .B mode
 Bool. Set true, append and set false, new file.
 
 .SH "RETURN VALUE"
-On success return 0, otherwise return -1.
+bool
 
 .SH EXAMPLE
 .nf
@@ -61,14 +66,17 @@ int main (void) {
     char *text = "asdf";
     char *path = "/etc/hosts";
 
-    printf ("%d\\n", writefile (path, text, 0));
+    if ( writefile (path, text, strlen (text), 0) == false )
+        printf ("failed\\n");
+    else
+        printf ("success\\n");
 
     return 0;
 }
 .fi
 
 .SH "SEE ALSO"
-readfile(3), fileread(3)
+readfile(3)
 
 .SH AUTHOR
 JoungKyun.Kim <http://oops.org>

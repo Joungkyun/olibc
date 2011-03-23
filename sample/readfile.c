@@ -28,7 +28,7 @@ go_fail:
 		// append mode test
 		if ( file_exists (wfile, _IS_FILE) )
 			unlink (wfile);
-		if ( writefile ("./test-write.txt", "1231", true) == -1 )
+		if ( writefile ("./test-write.txt", "1231", 4, true) == false )
 			printf ("failed\n");
 
 		buf = readfile (wfile);

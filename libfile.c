@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-23 12:19:35 $
- * $Revision: 1.28 $
+ * $Date: 2011-03-23 12:40:54 $
+ * $Revision: 1.29 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.28 2011-03-23 12:19:35 oops Exp $ */
+/* $Id: libfile.c,v 1.29 2011-03-23 12:40:54 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -168,25 +168,23 @@ char * readfile (CChar * path) // {{{
 } // }}}
 
 /**
- * @brief	Write a string to a file
+ * @brief	Writes to a file
  * @param	path Path to the file where to write the data.
  * @param	data The data to write.
+ * @param	size The length of data
  * @param	mode Bool. Set true, append and set false, new file.
- * @return	On success return 0, otherwise return -1.
+ * @return	bool
  * @sa		readfile
  *
- * @warning
- *   The writefile() function is not binary safe. If you need binary
- *   safe, use olibc >= 1.0.0
+ * This api writes data to a file. This api is <b><u>binary safe</u></b>!
  */
 OLIBC_API
-int writefile (CChar * path, CChar * data, bool mode) // {{{
+bool writefile (CChar * path, CChar * data, size_t size, bool mode) // {{{
 {
 	struct	stat s;
 
 	FILE	* fp;
 	char	* act = "wb";
-	size_t	len = 0;
 	int		ret;
 
 	act = "wb";
@@ -209,16 +207,15 @@ int writefile (CChar * path, CChar * data, bool mode) // {{{
 		}
 	}
 
-	len = strlen (data);
-	if ( fwrite (data, sizeof(char), len, fp) != len ) {
+	if ( fwrite (data, sizeof(char), size, fp) != size) {
 		fclose(fp);
 		oc_error ("Writeing failed: %s\n", path);
-		return -1;
+		return false;
 	}
 
 	fclose (fp);
 
-	return 0;
+	return true;
 } // }}}
 
 /**

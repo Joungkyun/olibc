@@ -3,12 +3,12 @@
 .\" nroff -man writefile.3
 .\" 2011-03-16 JoungKyun Kim <htt://oops.org>
 .SH 이름
-writefile \- 파일에 문자열을 기록
+writefile \- 파일에 데이터를 기록
 
 .SH 사용법
 .B #include <olibc/libfile.h>
 .sp
-.BI "int writefile (const char * path, const char * data, bool mode);"
+.BI "size_t writefile (const char * path, const char * data, size_t size, bool mode);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -35,8 +35,7 @@ data를 path에 기록한다. mode 가 1 이면, filename 이 존재할 경우
 을 새로 기록한다.
 
 .BI writefile()
-API는 binary safe 하지 않는다. binary safe는 1.0.0 이후 버전 부터 지원을
-한다.
+API는 binary safe를 보장한다.
 
 .TP
 .B path
@@ -49,14 +48,18 @@ API는 binary safe 하지 않는다. binary safe는 1.0.0 이후 버전 부터 �
 파일에 기록할 데이터
 
 .TP
+.B size
+.br
+data의 길이
+
+.TP
 .B mode
-1이 설정되고 파일이 존재할 경우, 기존의 내용에 이어서 기록을 하고,
-0이 설정되거나 파일이 존재하지 않을 경우 신규 파일로 path를 만들어
+true로 설정되고 파일이 존재할 경우, 기존의 내용에 이어서 기록을 하고,
+false로 설정되거나 파일이 존재하지 않을 경우 신규 파일로 path를 만들어
 기록한다.
 
 .SH 반환값
-이 함수는 기록에 성공했을 경우 0을 반환하며, 실패했을 경우 -1 을 반환
-한다.
+bool
 
 .SH 예제
 .nf
@@ -66,11 +69,17 @@ int main (void) {
     char *text = "asdf";
     char *path = "/etc/hosts";
 
-    printf ("%d\\n", writefile (path, text, 0));
+    if ( writefile (path, text, strlen (text), 0) == false )
+        printf ("failed\\n");
+    else
+        printf ("success\\n");
 
     return 0;
 }
 .fi
+
+.SH 참고
+readfile(3)
 
 .SH 작성
 김정균 <http://oops.org>
