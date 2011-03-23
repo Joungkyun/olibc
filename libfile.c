@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-23 12:42:31 $
- * $Revision: 1.30 $
+ * $Date: 2011-03-23 12:44:18 $
+ * $Revision: 1.31 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.30 2011-03-23 12:42:31 oops Exp $ */
+/* $Id: libfile.c,v 1.31 2011-03-23 12:44:18 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -176,7 +176,7 @@ char * readfile (CChar * path) // {{{
  * @return	bool
  * @sa		readfile
  *
- * This api writes data to a file. This api is <b><u>binary safe</u></b>!
+ * This api writes data to a file. This api is <b>binary safe</b>!
  */
 OLIBC_API
 bool writefile (CChar * path, CChar * data, size_t size, bool mode) // {{{
