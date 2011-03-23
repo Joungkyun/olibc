@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-23 12:02:04 $
- * $Revision: 1.10 $
+ * $Date: 2011-03-23 12:04:06 $
+ * $Revision: 1.11 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.10 2011-03-23 12:02:04 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.11 2011-03-23 12:04:06 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -23,19 +23,7 @@
 #include <stdint.h>
 
 /************ endign ***************/
-#if defined(SVR4) && !defined(linux)
-	#if defined(NCR) || defined(Mips)
-		#include <sys/endian.h>
-	#else
-		#if !defined(sun) && !defined(__sgi)
-			#include <sys/byteorder.h>
-		#endif
-	#endif
-#elif defined(__NetBSD__) || defined(__OpenBSD__)
-	#include <sys/types.h>
-#elif defined(__FreeBSD__)
-	#include <machine/endian.h>
-#elif defined(linux)
+#if defined(linux)
 	#if defined __STRICT_ANSI__
 		#undef __STRICT_ANSI__
 		#include <endian.h>
@@ -43,6 +31,10 @@
 	#else
 		#include <endian.h>
 	#endif
+#elif defined(__FreeBSD__)
+	#include <machine/endian.h>
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
+	#include <sys/types.h>
 #endif
 
 #ifndef BYTE_ORDER
