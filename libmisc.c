@@ -38,16 +38,41 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.11 $
+ * $Date: 2011-03-24 15:13:07 $
+ * $Revision: 1.12 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.11 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: libmisc.c,v 1.12 2011-03-24 15:13:07 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc
  * @{
  */
+
+/**
+ * @brief Check whether is exist white space or not in given string
+ * @param	stream The input string
+ * @param	length The length of input string
+ * @return	bool
+ * @retval	true Exsits only white space
+ * @retval	false Don't exsit only white space
+ *
+ * This api is only internal. If you build with over gcc4,
+ * you cannot access this api.
+ */
+bool only_whitespace (CChar * stream, CInt length) // {{{
+{
+	int	i,
+		len;
+
+	len = length ? length : strlen (stream);
+
+	for ( i = 0; i < len; i++ )
+		if ( ! isspace (stream[i]) )
+			return false;
+
+	return true;
+} // }}}
 
 /**
  * @brief	Get number of delimiters in the input string

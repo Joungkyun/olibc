@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-22 15:52:53 $
- * $Revision: 1.30 $
+ * $Date: 2011-03-24 15:13:07 $
+ * $Revision: 1.31 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.30 2011-03-22 15:52:53 oops Exp $ */
+/* $Id: libstring.h,v 1.31 2011-03-24 15:13:07 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -44,6 +44,8 @@ extern bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outle
 
 extern void trim (char * str);
 extern char * trim_r (char * str, bool should_free);
+
+extern char ** split (CChar * src, int * oargc, CChar * delimiter);
 
 extern Long64 str2long (CChar * src);
 extern long double str2double (CChar * src);

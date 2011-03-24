@@ -2,12 +2,12 @@
 .\" Process with
 .\" nroff -man split.3
 .\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: split.3,v 1.9 2011-03-18 05:53:44 oops Exp $
+.\" $Id: split.3,v 1.10 2011-03-24 15:13:07 oops Exp $
 .SH NAME
 split \- Split a string by string.
 
 .SH SYNOPSIS
-.B #include <olibc/libarg.h>
+.B #include <olibc/libstring.h>
 .sp
 .BI "char ** split (const char * stream, int * argc, const char * delimiter);"
 
@@ -67,7 +67,8 @@ the caller should deallocate this buffer using
 
 .SH EXAMPLE
 .nf
-#include <olibc/libarg.h>
+#include <olibc/libstring.h>
+#include <olibc/libarg.h> // for ofree_array()
 
 int main (void) {
     char ** sep;

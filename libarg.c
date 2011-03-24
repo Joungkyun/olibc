@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 09:46:58 $
- * $Revision: 1.39 $
+ * $Date: 2011-03-24 15:13:07 $
+ * $Revision: 1.40 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.39 2011-03-24 09:46:58 oops Exp $ */
+/* $Id: libarg.c,v 1.40 2011-03-24 15:13:07 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -143,31 +143,6 @@ static int optvalue_chk (CChar option, CChar * options) // {{{
 		oc_error ("Unsupported option -%c\n\n", option);
 
 	return val;
-} // }}}
-
-/**
- * @brief Check whether is exist white space or not in given string
- * @param	stream The input string
- * @param	length The length of input string
- * @return	bool
- * @retval	true Exsits only white space
- * @retval	false Don't exsit only white space
- *
- * This api is only internal. If you build with over gcc4,
- * you cannot access this api.
- */
-static bool only_whitespace (CChar * stream, CInt length) // {{{
-{
-	int	i,
-		len;
-
-	len = length ? length : strlen (stream);
-
-	for ( i = 0; i < len; i++ )
-		if ( ! isspace (stream[i]) )
-			return false;
-
-	return true;
 } // }}}
 
 /**
@@ -545,111 +520,6 @@ char ** argv_make (CChar * stream, int * oargc) // {{{
 } // }}}
 
 /**
- * @brief	Split a string by string
- * @param[in]	src The input string.
- * @param[out]	oargc Number of return arraies
- * @param[in]	delimiter The boundary string.
- * @return		The string array
- * @sa	ofree_array
- * @exception DEALLOCATE
- *   When occurs internal error, split() returns null.
- *   If the return string array pointer is not null, the caller should
- *   deallocate this buffer using @e ofree_array()
- *
- * Returns an array of strings, each of which is a substring of string
- * formed by splitting it on boundaries formed by the string delimiter.
- */
-OLIBC_API
-char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
-{
-	char	** sep;
-	char	* buf;
-	int		delno,
-			len,
-			dlen,
-			start,
-			end,
-			i,
-			j,
-			no;
-
-	*oargc = 0;
-	if ( src == null || delimiter == null )
-		return null;
-
-	/* removed white space of front and end string */
-	oc_strdup_r (buf, src, null);
-	trim (buf);
-
-	len = strlen (buf);
-	dlen = strlen (delimiter);
-
-	// todo: if dlen < 1, return whole src with 1 array.
-	if ( len < 1 || dlen < 1 ) {
-		ofree (buf);
-		return null;
-	}
-
-	delno = get_charcount (buf, delimiter);
-	delno++;
-	oc_malloc_r (sep, sizeof (char *) * (delno + 1), null);
-
-	start = 0;
-	end = 0;
-	no = 0;
-
-	for ( i=0; i<len; i++ ) {
-		for ( j=0; j<dlen; j++ ) {
-			if ( buf[i] == delimiter[j] ) {
-				if ( buf[i-1] != '\\' ) {
-					end = i;
-				}
-
-				if ( start == end ) {
-					end--;
-					start++;
-					break;
-				}
-			}
-
-			if ( end > start ) {
-				if ( only_whitespace (buf + start, end - start) ) {
-					start = end + 1;
-					break;
-				}
-
-				oc_strdup (sep[no], buf + start, end - start);
-				if ( sep[no] == null ) {
-					ofree (buf);
-					ofree_array (sep);
-					return null;
-				}
-				trim (sep[no]);
-				OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
-
-				start = end + 1;
-				no++;
-				break;
-			}
-		}
-	}
-
-	if ( end != len && ! only_whitespace (buf+ start, 0) ) {
-		oc_strdup (sep[no], buf + start, strlen (buf + start));
-		trim (sep[no]);
-		OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
-		no++;
-	}
-
-	ofree (buf);
-
-	sep[no] = null;
-	*oargc = no;
-
-	return sep;
-} // }}}
-
-/**
  * @brief	free memory that allocated by argv_make() function
  * @param	argv_array Return array pointer of argv_make() function
  * @return	void
@@ -702,8 +572,6 @@ int get_whitespace (CChar * src) // {{{
  *   The example for get_whitespace() api
  * @example oGetopt.c
  *   The example for o_getopt() api
- * @example split.c
- *   The exmaple for split() api
  */
 
 /*

@@ -38,14 +38,15 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-21 07:24:56 $
- * $Revision: 1.76 $
+ * $Date: 2011-03-24 15:13:07 $
+ * $Revision: 1.77 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76 2011-03-21 07:24:56 oops Exp $ */
+/* $Id: libstring.c,v 1.77 2011-03-24 15:13:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
+#include <libarg.h>
 
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
@@ -1457,6 +1458,111 @@ skip_error:
 } // }}}
 
 /**
+ * @brief	Split a string by string
+ * @param[in]	src The input string.
+ * @param[out]	oargc Number of return arraies
+ * @param[in]	delimiter The boundary string.
+ * @return		The string array
+ * @sa	ofree_array
+ * @exception DEALLOCATE
+ *   When occurs internal error, split() returns null.
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e ofree_array()
+ *
+ * Returns an array of strings, each of which is a substring of string
+ * formed by splitting it on boundaries formed by the string delimiter.
+ */
+OLIBC_API
+char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
+{
+	char	** sep;
+	char	* buf;
+	int		delno,
+			len,
+			dlen,
+			start,
+			end,
+			i,
+			j,
+			no;
+
+	*oargc = 0;
+	if ( src == null || delimiter == null )
+		return null;
+
+	/* removed white space of front and end string */
+	oc_strdup_r (buf, src, null);
+	trim (buf);
+
+	len = strlen (buf);
+	dlen = strlen (delimiter);
+
+	// todo: if dlen < 1, return whole src with 1 array.
+	if ( len < 1 || dlen < 1 ) {
+		ofree (buf);
+		return null;
+	}
+
+	delno = get_charcount (buf, delimiter);
+	delno++;
+	oc_malloc_r (sep, sizeof (char *) * (delno + 1), null);
+
+	start = 0;
+	end = 0;
+	no = 0;
+
+	for ( i=0; i<len; i++ ) {
+		for ( j=0; j<dlen; j++ ) {
+			if ( buf[i] == delimiter[j] ) {
+				if ( buf[i-1] != '\\' ) {
+					end = i;
+				}
+
+				if ( start == end ) {
+					end--;
+					start++;
+					break;
+				}
+			}
+
+			if ( end > start ) {
+				if ( only_whitespace (buf + start, end - start) ) {
+					start = end + 1;
+					break;
+				}
+
+				oc_strdup (sep[no], buf + start, end - start);
+				if ( sep[no] == null ) {
+					ofree (buf);
+					ofree_array (sep);
+					return null;
+				}
+				trim (sep[no]);
+				OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
+
+				start = end + 1;
+				no++;
+				break;
+			}
+		}
+	}
+
+	if ( end != len && ! only_whitespace (buf+ start, 0) ) {
+		oc_strdup (sep[no], buf + start, strlen (buf + start));
+		trim (sep[no]);
+		OC_DEBUG ("ARRAY[%d] = %s\n", no, sep[no]);
+		no++;
+	}
+
+	ofree (buf);
+
+	sep[no] = null;
+	*oargc = no;
+
+	return sep;
+} // }}}
+
+/**
  * @example trim.c
  *   The example for trim() and trim_r() api
  * @example addslashes.c
@@ -1477,6 +1583,8 @@ skip_error:
  *   The example for is_ksc5601() and is_utf8() api
  * @example CharsetConv.c
  *   The example for charset_conv() api
+ * @example split.c
+ *   The exmaple for split() api
  */
 
 /*

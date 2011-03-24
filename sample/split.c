@@ -1,4 +1,5 @@
 #include <olibc/libarg.h>
+#include <olibc/libstring.h>
 #include "test.h"
 
 int main (void) {
