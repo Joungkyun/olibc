@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 04:44:35 $
- * $Revision: 1.32 $
+ * $Date: 2011-03-24 05:48:56 $
+ * $Revision: 1.33 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.32 2011-03-24 04:44:35 oops Exp $ */
+/* $Id: libfile.c,v 1.33 2011-03-24 05:48:56 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -114,57 +114,59 @@ bool file_exists (CChar * path, int mode) // {{{
 } // }}}
 
 /**
- * @brief	Reads entire file into a string
+ * @brief	Reads entire file into a string.
  * @param	path The filename being read.
- * @return	read data or NULL on failure.
+ * @param	buf The pointer of file context
+ * @return	length of file
  * @sa		writefile
  * @exception DEALLOCATE
- *   When occurs internal error, readfile() returns null.
- *   If the return string array pointer is not null, the caller should
+ *   When occurs internal error, 2th argument of readfile() has null.
+ *   If the @e buf is not null, the caller should
  *   deallocate this buffer using @e free()
- * @warning
- *   The readfile() function is not binary safe. If you need binary
- *   safe, use olibc >= 1.0.0
+ *
+ * The readfile() api reads data from path, and return length of
+ * read data. This api is <b>binary safe</b>.
  */
 OLIBC_API
-char * readfile (CChar * path) // {{{
+size_t readfile (CChar * path, char ** buf) // {{{
 {
 	FILE	* fp;
-	char	tmp[OC_FILEBUF] = { 0, },
-			* buf;
+	char	tmp[OC_FILEBUF] = { 0, };
 	size_t	len = 0,
 			length = 0;
 	struct	stat f;
 
+	*buf = null;
+
 	if ( lstat (path, &f) == -1 ) {
 		oc_error ("File not found : %s\n", path);
-		return null;
+		return 0;
 	}
 
 	if ( f.st_size < 1 ) {
 		OC_DEBUG ("The file(%s) is empty\n", path);
-		return null;
+		return 0;
 	}
 
 	if ((fp = fopen(path, "rb")) == null) {
 		oc_error ("Can not open %s with read mode\n", path);
-		return null;
+		return 0;
 	}
 
 	/* initialize tmp variavle */
 	len = (f.st_size < 4) ? 4 : f.st_size;
-	oc_malloc_r (buf, sizeof (char) * (len + 1), null);
+	oc_malloc_r (*buf, sizeof (char) * (len + 1), 0);
 	len = 0;
 
 	while ( (length = fread (tmp, sizeof (char), OC_FILEBUF - 1, fp)) > 0 ) {
-		memmove (buf + len, tmp, length);
+		memmove (*buf + len, tmp, length);
 		len += length;
 		memset (tmp, 0, OC_FILEBUF);
 	}
-	memset (buf + len, 0, 1);
+	memset (*buf + len, 0, 1);
 	fclose (fp);
 
-	return buf;
+	return len;
 } // }}}
 
 /**
@@ -179,7 +181,7 @@ char * readfile (CChar * path) // {{{
  * This api writes data to a file. This api is <b>binary safe</b>!
  */
 OLIBC_API
-bool writefile (CChar * path, const void * data, size_t size, bool mode) // {{{
+bool writefile (CChar * path, CChar * data, size_t size, bool mode) // {{{
 {
 	struct	stat s;
 

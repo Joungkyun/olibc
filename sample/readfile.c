@@ -8,10 +8,9 @@ int main (void) {
 	size_t len;
 
 	oc_test_banner ("readfile");
-	buf = readfile (path);
-	len = strlen (buf);
+	len = readfile (path, &buf);
 
-	if ( len != 192 )
+	if ( buf == null || len != 192 )
 		goto go_fail;
 
 	if ( ! strncmp ("alias ", buf, 6) && strcmp (buf + 190, "ci") )
@@ -31,9 +30,12 @@ go_fail:
 		if ( writefile ("./test-write.txt", "1231", 4, true) == false )
 			printf ("failed\n");
 
-		buf = readfile (wfile);
-		printf ("%s\n", ! strcmp (buf, "1231") ? "ok" : "failed");
-		ofree (buf);
+		len = readfile (wfile, &buf);
+		if ( buf != null ) {
+			printf ("%s\n", ! strcmp (buf, "1231") ? "ok" : "failed");
+			ofree (buf);
+		} else
+			printf ("%s\n", "failed");
 
 		// removed test file
 		if ( file_exists (wfile, _IS_FILE) )

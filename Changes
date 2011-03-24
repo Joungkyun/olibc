@@ -1,11 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.70 2011-03-23 12:42:31 oops Exp $
+$Id: Changes,v 1.71 2011-03-24 05:48:56 oops Exp $
 
 * Wed, Mar 23 2011
 	- removed fileread api. use readfile api
-	- writefile api is binary safe. (changed proto type)
-    - On append mode, writefile api don't add newline any more at first.
+	- readfile and writefile api are binary safe. (changed proto type)
+    - On append mode of writefile api, don't add newline any more at first.
 
 * Tue, Mar 22 2011
 	- redefine type declare with stdint

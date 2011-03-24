@@ -5,11 +5,11 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 04:44:35 $
- * $Revision: 1.17 $
+ * $Date: 2011-03-24 05:48:56 $
+ * $Revision: 1.18 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.17 2011-03-24 04:44:35 oops Exp $ */
+/* $Id: libfile.h,v 1.18 2011-03-24 05:48:56 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -25,8 +25,8 @@
 #define _IS_SOCK	7
 
 extern bool file_exists (CChar * path, int mode);
-extern char * readfile (CChar * path);
-extern bool writefile (CChar * path, const void * data, size_t size, bool mode);
+extern size_t readfile (CChar * path, char ** buf);
+extern bool writefile (CChar * path, CChar * data, size_t size, bool mode);
 extern char * realpath_r (CChar * path);
 
 #endif
