@@ -6,9 +6,9 @@ int main (void) {
 	bool a, b, c;
 
 	oc_test_banner ("file_exists");
-	a = file_exists (path, _IS_NCHK);
-	b = file_exists (path, _IS_FILE);
-	c = file_exists (path, _IS_DIR);
+	a = file_exists (path, OC_IS_NCHK);
+	b = file_exists (path, OC_IS_FILE);
+	c = file_exists (path, OC_IS_DIR);
 
 	printf ("%s\n", (a && ! b && c) ? "ok" : "failed\n");
 

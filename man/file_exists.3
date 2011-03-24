@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man file_exists.3
 .\" 2011-03-16 JoungKyun Kim <htt://oops.org>
-.\" $Id: file_exists.3,v 1.6 2011-03-16 11:17:40 oops Exp $
+.\" $Id: file_exists.3,v 1.7 2011-03-24 09:46:58 oops Exp $
 .SH NAME
 file_exists \- Checks whether a file or directory exists
 
@@ -45,28 +45,28 @@ Path to the file or directory
 check conditions.
 
 .br
-.B _IS_NCHK 0
+.B OC_IS_NCHK 0
 => check only exists
 .br
-.B _IS_FILE 1
+.B OC_IS_FILE 1
 => check whether is regular file or not
 .br
-.B _IS_DIR 2
+.B OC_IS_DIR 2
 => check whether is regular directory or not
 .br
-.B _IS_SLINK 3
+.B OC_IS_SLINK 3
 => check whether is symbolic link or not
 .br
-.B _IS_CDEV 4
+.B OC_IS_CDEV 4
 => check whether is character device or not
 .br
-.B _IS_BDEV 5
+.B OC_IS_BDEV 5
 => check whether is block device or not
 .br
-.B _IS_FIFO 6
+.B OC_IS_FIFO 6
 => check whether is FIFO or not
 .br
-.B _IS_SOCK 7
+.B OC_IS_SOCK 7
 => check whether is socket or not
 
 .SH "RETURN VALUE"
@@ -79,14 +79,14 @@ On success, returns 1 otherwise, returns 0.
 int main (void) {
     char * path = "/var";
 
-    printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
-    printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
-    printf ("DIR  : %d\\n", file_exists (path, _IS_DIR));
-    printf ("SLINK: %d\\n", file_exists (path, _IS_SLINK));
-    printf ("CDEV : %d\\n", file_exists (path, _IS_CDEV));
-    printf ("BDEV : %d\\n", file_exists (path, _IS_BDEV));
-    printf ("FIFO : %d\\n", file_exists (path, _IS_FIFO));
-    printf ("SOCK : %d\\n", file_exists (path, _IS_SOCK));
+    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
+    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
+    printf ("DIR  : %d\\n", file_exists (path, OC_IS_DIR));
+    printf ("SLINK: %d\\n", file_exists (path, OC_IS_SLINK));
+    printf ("CDEV : %d\\n", file_exists (path, OC_IS_CDEV));
+    printf ("BDEV : %d\\n", file_exists (path, OC_IS_BDEV));
+    printf ("FIFO : %d\\n", file_exists (path, OC_IS_FIFO));
+    printf ("SOCK : %d\\n", file_exists (path, OC_IS_SOCK));
 
     return 0;
 }

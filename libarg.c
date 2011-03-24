@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-22 16:05:11 $
- * $Revision: 1.38 $
+ * $Date: 2011-03-24 09:46:58 $
+ * $Revision: 1.39 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.38 2011-03-22 16:05:11 oops Exp $ */
+/* $Id: libarg.c,v 1.39 2011-03-24 09:46:58 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -54,6 +54,11 @@
 #include <libstring.h>
 #include <libarg.h>
 
+/** @defgroup o_getopt_global_var o_getopt global variables
+ * Theses global variables are used by o_getopt api.
+ *
+ * @{
+ */
 int _ogetopt_chk_int = -1; //!< o_getopt processing count
 int _ogetopt_cmd_int = 0;  //!< Number of o_cmdarg array
 //! String length of o_optarg variable. Use by o_getopt API
@@ -67,8 +72,11 @@ char o_optarg[ARGLENGTH];
  * api and is must memory freed with @e ofree_array() function.
  */
 char ** o_cmdarg = null;
+/** @} end of o_getopt_global_var group */
 
 /** @defgroup arg_internalfunc Argument API internal functions of olibc
+ * These are internal apis that used for libarg apis.
+ *
  * @{
  */
 
@@ -285,7 +293,7 @@ static char * unconvert_quoted_blank (CChar * stream) // {{{
 	return ret;
 } // }}}
 
-/** @} */ // end of arg_internalfunc group
+/** @} end of arg_internalfunc group */
 
 
 /**

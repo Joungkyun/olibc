@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man file_exists.3
 .\" 2011-03-16 JoungKyun Kim <htt://oops.org>
-.\" $Id: file_exists.3,v 1.1 2011-03-16 11:17:40 oops Exp $
+.\" $Id: file_exists.3,v 1.2 2011-03-24 09:46:58 oops Exp $
 .SH 이름
 file_exists \- 파일이나 디렉토리가 존재하는지 검사
 
@@ -45,28 +45,28 @@ or
 다음의 상수를 참고한다.
 
 .br
-.B _IS_NCHK 0
+.B OC_IS_NCHK 0
 => 해당 경로의 존재 여부만 체크한다.
 .br
-.B _IS_FILE 1
+.B OC_IS_FILE 1
 => path 가 파일 인지를 체크
 .br
-.B _IS_DIR 2
+.B OC_IS_DIR 2
 => path 가 디렉토리 인지를 체크
 .br
-.B _IS_SLINK 3
+.B OC_IS_SLINK 3
 => path 가 심볼릭 링크 인지를 체크
 .br
-.B _IS_CDEV 4
+.B OC_IS_CDEV 4
 => path 가 캐릭터 디바이스 인지를 체크
 .br
-.B _IS_BDEV 5
+.B OC_IS_BDEV 5
 => path 가 블럭 디바이스 인지를 체크
 .br
-.B _IS_FIFO 6
+.B OC_IS_FIFO 6
 => path 가 FIFO 인지를 체크
 .br
-.B _IS_SOCK 7
+.B OC_IS_SOCK 7
 => path 가 소켓 인지를 체크
 
 .SH 반환값
@@ -79,14 +79,14 @@ or
 int main (void) {
     char * path = "/var";
 
-    printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
-    printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
-    printf ("DIR  : %d\\n", file_exists (path, _IS_DIR));
-    printf ("SLINK: %d\\n", file_exists (path, _IS_SLINK));
-    printf ("CDEV : %d\\n", file_exists (path, _IS_CDEV));
-    printf ("BDEV : %d\\n", file_exists (path, _IS_BDEV));
-    printf ("FIFO : %d\\n", file_exists (path, _IS_FIFO));
-    printf ("SOCK : %d\\n", file_exists (path, _IS_SOCK));
+    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
+    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
+    printf ("DIR  : %d\\n", file_exists (path, OC_IS_DIR));
+    printf ("SLINK: %d\\n", file_exists (path, OC_IS_SLINK));
+    printf ("CDEV : %d\\n", file_exists (path, OC_IS_CDEV));
+    printf ("BDEV : %d\\n", file_exists (path, OC_IS_BDEV));
+    printf ("FIFO : %d\\n", file_exists (path, OC_IS_FIFO));
+    printf ("SOCK : %d\\n", file_exists (path, OC_IS_SOCK));
 
     return 0;
 }

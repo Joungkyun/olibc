@@ -25,7 +25,7 @@ go_fail:
 	{
 		char * wfile = "./test-write.txt";
 		// append mode test
-		if ( file_exists (wfile, _IS_FILE) )
+		if ( file_exists (wfile, OC_IS_FILE) )
 			unlink (wfile);
 		if ( writefile ("./test-write.txt", "1231", 4, true) == false )
 			printf ("failed\n");
@@ -38,7 +38,7 @@ go_fail:
 			printf ("%s\n", "failed");
 
 		// removed test file
-		if ( file_exists (wfile, _IS_FILE) )
+		if ( file_exists (wfile, OC_IS_FILE) )
 			unlink (wfile);
 	}
 

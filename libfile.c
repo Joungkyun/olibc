@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 05:48:56 $
- * $Revision: 1.33 $
+ * $Date: 2011-03-24 09:46:58 $
+ * $Revision: 1.34 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.33 2011-03-24 05:48:56 oops Exp $ */
+/* $Id: libfile.c,v 1.34 2011-03-24 09:46:58 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -61,14 +61,14 @@
  * @param	path Path to the file or directory
  * @param	mode check conditions.
  * @code
- *   _IS_NCHK : check only exists
- *   _IS_FILE : check whether is regular file or not
- *   _IS_DIR : check whether is regular directory or not
- *   _IS_SLINK : check whether is symbolic link or not
- *   _IS_CDEV : check whether is character device or not
- *   _IS_BDEV : check whether is block device or not
- *   _IS_FIFO : check whether is FIFO or not
- *   _IS_SOCK : check whether is socket or not
+ *   OC_IS_NCHK
+ *   OC_IS_FILE
+ *   OC_IS_DIR
+ *   OC_IS_SLINK
+ *   OC_IS_CDEV
+ *   OC_IS_BDEV
+ *   OC_IS_FIFO
+ *   OC_IS_SOCK
  * @endcode
  * @return	bool
  * @retval	true Success
@@ -87,25 +87,25 @@ bool file_exists (CChar * path, int mode) // {{{
 		return false;
 
 	switch ( mode ) {
-		case _IS_FILE :
+		case OC_IS_FILE :
 			return S_ISREG (f.st_mode);
 			break;
-		case _IS_DIR :
+		case OC_IS_DIR :
 			return S_ISDIR (f.st_mode);
 			break;
-		case _IS_SLINK :
+		case OC_IS_SLINK :
 			return S_ISLNK (f.st_mode);
 			break;
-		case _IS_CDEV :
+		case OC_IS_CDEV :
 			return S_ISCHR (f.st_mode);
 			break;
-		case _IS_BDEV :
+		case OC_IS_BDEV :
 			return S_ISBLK (f.st_mode);
 			break;
-		case _IS_FIFO :
+		case OC_IS_FIFO :
 			return S_ISFIFO (f.st_mode);
 			break;
-		case _IS_SOCK :
+		case OC_IS_SOCK :
 			return S_ISSOCK (f.st_mode);
 			break;
 		default:

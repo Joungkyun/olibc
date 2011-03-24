@@ -5,24 +5,30 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 05:48:56 $
- * $Revision: 1.18 $
+ * $Date: 2011-03-24 09:46:58 $
+ * $Revision: 1.19 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.18 2011-03-24 05:48:56 oops Exp $ */
+/* $Id: libfile.h,v 1.19 2011-03-24 09:46:58 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
 #include <olibc/oc_type.h>
 
-#define _IS_NCHK	0
-#define _IS_FILE	1
-#define _IS_DIR		2
-#define _IS_SLINK	3
-#define _IS_CDEV	4
-#define _IS_BDEV	5
-#define _IS_FIFO	6
-#define _IS_SOCK	7
+/** @defgroup file_exists_constant file_exsits constants
+ * These constants are used by file_exsists() api, and defined
+ * in libfile.h
+ * @{
+ */
+#define OC_IS_NCHK	0 //!< check only exists 
+#define OC_IS_FILE	1 //!< check whether is regular file or not
+#define OC_IS_DIR	2 //!< check whether is regular directory or not
+#define OC_IS_SLINK	3 //!< check whether is symbolic link or not
+#define OC_IS_CDEV	4 //!< check whether is character device or not
+#define OC_IS_BDEV	5 //!< check whether is block device or not
+#define OC_IS_FIFO	6 //!< check whether is FIFO or not
+#define OC_IS_SOCK	7 //!< check whether is socket or not
+/** @} end of file_exists_constant group */
 
 extern bool file_exists (CChar * path, int mode);
 extern size_t readfile (CChar * path, char ** buf);
