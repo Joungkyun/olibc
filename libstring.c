@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 15:13:07 $
- * $Revision: 1.77 $
+ * $Date: 2011-03-24 16:11:40 $
+ * $Revision: 1.78 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.77 2011-03-24 15:13:07 oops Exp $ */
+/* $Id: libstring.c,v 1.78 2011-03-24 16:11:40 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1463,7 +1463,7 @@ skip_error:
  * @param[out]	oargc Number of return arraies
  * @param[in]	delimiter The boundary string.
  * @return		The string array
- * @sa	ofree_array
+ * @sa	join ofree_array
  * @exception DEALLOCATE
  *   When occurs internal error, split() returns null.
  *   If the return string array pointer is not null, the caller should
@@ -1560,6 +1560,53 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 	*oargc = no;
 
 	return sep;
+} // }}}
+
+/**
+ * @brief	Join array elements with a string
+ * @param	glue delimeter of joined string.
+ * @param	sep The array of strings to join.
+ * @return		The pointer of joined string.
+ * @sa	split
+ * @exception DEALLOCATE
+ *   When occurs internal error, join() returns null.
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
+ *
+ * Join array elements with a glue string. If glue is set null,
+ * join() api joined string with empty string.
+ */
+OLIBC_API
+char * join (CChar * glue, CChar ** sep) // {{{
+{
+	ULong	alloc = 1024,
+			plen = 0;
+	int		glen;
+	char	* buf;
+
+	if ( glue == null ) {
+		glue = "";
+		glen = 0;
+	} else
+		glen = strlen (glue);
+
+	oc_malloc_r (buf, sizeof (char) * alloc, null);
+	memset (buf, 0, sizeof (char) * alloc);
+
+	while ( *sep != null ) {
+		plen += strlen (*sep) + glen;
+		if ( plen > (alloc - 1) ) {
+			alloc = plen + 1024;
+			oc_realloc_r (buf, sizeof (char) * alloc, null);
+		}
+
+		if ( strlen (buf) && glen )
+			strcat (buf, glue);
+		strcat (buf, *sep);
+		sep++;
+	}
+
+	return buf;
 } // }}}
 
 /**

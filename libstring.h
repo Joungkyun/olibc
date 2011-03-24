@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 15:13:07 $
- * $Revision: 1.31 $
+ * $Date: 2011-03-24 16:11:40 $
+ * $Revision: 1.32 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.31 2011-03-24 15:13:07 oops Exp $ */
+/* $Id: libstring.h,v 1.32 2011-03-24 16:11:40 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -46,6 +46,7 @@ extern void trim (char * str);
 extern char * trim_r (char * str, bool should_free);
 
 extern char ** split (CChar * src, int * oargc, CChar * delimiter);
+extern char * join (CChar * glue, CChar ** sep);
 
 extern Long64 str2long (CChar * src);
 extern long double str2double (CChar * src);

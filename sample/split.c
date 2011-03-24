@@ -38,5 +38,16 @@ go_split_fail:
 		printf ("failed\n");
 	}
 
+	{
+		char	*sep[4] = { "123", "456", "789", null };
+		char	* buf = "123/456/789",
+				* res;
+		oc_test_banner ("join");
+
+		res = join ("/", (const char **) sep);
+		printf ("%s\n", ! strcmp (buf, res) ? "ok" : "failed");
+		ofree (res);
+	}
+
 	return 0;
 }

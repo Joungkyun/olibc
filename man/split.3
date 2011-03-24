@@ -2,14 +2,18 @@
 .\" Process with
 .\" nroff -man split.3
 .\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: split.3,v 1.10 2011-03-24 15:13:07 oops Exp $
+.\" $Id: split.3,v 1.11 2011-03-24 16:11:40 oops Exp $
 .SH NAME
 split \- Split a string by string.
+.br
+join \- Join array elements with a string.
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
 .BI "char ** split (const char * stream, int * argc, const char * delimiter);"
+.br
+.BI "char * join (const char * glue, const char ** sep);"
 
 .SH "Link library"
 .B \-loc
@@ -31,10 +35,10 @@ or
 that follows BSD license.
 
 .SH DESCRIPTION
-Returns an array of strings, each of which is a substring of string
+The
+.BI split()
+api returns an array of strings, each of which is a substring of string
 formed by splitting it on boundaries formed by the string delimiter.
-
-If already escaped, escaped character is skip escaping.
 
 .TP
 .B stream
@@ -51,8 +55,26 @@ Number of return arraies
 .br
 The boundary string.
 
+.PP
+The
+.BI join()
+api join array elements with a glue string.
+
+.TP
+.B glue
+.br
+Connected string. If set null, glue has empty string internally.
+
+.TP
+.B sep
+.br
+ The array of strings to join.
+
 .SH "RETURN VALUE"
-If delimiter or src is an empty string (""),
+The
+.BI split()
+api returns the pointer of string array. If delimiter or src is an
+empty string (""),
 .BI split()
 api will return null.
 
@@ -65,6 +87,16 @@ returns null. If the return string array pointer is not null,
 the caller should deallocate this buffer using
 .BI ofree_array().
 
+The
+.BI join()
+api returns the point of string.
+
+When occurs internal error,
+.BI join()
+returns null. If the return string pointer is not null,
+the caller should deallocate this buffer using
+.BI free().
+
 .SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
@@ -73,6 +105,7 @@ the caller should deallocate this buffer using
 int main (void) {
     char ** sep;
     char *a = "abcA abcAabc ";
+    char *j;
     int i, j;
 
     sep = split (a, &i, "A");
@@ -81,6 +114,10 @@ int main (void) {
         printf ("** %s\\n", sep[j]);
     }
 
+    j = join ("A", sep);
+    printf ("%s\n", j);
+
+    free (j);
     ofree_array (sep);
     return 0;
 }
