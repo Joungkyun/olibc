@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 11:00:10 $
- * $Revision: 1.12 $
+ * $Date: 2011-03-24 11:33:38 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.12 2011-03-24 11:00:10 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.13 2011-03-24 11:33:38 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -59,9 +59,9 @@
 	#undef HAVE_STDBOOL_H
 #endif
 
-typedef uint8_t UChar;          //!< unsigned char
-typedef const int8_t CChar;     //!< const char
-typedef const uint8_t UCChar;   //!< const unsigned char
+typedef unsigned char UChar;    //!< unsigned char
+typedef const char CChar;       //!< const char
+typedef const UChar UCChar;     //!< const unsigned char
 typedef uint16_t UShort;        //!< unsigned short
 typedef const uint16_t CShort;  //!< const short
 typedef const uint16_t UCShort; //!< const unsigned short
