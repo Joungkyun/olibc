@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-23 12:04:06 $
- * $Revision: 1.11 $
+ * $Date: 2011-03-24 11:00:10 $
+ * $Revision: 1.12 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.11 2011-03-23 12:04:06 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.12 2011-03-24 11:00:10 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -154,13 +154,13 @@ typedef struct {
 	
 #define oc_realloc(v, size) \
 	{ \
-		void * ptr; \
+		void * ptr_oc_ival; \
 		OC_MEM_DEBUG("Memory reallocation\n"); \
-		if ( (ptr = realloc (v, size)) == NULL ) { \
+		if ( (ptr_oc_ival = realloc (v, size)) == NULL ) { \
 			ofree (v); \
 			v = NULL; \
 		} else { \
-			v = ptr; \
+			v = ptr_oc_ival; \
 		} \
 	}
 
@@ -226,11 +226,11 @@ typedef struct {
 
 #define oc_safe_cpy(dst, src, size) \
 	{ \
-		UInt cpylen; \
-		cpylen = strlen (src); \
-		cpylen = (cpylen > (size-1)) ? size - 1 : cpylen; \
-		memmove (dst, src, cpylen); \
-		memset (dst + cpylen, 0, 1); \
+		UInt cpylen_oc_ival; \
+		cpylen_oc_ival = strlen (src); \
+		cpylen_oc_ival = (cpylen_oc_ival > (size-1)) ? size - 1 : cpylen_oc_ival; \
+		memmove (dst, src, cpylen_oc_ival); \
+		memset (dst + cpylen_oc_ival, 0, 1); \
 	}
 
 #endif

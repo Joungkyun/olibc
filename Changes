@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.71 2011-03-24 05:48:56 oops Exp $
+$Id: Changes,v 1.72 2011-03-24 11:00:10 oops Exp $
+
+* Thu, Mar 24 2011
+	- changed internal variable name for conflict other programs
 
 * Wed, Mar 23 2011
 	- removed fileread api. use readfile api
