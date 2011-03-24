@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 09:46:58 $
- * $Revision: 1.34 $
+ * $Date: 2011-03-24 11:29:24 $
+ * $Revision: 1.35 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.34 2011-03-24 09:46:58 oops Exp $ */
+/* $Id: libfile.c,v 1.35 2011-03-24 11:29:24 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -55,6 +55,49 @@
 #define PATH_MAX 256 //!< Be declared If undefined PATH_MAX and _POSIX_PATH_MAX
 #endif
 #endif
+
+/**
+ * @brief	Checks type of file or directory
+ * @param	path Path to the file or directory
+ * @return	false or file status constant
+ * @retval	false Failure
+ * @retval	OC_IS_FILE
+ * @retval	OC_IS_DIR
+ * @retval	OC_IS_SLINK
+ * @retval	OC_IS_CDEV
+ * @retval	OC_IS_BDEV
+ * @retval	OC_IS_FIFO
+ * @retval	OC_IS_SOCK
+ */
+OLIBC_API
+int file_status (CChar * path) // {{{
+{
+	struct	stat f;
+	int		ret;
+
+	f.st_size = 0;
+	ret = lstat (path, &f);
+
+	if ( ret == -1 )
+		return false;
+
+	if ( S_ISREG (f.st_mode) )
+		return OC_IS_FILE;
+	else if ( S_ISDIR (f.st_mode) )
+		return OC_IS_DIR;
+	else if ( S_ISLNK (f.st_mode) )
+		return OC_IS_SLINK;
+	else if ( S_ISCHR (f.st_mode) )
+		return OC_IS_CDEV;
+	else if ( S_ISBLK (f.st_mode) )
+		return OC_IS_BDEV;
+	else if ( S_ISFIFO (f.st_mode) )
+		return OC_IS_FIFO;
+	else if ( S_ISSOCK (f.st_mode) )
+		return OC_IS_SOCK;
+
+	return OC_IS_FILE;
+} // }}}
 
 /**
  * @brief	Checks whether a file or directory exists

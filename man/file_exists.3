@@ -2,15 +2,18 @@
 .\" Process with
 .\" nroff -man file_exists.3
 .\" 2011-03-16 JoungKyun Kim <htt://oops.org>
-.\" $Id: file_exists.3,v 1.7 2011-03-24 09:46:58 oops Exp $
+.\" $Id: file_exists.3,v 1.8 2011-03-24 11:29:24 oops Exp $
 .SH NAME
 file_exists \- Checks whether a file or directory exists
+.br
+file_status \- Checks type of a file or a directory
 
 .SH SYNOPSIS
 .B #include <olibc/libfile.h>
 .sp
 .BI "int file_exists (const char * path, int mode);"
-
+.br
+.BI "int file_status (const char * path);"
 
 .SH "Link library"
 .B \-loc
@@ -32,7 +35,9 @@ or
 that follows BSD license.
 
 .SH DESCRIPTION
-Checks whether a file or directory exists with mode.
+The
+.BI file_exsits()
+api hecks whether a file or directory exists with mode.
 
 .TP
 .B path
@@ -69,8 +74,25 @@ check conditions.
 .B OC_IS_SOCK 7
 => check whether is socket or not
 
+.PP
+The
+.BI file_status()
+api checks type of a file or a directory.
+
+.TP
+.B path
+.br
+Path to the file or directory
+
+
 .SH "RETURN VALUE"
-On success, returns 1 otherwise, returns 0.
+The
+.BI file_exists()
+api retruns true on success, otherwise returns false.
+
+The
+.BI file_status()
+api return constant of file type or false.
 
 .SH EXAMPLE
 .nf
@@ -87,6 +109,11 @@ int main (void) {
     printf ("BDEV : %d\\n", file_exists (path, OC_IS_BDEV));
     printf ("FIFO : %d\\n", file_exists (path, OC_IS_FIFO));
     printf ("SOCK : %d\\n", file_exists (path, OC_IS_SOCK));
+
+    printf (
+        "%s is %s directory\\n",
+        (file_exists (path) == OC_IS_DIR) ? "" : "not"
+    );
 
     return 0;
 }

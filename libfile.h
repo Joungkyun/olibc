@@ -5,11 +5,11 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 09:46:58 $
- * $Revision: 1.19 $
+ * $Date: 2011-03-24 11:29:24 $
+ * $Revision: 1.20 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.19 2011-03-24 09:46:58 oops Exp $ */
+/* $Id: libfile.h,v 1.20 2011-03-24 11:29:24 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
@@ -30,6 +30,7 @@
 #define OC_IS_SOCK	7 //!< check whether is socket or not
 /** @} end of file_exists_constant group */
 
+extern int file_status (CChar * path);
 extern bool file_exists (CChar * path, int mode);
 extern size_t readfile (CChar * path, char ** buf);
 extern bool writefile (CChar * path, CChar * data, size_t size, bool mode);
