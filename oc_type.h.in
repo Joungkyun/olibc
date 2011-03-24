@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 14:37:47 $
- * $Revision: 1.14 $
+ * $Date: 2011-03-24 14:47:06 $
+ * $Revision: 1.15 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.14 2011-03-24 14:37:47 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.15 2011-03-24 14:47:06 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -237,7 +237,7 @@ typedef struct {
 	{ \
 		size = (srclen > (size-1)) ? size - 1 : srclen; \
 		memmove (dst, src, size); \
-		memset (dst + size, 0, 1);
+		memset (dst + size, 0, 1); \
 	}
 
 #endif
