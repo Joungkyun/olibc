@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 16:11:40 $
- * $Revision: 1.78 $
+ * $Date: 2011-03-25 11:30:00 $
+ * $Revision: 1.79 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.78 2011-03-24 16:11:40 oops Exp $ */
+/* $Id: libstring.c,v 1.79 2011-03-25 11:30:00 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -682,7 +682,14 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 		else
 			size /= 1000;
 
-		OC_DEBUG ("INT  PART: %llu / %d = %lld\n", frac, dvd, size);
+		OC_DEBUG (
+#if defined(__x86_64) || defined(__amd64)
+			"INT  PART: %lu / %d = %lld\n",
+#else
+			"INT  PART: %llu / %d = %lld\n",
+#endif
+			frac, dvd, size
+		);
 		i++;
 	}
 
@@ -692,19 +699,41 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 	else
 		frac = (frac & 0x03ff) * 100 >> 10;
 
-	OC_DEBUG ("FRAC PART: %lld\n", frac);
+	OC_DEBUG (
+#if defined(__x86_64) || defined(__amd64)
+		"FRAC PART: %ld\n",
+#else
+		"FRAC PART: %lld\n",
+#endif
+		frac
+	);
 
 	if ( sub ) {
 		char	* BYTE_C;
 		BYTE_C = (char *) numberFormat (osize, 0, '.', ',', 0);
 		sprintf (
-			buf, "%llu.%llu %c%c (%s B%s%s)",
+			buf,
+#if defined(__x86_64) || defined(__amd64)
+			"%lu.%lu %c%c (%s B%s%s)",
+#else
+			"%llu.%llu %c%c (%s B%s%s)",
+#endif
 			size, frac, units[i], unit ? 'b' : 'B',
 			BYTE_C, unit ? "it" : "yte", singular
 		);
 		ofree (BYTE_C);
-	} else
-		sprintf (buf, "%llu.%llu %c%c", size, frac, units[i], unit ? 'b' : 'B');
+	} else {
+		sprintf (
+			buf,
+#if defined(__x86_64) || defined(__amd64)
+			"%lu.%lu %c%c",
+#else
+			"%llu.%llu %c%c",
+#endif
+			size, frac, units[i],
+			unit ? 'b' : 'B'
+		);
+	}
 
 	return buf;
 } // }}}
@@ -1294,7 +1323,7 @@ bool is_utf8 (UCChar * src) // {{{
 	if ( src == null )
 		return false;
 
-	len = strlen (src);
+	len = strlen ((CChar *) src);
 	if ( len == 0 )
 		return true;
 
