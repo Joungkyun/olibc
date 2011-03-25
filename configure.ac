@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.33 2011-03-25 10:35:43 oops Exp $
+# $Id: configure.ac,v 1.34 2011-03-25 11:43:38 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -135,7 +135,7 @@ if test "x$with_iconv" != "x"; then
 
   # check of iconv.h
   if test -f "$with_iconv/include/iconv.h" -o "$with_iconv/include/giconv.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$with_iconv/include "`
+    inschk=`echo $CPPFLAGS | ${GREP} "I$with_iconv/include " 2> /dev/null`
     if test -z "$inschk"; then
       CPPFLAGS="-I$with_iconv/include $CPPFLAGS"
     fi

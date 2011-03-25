@@ -8283,7 +8283,7 @@ fi
 
   # check of iconv.h
   if test -f "$with_iconv/include/iconv.h" -o "$with_iconv/include/giconv.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$with_iconv/include "`
+    inschk=`echo $CPPFLAGS | ${GREP} "I$with_iconv/include " 2> /dev/null`
     if test -z "$inschk"; then
       CPPFLAGS="-I$with_iconv/include $CPPFLAGS"
     fi
