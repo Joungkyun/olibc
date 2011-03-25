@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.65 2011-03-21 13:04:29 oops Exp $
+$Id: Changes,v 1.65.2.1 2011-03-25 09:21:48 oops Exp $
+
+* Fri, Mar 25 2011
+	- fixed wrong realpath_r() operation
 
 * Thu, Mar  3 2011
 	- add sample code
