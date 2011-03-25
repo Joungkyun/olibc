@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 11:36:09 $
- * $Revision: 1.80 $
+ * $Date: 2011-03-25 15:50:04 $
+ * $Revision: 1.81 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.80 2011-03-25 11:36:09 oops Exp $ */
+/* $Id: libstring.c,v 1.81 2011-03-25 15:50:04 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -295,10 +295,10 @@ char * trim_r (char * str, bool should_free) // {{{
  * This is binary safe.
  */
 OLIBC_API
-bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{{
+bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
-	UChar	* source,
+	char	* source,
 			* target,
 			* end;
 
@@ -307,7 +307,7 @@ bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {
 
 	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), false);
 
-	source = in;
+	source = (char *) in;
 	target = *out;
 	end = source + inlen;
 
@@ -361,12 +361,12 @@ OLIBC_API
 char * addslashes (char * in, bool should_free) // {{{
 {
 	size_t	outlen;
-	UChar	* out;
+	char	* out;
 
 	if ( in == null )
 		return null;
 
-	if ( addslashes_r ((UChar *) in, strlen (in), &out, &outlen) == false )
+	if ( addslashes_r (in, strlen (in), &out, &outlen) == false )
 		return null;
 
 	if ( should_free )

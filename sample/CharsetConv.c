@@ -2,9 +2,9 @@
 #include "test.h"
 
 int main (int argc, char ** argv) {
-	UChar src[5] = { 0, };
-	UChar * p = null,
-		  * q = null;
+	char	src[5] = { 0, };
+	char	* p = null,
+		 	* q = null;
 
 	// follow is EUC-KR "한글"
 	sprintf (src, "%c%c%c%c", 0xc7, 0xd1, 0xb1, 0xdb);

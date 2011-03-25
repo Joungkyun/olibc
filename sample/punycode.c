@@ -3,11 +3,10 @@
 #include "test.h"
 
 int main (int argc, char ** argv) {
-	char	domain[32] = { 0, };
-	char	* punyc  = "xn---az-eb9lt87c3t8a66a.kr",
+	char	domain[32] = { 0, },
+			* punyc  = "xn---az-eb9lt87c3t8a66a.kr",
 			* puny,
 			* unpuny;
-	UInt l;
 
 	// "한글-a밝혀z.kr" EUC-KR
 	sprintf (
@@ -22,7 +21,7 @@ int main (int argc, char ** argv) {
 
 	oc_test_banner ("convert_punycode encode");
 	puny = convert_punycode (domain, "EUC-KR");
-	if ( l == 0 || puny == null )
+	if ( puny == null )
 		printf ("failed - mem allocate\n");
 	else
 		printf ("%s\n", strcmp (puny, punyc) ? "failed" : "ok");

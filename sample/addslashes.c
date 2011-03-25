@@ -4,7 +4,7 @@
 int main (void) {
 	char * src = "'aa', \"bb\" and slash(\\)";
 	char * dst = "\\'aa\\', \\\"bb\\\" and slash(\\\\)";
-	unsigned char * buf;
+	char * buf;
 
 	oc_test_banner ("addslashes");
 
@@ -15,6 +15,7 @@ int main (void) {
 	{
 		size_t buflen;
 		oc_test_banner ("addslashes_r");
+//bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen)
 		if ( addslashes_r (src, strlen (src), &buf, &buflen) == false ) {
 			printf ("failed\n");
 			return 0;

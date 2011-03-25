@@ -24,6 +24,7 @@ int main (void) {
 		oc_test_banner ("str2double");
 		buf = str2double (src);
 		printf ("%s\n", buf == 1234567.12345 ? "ok" : "failed");
+		printf ("#### %lf\n", buf);
 	}
 
 	/*
