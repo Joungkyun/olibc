@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 11:30:00 $
- * $Revision: 1.79 $
+ * $Date: 2011-03-25 11:36:09 $
+ * $Revision: 1.80 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.79 2011-03-25 11:30:00 oops Exp $ */
+/* $Id: libstring.c,v 1.80 2011-03-25 11:36:09 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1274,10 +1274,10 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
  * @return	bool
  */
 OLIBC_API
-bool is_ksc5601 (UInt c1, UInt c2) // {{{
+bool is_ksc5601 (int c1, int c2) // {{{
 {
-	UChar	* c = (UChar *) ((c1 << 8) | c2);
-	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, (int) c, (int) c1, (int) c2);
+	int c = (c1 << 8) | c2;
+	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c1, c2);
 
 	if ( ! (c1 & 0x80) )
 		return false;
@@ -1287,19 +1287,19 @@ bool is_ksc5601 (UInt c1, UInt c2) // {{{
 		 && (c2 >= 0xa1 && c2 <= 0xfe) )
 		return true;
 
-	if ( (int) c >= 0xa1a2 && (int) c <= 0xa1fe )
+	if ( c >= 0xa1a2 && c <= 0xa1fe )
 		return true;
-	if ( (int) c >= 0xa5a1 && (int) c <= 0xa5f8 )
+	if ( c >= 0xa5a1 && c <= 0xa5f8 )
 		return true;
-	if ( (int) c >= 0xa6a1 && (int) c <= 0xa6e4 )
+	if ( c >= 0xa6a1 && c <= 0xa6e4 )
 		return true;
-	if ( (int) c >= 0xa7a1 && (int) c <= 0xa7ef )
+	if ( c >= 0xa7a1 && c <= 0xa7ef )
 		return true;
-	if ( (int) c >= 0xaaa1 && (int) c <= 0xaaf3 ) // hirakana
+	if ( c >= 0xaaa1 && c <= 0xaaf3 ) // hirakana
 		return true;
-	if ( (int) c >= 0xaba1 && (int) c <= 0xabf6 ) // katakana
+	if ( c >= 0xaba1 && c <= 0xabf6 ) // katakana
 		return true;
-	if ( (int) c >= 0xaca1 && (int) c <= 0xacf1 )
+	if ( c >= 0xaca1 && c <= 0xacf1 )
 		return true;
 
 	return false;

@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 16:11:40 $
- * $Revision: 1.32 $
+ * $Date: 2011-03-25 11:36:09 $
+ * $Revision: 1.33 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.32 2011-03-24 16:11:40 oops Exp $ */
+/* $Id: libstring.h,v 1.33 2011-03-25 11:36:09 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -71,7 +71,7 @@ extern ULong64 bin2long (CChar * src);
 extern UInt long2bin (Long64 dec, char ** dst);
 extern UInt dec2bin (CChar * src, char ** dst);
 
-extern bool is_ksc5601 (UInt c1, UInt c2);
+extern bool is_ksc5601 (int c1, int c2);
 extern bool is_utf8 (UCChar * src);
 extern char * charset_conv (CChar * src, CChar * from, CChar * to);
 #endif
