@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.32 2011-03-22 11:16:28 oops Exp $
+# $Id: configure.ac,v 1.33 2011-03-25 10:35:43 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -47,10 +47,10 @@ AC_PROG_AWK
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
-AC_PATH_PROG(MAKE, make)
-if test ! -f "$ac_cv_path_MAKE"; then
-  AC_MSG_ERROR(Can't not found make)
-fi
+#AC_PATH_PROG(MAKE, make)
+#if test ! -f "$ac_cv_path_MAKE"; then
+#  AC_MSG_ERROR(Can't not found make)
+#fi
 
 AC_PATH_PROG(PERL, perl)
 if test ! -f "$ac_cv_path_PERL"; then

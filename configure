@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS SONAME_INFO SONAME_VERSION SONAME_MAJOR SONAME_MINOR SONAME_REVISION LIBIDN_NAME LIBIDN_VERSOIN CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S AWK SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CPP EGREP LIBTOOL MAKE PERL HEAD CP AR LS RM MKDIR GZIP MV LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS SONAME_INFO SONAME_VERSION SONAME_MAJOR SONAME_MINOR SONAME_REVISION LIBIDN_NAME LIBIDN_VERSOIN CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S AWK SET_MAKE build build_cpu build_vendor build_os host host_cpu host_vendor host_os ECHO RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP CPP EGREP LIBTOOL PERL HEAD CP AR LS RM MKDIR GZIP MV LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -7680,50 +7680,10 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
-# Extract the first word of "make", so it can be a program name with args.
-set dummy make; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_MAKE+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $MAKE in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_MAKE="$MAKE" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_MAKE="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-MAKE=$ac_cv_path_MAKE
-
-if test -n "$MAKE"; then
-  echo "$as_me:$LINENO: result: $MAKE" >&5
-echo "${ECHO_T}$MAKE" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-if test ! -f "$ac_cv_path_MAKE"; then
-  { { echo "$as_me:$LINENO: error: Can't not found make" >&5
-echo "$as_me: error: Can't not found make" >&2;}
-   { (exit 1); exit 1; }; }
-fi
+#AC_PATH_PROG(MAKE, make)
+#if test ! -f "$ac_cv_path_MAKE"; then
+#  AC_MSG_ERROR(Can't not found make)
+#fi
 
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
@@ -13045,7 +13005,6 @@ s,@ac_ct_STRIP@,$ac_ct_STRIP,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
-s,@MAKE@,$MAKE,;t t
 s,@PERL@,$PERL,;t t
 s,@HEAD@,$HEAD,;t t
 s,@CP@,$CP,;t t
