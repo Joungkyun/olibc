@@ -1,6 +1,6 @@
 %define major 0
 %define minor 1
-%define rev   3
+%define rev   4
 Summary: useful high level C library
 Summary(ko): 유용한 하이레벨 C 라이브러리
 Name: olibc
