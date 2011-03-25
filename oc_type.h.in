@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 14:47:06 $
- * $Revision: 1.15 $
+ * $Date: 2011-03-25 16:16:15 $
+ * $Revision: 1.16 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.15 2011-03-24 14:47:06 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.16 2011-03-25 16:16:15 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -21,6 +21,14 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdint.h>
+
+/************ architecure **********/
+#if defined(__x86_64) || defined(__amd64)
+	#ifndef __x86_64__
+		#define __x86_64__	1
+	#endif
+#endif
+/************ architecure **********/
 
 /************ endign ***************/
 #if defined(linux)
