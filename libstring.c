@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 15:50:04 $
- * $Revision: 1.81 $
+ * $Date: 2011-03-25 16:18:22 $
+ * $Revision: 1.82 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.81 2011-03-25 15:50:04 oops Exp $ */
+/* $Id: libstring.c,v 1.82 2011-03-25 16:18:22 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -683,7 +683,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 			size /= 1000;
 
 		OC_DEBUG (
-#if defined(__x86_64) || defined(__amd64)
+#ifdef __x86_64__
 			"INT  PART: %lu / %d = %lld\n",
 #else
 			"INT  PART: %llu / %d = %lld\n",
@@ -700,7 +700,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 		frac = (frac & 0x03ff) * 100 >> 10;
 
 	OC_DEBUG (
-#if defined(__x86_64) || defined(__amd64)
+#ifdef __x86_64__
 		"FRAC PART: %ld\n",
 #else
 		"FRAC PART: %lld\n",
@@ -713,7 +713,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 		BYTE_C = (char *) numberFormat (osize, 0, '.', ',', 0);
 		sprintf (
 			buf,
-#if defined(__x86_64) || defined(__amd64)
+#ifdef __x86_64__
 			"%lu.%lu %c%c (%s B%s%s)",
 #else
 			"%llu.%llu %c%c (%s B%s%s)",
@@ -725,7 +725,7 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 	} else {
 		sprintf (
 			buf,
-#if defined(__x86_64) || defined(__amd64)
+#ifdef __x86_64__
 			"%lu.%lu %c%c",
 #else
 			"%llu.%llu %c%c",
