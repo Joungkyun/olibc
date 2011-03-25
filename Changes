@@ -1,9 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.74 2011-03-24 16:11:40 oops Exp $
+$Id: Changes,v 1.75 2011-03-25 09:15:40 oops Exp $
 
 * Fri, Mar 25 2011
 	- add join() api
+	- fixed wrong realpath_r() operation
 
 * Thu, Mar 24 2011
 	- changed internal variable name for conflict other programs

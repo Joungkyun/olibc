@@ -13,7 +13,7 @@ int main (void) {
 		goto go_fail;
 
 	strcat (path_c, "/");
-	strcat (path_c, path);
+	strcat (path_c, "test.txt");
 
 	if ( (buf = realpath_r (path)) == null )
 		goto go_fail;
@@ -22,7 +22,7 @@ int main (void) {
 		printf ("ok\n");
 	else {
 go_fail:
-		printf ("failed\n");
+		printf ("failed");
 	}
 	ofree (buf);
 

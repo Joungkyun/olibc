@@ -38,15 +38,17 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 11:29:24 $
- * $Revision: 1.35 $
+ * $Date: 2011-03-25 09:15:40 $
+ * $Revision: 1.36 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.35 2011-03-24 11:29:24 oops Exp $ */
+/* $Id: libfile.c,v 1.36 2011-03-25 09:15:40 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
 #include <libfile.h>
+#include <libstring.h>
+#include <libarg.h>
 
 #ifndef PATH_MAX
 #ifdef _POSIX_PATH_MAX
@@ -292,87 +294,14 @@ bool writefile (CChar * path, CChar * data, size_t size, bool mode) // {{{
 OLIBC_API
 char * realpath_r (CChar * path) // {{{
 {
-	struct	stat f;
-	size_t	r;
-	bool	isdir;
-	char	filename[PATH_MAX + 1] = { 0, },
-			dirpath[PATH_MAX + 1] = { 0, },
-			curpath[PATH_MAX + 1] = { 0, },
-			* buf;
+	char	* buf,
+			* res,
+			resolved[PATH_MAX] = { 0, };
 
-	if ( path == null ) {
-		errno = ENOENT;
-		return null;
-	}
-
-	// The given path is already real path.
-	if ( path[0] == '/' ) {
-		r = strlen (path);
-		oc_malloc (buf, sizeof (char) * (r + 4));
-		if ( buf == null ) {
-			errno = ENOMEM;
-			return null;
-		}
-		memcpy (buf, path, r);
-		memset (buf + r, 0, 1);
-
-		return buf;
-	}
-
-	if ( strlen (path) > PATH_MAX ) {
-		errno = ENAMETOOLONG;
-		return null;
-	}
-
-	if ( (r = stat (path, &f)) == -1 ) {
-		errno = ENOENT;
-		return null;
-	}
-
-	isdir = S_ISDIR (f.st_mode);
-
-	if ( isdir == false ) {
-		// if path is filename
-		if ( (buf = strrchr (path, '/')) == null ) {
-			strcpy (filename, path);
-			strcpy (dirpath, "./");
-		} else {
-			strcpy (filename, buf + 1);
-			strcpy (dirpath, path);
-			buf = strrchr (dirpath, '/') + 1;
-			*buf = 0;
-		}
-	} else
-		strcpy (dirpath, path);
-
-	// save current directory
-	if ( getcwd (curpath, PATH_MAX) == null )
+	if ( realpath (path, resolved) == null )
 		return null;
 
-	if ( chdir (dirpath) == -1 )
-		return null;
-
-	memset (dirpath, 0, PATH_MAX + 1);
-	if ( getcwd (dirpath, PATH_MAX) == null ) {
-		chdir (curpath);
-		return null;
-	}
-
-	if ( chdir (curpath) == -1 )
-		return null;
-
-	r = strlen (dirpath) + strlen (filename) + 4;
-	oc_malloc (buf, sizeof (char) * r);
-	if ( buf == null ) {
-		errno = ENOENT;
-		return null;
-	}
-	memset (buf, 0, r);
-
-	r = strlen (dirpath);
-	memcpy (buf, dirpath, r);
-	memcpy (buf + r++, "/", 1);
-	memcpy (buf + r, filename, strlen (filename));
+	oc_strdup_r (buf, resolved, null);
 
 	return buf;
 } // }}}
