@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 16:26:26 $
- * $Revision: 1.83 $
+ * $Date: 2011-03-25 17:35:12 $
+ * $Revision: 1.84 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.83 2011-03-25 16:26:26 oops Exp $ */
+/* $Id: libstring.c,v 1.84 2011-03-25 17:35:12 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1400,12 +1400,18 @@ OLIBC_API
 char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 {
 #ifdef HAVE_ICONV_H
-	iconv_t cd;
-	char * ibuf, * ibuf_t;
-	char * obuf, * obuf_t;
-	size_t err;
-
-	size_t ilen, olen, olen_t;
+	iconv_t	cd;
+#ifdef HAVE_LIBICONV
+	const
+#endif
+	char	* ibuf_t;
+	char	* ibuf,
+			* obuf,
+			* obuf_t;
+	size_t	err,
+			ilen,
+			olen,
+			olen_t;
 
 	if ( src == null || from == null || to == null )
 		return null;
