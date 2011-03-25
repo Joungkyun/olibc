@@ -2,32 +2,24 @@
 #include "test.h"
 
 int main (void) {
-	char * src = "'aa', \"bb\" and slash(\\)";
-	char * dst = "\\'aa\\', \\\"bb\\\" and slash(\\\\)";
-	char * buf;
+	char	* src = "'aa', \"bb\" and slash(\\)";
+	char	* dst = "\\'aa\\', \\\"bb\\\" and slash(\\\\)";
+	char	* buf;
+	size_t	buflen;
 
 	oc_test_banner ("addslashes");
+	if ( addslashes (src, strlen (src), &buf, &buflen) == false ) {
+		printf ("failed\n");
+		return 0;
+	}
 
-	buf = addslashes (src, false);
+	if ( buflen != 28 ) {
+		printf ("failed\n");
+		return 0;
+	}
+
 	printf ("%s\n", strcmp (buf, dst) ? "failed" : "ok");
 	ofree (buf);
-
-	{
-		size_t buflen;
-		oc_test_banner ("addslashes_r");
-		if ( addslashes_r (src, strlen (src), &buf, &buflen) == false ) {
-			printf ("failed\n");
-			return 0;
-		}
-
-		if ( buflen != 28 ) {
-			printf ("failed\n");
-			return 0;
-		}
-
-		printf ("%s\n", strcmp (buf, dst) ? "failed" : "ok");
-		ofree (buf);
-	}
 
 	return 0;
 }

@@ -38,11 +38,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 15:13:07 $
- * $Revision: 1.12 $
+ * $Date: 2011-03-25 19:16:22 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.12 2011-03-24 15:13:07 oops Exp $ */
+/* $Id: libmisc.c,v 1.13 2011-03-25 19:16:22 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc
@@ -79,22 +79,25 @@ bool only_whitespace (CChar * stream, CInt length) // {{{
  * @param	str The input string
  * @param	del	The input delimiters
  * @return	Number of delimiters in the input string
+ *
+ * The get_charcount() api get number of delimiters in the input
+ * stinrg. This api is binary safe.
  */
-UInt get_charcount (CChar * str, CChar * del) // {{{
+UInt get_charcount (CChar * str, size_t sl, CChar * del, size_t dl) // {{{
 {
-	UInt no, i, j, len, dlen;
+	UInt	no,
+			i,
+			j;
 
 	if ( str == null || del == null )
 		return 0;
 
 	no = 0;
-	len = strlen (str);
-	dlen = strlen (del);
 
-	for ( i = 0; i < len; i++ ) {
-		for ( j = 0; j < dlen; j++ ) {
+	for ( i=0; i<sl; i++ ) {
+		for ( j=0; j<dl; j++ ) {
 			if ( str[i] == del[j] ) {
-				if ( str[i-1] == '\\' )
+				if ( i>0 && str[i-1] == 0x5c )
 					continue;
 
 				no++;
@@ -110,13 +113,13 @@ UInt get_charcount (CChar * str, CChar * del) // {{{
  * @param	v 64bit ingeger
  * @return	Bit64 struct
  */
-Bit64 devided64_high_low (ULong64 v) // {{{
+Bit64 devided64_high_low (Long64 v) // {{{
 {
-	Bit64 r;
+	Bit64	r;
 
-	if ( v <= ULONG_MAX ) {
+	if ( v <= LONG_MAX ) {
 		r.high = 0;
-		r.low = (ULong32) v;
+		r.low = (Long32) v;
 		return r;
 	}
 
@@ -131,12 +134,12 @@ Bit64 devided64_high_low (ULong64 v) // {{{
  * @param	v struct of 23bit high and low bit
  * @return	64bit interger
  */
-ULong64 combined64_high_low (Bit64 v) // {{{
+Long64 combined64_high_low (Bit64 v) // {{{
 {
 	if ( v.high == 0 )
-		return (ULong64) v.low;
+		return (Long64) v.low;
 
-	return ((ULong64) v.high << 32) | v.low;
+	return ((Long64) v.high << 32) | v.low;
 } // }}}
 
 /** @} */ // end of global_internalfunc

@@ -1,10 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.79 2011-03-25 17:35:12 oops Exp $
+$Id: Changes,v 1.80 2011-03-25 19:16:22 oops Exp $
 
 * Sat, Mar 26 2011
 	- changed function declare of str2double api
 	- support GCC4 and FreeBSD
+	- remove addslashes_r api
 	
 * Fri, Mar 25 2011
 	- add join() api

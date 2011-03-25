@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 17:35:12 $
- * $Revision: 1.84 $
+ * $Date: 2011-03-25 19:16:22 $
+ * $Revision: 1.85 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.84 2011-03-25 17:35:12 oops Exp $ */
+/* $Id: libstring.c,v 1.85 2011-03-25 19:16:22 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -282,30 +282,36 @@ char * trim_r (char * str, bool should_free) // {{{
  * @param[out]	outlen length of converted data
  * @retval	true Success
  * @retval	false Failure
- * @sa		addslashes
  * @exception DEALLOCATE
  *   When occurs internal error, 2th argument @e out of addslashes() has
  *   null value. If the @e out argument has not null, the caller should deallocate
  *   this buffer using @e free()
  *
- * convert binary data with * backslashes before characters that need
+ * convert binary data with backslashes before characters that need
  * to be quoted in database queries etc. These characters are single
  * quote ('), double quote ("), backslash (\) and Null byte (\\0).
+ *
+ * The null byte is convert to string '\0'.
  *
  * This is binary safe.
  */
 OLIBC_API
-bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{{
+bool addslashes (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
 	char	* source,
 			* target,
 			* end;
+	UInt	c;
 
 	if ( in == null || inlen < 1 )
 		return false;
 
-	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), false);
+	char q[4] = { 0, };
+	strcpy (q, "'\"\\");
+
+	c = get_charcount (in, inlen, q, 4);
+	oc_malloc_r (*out, sizeof (char) * (inlen * (c + 1)), false);
 
 	source = (char *) in;
 	target = *out;
@@ -331,48 +337,8 @@ bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{
 
 	*target = 0;
 	*outlen = target - (*out);
-	/*
-	// if you want to save memory
-	if ( *outlen < (inlen * 2) )
-		oc_realloc_r (*out, sizeof (char) * ((*outlen) + 1), null);
-	*/
 
 	return true;
-} // }}}
-
-/**
- * @brief	Quote string with slashes
- * @param	in given string for qouting
- * @param	should_free bool / set true, free memory of in argument.
- * @return	pointer of result
- * @sa		addslashes_r
- * @exception DEALLOCATE
- *   When occurs internal error, addslashes() returns null.
- *   If the return string array pointer is not null, the caller should
- *   deallocate this buffer using @e free()
- *
- * Returns a string with backslashes before characters that need
- * to be quoted in database queries etc. These characters are single
- * quote ('), double quote ("), backslash (\).
- *
- * This is not binary safe. If you want to binary safe, use addslashes_r.
- */
-OLIBC_API
-char * addslashes (char * in, bool should_free) // {{{
-{
-	size_t	outlen;
-	char	* out;
-
-	if ( in == null )
-		return null;
-
-	if ( addslashes_r (in, strlen (in), &out, &outlen) == false )
-		return null;
-
-	if ( should_free )
-		ofree (in);
-
-	return (char *) out;
 } // }}}
 
 /**
@@ -1538,7 +1504,7 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 		return null;
 	}
 
-	delno = get_charcount (buf, delimiter);
+	delno = get_charcount (buf, strlen (buf), delimiter, strlen (delimiter));
 	delno++;
 	oc_malloc_r (sep, sizeof (char *) * (delno + 1), null);
 
