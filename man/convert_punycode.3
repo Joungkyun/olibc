@@ -2,18 +2,16 @@
 .\" Process with
 .\" nroff -man convert_punycode.3
 .\" 2011-03-14 JoungKyun Kim <htt://oops.org>
-.\" $Id: convert_punycode.3,v 1.8 2011-03-14 04:57:26 oops Exp $
+.\" $Id: convert_punycode.3,v 1.9 2011-03-25 12:14:41 oops Exp $
 .SH NAME
 convert_punycode \- Convert between punycode and international domain.
 
 .SH SYNOPSIS
 .B #include <olibc/libidn.h>
 .sp
-.BI "char * convert_punycode (char * domain, int mode, int debug);"
-.br
-.BI "unsigned int convert_punycode_r (const char * src, unsigned char ** dst, bool mode, const char * charset)"
+.BI "char * convert_punycode_r (const char * src, bool mode, const char * charset)"
 
-.SH 라이브러리 링크
+.SH "Link Library"
 .B \-logc
 or
 .B \-lolibc
@@ -28,34 +26,26 @@ These apis convert to punycode from international domain or
 convert to international domain from punycode
 
 .TP
-.B domain
+.B src
 .br
 International domain for converting
 
 .TP
 .B mode
 .br
-encode(set 0) or decode(set 1)
+encode(set false) or decode(set true)
 
 .TP
-.B debug
+.B charset
 .br
-Deprecated (no action). For debugging, use -D__OCDEBUG__ on build time.
+The character set of international domain
 
 .SH "RETURN VALUE"
-The 
-.BI convert_punycode() 
-returns static allocated memory, so this api is not thread safe. 
-If you want to thread safe, use 
-.BI convert_punycode_r().
-
-The
-.BI convert_punycode_r() return length of 2th argument. When The
-.BI convert_punycode_r()
-api occurs internal error, 2th argument dst has null value. If the
-dst argument has not null, the caller should deallocate this buffer
-using
-.BI free().
+The pointer of converted domain. When occurs internal error,
+.B convert punycode()
+returns null. If the return string array pointer is not null,
+the caller should deallocate this buffer using
+.B free()
 
 .SH EXAMPLE
 .nf
@@ -65,18 +55,14 @@ int main (void) {
     char x[32] = "한글도메인.kr";
     char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
 	char * buf;
-    unsigned int len;
 
-    printf ("%s\\n", convert_punycode (x, 0, 1));
-    printf ("%s\\n", convert_punycode (y, 1, 1));
-
-    len = convert_punycode_r (x, &buf, 0, "EUC-KR");
+    buf = convert_punycode (x, false, "EUC-KR");
     if ( buf != NULL ) {
         printf ("%s\\n", buf);
         free (buf);
     }
 
-    len = convert_punycode_r (y, &buf, 0, "EUC-KR");
+    buf = convert_punycode (y, true, "EUC-KR");
     if ( buf != NULL ) {
         printf ("%s\\n", buf);
         free (buf);

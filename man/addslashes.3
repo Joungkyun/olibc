@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man addslashes.3
 .\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: addslashes.3,v 1.9 2011-03-18 06:25:23 oops Exp $
+.\" $Id: addslashes.3,v 1.10 2011-03-25 12:14:41 oops Exp $
 .SH NAME
 addslashes \- Quote string with slashes
 
@@ -54,7 +54,7 @@ bool / set true, free memory of in argument into
 .B addslashes().
 
 .SH "RETURN VALUE"
-The point of quoted string. When occurs internal error,
+The pointer of quoted string. When occurs internal error,
 .B addslashes()
 returns null. If the return string array pointer is not null,
 the caller should deallocate this buffer using

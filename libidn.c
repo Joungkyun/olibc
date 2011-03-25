@@ -37,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 11:30:00 $
- * $Revision: 1.17 $
+ * $Date: 2011-03-25 12:14:41 $
+ * $Revision: 1.18 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.17 2011-03-25 11:30:00 oops Exp $ */
+/* $Id: libidn.c,v 1.18 2011-03-25 12:14:41 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -113,43 +113,44 @@ UInt * toucs4 (CChar * s, CChar * from) // {{{
 
 /**
  * @brief	Convert between punycode and international domain
- * @param[in]	src International domain for converting
- * @param[out]	dst Save the punycode that fixed 
- * @param[in]	mode Encode(set 0) or decode(set 1)
- * @param[in]	charset Character set of 1st @e src argument
- * @return	Returns length of dst argument
+ * @param	src International domain for converting
+ * @param	charset Character set of 1st @e src argument
+ * @return	The pointer of converted string.
  * @sa	convert_punycode
  * @exception DEALLOCATE
- *   When occurs internal error, 2th argument @e dst of convert_punycode_r() has
- *   null value. If the @e dst argument has not null, the caller should deallocate
- *   this buffer using @e free()
+ *   When occurs internal error, convert_punycode() returns null.
+ *   If the return string array pointer is not null, the caller should
+ *   deallocate this buffer using @e free()
  *
- * The convert_punycode_r() api convert to punycode from international domain
+ * The convert_punycode() api convert to punycode from international domain
  * or convert to international domain from punycode.
  */
 OLIBC_API
-UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) // {{{
+char * convert_punycode (CChar * src, CChar * charset) // {{{
 {
 #ifdef HAVE_LIBIDN
 #ifdef HAVE_ICONV_H
 	ULong32	* q;
 	char	* p,
-			*r;
+			* r,
+			* dst;
 	int		dlen,
 			rc;
-
-	*dst = null;
+	bool	mode = false;
 
 	if ( src == null || strlen (src) < 1 )
-		return 0;
+		return null;
+
+	if ( strncmp ("xn--", src, 4) == 0 )
+		mode = true;
 
 	dlen = strlen (src);
-	oc_strdup_r (*dst, src, 0);
+	oc_strdup_r (dst, src, 0);
 
 	// remove after newline
 	{
 		char * newline;
-		if ( (newline = strchr ((CChar *) *dst, '\n')) != null )
+		if ( (newline = strchr (dst, '\n')) != null )
 			*newline = 0;
 	}
 
@@ -158,27 +159,27 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 		// Encoding mode
 		//
 		if ( charset == null ) {
-			p = stringprep_locale_to_utf8 ((CChar *) *dst);
+			p = stringprep_locale_to_utf8 (dst);
 			if ( p == null )
 				oc_error ("%s: could not convert from %s to UTF-8.\n",
-					 	 *dst, stringprep_locale_charset ());
+					 	 dst, stringprep_locale_charset ());
 		} else {
-			p = charset_conv ((CChar *) *dst, charset, "UTF-8");
+			p = charset_conv (dst, charset, "UTF-8");
 			stringprep_locale_charset_cache = "UTF-8";
 		}
 
 		if ( p == null ) {
-			ofree (*dst);
-			return 0;
+			ofree (dst);
+			return null;
 		}
 
 		q = stringprep_utf8_to_ucs4 (p, -1, null);
 		ofree (p);
 
 		if ( !q ) {
-			oc_error ("%s: could not convert to UCS-4 from UTF-8.\n", *dst);
-			ofree (*dst);
-			return 0;
+			oc_error ("%s: could not convert to UCS-4 from UTF-8.\n", dst);
+			ofree (dst);
+			return null;
 		}
 
 #ifdef __OCDEBUG__
@@ -194,20 +195,20 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 
 		if ( rc != IDNA_SUCCESS ) {
 			oc_error ("%s: idna_to_ascii_from_locale() failed with error %d.\n",
-					 *dst, rc);
-			ofree (*dst);
-			return 0;
+					 dst, rc);
+			ofree (dst);
+			return null;
 		}
 	} else {
 		//
 		// Decoding mode
 		//
-		p = stringprep_locale_to_utf8 ((CChar *) *dst);
+		p = stringprep_locale_to_utf8 (dst);
 		if ( !p ) {
 			oc_error ("%s: could not convert from %s to UTF-8.\n",
-					 *dst, stringprep_locale_charset ());
-			ofree (*dst);
-			return 0;
+					 dst, stringprep_locale_charset ());
+			ofree (dst);
+			return null;
 		}
 
 		rc = idna_to_unicode_8z4z (p, &q, 0|0);
@@ -218,10 +219,10 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 			oc_error (
 				"%s: idna_to_unicode_locale_from_locale() "
 				"failed with error %d.\n",
-				 *dst, rc
+				 dst, rc
 			 );
-			ofree (*dst);
-			return 0;
+			ofree (dst);
+			return null;
 		}
 
 #ifdef __OCDEBUG__
@@ -235,36 +236,34 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 		p = stringprep_ucs4_to_utf8 (q, -1, null, null);
 		ofree (q);
 		if ( !p ) {
-			oc_error ("%s: could not convert from UCS-4 to UTF-8.\n", *dst);
-			ofree (*dst);
-			return 0;
+			oc_error ("%s: could not convert from UCS-4 to UTF-8.\n", dst);
+			ofree (dst);
+			return null;
 		}
 
 		if ( charset == null ) {
 			r = stringprep_utf8_to_locale (p);
 			if ( !r )
 				oc_error ("%s: could not convert from UTF-8 to %s.\n",
-						 *dst, stringprep_locale_charset ());
+						 dst, stringprep_locale_charset ());
 		} else
 			r = charset_conv (p, "UTF-8", charset);
 
 		ofree (p);
 
 		if ( ! r ) {
-			ofree (*dst);
-			return 0;
+			ofree (dst);
+			return null;
 		}
 	}
 
-	ofree (*dst);
+	ofree (dst);
 
 	dlen = strlen (r);
-	oc_strdup (*dst, r, dlen);
+	oc_strdup (dst, r, dlen);
 	ofree (r);
-	if ( *dst == null )
-		return 0;
 
-	return dlen;
+	return dst;
 #else
 	oc_error ("olibc was compiled without iconv library\n");
 	return domain;
@@ -276,41 +275,8 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 } // }}}
 
 /**
- * @brief	Convert between punycode and international domain
- * @param	domain International domain for converting
- * @param	mode encode(set 0) or decode(set 1)
- * @param	debug Deprecated (no action)
- * @sa	convert_punycode_r
- * @return	converted string (static memory)
- *
- * @warning
- *   The convert_punycode() returns static allocated memory, so this
- *   api is not thread safe. If you want to thread safe, use convert_punycode_r()
- *   api.
- *
- * The convert_punycode_r() api convert to punycode from international domain
- * or convert to international domain from punycode.
- */
-OLIBC_API
-char * convert_punycode (char * domain, int mode, int debug) // {{{
-{
-	static char conv[512] = { 0, };
-	UChar * dst;
-	UInt len;
-
-	mode = mode ? true : false;
-	len = convert_punycode_r (domain, &dst, mode, null);
-	if ( len == 0 || dst == null )
-		return conv;
-
-	oc_safe_cpy (conv, (CChar *) dst, 512);
-	ofree (dst);
-	return conv;
-} // }}}
-
-/**
  * @example punycode.c
- *   The example for convert_punycode() and convert_punycode_r() api
+ *   The example for convert_punycode()
  */
 
 /*

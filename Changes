@@ -1,11 +1,13 @@
 Changelog
 
-$Id: Changes,v 1.76 2011-03-25 11:36:09 oops Exp $
+$Id: Changes,v 1.77 2011-03-25 12:14:41 oops Exp $
 
 * Fri, Mar 25 2011
 	- add join() api
 	- fixed wrong realpath_r() operation
 	- changed function declare of is_ksc5601 api
+	- remove convert_punycode_r api
+	- changed function declare of convert_punycode api
 
 * Thu, Mar 24 2011
 	- changed internal variable name for conflict other programs
