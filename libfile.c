@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 09:15:40 $
- * $Revision: 1.36 $
+ * $Date: 2011-03-25 09:22:10 $
+ * $Revision: 1.37 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.36 2011-03-25 09:15:40 oops Exp $ */
+/* $Id: libfile.c,v 1.37 2011-03-25 09:22:10 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -295,13 +295,14 @@ OLIBC_API
 char * realpath_r (CChar * path) // {{{
 {
 	char	* buf,
-			* res,
 			resolved[PATH_MAX] = { 0, };
 
 	if ( realpath (path, resolved) == null )
 		return null;
 
-	oc_strdup_r (buf, resolved, null);
+	oc_strdup (buf, resolved, strlen (resolved));
+	if ( buf == null )
+		errno = ENOMEM;
 
 	return buf;
 } // }}}
