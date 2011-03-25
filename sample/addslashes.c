@@ -15,7 +15,6 @@ int main (void) {
 	{
 		size_t buflen;
 		oc_test_banner ("addslashes_r");
-//bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen)
 		if ( addslashes_r (src, strlen (src), &buf, &buflen) == false ) {
 			printf ("failed\n");
 			return 0;
