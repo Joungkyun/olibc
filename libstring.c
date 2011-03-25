@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 16:18:22 $
- * $Revision: 1.82 $
+ * $Date: 2011-03-25 16:26:26 $
+ * $Revision: 1.83 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.82 2011-03-25 16:18:22 oops Exp $ */
+/* $Id: libstring.c,v 1.83 2011-03-25 16:26:26 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -442,7 +442,7 @@ Long64 str2long (CChar * src) // {{{
  * to integer that casted double.
  */
 OLIBC_API
-long double str2double (CChar * src) { // {{{
+double str2double (CChar * src) { // {{{
 	char	* dot,
 			* decimal_t,
 			* fraction_t;
@@ -496,7 +496,7 @@ long double str2double (CChar * src) { // {{{
 
 	OC_DEBUG ("Fraction floating => %f\n", fraction_f);
 
-	buf = (long double) decimal + fraction_f;
+	buf = (double) decimal + fraction_f;
 	if ( minus )
 		buf *= -1;
 

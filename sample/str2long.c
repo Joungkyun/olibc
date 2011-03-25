@@ -18,13 +18,14 @@ int main (void) {
 	 * str2double test
 	 */
 	{
-		char	* src = "1234567.12345";
+		char	* src = "1234567.12345",
+				src_t[16] = { 0, };
 		double	buf;
 
 		oc_test_banner ("str2double");
 		buf = str2double (src);
-		printf ("%s\n", buf == 1234567.12345 ? "ok" : "failed");
-		printf ("#### %lf\n", buf);
+		sprintf (src_t, "%.5f", buf);
+		printf ("%s\n", ! strcmp (src, src_t) ? "ok" : "failed");
 	}
 
 	/*
