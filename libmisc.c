@@ -38,11 +38,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.11 $
+ * $Date: 2011-03-25 18:34:29 $
+ * $Revision: 1.11.2.1 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.11 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: libmisc.c,v 1.11.2.1 2011-03-25 18:34:29 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc
@@ -66,10 +66,10 @@ UInt get_charcount (CChar * str, CChar * del) // {{{
 	len = strlen (str);
 	dlen = strlen (del);
 
-	for ( i = 0; i < len; i++ ) {
-		for ( j = 0; j < dlen; j++ ) {
+	for ( i=0; i<len; i++ ) {
+		for ( j=0; j<dlen; j++ ) {
 			if ( str[i] == del[j] ) {
-				if ( str[i-1] == '\\' )
+				if ( i>0 && str[i-1] == '\\' )
 					continue;
 
 				no++;

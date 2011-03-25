@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.65.2.1 2011-03-25 09:21:48 oops Exp $
+$Id: Changes,v 1.65.2.2 2011-03-25 18:34:29 oops Exp $
+
+* Sat, Mar 26 2011
+	- fixed segfault on get_charcount
 
 * Fri, Mar 25 2011
 	- fixed wrong realpath_r() operation
