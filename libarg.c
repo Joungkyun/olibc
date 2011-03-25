@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-24 15:13:07 $
- * $Revision: 1.40 $
+ * $Date: 2011-03-25 11:04:35 $
+ * $Revision: 1.41 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.40 2011-03-24 15:13:07 oops Exp $ */
+/* $Id: libarg.c,v 1.41 2011-03-25 11:04:35 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -59,11 +59,15 @@
  *
  * @{
  */
+OLIBC_API
 int _ogetopt_chk_int = -1; //!< o_getopt processing count
+OLIBC_API
 int _ogetopt_cmd_int = 0;  //!< Number of o_cmdarg array
 //! String length of o_optarg variable. Use by o_getopt API
+OLIBC_API
 int o_optlen;
 //! Value of current option. Use by o_getopt API
+OLIBC_API
 char o_optarg[ARGLENGTH];
 
 /**
@@ -71,6 +75,7 @@ char o_optarg[ARGLENGTH];
  * removed option arguments. This variable called by o_getopt
  * api and is must memory freed with @e ofree_array() function.
  */
+OLIBC_API
 char ** o_cmdarg = null;
 /** @} end of o_getopt_global_var group */
 

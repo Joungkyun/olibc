@@ -23,6 +23,8 @@
 # include <config.h>
 #endif
 
+#include <oc_common.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,6 +86,7 @@ stringprep_locale_charset_slow (void)
   return "ASCII";
 }
 
+OLIBC_API
 const char *stringprep_locale_charset_cache = NULL;
 
 /**
