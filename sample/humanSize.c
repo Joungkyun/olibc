@@ -22,19 +22,7 @@ int main (void) {
 	 */
 	{
 		oc_test_banner ("human_size");
-		buf = human_size (src, 0, 0);
-		if ( strcmp ("123.45 MB", buf) )
-			printf ("failed\n");
-		else
-			printf ("ok\n");
-	}
-
-	/*
-	 * human_size_r test
-	 */
-	{
-		oc_test_banner ("human_size_r");
-		buf = human_size_r (src, false, true);
+		buf = human_size (src, false, true);
 		if ( strcmp ("117.73 Mb", buf) )
 			printf ("failed\n");
 		else

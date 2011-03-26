@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 19:39:41 $
- * $Revision: 1.89 $
+ * $Date: 2011-03-26 19:42:37 $
+ * $Revision: 1.90 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.89 2011-03-26 19:39:41 oops Exp $ */
+/* $Id: libstring.c,v 1.90 2011-03-26 19:42:37 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1587,7 +1587,7 @@ char * join (CChar * glue, CChar ** sep) // {{{
  * @example setansi.c
  *   The example for setansi() api
  * @example humanSize.c
- *   The example for numberFormat(), human_size() and human_size_r() api
+ *   The example for numberFormat(), human_size() api
  * @example caseSensitive.c
  *   The example for strtoupper() and strtolower() api
  * @example binhex.c
