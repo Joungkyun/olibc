@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 04:29:14 $
- * $Revision: 1.86 $
+ * $Date: 2011-03-26 04:34:39 $
+ * $Revision: 1.87 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.86 2011-03-26 04:29:14 oops Exp $ */
+/* $Id: libstring.c,v 1.87 2011-03-26 04:34:39 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -154,6 +154,48 @@ static size_t charset_conv_outplen (CChar * charset, size_t srclen) // {{{
 		return srclen * 2;
 
 	return srclen;
+} // }}}
+
+/**
+ * @brief	Convert hexadecimal character to binary string
+ * @param	c	hexadecimal character for converting
+ * @return	binary string
+ * @sa	hex2bin bin2hex bin2hex_r
+ * @retval	'....' out of range
+ */
+static char * _hex2bin (CChar c) // {{{
+{
+	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
+		switch (c) {
+			case 'a' : return "1010"; break;
+			case 'b' : return "1011"; break;
+			case 'c' : return "1100"; break;
+			case 'd' : return "1101"; break;
+			case 'e' : return "1110"; break;
+			case 'f' : return "1111"; break;
+			case 'A' : return "1010"; break;
+			case 'B' : return "1011"; break;
+			case 'C' : return "1100"; break;
+			case 'D' : return "1101"; break;
+			case 'E' : return "1110"; break;
+			case 'F' : return "1111"; break;
+		}
+	} else {
+		switch (c) {
+			case '0' : return "0000"; break;
+			case '1' : return "0001"; break;
+			case '2' : return "0010"; break;
+			case '3' : return "0011"; break;
+			case '4' : return "0100"; break;
+			case '5' : return "0101"; break;
+			case '6' : return "0110"; break;
+			case '7' : return "0111"; break;
+			case '8' : return "1000"; break;
+			case '9' : return "1001"; break;
+		}
+	}
+
+	return "....";
 } // }}}
 
 /** @} */ // end of string_internalfunc group
@@ -960,53 +1002,10 @@ char * bin2hex (CChar * src) // {{{
 } // }}}
 
 /**
- * @brief	Convert hexadecimal character to binary string
- * @param	c	hexadecimal character for converting
- * @return	binary string
- * @sa	hex2bin bin2hex bin2hex_r
- * @retval	'....' out of range
- */
-OLIBC_API
-char * _hex2bin (CChar c) // {{{
-{
-	if((c >= 0x61 && c <= 0x7a) || (c >= 0x41 && c <= 0x5a)) {
-		switch (c) {
-			case 'a' : return "1010"; break;
-			case 'b' : return "1011"; break;
-			case 'c' : return "1100"; break;
-			case 'd' : return "1101"; break;
-			case 'e' : return "1110"; break;
-			case 'f' : return "1111"; break;
-			case 'A' : return "1010"; break;
-			case 'B' : return "1011"; break;
-			case 'C' : return "1100"; break;
-			case 'D' : return "1101"; break;
-			case 'E' : return "1110"; break;
-			case 'F' : return "1111"; break;
-		}
-	} else {
-		switch (c) {
-			case '0' : return "0000"; break;
-			case '1' : return "0001"; break;
-			case '2' : return "0010"; break;
-			case '3' : return "0011"; break;
-			case '4' : return "0100"; break;
-			case '5' : return "0101"; break;
-			case '6' : return "0110"; break;
-			case '7' : return "0111"; break;
-			case '8' : return "1000"; break;
-			case '9' : return "1001"; break;
-		}
-	}
-
-	return "....";
-} // }}}
-
-/**
  * @brief	Convert hexadecimal string to binary string
  * @param	src hexadecimal string for converting
  * @return	binary string
- * @sa	_hex2bin bin2hex bin2hex_r
+ * @sa	bin2hex bin2hex_r
  * @exception DEALLOCATE
  *   When occurs internal error, hex2bin() returns null.
  *   If the return string array pointer is not null, the caller should
