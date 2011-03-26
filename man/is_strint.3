@@ -1,15 +1,15 @@
-.TH check_int(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
+.TH is_strint(3) 2011-03-26 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man check_int.1
-.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
-.\" $Id: check_int.3,v 1.6 2011-03-14 04:29:54 oops Exp $
+.\" nroff -man is_strint.3
+.\" 2011-03-26 JoungKyun Kim <htt://oops.org>
+.\" $Id: is_strint.3,v 1.1 2011-03-26 05:08:16 oops Exp $
 .SH NAME
-check_int \- check the ascii value of a character whether is between 48 and 57
+is_strint \- check the ascii value of a character whether is between 48 and 57
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "int check_int (char c);"
+.BI "bool is_strint (char c);"
 
 .SH Link library
 .B \-loc
@@ -32,7 +32,7 @@ that follows BSD license.
 
 .SH DESCRIPTION
 The
-.BI check_int()
+.BI is_strint()
 function check whether a given character has value between 48 and 57.
 
 .TP
@@ -52,7 +52,7 @@ int main (void) {
     int i = 0;
 
     for (i=strlen (str) - 1; i >= 0; i--) {
-        if ( check_int (str[i]) ) {
+        if ( is_strint (str[i]) ) {
             printf ("%c is int\\n", str[i]);
         } else {
             printf ("%c is not int\\n", str[i]);

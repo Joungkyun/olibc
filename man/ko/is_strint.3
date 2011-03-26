@@ -1,15 +1,15 @@
-.TH check_int(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
+.TH is_strint(3) 2011-03-26 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man check_int.3
-.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
-.\" $Id: check_int.3,v 1.1 2011-03-14 04:29:54 oops Exp $
+.\" nroff -man is_strint.3
+.\" 2011-03-26 JoungKyun Kim <htt://oops.org>
+.\" $Id: is_strint.3,v 1.1 2011-03-26 05:08:16 oops Exp $
 .SH 이름
-check_int \- 캐릭터의 아스키값이 48 - 57 사이의 값인지를 검사
+is_strint \- 캐릭터의 아스키값이 48 - 57 사이의 값인지를 검사
 
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "int check_int (char c);"
+.BI "int is_strint (char c);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -23,8 +23,8 @@ or
 에는
 .BI "LGPL2 symbol"
 이 포함되어 있으므로 이 라이브러리를
-링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용>을
-원한다면
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고,
+BSD 라이센스의 적용을 원한다면
 .B liboc.so
 나
 .B liboc.a
@@ -39,7 +39,7 @@ or
 캐릭터를 지정한다.
 
 .SH 반환값
-정수이면 1을 반환하고, 아니면 0을 반환한다.
+bool
 
 .SH 예제
 .nf
@@ -50,7 +50,7 @@ int main (void) {
     int i = 0;
 
     for (i=strlen (str) - 1; i >= 0; i--) {
-        if ( check_int (str[i]) ) {
+        if ( is_strint (str[i]) ) {
             printf ("%c is int\\n", str[i]);
         } else {
             printf ("%c is not int\\n", str[i]);

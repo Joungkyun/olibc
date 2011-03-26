@@ -41,14 +41,14 @@ int main (void) {
 	}
 
 	/*
-	 * check_int test
+	 * is_strint test
 	 */
 	{
 		char	src = 'a';
 		int		buf;
 
-		oc_test_banner ("check_int");
-		buf = check_int (src);
+		oc_test_banner ("is_strint");
+		buf = is_strint (src);
 		printf ("%s\n", buf == false ? "ok" : "failed");
 	}
 

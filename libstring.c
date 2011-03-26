@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 04:34:39 $
- * $Revision: 1.87 $
+ * $Date: 2011-03-26 05:08:16 $
+ * $Revision: 1.88 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.87 2011-03-26 04:34:39 oops Exp $ */
+/* $Id: libstring.c,v 1.88 2011-03-26 05:08:16 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -517,7 +517,7 @@ double str2double (CChar * src) { // {{{
  *   the char2int() function returns -1.
  * @endcode
  * @retval	-1 Failure
- * @sa	check_int str2double str2long
+ * @sa	is_strint str2double str2long
  *
  * The char2int() api convert to integer a character that is
  * ascii between 48 and 57. This api is similar the atoi() api.
@@ -536,14 +536,14 @@ int char2int (CChar c) // {{{
  * @param	c A character for checking
  * @return	bool
  *
- * The check_int() function check whether a given character has value
+ * The is_strint() function check whether a given character has value
  * between 48 and 57.
  */
 OLIBC_API
-int check_int (char c) // {{{
+bool is_strint (char c) // {{{
 {
-	if ( c < 48 || c > 57 ) return 0;
-	return 1;
+	if ( c < 48 || c > 57 ) return false;
+	return true;
 } // }}}
 
 /**
@@ -558,23 +558,23 @@ int check_int (char c) // {{{
  *
  * Color constants:
  * @code
- *     ENDANSI   0
- *     GRAY      1
- *     BGRAY     2
- *     RED       3
- *     BRED      4
- *     GREEN     5
- *     BGREEN    6
- *     YELLOW    7
- *     BYELLOW   8
- *     BLUE      9
- *     BBLUE    10
- *     MAGENTA  11
- *     BMAGENTA 12
- *     CYAN     13
- *     BCYAN    14
- *     WHITE    15
- *     BWHITE   16
+ *     OC_ENDANSI   0
+ *     OC_GRAY      1
+ *     OC_BGRAY     2
+ *     OC_RED       3
+ *     OC_BRED      4
+ *     OC_GREEN     5
+ *     OC_BGREEN    6
+ *     OC_YELLOW    7
+ *     OC_BYELLOW   8
+ *     OC_BLUE      9
+ *     OC_BBLUE    10
+ *     OC_MAGENTA  11
+ *     OC_BMAGENTA 12
+ *     OC_CYAN     13
+ *     OC_BCYAN    14
+ *     OC_WHITE    15
+ *     OC_BWHITE   16
  * @endcode
  */
 OLIBC_API
@@ -583,52 +583,52 @@ void setansi (FILE * stream, int color, bool noansi) // {{{
 	int	ansi = 0;
 
 	switch ( color ) {
-		case GRAY :
+		case OC_GRAY :
 			ansi = 30;
 			break;
-		case BGRAY :
+		case OC_BGRAY :
 			ansi = 40;
 			break;
-		case RED :
+		case OC_RED :
 			ansi = 31;
 			break;
-		case BRED :
+		case OC_BRED :
 			ansi = 41;
 			break;
-		case GREEN :
+		case OC_GREEN :
 			ansi = 32;
 			break;
-		case BGREEN :
+		case OC_BGREEN :
 			ansi = 42;
 			break;
-		case YELLOW :
+		case OC_YELLOW :
 			ansi = 33;
 			break;
-		case BYELLOW :
+		case OC_BYELLOW :
 			ansi = 43;
 			break;
-		case BLUE :
+		case OC_BLUE :
 			ansi = 34;
 			break;
-		case BBLUE :
+		case OC_BBLUE :
 			ansi = 44;
 			break;
-		case MAGENTA :
+		case OC_MAGENTA :
 			ansi = 35;
 			break;
-		case BMAGENTA :
+		case OC_BMAGENTA :
 			ansi = 45;
 			break;
-		case CYAN :
+		case OC_CYAN :
 			ansi = 36;
 			break;
-		case BCYAN :
+		case OC_BCYAN :
 			ansi = 46;
 			break;
-		case WHITE :
+		case OC_WHITE :
 			ansi = 37;
 			break;
-		case BWHITE :
+		case OC_BWHITE :
 			ansi = 47;
 			break;
 		default :
@@ -636,7 +636,7 @@ void setansi (FILE * stream, int color, bool noansi) // {{{
 	}
 
 	if ( ! noansi ) {
-		if ( color == ENDANSI )
+		if ( color == OC_ENDANSI )
 			fprintf (stream, "[7;0m");
 		else
 			fprintf (stream, "[1;%dm", ansi);
@@ -1612,7 +1612,7 @@ char * join (CChar * glue, CChar ** sep) // {{{
  * @example addslashes.c
  *   The example for addslashes() api
  * @example str2long.c
- *   The example for str2long(), str2double(), char2int() and check_int() api
+ *   The example for str2long(), str2double(), char2int() and is_strint() api
  * @example setansi.c
  *   The example for setansi() api
  * @example humanSize.c

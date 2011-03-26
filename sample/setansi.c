@@ -4,9 +4,9 @@
 int main (void) {
 	oc_test_banner ("setansi");
 
-	setansi (stdout, RED, false);
+	setansi (stdout, OC_RED, false);
 	printf ("red\n");
-	setansi (stdout, ENDANSI, false);
+	setansi (stdout, OC_ENDANSI, false);
 
 	return 0;
 }

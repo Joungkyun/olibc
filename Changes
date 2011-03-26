@@ -1,12 +1,13 @@
 Changelog
 
-$Id: Changes,v 1.81 2011-03-26 04:34:39 oops Exp $
+$Id: Changes,v 1.82 2011-03-26 05:08:16 oops Exp $
 
 * Sat, Mar 26 2011
 	- changed function declare of str2double api
 	- support GCC4 and FreeBSD
 	- remove addslashes_r api
 	- changed _hex2bin to internal function
+	- rename check_int to is_strint
 	
 * Fri, Mar 25 2011
 	- add join() api

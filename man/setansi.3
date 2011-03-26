@@ -1,8 +1,8 @@
-.TH setansi(3) 2011-03-19 "Linux Manpage" "OOPS Library's Manual"
+.TH setansi(3) 2011-03-26 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man setansi.3
-.\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.9 2011-03-24 09:46:58 oops Exp $
+.\" 2011-03-26 JoungKyun Kim <htt://oops.org>
+.\" $Id: setansi.3,v 1.10 2011-03-26 05:08:16 oops Exp $
 .SH NAME
 setansi \- Set ansi color
 
@@ -47,39 +47,39 @@ and so on.
 .br
 olibc color constants. See also follows:
 
-.B ENDANSI 0
+.B OC_ENDANSI 0
 .br
-.B GRAY 1
+.B OC_GRAY 1
 .br
-.B BGRAY 2
+.B OC_BGRAY 2
 .br
-.B RED 3
+.B OC_RED 3
 .br
-.B BRED 4
+.B OC_BRED 4
 .br
-.B GREEN 5
+.B OC_GREEN 5
 .br
-.B BGREEN 6
+.B OC_BGREEN 6
 .br
-.B YELLOW 7
+.B OC_YELLOW 7
 .br
-.B BYELLOW 8
+.B OC_BYELLOW 8
 .br
-.B BLUE 9
+.B OC_BLUE 9
 .br
-.B BBLUE 10
+.B OC_BBLUE 10
 .br
-.B MAGENTA 11
+.B OC_MAGENTA 11
 .br
-.B BMAGENTA 12
+.B OC_BMAGENTA 12
 .br
-.B CYAN 13
+.B OC_CYAN 13
 .br
-.B BCYAN 14
+.B OC_BCYAN 14
 .br
-.B WHITE 15
+.B OC_WHITE 15
 .br
-.B BWHITE 16
+.B OC_BWHITE 16
 
 .TP
 .B noansi
@@ -96,12 +96,12 @@ Set true, this function don't operate.
 int main (void) {
     char * path = "/vars";
 
-    setansi (stdout, GRAY, 0);
+    setansi (stdout, OC_GRAY, 0);
     printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
-    setansi (stdout, ENDANSI, 0);
-    setansi (stdout, BLUE, 0);
+    setansi (stdout, OC_ENDANSI, 0);
+    setansi (stdout, OC_BLUE, 0);
     printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
-    setansi (stdout, ENDANSI, 0);
+    setansi (stdout, OC_ENDANSI, 0);
 
     return 0;
 }
