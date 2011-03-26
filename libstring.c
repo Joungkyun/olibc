@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 19:16:22 $
- * $Revision: 1.85 $
+ * $Date: 2011-03-26 04:29:14 $
+ * $Revision: 1.86 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.85 2011-03-25 19:16:22 oops Exp $ */
+/* $Id: libstring.c,v 1.86 2011-03-26 04:29:14 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -307,10 +307,7 @@ bool addslashes (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{{
 	if ( in == null || inlen < 1 )
 		return false;
 
-	char q[4] = { 0, };
-	strcpy (q, "'\"\\");
-
-	c = get_charcount (in, inlen, q, 4);
+	c = get_charcount (in, inlen, "'\"\\\0", 4);
 	oc_malloc_r (*out, sizeof (char) * (inlen * (c + 1)), false);
 
 	source = (char *) in;
