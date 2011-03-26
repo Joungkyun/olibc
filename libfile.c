@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 09:22:10 $
- * $Revision: 1.37 $
+ * $Date: 2011-03-26 04:55:17 $
+ * $Revision: 1.38 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.37 2011-03-25 09:22:10 oops Exp $ */
+/* $Id: libfile.c,v 1.38 2011-03-26 04:55:17 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
@@ -98,7 +98,7 @@ int file_status (CChar * path) // {{{
 	else if ( S_ISSOCK (f.st_mode) )
 		return OC_IS_SOCK;
 
-	return OC_IS_FILE;
+	return false;
 } // }}}
 
 /**
