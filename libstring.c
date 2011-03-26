@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 05:08:16 $
- * $Revision: 1.88 $
+ * $Date: 2011-03-26 19:39:41 $
+ * $Revision: 1.89 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.88 2011-03-26 05:08:16 oops Exp $ */
+/* $Id: libstring.c,v 1.89 2011-03-26 19:39:41 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -652,17 +652,17 @@ void setansi (FILE * stream, int color, bool noansi) // {{{
  * @return	formatted string by human read.
  * @sa	human_size
  * @exception DEALLOCATE
- *   When occurs internal error, human_size_r() returns null.
+ *   When occurs internal error, human_size() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
  *
- * The human_size_r() funtion convert to unit for human readable.
+ * The human_size() funtion convert to unit for human readable.
  * The return value support decimal porint under 2 digits.
  *
- * This function is thread safe.
+ * This api don't support negative.
  */
 OLIBC_API
-char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
+char * human_size (ULong64 size, bool sub, bool unit) // {{{
 {
 	char	units[] = { 0, 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' },
 			singular[2] = { 0, };
@@ -739,35 +739,6 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 			unit ? 'b' : 'B'
 		);
 	}
-
-	return buf;
-} // }}}
-
-/**
- * @brief	convert number to human readable
- * @param	size The input double integer
- * @param	sub Set 1, return with original size.<br />
- * 			For example, 'convert size (orignal size)'
- * @param	unit Set 1, caculation with Byte, else with Bit.
- * @return	formatted string by human read.
- * @sa	human_size_r
- * @exception THREADSAFE
- *   The human_size() function returns static memory address.<br />
- *   So, this function is not thread safe. For thread safe, use
- *   @e human_size_r() function.
- *
- * The human_size() funtion convert to unit for human readable.
- * The return value support decimal porint under 2 digits.
- */
-OLIBC_API
-char * human_size (double size, int sub, int unit) // {{{
-{
-	static char	buf[1024] = { 0, };
-	char		* tmp;
-
-	tmp = human_size_r (size, sub, unit);
-	oc_safe_cpy (buf, tmp, 1024);
-	ofree (tmp);
 
 	return buf;
 } // }}}

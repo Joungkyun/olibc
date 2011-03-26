@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 05:08:16 $
- * $Revision: 1.38 $
+ * $Date: 2011-03-26 19:39:41 $
+ * $Revision: 1.39 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.38 2011-03-26 05:08:16 oops Exp $ */
+/* $Id: libstring.h,v 1.39 2011-03-26 19:39:41 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -54,8 +54,7 @@ extern bool is_strint (char c);
 
 extern void setansi (FILE * stream, int color, bool noansi);
 
-extern char * human_size (double size, int sub, int unit);
-extern char * human_size_r (ULong64 size, bool sub, bool unit);
+extern char * human_size (ULong64 size, bool sub, bool unit);
 extern char * numberFormat (double num, int dec, char dec_point, char thousand_sep, bool print);
 
 extern void strtolower (char * src);

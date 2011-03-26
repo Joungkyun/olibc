@@ -1,19 +1,15 @@
-.TH human_size(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH human_size(3) 2011-03-27 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man human_size.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: human_size.3,v 1.1 2011-03-18 09:05:18 oops Exp $
+.\" 2011-03-27 JoungKyun Kim <htt://oops.org>
+.\" $Id: human_size.3,v 1.2 2011-03-26 19:39:42 oops Exp $
 .SH 이름
 human_size \- 인식하기 쉬운 형태로 단위를 변경
-.br
-human_size_r
 
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * human_size (double size, int sub, int unit);"
-.br
-.BI "char * human_size_r (ULong64 size, bool sub, bool unit);"
+.BI "char * human_size (ULong64 size, bool sub, bool unit);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -36,8 +32,6 @@ BSD 라이센스의 적용을 원한다면
 
 .SH 설명
 .BI human_size()
-와
-.BI human_size_r()
 api는 숫자를 읽기 쉬운 단위로 환산을 하여 문자열로 반환을 한다.
 반환값은 소수점 2 자리에서 잘린다.
 
@@ -51,7 +45,8 @@ api는 숫자를 읽기 쉬운 단위로 환산을 하여 문자열로 반환을
 .TP
 .B sub
 .br
-1 로 지정을 하면,
+.B true
+로 지정을 하면,
 .B 117.74 MB (123,456,789 Bytes)
 와 같이 3자리 형식의 원본 수를 같이 반환을 한다.
 
@@ -59,23 +54,17 @@ api는 숫자를 읽기 쉬운 단위로 환산을 하여 문자열로 반환을
 .B unit
 .br
 Byte 와 Bit 를 지정한다.
-.B 0
-을 지정하면
+.B false
+를 지정하면
 .B Bit
 ,
-.B 1
+.B true
 을 지정하면
 .B Byte
 로 계산이 된다.
 
 .SH 반환값
 변환된 문자열의 포인터.
-
-.BI humna_size()
-api는 static memory를 반환하기 때문에 thread safe하지 못하다.
-thread safe를 원한다면
-.BI human_size_r()
-api를 사용해야 한다.
 
 .BI human_size()
 api의 반환값이 null이 아닐경우,
@@ -87,12 +76,10 @@ api로 메모리를 해제해 주어야 한다.
 #include <olibc/libstring.h>
 
 int main (void) {
-    double no = 123456789;
+    long no = 123456789;
     char *data;
 
-    printf ("%s\\n", human_size (no, 1, 0));
-
-    data = human_size_r ((unsigned long long) no, 1, 0);
+    data = human_size_r ((ULong64) no, 1, 0);
     printf ("%s\\n", data);
     if ( data != null )
         free (data);
