@@ -60,7 +60,6 @@ go_long2bin_fail:
 			printf ("ok\n");
 		else
 			printf ("failed\n");
-		printf ("######## %d\n", dst);
 	}
 
 	/*
@@ -79,8 +78,6 @@ go_long2bin_fail:
 			printf ("ok\n");
 		else
 			printf ("failed\n");
-
-		printf ("######## %lld\n", dst);
 	}
 
 	return 0;
