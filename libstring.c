@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 10:43:57 $
- * $Revision: 1.96 $
+ * $Date: 2011-03-28 11:18:49 $
+ * $Revision: 1.97 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.96 2011-03-28 10:43:57 oops Exp $ */
+/* $Id: libstring.c,v 1.97 2011-03-28 11:18:49 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -76,7 +76,7 @@ static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 
 	len = 0;
 	while ( mask > 0 ) {
-		m = (Long32) src & (Long32) mask;
+		m = (Long32) src & mask;
 
 		if ( m ) {
 			memset ((*dst) + len, 49, 1);
@@ -1130,7 +1130,7 @@ char * long2bin (Long64 dec, size_t * outlen) // {{{
 		return dst;
 	}
 
-	if ( dec > LONG_MAX || dec < LONG_MIN )
+	if ( dec > INT_MAX || dec < INT_MIN )
 		over32 = true;
 
 	*outlen = buflen = 0;

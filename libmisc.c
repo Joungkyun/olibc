@@ -38,11 +38,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 05:43:41 $
- * $Revision: 1.14 $
+ * $Date: 2011-03-28 11:18:49 $
+ * $Revision: 1.15 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.14 2011-03-28 05:43:41 oops Exp $ */
+/* $Id: libmisc.c,v 1.15 2011-03-28 11:18:49 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc
@@ -118,7 +118,7 @@ Bit64 devided64_high_low (Long64 v) // {{{
 	Bit64	r;
 
 	/*
-	if ( v <= LONG_MAX ) {
+	if ( v <= INT_MAX ) {
 		r.high = 0;
 		r.low = (Long32) v;
 		return r;
