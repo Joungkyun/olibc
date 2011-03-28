@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 11:18:49 $
- * $Revision: 1.97 $
+ * $Date: 2011-03-28 12:30:19 $
+ * $Revision: 1.98 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.97 2011-03-28 11:18:49 oops Exp $ */
+/* $Id: libstring.c,v 1.98 2011-03-28 12:30:19 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1089,7 +1089,7 @@ b2l_low:
 		ret = combined64_high_low (v);
 	}
 
-	return over32 ? ret : (Long64) var;
+	return over32 ? ret : (Long32) var;
 } // }}}
 
 /**
