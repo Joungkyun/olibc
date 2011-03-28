@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 06:56:32 $
- * $Revision: 1.95 $
+ * $Date: 2011-03-28 10:43:57 $
+ * $Revision: 1.96 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.95 2011-03-28 06:56:32 oops Exp $ */
+/* $Id: libstring.c,v 1.96 2011-03-28 10:43:57 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1013,14 +1013,12 @@ char * hex2bin (CChar * src) // {{{
  * @param	src	The input binary string
  * @sa	dec2bin bin2long long2bin
  * @return	32bit integer
- * @warning
- *   The bin2long() function don't support negative.
  */
 OLIBC_API
-UInt bin2dec (CChar * src) // {{{
+Long32 bin2dec (CChar * src) // {{{
 {
-	UInt	len, i,
-			ret = 0;
+	Long32	ret = 0;
+	UInt	len, i;
 	char	var;
 
 	len = strlen (src);
@@ -1039,12 +1037,14 @@ UInt bin2dec (CChar * src) // {{{
  * @sa	long2bin bin2dec dec2bin
  * @return	64bit integer
  * @warning
- *   The bin2long() function don't support negative.
+ *    The bin2long() function caculate 64bit integer with high and
+ *    low bit for 32bit and 64bit compatibility.
+ *
  */
 OLIBC_API
-ULong64 bin2long (CChar * src) // {{{
+Long64 bin2long (CChar * src) // {{{
 {
-	ULong64	ret = 0;
+	Long64	ret = 0;
 	UInt	var,
 			len;
 	char	high[33] = { 0, },
@@ -1089,7 +1089,7 @@ b2l_low:
 		ret = combined64_high_low (v);
 	}
 
-	return over32 ? ret : var;
+	return over32 ? ret : (Long64) var;
 } // }}}
 
 /**

@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man bin2dec.3
 .\" 2011-03-10 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2dec.3,v 1.6 2011-03-09 17:32:23 oops Exp $
+.\" $Id: bin2dec.3,v 1.7 2011-03-28 10:43:57 oops Exp $
 .SH NAME
 bin2dec \- Convert binary string to 32bit integer
 .br
@@ -11,9 +11,9 @@ bin2long \- Convert binary string to 64bit integer
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "unsigned int bin2dec (const char * str)"
+.BI "Long32 bin2dec (const char * str)"
 .br
-.BI "unsigned long long bin2long (const char * str)"
+.BI "Long64 bin2long (const char * str)"
 
 .SH Link library
 .B \-loc
@@ -39,34 +39,28 @@ The
 .BI bin2dec()
 and
 .BI bin2long()
-functions are convert binary numeric string to decimal integer.
+functions are convert binary numeric string to signed decimal integer.
 
 The
 .BI bin2dec()
-function convert 32bit integer and, the
+function convert signed 32bit integer and, the
 .BI bin2long()
-function convert 64bit integer. The
+function convert signed 64bit integer. The
 .BI bin2long()
 function caculate 64bit integer with high bit and low bit for 32 bit and
 64bit compatibility. So for cleary 32bit range integer, use the
 .BI bin2dec()
 function.
 
-The
-.BI bin2dec()
-and
-.BI bin2long()
-functions don't support negative integer.
-
 .SH EXAMPLE
 .nf
 #include <olibc/libstring.h>
 
 int main (void) {
-    unsigned int x = 0;
-    unsigned long long v = 0;
-    char y = "11011000";
-    char w = "1001010100000010111110010000000000";
+    Long32 x = 0;
+    Long64 v = 0;
+    char * y = "11011000";
+    char * w = "1001010100000010111110010000000000";
 
     x = bin2dec (y);
     v = bin2long (w);
