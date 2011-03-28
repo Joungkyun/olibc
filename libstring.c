@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 05:58:32 $
- * $Revision: 1.92 $
+ * $Date: 2011-03-28 06:07:07 $
+ * $Revision: 1.93 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.92 2011-03-28 05:58:32 oops Exp $ */
+/* $Id: libstring.c,v 1.93 2011-03-28 06:07:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -71,7 +71,6 @@ static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 	UInt	len;
 
 	oc_malloc_r (*dst, sizeof (char) * 33, 0);
-	memset (*dst, 0, 32);
 
 	OC_DEBUG ("Buf No: %d\n", src);
 
@@ -674,7 +673,6 @@ char * human_size (ULong64 size, bool sub, bool unit) // {{{
 
 	oc_safe_cpy (singular, (size > 2) ? "s" : "", 2);
 	oc_malloc_r (buf, sizeof (char) * 64, null);
-	memset (buf, 0, 64);
 
 	if ( ! unit )
 		dvd = 1000;
@@ -1137,7 +1135,6 @@ char * long2bin (Long64 dec, UInt * outlen) // {{{
 
 	*outlen = buflen = 0;
 	oc_malloc_r (dst, sizeof (char) * 65, 0);
-	memset (dst, 0, 65);
 
 	v = devided64_high_low (dec);
 	tmp = over32 ? v.high : v.low;
@@ -1566,7 +1563,6 @@ char * join (CChar * glue, CChar ** sep) // {{{
 		glen = strlen (glue);
 
 	oc_malloc_r (buf, sizeof (char) * alloc, null);
-	memset (buf, 0, sizeof (char) * alloc);
 
 	while ( *sep != null ) {
 		plen += strlen (*sep) + glen;

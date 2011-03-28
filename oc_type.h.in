@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 16:16:15 $
- * $Revision: 1.16 $
+ * $Date: 2011-03-28 06:07:07 $
+ * $Revision: 1.17 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.16 2011-03-25 16:16:15 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.17 2011-03-28 06:07:07 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -196,6 +196,7 @@ typedef struct {
 			if ( result == OC_DEF_RETURN ) return ret; \
 			exit (1); \
 		} \
+		if ( type == OC_DEF_MALLOC ) { memset (v, 0, size); } \
 	}
 
 /*

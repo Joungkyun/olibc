@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 11:04:35 $
- * $Revision: 1.41 $
+ * $Date: 2011-03-28 06:07:07 $
+ * $Revision: 1.42 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.41 2011-03-25 11:04:35 oops Exp $ */
+/* $Id: libarg.c,v 1.42 2011-03-28 06:07:07 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -183,7 +183,6 @@ static char * convert_quoted_blank (CChar * stream) // {{{
 	size = sizeof (char) * ((white * 8) + len + 1);
 
 	oc_malloc_r (ret, size, null);
-	memset  (ret, 0, size);
 
 	for ( i=0; i<len; i++ ) {
 		if ( openquote == 0 && stream[i] == '\'' ) {
@@ -259,7 +258,6 @@ static char * unconvert_quoted_blank (CChar * stream) // {{{
 	size = sizeof (char) * (len + 1);
 
 	oc_malloc_r (ret, size, null);
-	memset  (ret, 0, size);
 
 	for (i = 0, j = 0; i <len; i++, j++ ) {
 		if ( ! strncmp ("__OABC__", stream + i, 8) ) {
