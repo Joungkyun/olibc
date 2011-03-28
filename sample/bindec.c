@@ -75,7 +75,6 @@ int main (void) {
 	 * bin2long test
 	 */
 	{
-		ULong64 pp;
 		for ( i=0; i<4; i++ ) {
 			sprintf (u, "bin2long %s", unit[i]);
 			oc_test_banner (u);
