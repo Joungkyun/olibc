@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 06:07:07 $
- * $Revision: 1.93 $
+ * $Date: 2011-03-28 06:47:01 $
+ * $Revision: 1.94 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.93 2011-03-28 06:07:07 oops Exp $ */
+/* $Id: libstring.c,v 1.94 2011-03-28 06:47:01 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1110,7 +1110,7 @@ b2l_low:
  * The long2bin() function convert signed 64bit integer to binary string.
  */
 OLIBC_API
-char * long2bin (Long64 dec, UInt * outlen) // {{{
+char * long2bin (Long64 dec, size_t * outlen) // {{{
 {
 	Long32	tmp;
 	UInt	buflen;
@@ -1178,7 +1178,7 @@ lowbit:
  * This supports signed 64bit integer.
  */
 OLIBC_API
-char * dec2bin (CChar * src, UInt * outlen) // {{{
+char * dec2bin (CChar * src, size_t * outlen) // {{{
 {
 	Long64	dec;
 
