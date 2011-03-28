@@ -3,81 +3,88 @@
 
 int main (void) {
 	size_t	len;
+	int		i;
+	char	* buf;
+	char	u[32];
+	char	* unit[4] = { "32bit", "32bit negative", "64bit", "64bit negative" };
+	char	* str[4] = { "1000", "-1000", "4294968296", "-4294968296" };
+	ULong64 dec[4] = { 1000, -1000, 4294968296, -4294968296 };
+	char	* bin[4] = {
+						"1111101000",
+						"11111111111111111111110000011000",
+						"100000000000000000000001111101000",
+						"1111111111111111111111111111111011111111111111111111110000011000"
+	};
+
 	/*
 	 * dec2bin test
 	 */
 	{
-		char	* src = "-1000";
-		char	* dst;
+		for ( i=0; i<4; i++ ) {
+			sprintf (u, "dec2bin%s", unit[i]);
+			oc_test_banner (u);
 
-		oc_test_banner ("dec2bin");
-		if ( (dst= dec2bin (src, &len)) == null )
-			goto go_dec2bin_fail;
-
-		if ( ! strcmp ("11111111111111111111110000011000", dst) )
-			printf ("ok\n");
-		else {
-go_dec2bin_fail:
-			printf ("failed\n");
+			if ( (buf= dec2bin(str[i], &len)) == null ) {
+				printf ("failed\n");
+			} else {
+				if ( ! strcmp (bin[i], buf) ) {
+					printf ("ok\n");
+					ofree (buf);
+				} else
+					printf ("failed\n");
+			}
 		}
-
-		ofree (dst);
 	}
 
 	/*
 	 * long2bin test
 	 */
 	{
-		//Long64	src = 1000;
-		Long64	src = (((Long64) 1)<<32) +1000; // 4294968296
-		char	* dst;
+		for ( i=0; i<4; i++ ) {
+			sprintf (u, "long2bin %s", unit[i]);
+			oc_test_banner (u);
 
-		oc_test_banner ("long2bin");
-		if ( (dst = long2bin (src, &len)) == null )
-			goto go_long2bin_fail;
-
-		if ( ! strcmp ("100000000000000000000001111101000", dst) )
-			printf ("ok\n");
-		else {
-go_long2bin_fail:
-			printf ("failed\n");
+			if ( (buf= long2bin (dec[i], &len)) == null ) {
+				printf ("failed\n");
+			} else {
+				if ( ! strcmp (bin[i], buf) ) {
+					printf ("ok\n");
+					ofree (buf);
+				} else
+					printf ("failed\n");
+			}
 		}
-
-		ofree (dst);
 	}
 
 	/*
 	 * bin2dec test
 	 */
 	{
-		char	* src = "1111101000";
-		Long32	dst;
+		for ( i=0; i<2; i++ ) {
+			sprintf (u, "bin2dec %s", unit[i]);
+			oc_test_banner (u);
 
-		oc_test_banner ("bin2dec");
-		dst = bin2dec (src);
-
-		if ( dst == 1000 )
-			printf ("ok\n");
-		else
-			printf ("failed\n");
+			if ( bin2dec (bin[i]) == dec[i] )
+				printf ("ok\n");
+			else
+				printf ("failed\n");
+		}
 	}
 
 	/*
 	 * bin2long test
 	 */
 	{
-		//char	* src = "1111111111111111111111111111111111111111111111111111110000011000"; // -1000
-		//char	* src = "1111101000"; // 1000
-		char	* src = "100000000000000000000001111101000"; // 4294968296
-		Long64	dst;
+		ULong64 pp;
+		for ( i=0; i<4; i++ ) {
+			sprintf (u, "bin2long %s", unit[i]);
+			oc_test_banner (u);
 
-		oc_test_banner ("bin2long");
-		dst = bin2long (src);
-
-		if ( dst == (Long64) 4294968296 )
-			printf ("ok\n");
-		else
-			printf ("failed\n");
+			if ( bin2long (bin[i]) == dec[i] )
+				printf ("ok\n");
+			else
+				printf ("failed\n");
+		}
 	}
 
 	return 0;
