@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 19:42:37 $
- * $Revision: 1.90 $
+ * $Date: 2011-03-28 05:43:41 $
+ * $Revision: 1.91 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.90 2011-03-26 19:42:37 oops Exp $ */
+/* $Id: libstring.c,v 1.91 2011-03-28 05:43:41 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -73,7 +73,7 @@ static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 	oc_malloc_r (*dst, sizeof (char) * 33, 0);
 	memset (*dst, 0, 32);
 
-	OC_DEBUG ("Buf No: %ld\n", src);
+	OC_DEBUG ("Buf No: %d\n", src);
 
 	len = 0;
 	while ( mask > 0 ) {
@@ -687,14 +687,11 @@ char * human_size (ULong64 size, bool sub, bool unit) // {{{
 		else
 			size /= 1000;
 
-		OC_DEBUG (
 #ifdef __x86_64__
-			"INT  PART: %lu / %d = %lld\n",
+		OC_DEBUG ("INT  PART: %lu / %d = %lu\n", frac, dvd, size);
 #else
-			"INT  PART: %llu / %d = %lld\n",
+		OC_DEBUG ("INT  PART: %llu / %d = %llu\n", frac, dvd, size);
 #endif
-			frac, dvd, size
-		);
 		i++;
 	}
 
@@ -704,14 +701,11 @@ char * human_size (ULong64 size, bool sub, bool unit) // {{{
 	else
 		frac = (frac & 0x03ff) * 100 >> 10;
 
-	OC_DEBUG (
 #ifdef __x86_64__
-		"FRAC PART: %ld\n",
+	OC_DEBUG ("FRAC PART: %ld\n", frac);
 #else
-		"FRAC PART: %lld\n",
+	OC_DEBUG ("FRAC PART: %lld\n", frac);
 #endif
-		frac
-	);
 
 	if ( sub ) {
 		char	* BYTE_C;
@@ -1086,14 +1080,14 @@ b2l_low:
 		if ( over32_high == false ) {
 			over32_high = true;
 
-			v.high = (ULong32) var;
+			v.high = var;
 			buf = low;
 			goto b2l_low;
 		}
 
 		v.low = (ULong32) var;
-		OC_DEBUG ("HIGH: %lu\n", v.high);
-		OC_DEBUG ("LOW : %lu\n", v.low);
+		OC_DEBUG ("HIGH: %d\n", v.high);
+		OC_DEBUG ("LOW : %d\n", v.low);
 		ret = combined64_high_low (v);
 	}
 
@@ -1103,12 +1097,12 @@ b2l_low:
 /**
  * @brief	Convert 64bit integer to binary string
  * @param[in]	dec The input 64bit ingeter
- * @param[out]	dst The converted binary string
- * @return	Length of binary string
+ * @param[out]	outlen The length of return string
+ * @return	The pointer of binary string
  * @sa	dec2bin bin2long bin2dec
  * @exception DEALLOCATE
- *   When occurs internal error, 2th argument @e dst of long2bin() has
- *   null value. If the @e dst argument has not null, the caller should deallocate
+ *   When occurs internal error, the return value of long2bin() has
+ *   null. If the return value is not null, the caller should deallocate
  *   this buffer using @e free()
  *
  * @warning
@@ -1116,74 +1110,83 @@ b2l_low:
  *    low bit for 32bit and 64bit compatibility. So, for cleary 32bit
  *    range integer, use the dec2bin() function.
  *
- * The long2bin() function convert 64bit integer to binary string.
+ * The long2bin() function convert signed 64bit integer to binary string.
  */
 OLIBC_API
-UInt long2bin (Long64 dec, char ** dst) // {{{
+char * long2bin (Long64 dec, UInt * outlen) // {{{
 {
-	ULong64	tmp;
-	UInt	len,
-			buflen;
+	Long32	tmp;
+	UInt	buflen;
 	Bit64	v;
-	char	* buf;
+	char	* buf,
+			* dst;
 	bool	over32 = false,
 			full_print = false;
 
-	*dst = null;
+	*outlen = 0;
 
-	if ( ! dec )
-		return 0;
+	if ( ! dec ) {
+		oc_strdup (dst, "0", 1);
+		*outlen = 1;
+		if ( dst == null )
+			*outlen = 0;
+		return dst;
+	}
 
-	if ( dec > 4294967295UL ) // 4byte ULONG_MAX
+	if ( dec > LONG_MAX || dec < LONG_MIN )
 		over32 = true;
 
-	len = buflen = 0;
-	oc_malloc_r (*dst, sizeof (char) * 65, 0);
+	*outlen = buflen = 0;
+	oc_malloc_r (dst, sizeof (char) * 65, 0);
+	memset (dst, 0, 65);
 
 	v = devided64_high_low (dec);
-
 	tmp = over32 ? v.high : v.low;
 
 lowbit:
-	if ( (buflen = Forebyte2bin (tmp, &buf, full_print)) == 0 )
-		return 0;
+	if ( (buflen = Forebyte2bin (tmp, &buf, full_print)) == 0 ) {
+		ofree (dst);
+		*outlen = 0;
+		return null;
+	}
 
 	OC_DEBUG ("res -> %s (%d)\n", buf, buflen);
+	OC_DEBUG ("res -> %s (%d)\n", dst, *outlen);
 
-	memcpy (*dst + len, buf, buflen);
-	len += buflen;
+	memcpy (dst + *outlen, buf, buflen);
+	*outlen += buflen;
 	ofree (buf);
 
 	if ( over32 == true ) {
 		over32 = false;
 		full_print = true;
-		tmp = (Long64) v.low;
+		tmp = v.low;
 		goto lowbit;
 	}
 
-	return len;
+	return dst;
 } // }}}
 
 /**
  * @brief	Convert decimal string to binary
  * @param[in]	src The input deciaml string
- * @param[out]	dst The converted binary string
- * @return	Length of binary string
+ * @param[out]	outlen The length of return string
+ * @return	The pointer of binary string
  * @sa	long2bin bin2dec bin2long
  * @exception DEALLOCATE
- *   When occurs internal error, 2th argument @e dst of dec2bin() has
- *   null value. If the @e dst argument has not null, the caller should deallocate
+ *   When occurs internal error, the return value of dec2bin() has
+ *   null. If the return value is not null, the caller should deallocate
  *   this buffer using @e free()
  *
  * The dec2bin() function convert decimal string to binary string.
- * This supports 64bit.
+ * This supports signed 64bit integer.
  */
 OLIBC_API
-UInt dec2bin (CChar * src, char ** dst) // {{{
+char * dec2bin (CChar * src, UInt * outlen) // {{{
 {
 	Long64	dec;
 
-	*dst = null;
+	*outlen = 0;
 
 	if ( src == null )
 		return 0;
@@ -1191,13 +1194,18 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 	if ( strlen (src) == 0 )
 		return 0;
 
-#ifdef HAVE_STRTOULL
+#ifdef HAVE_STRTOLL
+	OC_DEBUG ("USE strtoll\n");
+#ifdef __x86_64__
+	dec = strtol (src, null, 10);
+#else
 	dec = strtoll (src, null, 10);
+#endif
 #else
 	dec = (Long64) str2long (src);
 #endif
 
-	return long2bin (dec, dst);
+	return long2bin (dec, outlen);
 } // }}}
 
 /**

@@ -7,16 +7,16 @@ int main (void) {
 	 * dec2bin test
 	 */
 	{
-		char	* src = "1000";
+		char	* src = "-1000";
 		char	* dst;
 
 		oc_test_banner ("dec2bin");
-		len = dec2bin (src, &dst);
+		dst= dec2bin (src, &len);
 
 		if ( dst == null )
 			goto go_dec2bin_fail;
 
-		if ( ! strcmp ("1111101000", dst) )
+		if ( ! strcmp ("11111111111111111111110000011000", dst) )
 			printf ("ok\n");
 		else {
 go_dec2bin_fail:
@@ -34,7 +34,7 @@ go_dec2bin_fail:
 		char	* dst;
 
 		oc_test_banner ("long2bin");
-		len = long2bin (src, &dst);
+		dst = long2bin (src, &len);
 
 		if ( dst == null )
 			goto go_long2bin_fail;
