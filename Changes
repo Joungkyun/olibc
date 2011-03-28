@@ -1,10 +1,11 @@
 Changelog
 
-$Id: Changes,v 1.85 2011-03-28 06:07:07 oops Exp $
+$Id: Changes,v 1.86 2011-03-28 13:00:04 oops Exp $
 
 * Mon, Mar 28 2011
 	- changed proto type of dec2bin, long2bin api
 	- oc_malloc_originate padding 0 on default.
+	- support 64bit caculation bin2long on 64bit system
 
 * Sun, Mar 27 2011
 	- removed human_size_r

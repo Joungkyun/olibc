@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 12:30:19 $
- * $Revision: 1.98 $
+ * $Date: 2011-03-28 13:00:04 $
+ * $Revision: 1.99 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.98 2011-03-28 12:30:19 oops Exp $ */
+/* $Id: libstring.c,v 1.99 2011-03-28 13:00:04 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1038,12 +1038,28 @@ Long32 bin2dec (CChar * src) // {{{
  * @return	64bit integer
  * @warning
  *    The bin2long() function caculate 64bit integer with high and
- *    low bit for 32bit and 64bit compatibility.
- *
+ *    low bit on 32bit system
  */
 OLIBC_API
 Long64 bin2long (CChar * src) // {{{
 {
+#ifndef __x86_64__
+	Long64  ret = 0;
+	UInt    len, i;
+	char    var;
+
+	len = strlen (src);
+
+	for ( i=0 ; i<len ; i++ ) {
+		var = (src[i] == 0x30) ? 0 : 1;
+		if ( len <= 32 )
+			ret += ((Long32) var) << (len - 1 - i);
+		else
+			ret += ((Long64) var) << (len - 1 - i);
+	}
+
+	return ret;
+#else
 	Long64	ret = 0;
 	UInt	var,
 			len;
@@ -1090,6 +1106,7 @@ b2l_low:
 	}
 
 	return over32 ? ret : (Long32) var;
+#endif
 } // }}}
 
 /**

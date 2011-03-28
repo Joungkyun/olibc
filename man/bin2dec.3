@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man bin2dec.3
 .\" 2011-03-10 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2dec.3,v 1.7 2011-03-28 10:43:57 oops Exp $
+.\" $Id: bin2dec.3,v 1.8 2011-03-28 13:03:13 oops Exp $
 .SH NAME
 bin2dec \- Convert binary string to 32bit integer
 .br
@@ -47,8 +47,8 @@ function convert signed 32bit integer and, the
 .BI bin2long()
 function convert signed 64bit integer. The
 .BI bin2long()
-function caculate 64bit integer with high bit and low bit for 32 bit and
-64bit compatibility. So for cleary 32bit range integer, use the
+function caculate 64bit integer with high bit and low bit on 32bit system.
+So for cleary 32bit range integer on 32bit system, use the
 .BI bin2dec()
 function.
 
