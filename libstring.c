@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-21 07:24:56 $
- * $Revision: 1.76 $
+ * $Date: 2011-03-28 07:29:38 $
+ * $Revision: 1.76.2.1 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76 2011-03-21 07:24:56 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.1 2011-03-28 07:29:38 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -70,7 +70,6 @@ static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
 	UInt	len;
 
 	oc_malloc_r (*dst, sizeof (char) * 33, 0);
-	memset (*dst, 0, 32);
 
 	OC_DEBUG ("Buf No: %ld\n", src);
 
@@ -668,7 +667,6 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 
 	oc_safe_cpy (singular, (size > 2) ? "s" : "", 2);
 	oc_malloc_r (buf, sizeof (char) * 64, null);
-	memset (buf, 0, 64);
 
 	if ( ! unit )
 		dvd = 1000;
@@ -1039,7 +1037,6 @@ char * hex2bin (CChar * src) // {{{
 
 	// if failed memory allocate, return NULL
 	oc_malloc_r (data, sizeof (char) * alloc, null);
-	memset (data, 0, sizeof (char) * alloc);
 
 	for ( i=0, j=0; i<len; i++ ) {
 		memcpy (data + j, _hex2bin (src[i]), 4);
