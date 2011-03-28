@@ -6,11 +6,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 19:16:22 $
- * $Revision: 1.23 $
+ * $Date: 2011-03-28 06:56:32 $
+ * $Revision: 1.24 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.23 2011-03-25 19:16:22 oops Exp $ */
+/* $Id: oc_common.h,v 1.24 2011-03-28 06:56:32 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -60,6 +60,16 @@
 #include <limits.h>
 #include <errno.h>
 #include <olibc/oc_type.h>
+
+#ifdef HAVE_ICONV_H
+	#ifndef ICONV_CONST
+		#ifdef HAVE_LIBICONV
+			#define ICONV_CONST const
+		#else
+			#define ICONV_CONST
+		#endif
+	#endif
+#endif
 
 bool only_whitespace (CChar * stream, CInt length);
 UInt get_charcount (CChar * str, size_t sl, CChar * del, size_t dl);
