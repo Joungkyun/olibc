@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 05:43:41 $
- * $Revision: 1.91 $
+ * $Date: 2011-03-28 05:58:32 $
+ * $Revision: 1.92 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.91 2011-03-28 05:43:41 oops Exp $ */
+/* $Id: libstring.c,v 1.92 2011-03-28 05:58:32 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1107,8 +1107,7 @@ b2l_low:
  *
  * @warning
  *    The long2bin() function caculate 64bit integer with high and
- *    low bit for 32bit and 64bit compatibility. So, for cleary 32bit
- *    range integer, use the dec2bin() function.
+ *    low bit for 32bit and 64bit compatibility.
  *
  * The long2bin() function convert signed 64bit integer to binary string.
  */

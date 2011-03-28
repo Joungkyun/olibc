@@ -11,9 +11,7 @@ int main (void) {
 		char	* dst;
 
 		oc_test_banner ("dec2bin");
-		dst= dec2bin (src, &len);
-
-		if ( dst == null )
+		if ( (dst= dec2bin (src, &len)) == null )
 			goto go_dec2bin_fail;
 
 		if ( ! strcmp ("11111111111111111111110000011000", dst) )
@@ -34,9 +32,7 @@ go_dec2bin_fail:
 		char	* dst;
 
 		oc_test_banner ("long2bin");
-		dst = long2bin (src, &len);
-
-		if ( dst == null )
+		if ( (dst = long2bin (src, &len)) == null )
 			goto go_long2bin_fail;
 
 		if ( ! strcmp ("1111101000", dst) )

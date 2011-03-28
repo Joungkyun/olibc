@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.1 2011-03-18 16:52:20 oops Exp $
+.\" $Id: long2bin.3,v 1.2 2011-03-28 05:58:32 oops Exp $
 .SH NAME
 long2bin \- Convert 64bit integer to binary string
 .br
@@ -11,9 +11,9 @@ dec2bin \- Convert decimal string to binary
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "unsigned int long2bin (long long src, char ** dst);"
+.BI "char * long2bin (Long64 src, UInt * outlen);"
 .sp
-.BI "unsigned int dec2bin (const char * src, char ** dst);"
+.BI "char * dec2bin (CChar * src, UInt * outlen);"
 
 .SH Link library
 .B \-loc
@@ -42,9 +42,7 @@ api convert 64bit integer to binary string.
 The
 .BI long2bin()
 api caculate 64bit integer with high and low bit for 32bit and 64bit
-compatibility. So, for cleary 32bit range integer, use the
-.BI dec2bin()
-api.
+compatibility.
 
 .TP
 .B src
@@ -52,9 +50,9 @@ api.
 The input 64bit ingeter
 
 .TP
-.B dst
+.B outlen
 .br
-The converted binary string
+The length of return string
 
 .PP
 The
@@ -67,16 +65,16 @@ api convert decimal string to binary string.
 The input deciaml string
 
 .TP
-.B dst
+.B outlen
 .br
-The converted binary string
+The length of return string
 
 .SH "RETURN VALUE"
-Length of binary string. When occurs internal error, 2th argument
-.B dst
-has null value. If the
-.B dst
-argument has not null, the caller should deallocate this buffer using
+The pointer of binary string.
+
+When occurs internal error, the return value has null.
+If the return value is not null, the caller should deallocate
+this buffer using
 .BI free().
 
 .SH EXAMPLE
@@ -84,19 +82,17 @@ argument has not null, the caller should deallocate this buffer using
 #include <olibc/libstring.h>
 
 int main (void) {
-    long long src = 1000;
-    char    * dec = "1000";
+    Long64  src = 1000;
+    char    * dec = "-1000";
     char    * dst;
-    unsigned int len;
+    UInt    len;
 
-    len = long2bin (src, &dst);
-    if ( dst != null ) {
+    if ( (dst = long2bin (src, &len)) != null ) {
         printf ("%s\\n", dst);
         free (dst);
     }
 
-    len = dec2bin (dec, &dst);
-    if ( dst != null ) {
+    if ( (dst = dec2bin (dec, &len)) != null ) {
         printf ("%s\\n", dst);
         free (dst);
     }
