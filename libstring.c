@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 13:00:47 $
- * $Revision: 1.100 $
+ * $Date: 2011-03-28 13:46:14 $
+ * $Revision: 1.101 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.100 2011-03-28 13:00:47 oops Exp $ */
+/* $Id: libstring.c,v 1.101 2011-03-28 13:46:14 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -56,27 +56,35 @@
  * @{
  */
 
-/* dec to binary template fucntion */
 /**
- * @brief	convert binary to 4 byte string type
- * @param[in]	src	The input binary
+ * @brief	convert 4 or 8 byte decimal string to binary
+ * @param[in]	src	The input decimal string
  * @param[out]	dst	Converted binary string
  * @param[in]	complete Bool. Set true filled right blank to 0.
  * @return	The length of dst variable that has converted binary string
  */
-static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
+static UInt byte2bin (Long64 src, char ** dst, bool complete) // {{{
 {
-	ULong32	mask = 2147483648UL;
-	Long32	m;
+	ULong64	mask;
+	Long64	m;
 	UInt	len;
 
-	oc_malloc_r (*dst, sizeof (char) * 33, 0);
+	if ( src > INT_MAX || src < INT_MIN )
+#ifdef __x86_64__
+		mask = LONG_MAX + 1UL;
+#else
+		mask = LLONG_MAX + 1ULL;
+#endif
+	else
+		mask = INT_MAX + 1UL;
+
+	oc_malloc_r (*dst, sizeof (char) * 65, 0);
 
 	OC_DEBUG ("Buf No: %d\n", src);
 
 	len = 0;
 	while ( mask > 0 ) {
-		m = (Long32) src & mask;
+		m = (Long64) src & mask;
 
 		if ( m ) {
 			memset ((*dst) + len, 49, 1);
@@ -391,8 +399,13 @@ OLIBC_API
 Long64 str2long (CChar * src) // {{{
 {
 #ifdef HAVE_STRTOLL
+#ifdef __x86_64__
+	OC_DEBUG ("USE strtol\n");
+	return strtol (src, null, 10);
+#else
 	OC_DEBUG ("USE strtoll\n");
 	return strtoll (src, null, 10);
+#endif
 #else
 	int		bufno = 0,
 			i;
@@ -1121,14 +1134,24 @@ b2l_low:
  *   this buffer using @e free()
  *
  * @warning
- *    The long2bin() function caculate 64bit integer with high and
- *    low bit for 32bit and 64bit compatibility.
+ *    On 32bit system, The long2bin() function caculate 64bit integer
+ *    with high and low bit.
  *
  * The long2bin() function convert signed 64bit integer to binary string.
  */
 OLIBC_API
 char * long2bin (Long64 dec, size_t * outlen) // {{{
 {
+#ifdef __x86_64__
+	char	* dst;
+
+	if ( (*outlen = byte2bin (dec, &dst, false)) == 0 ) {
+		*outlen = 0;
+		return null;
+	}
+
+	return dst;
+#else
 	Long32	tmp;
 	UInt	buflen;
 	Bit64	v;
@@ -1157,7 +1180,7 @@ char * long2bin (Long64 dec, size_t * outlen) // {{{
 	tmp = over32 ? v.high : v.low;
 
 lowbit:
-	if ( (buflen = Forebyte2bin (tmp, &buf, full_print)) == 0 ) {
+	if ( (buflen = byte2bin ((Long64) tmp, &buf, full_print)) == 0 ) {
 		ofree (dst);
 		*outlen = 0;
 		return null;
@@ -1178,6 +1201,7 @@ lowbit:
 	}
 
 	return dst;
+#endif
 } // }}}
 
 /**

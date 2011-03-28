@@ -6,11 +6,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 07:45:30 $
- * $Revision: 1.25 $
+ * $Date: 2011-03-28 13:46:14 $
+ * $Revision: 1.26 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.25 2011-03-28 07:45:30 oops Exp $ */
+/* $Id: oc_common.h,v 1.26 2011-03-28 13:46:14 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -71,6 +71,16 @@
 		#endif
 	#endif
 #endif
+
+#if ! defined(__x86_64__) && ! defined(LLONG_MAX)
+	/* Minimum and maximum values a `signed long long int' can hold.  */
+	#define LLONG_MAX    9223372036854775807LL
+	#define LLONG_MIN    (-LLONG_MAX - 1LL)
+
+	/* Maximum value an `unsigned long long int' can hold.  (Minimum is 0.)  */
+	#define ULLONG_MAX   18446744073709551615ULL
+#endif
+
 
 bool only_whitespace (CChar * stream, CInt length);
 UInt get_charcount (CChar * str, size_t sl, CChar * del, size_t dl);
