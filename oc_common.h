@@ -6,11 +6,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 06:56:32 $
- * $Revision: 1.24 $
+ * $Date: 2011-03-28 07:45:30 $
+ * $Revision: 1.25 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.24 2011-03-28 06:56:32 oops Exp $ */
+/* $Id: oc_common.h,v 1.25 2011-03-28 07:45:30 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -62,6 +62,7 @@
 #include <olibc/oc_type.h>
 
 #ifdef HAVE_ICONV_H
+	#define HAVE_ICONV 1
 	#ifndef ICONV_CONST
 		#ifdef HAVE_LIBICONV
 			#define ICONV_CONST const
