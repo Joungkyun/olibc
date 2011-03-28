@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 07:29:38 $
- * $Revision: 1.76.2.1 $
+ * $Date: 2011-03-28 07:31:44 $
+ * $Revision: 1.76.2.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.1 2011-03-28 07:29:38 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.2 2011-03-28 07:31:44 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -1368,7 +1368,8 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 {
 #ifdef HAVE_ICONV_H
 	iconv_t cd;
-	char * ibuf, * ibuf_t;
+	ICONV_CONST char * ibuf;
+	char * ibuf_t;
 	char * obuf, * obuf_t;
 	size_t err;
 

@@ -29,12 +29,6 @@
 
 #include "stringprep.h"
 
-#ifdef HAVE_ICONV_H
-# define HAVE_ICONV 1
-/* Define as const if the declaration of iconv() needs const. */
-# define ICONV_CONST
-#endif
-
 #define ENABLE_NLS
 
 #ifndef HAVE_LOCALE_H
