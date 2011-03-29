@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.3 2011-03-28 06:47:01 oops Exp $
+.\" $Id: long2bin.3,v 1.4 2011-03-29 17:24:36 oops Exp $
 .SH NAME
 long2bin \- Convert 64bit integer to binary string
 .br
@@ -52,7 +52,8 @@ The input 64bit ingeter
 .TP
 .B outlen
 .br
-The length of return string
+The length of return string. This argument is set null, don't count
+length of return string.
 
 .PP
 The
@@ -67,7 +68,8 @@ The input deciaml string
 .TP
 .B outlen
 .br
-The length of return string
+The length of return string. This argument is set null, don't count
+length of return string.
 
 .SH "RETURN VALUE"
 The pointer of binary string.

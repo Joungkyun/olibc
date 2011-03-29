@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man bin2hex.3
 .\" 2011-03-30 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2hex.3,v 1.3 2011-03-29 16:46:07 oops Exp $
+.\" $Id: bin2hex.3,v 1.4 2011-03-29 17:24:36 oops Exp $
 .SH 이름
 bin2hex \- 이진 문자열을 16진 문자열로 변환
 
@@ -34,6 +34,16 @@ or
 .BI bin2hex()
 은 2진수 형태의 문자열을 16진수의 문자열로 반환한다.
 입력값이 binary format을 벗어날 경우 \'??\'로 처리가 된다.
+
+.TP
+.B str
+.br
+입력할 2진 문자열
+
+.TP
+.B outlen
+.br
+반환된 값의 길이. 이 변수를 null로 선언을 하면, 길이를 세지 않는다.
 
 .SH 반환값
 bin2hex \- 16진수 형태의 문자열

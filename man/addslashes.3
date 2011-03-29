@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man addslashes.3
 .\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: addslashes.3,v 1.12 2011-03-25 19:16:23 oops Exp $
+.\" $Id: addslashes.3,v 1.13 2011-03-29 17:24:36 oops Exp $
 .SH NAME
 addslashes \- Quote string with slashes
 
@@ -59,7 +59,8 @@ Save converted string.
 .TP
 .B outlen
 .br
-Save length of converted string.
+Save length of converted string. This argument is set null, don't count
+length of return string.
 
 .SH "RETURN VALUE"
 .B bool

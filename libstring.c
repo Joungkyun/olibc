@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 17:17:06 $
- * $Revision: 1.107 $
+ * $Date: 2011-03-29 17:24:36 $
+ * $Revision: 1.108 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.107 2011-03-29 17:17:06 oops Exp $ */
+/* $Id: libstring.c,v 1.108 2011-03-29 17:24:36 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -341,6 +341,9 @@ char * trim_r (char * str, bool should_free) // {{{
  * quote ('), double quote ("), backslash (\) and Null byte (\\0).
  *
  * The null byte is convert to string '\\0'.
+ *
+ * If @e outlen argument is set null, @e addslashes() api don't count
+ * the length of return value.
  *
  * This is binary safe.
  */
@@ -862,6 +865,9 @@ void strtoupper (char * str) // {{{
  * The bin2hex() function converts binary string to hexadecimal
  * string. The binary string that is out of range is converted
  * '?' character.
+ *
+ * If @e outlen argument is set null, @e bin2hex() api don't count
+ * the length of return value.
  */
 OLIBC_API
 char * bin2hex (CChar * src, size_t * outlen) // {{{
@@ -1068,6 +1074,9 @@ b2l_low:
  *    with high and low bit.
  *
  * The long2bin() function convert signed 64bit integer to binary string.
+ *
+ * If @e outlen argument is set null, @e long2bin() api don't count
+ * the length of return value.
  */
 OLIBC_API
 char * long2bin (Long64 dec, size_t * outlen) // {{{
@@ -1160,6 +1169,9 @@ lowbit:
  *
  * The dec2bin() function convert decimal string to binary string.
  * This supports signed 64bit integer.
+ *
+ * If @e outlen argument is set null, @e decbin() api don't count
+ * the length of return value.
  */
 OLIBC_API
 char * dec2bin (CChar * src, size_t * outlen) // {{{

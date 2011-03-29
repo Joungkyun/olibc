@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man hex2bin.3
 .\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: hex2bin.3,v 1.3 2011-03-29 17:17:06 oops Exp $
+.\" $Id: hex2bin.3,v 1.4 2011-03-29 17:24:36 oops Exp $
 .SH 이름
 hex2bin \- 8진수 문자열을 2진수 문자열로 변환
 
@@ -41,7 +41,7 @@ hex2bin 은 16진수 형태의 문자열을 이진수의 문자열로 반환한�
 .TP
 .B outlen
 .br
-반환값의 길이
+반환값의 길이. 이 변수를 null로 선언을 하면, 길이를 세지 않는다.
 
 .SH 반환값
 이진수 형태의 문자열로 반환. 내부 에러가 발생했을 경우 NULL을

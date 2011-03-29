@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man bin2hex.3
 .\" 2011-03-30 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2hex.3,v 1.8 2011-03-29 16:46:07 oops Exp $
+.\" $Id: bin2hex.3,v 1.9 2011-03-29 17:24:36 oops Exp $
 .SH NAME
 bin2hex \- Convert binary data into hexadecimal representation.
 
@@ -35,6 +35,17 @@ The
 .BI bin2hex()
 function converts binary string to hexadecimal string. The binary string
 that is out of range is converted \'?\' character.
+
+.TP
+.B str
+.br
+The input binary string
+
+.TP
+.B outlen
+.br
+The length of return value. This argument is set null, don't count
+length of return string.
 
 .SH "RETURN VALUE"
 The point of hexadecimal string
