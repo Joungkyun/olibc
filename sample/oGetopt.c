@@ -51,10 +51,14 @@ int main (void) {
 		goto go_ogetopt_fail;
 	}
 
-	if ( ! strcmp (*o_cmdarg++, "arg1") )
-		ok++;
-	if ( ! strcmp (*o_cmdarg, "arg2") )
-		ok++;
+	{
+		char ** cmdarg = o_cmdarg;
+
+		if ( ! strcmp (*cmdarg++, "arg1") )
+			ok++;
+		if ( ! strcmp (*cmdarg, "arg2") )
+			ok++;
+	}
 
 	if ( bestopt && ! strcmp (app, "10") && ok == 2 )
 		printf ("ok\n");
@@ -62,5 +66,7 @@ int main (void) {
 go_ogetopt_fail:
 		printf ("failed\n");
 	}
+
+	ofree_array (o_cmdarg);
 	return 0;
 }

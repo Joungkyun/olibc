@@ -33,6 +33,7 @@ int main (void) {
 		}
 
 		printf ("%s\n", strcmp (buf, dst) ? "failed" : "ok");
+		ofree (buf);
 	}
 
 	return 0;
