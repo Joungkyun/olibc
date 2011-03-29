@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.4 2011-03-29 17:24:36 oops Exp $
+.\" $Id: long2bin.3,v 1.5 2011-03-29 18:57:57 oops Exp $
 .SH 이름
 long2bin \- 64bit 정수를 2진수 문자열로 변환
 .br
@@ -13,7 +13,7 @@ dec2bin \- 10진수 문자열을 2진수 문자열로 변환
 .sp
 .BI "char * long2bin (Long64 src, size_t * outlen);"
 .sp
-.BI "char * dec2bin (CChar * src, size_t * outlen);"
+.BI "char * dec2bin (const char * src, size_t * outlen);"
 
 .SH 라이브러리 링크
 .B \-loc
