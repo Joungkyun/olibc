@@ -6,11 +6,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 13:46:14 $
- * $Revision: 1.26 $
+ * $Date: 2011-03-29 18:14:22 $
+ * $Revision: 1.27 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.26 2011-03-28 13:46:14 oops Exp $ */
+/* $Id: oc_common.h,v 1.27 2011-03-29 18:14:22 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -83,7 +83,7 @@
 
 
 bool only_whitespace (CChar * stream, CInt length);
-UInt get_charcount (CChar * str, size_t sl, CChar * del, size_t dl);
+size_t get_charcount (CChar * str, size_t sl, CChar * del, size_t dl);
 Bit64 devided64_high_low (Long64 v);
 Long64 combined64_high_low (Bit64 v);
 
