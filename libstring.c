@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 11:06:01 $
- * $Revision: 1.76.2.4 $
+ * $Date: 2011-03-29 15:03:36 $
+ * $Revision: 1.76.2.5 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.4 2011-03-29 11:06:01 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.5 2011-03-29 15:03:36 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -568,88 +568,31 @@ int check_int (char c) // {{{
  *
  * Color constants:
  * @code
- *     ENDANSI   0
- *     GRAY      1
- *     BGRAY     2
- *     RED       3
- *     BRED      4
- *     GREEN     5
- *     BGREEN    6
- *     YELLOW    7
- *     BYELLOW   8
- *     BLUE      9
- *     BBLUE    10
- *     MAGENTA  11
- *     BMAGENTA 12
- *     CYAN     13
- *     BCYAN    14
- *     WHITE    15
- *     BWHITE   16
+ *     OC_ENDANSI   0
+ *     OC_GRAY      30
+ *     OC_BGRAY     40
+ *     OC_RED       31
+ *     OC_BRED      41
+ *     OC_GREEN     32
+ *     OC_BGREEN    42
+ *     OC_YELLOW    33
+ *     OC_BYELLOW   43
+ *     OC_BLUE      34
+ *     OC_BBLUE     44
+ *     OC_MAGENTA   35
+ *     OC_BMAGENTA  45
+ *     OC_CYAN      36
+ *     OC_BCYAN     46
+ *     OC_WHITE     37
+ *     OC_BWHITE    47
  * @endcode
  */
 OLIBC_API
 void setansi (FILE * stream, int color, bool noansi) // {{{
 {
-	int	ansi = 0;
-
-	switch ( color ) {
-		case GRAY :
-			ansi = 30;
-			break;
-		case BGRAY :
-			ansi = 40;
-			break;
-		case RED :
-			ansi = 31;
-			break;
-		case BRED :
-			ansi = 41;
-			break;
-		case GREEN :
-			ansi = 32;
-			break;
-		case BGREEN :
-			ansi = 42;
-			break;
-		case YELLOW :
-			ansi = 33;
-			break;
-		case BYELLOW :
-			ansi = 43;
-			break;
-		case BLUE :
-			ansi = 34;
-			break;
-		case BBLUE :
-			ansi = 44;
-			break;
-		case MAGENTA :
-			ansi = 35;
-			break;
-		case BMAGENTA :
-			ansi = 45;
-			break;
-		case CYAN :
-			ansi = 36;
-			break;
-		case BCYAN :
-			ansi = 46;
-			break;
-		case WHITE :
-			ansi = 37;
-			break;
-		case BWHITE :
-			ansi = 47;
-			break;
-		default :
-			ansi = 0;
-	}
-
 	if ( ! noansi ) {
-		if ( color == ENDANSI )
-			fprintf (stream, "[7;0m");
-		else
-			fprintf (stream, "[1;%dm", ansi);
+		if ( color == 0 || (color > 29 && color < 38) || (color > 39 && color < 48) )
+			fprintf (stream, "[1;%dm", color);
 	}
 } // }}}
 
