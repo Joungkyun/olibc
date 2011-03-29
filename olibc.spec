@@ -77,8 +77,11 @@ make DESTDIR=%{buildroot} install
 %{_mandir}/ko/man3/*.3.*
 
 %changelog
+* Wed Mar 30 2011 JoungKyun.Kim <http://oops.org> 0.1.4-1
+- update 0.1.4
+
 * Thu Mar 21 2011 JoungKyun.Kim <http://oops.org> 0.1.3-1
-- update version 0.1.3
+- update 0.1.3
 
 * Thu Sep  1 2005 JoungKyun.Kim <http://oops.org> 0.1.2-1
 - fixed  CAN-2005-2491 in pcrelib under 0.1.1

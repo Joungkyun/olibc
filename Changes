@@ -1,9 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.65.2.5 2011-03-29 15:03:36 oops Exp $
+$Id: Changes,v 1.65.2.6 2011-03-29 18:42:12 oops Exp $
 
 * Wed, Mar 30 2011
 	- backport setansi from 1.0.x
+	- <release 0.1.4>
 
 * Tue, Mar 29 2011
 	- suport negative decimal on dec2bin/long2bin/bin2dec/bin2long
