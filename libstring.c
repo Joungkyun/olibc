@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:30:10 $
- * $Revision: 1.76.2.7 $
+ * $Date: 2011-03-29 18:38:23 $
+ * $Revision: 1.76.2.8 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.7 2011-03-29 18:30:10 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.8 2011-03-29 18:38:23 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -367,13 +367,12 @@ bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{
 OLIBC_API
 char * addslashes (char * in, bool should_free) // {{{
 {
-	size_t	outlen;
 	char	* out;
 
 	if ( in == null )
 		return null;
 
-	if ( addslashes_r (in, strlen (in), &out, &outlen) == false )
+	if ( addslashes_r (in, strlen (in), &out, null) == false )
 		return null;
 
 	if ( should_free )
@@ -394,8 +393,13 @@ OLIBC_API
 Long64 str2long (CChar * src) // {{{
 {
 #ifdef HAVE_STRTOLL
+#ifdef __x86_64__
+	OC_DEBUG ("USE strtol\n");
+	return strtol (src, null, 10);
+#else
 	OC_DEBUG ("USE strtoll\n");
 	return strtoll (src, null, 10);
+#endif
 #else
 	int		bufno = 0,
 			i;
@@ -569,23 +573,23 @@ int check_int (char c) // {{{
  *
  * Color constants:
  * @code
- *     OC_ENDANSI   0
- *     OC_GRAY      30
- *     OC_BGRAY     40
- *     OC_RED       31
- *     OC_BRED      41
- *     OC_GREEN     32
- *     OC_BGREEN    42
- *     OC_YELLOW    33
- *     OC_BYELLOW   43
- *     OC_BLUE      34
- *     OC_BBLUE     44
- *     OC_MAGENTA   35
- *     OC_BMAGENTA  45
- *     OC_CYAN      36
- *     OC_BCYAN     46
- *     OC_WHITE     37
- *     OC_BWHITE    47
+ *     ENDANSI   0
+ *     GRAY      30
+ *     BGRAY     40
+ *     RED       31
+ *     BRED      41
+ *     GREEN     32
+ *     BGREEN    42
+ *     YELLOW    33
+ *     BYELLOW   43
+ *     BLUE      34
+ *     BBLUE     44
+ *     MAGENTA   35
+ *     BMAGENTA  45
+ *     CYAN      36
+ *     BCYAN     46
+ *     WHITE     37
+ *     BWHITE    47
  * @endcode
  */
 OLIBC_API
