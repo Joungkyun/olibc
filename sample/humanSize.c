@@ -15,6 +15,7 @@ int main (void) {
 			printf ("failed\n");
 		else
 			printf ("ok\n");
+		free (buf);
 	}
 
 	/*
@@ -27,6 +28,7 @@ int main (void) {
 			printf ("failed\n");
 		else
 			printf ("ok\n");
+		ofree (buf);
 	}
 
 	return 0;
