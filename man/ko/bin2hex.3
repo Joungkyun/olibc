@@ -1,21 +1,15 @@
-.TH bin2hex(3) 2011-03-13 "Linux Manpage" "OOPS Library's Manual"
+.TH bin2hex(3) 2011-03-30 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man bin2hex.3
-.\" 2011-03-13 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2hex.3,v 1.2 2011-03-26 04:34:39 oops Exp $
+.\" 2011-03-30 JoungKyun Kim <htt://oops.org>
+.\" $Id: bin2hex.3,v 1.3 2011-03-29 16:46:07 oops Exp $
 .SH 이름
 bin2hex \- 이진 문자열을 16진 문자열로 변환
-.br
-bin2hex_r
 
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * bin2hex (const char * str);"
-.sp
-.BI "unsigned int bin2hex_r (const char * src, char ** dst);"
-.sp
-.BI "char * _bin2hex (const char c);"
+.BI "char * bin2hex (const char * str, size_t * outlen);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -39,23 +33,15 @@ or
 .SH 설명
 .BI bin2hex()
 은 2진수 형태의 문자열을 16진수의 문자열로 반환한다.
-.BI _bin2hex()
-은 길이 4의 이진수 문자열을 16진수 형태의 캐릭터로 반환을 한다.
-
-.BI bin2hex()
-는 static memory를 반환하기 때문에 thread safe하지 못하다. thread safe를
-원한다면
-.BI bin2hex_r()
-을 사용해야 한다.
-
+입력값이 binary format을 벗어날 경우 \'??\'로 처리가 된다.
 
 .SH 반환값
 bin2hex \- 16진수 형태의 문자열
-.br
-_bin2hex \- 16진수 문자. 범위 밖의 문자가 주어질 경우, ?를 반환한다.
-.br
-bin2hex_r \- 16진수로 변환된 문자 수
 
+내부 에러가 발생했을 경우, null을 반환하며, 반환값이 null이 아닌
+경우에는 반환값을
+.BI free()
+api를 이용하여 메모리를 해제해야 한다.
 
 .SH 예제
 .nf
@@ -66,15 +52,10 @@ int main (void) {
     char *dest;
     unsigned int len;
 
-    dest = bin2hex (src);
-    printf ("%s\\n", dest);
-
-    len = bin2hex_r (src, &dest);
-    printf ("%s (%d byte)\\n", dest, len);
-    free (dest) // must need!
-
-    src = "1011";
-    printf ("%c\\n", _bin2hex (src));
+    if ( (dest = bin2hex (src, * len) != null ) {
+        printf ("%s (%d)\\n", dest, len);
+        free (dest); // must need
+    }
 
     return 0;
 }

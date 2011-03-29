@@ -4,33 +4,19 @@
 int main (void) {
 	char * src = "11111101";
 	char * buf;
+	size_t len;
 
 	/*
 	 * bin2hex
 	 */
 	{
 		oc_test_banner ("bin2hex");
-		buf = bin2hex (src);
-
-		if ( strcmp ("fd", buf) )
-			printf ("failed\n");
-		else
-			printf ("ok\n");
-	}
-
-	/*
-	 * bin2hex_r
-	 */
-	{
-		size_t l;
-		oc_test_banner ("bin2hex_r");
-		l = bin2hex_r (src, &buf);
-
-		if ( l != 2 )
+		//if ( (buf = bin2hex (src, null)) == null )
+		if ( (buf = bin2hex (src, &len)) == null )
 			goto go_bin2hex_fail;
 
 		if ( ! strcmp ("fd", buf) )
-			printf ("ok\n");
+			printf ("ok (%d)\n", len);
 		else {
 go_bin2hex_fail:
 			printf ("failed\n");
@@ -42,6 +28,10 @@ go_bin2hex_fail:
 	 */
 	{
 		char * tmp;
+
+		if ( buf == null )
+			buf = strdup ("fd");
+
 		oc_test_banner ("hex2bin");
 		tmp = hex2bin (buf);
 		ofree (buf);

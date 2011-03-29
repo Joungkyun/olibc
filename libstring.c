@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 15:00:11 $
- * $Revision: 1.103 $
+ * $Date: 2011-03-29 16:46:07 $
+ * $Revision: 1.104 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.103 2011-03-29 15:00:11 oops Exp $ */
+/* $Id: libstring.c,v 1.104 2011-03-29 16:46:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -167,7 +167,7 @@ static size_t charset_conv_outplen (CChar * charset, size_t srclen) // {{{
  * @brief	Convert hexadecimal character to binary string
  * @param	c	hexadecimal character for converting
  * @return	binary string
- * @sa	hex2bin bin2hex bin2hex_r
+ * @sa	hex2bin bin2hex
  * @retval	'....' out of range
  */
 static char * _hex2bin (CChar c) // {{{
@@ -850,26 +850,26 @@ void strtoupper (char * str) // {{{
 /**
  * @brief	Convert binary data into hexadecimal representation
  * @param[in]	src The input binary string
- * @param[out]	dst hexadecimal string
- * @return	length of @e dst
- * @sa	bin2hex hex2bin
+ * @param[out]	outlen The length of return string
+ * @return	The pointer of converted hexadecimal string.
+ * @sa	hex2bin
  * @exception DEALLOCATE
- *   When occurs internal error, 2th argument @e dst has null.
- *   If the 2th argument @e dst has string array pointer, the caller should
+ *   When occurs internal error, return null.
+ *   If the return value is string array pointer, the caller should
  *   deallocate this buffer using @e free()
  *
- * The bin2hex_r() function converts binary string to hexadecimal
- * string.
- *
- * This function is thread safe.
+ * The bin2hex() function converts binary string to hexadecimal
+ * string. The binary string that is out of range is converted
+ * '?' character.
  */
 OLIBC_API
-ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
+char * bin2hex (CChar * src, size_t * outlen) // {{{
 {
 	int		i,
 			j,
 			len;
-	char	buf[5];
+	char	buf[5],
+			* dst;
 
 	if ( src == null )
 		return 0;
@@ -877,46 +877,18 @@ ULong32 bin2hex_r (CChar * src, char ** dst) // {{{
 	if ( (len = strlen (src)) < 4 )
 		return 0;
 
-	oc_malloc_r (*dst, sizeof (char) * (len / 4 + 1), 0);
+	oc_malloc_r (dst, sizeof (char) * (len / 4 + 1), null);
 
 	i = j = 0;
 	for ( ; i<len; i+=4, j++ ) {
 		memset (buf, 0, 5);
 		strncpy (buf, src + i, 4);
-		memset (*dst + j, _bin2hex (buf), 1);
+		memset (dst + j, _bin2hex (buf), 1);
 	}
 
-	return j;
-} // }}}
+	if ( outlen != null )
+		*outlen = j;
 
-/**
- * @brief	Convert binary data into hexadecimal representation
- * @param	src The input binary string
- * @sa	bin2hex_r hex2bin
- * @return	hexadecimal string
- *
- * @exception THREADSAFE
- *   The return value used static memory, so this function is
- *   not thread safe. If you want thread safe, use bin2hex_r().<br /><br />
- *   The argument @e src length of bin2hex() is smaller then 4096.
- *
- * The bin2hex() function converts binary string to hexadecimal
- * string.
- */
-OLIBC_API
-char * bin2hex (CChar * src) // {{{
-{
-	static char	dst[1024] = { 0, };
-	ULong32		len;
-	char		* buf;
-
-	len = bin2hex_r (src, &buf);
-
-	if ( ! len )
-		return dst;
-
-	strncpy (dst, buf, len);
-	ofree (buf);
 	return dst;
 } // }}}
 
@@ -924,7 +896,7 @@ char * bin2hex (CChar * src) // {{{
  * @brief	Convert hexadecimal string to binary string
  * @param	src hexadecimal string for converting
  * @return	binary string
- * @sa	bin2hex bin2hex_r
+ * @sa	bin2hex
  * @exception DEALLOCATE
  *   When occurs internal error, hex2bin() returns null.
  *   If the return string array pointer is not null, the caller should
@@ -1575,7 +1547,7 @@ char * join (CChar * glue, CChar ** sep) // {{{
  * @example caseSensitive.c
  *   The example for strtoupper() and strtolower() api
  * @example binhex.c
- *   The example for bin2hex(), bin2hex_r() and hex2bin() api
+ *   The example for bin2hex() and hex2bin() api
  * @example bindec.c
  *   The example for dec2bin(), long2bin(), bin2dec() and bin2long() api
  * @example charset.c

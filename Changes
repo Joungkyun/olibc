@@ -1,6 +1,9 @@
 Changelog
 
-$Id: Changes,v 1.87 2011-03-28 13:48:51 oops Exp $
+$Id: Changes,v 1.88 2011-03-29 16:46:06 oops Exp $
+
+* Wed, Mar 30 2011
+	- changed hex2bin_r to hex2bin
 
 * Mon, Mar 28 2011
 	- changed proto type of dec2bin, long2bin api
@@ -13,7 +16,7 @@ $Id: Changes,v 1.87 2011-03-28 13:48:51 oops Exp $
 * Sat, Mar 26 2011
 	- changed function declare of str2double api
 	- support GCC4 and FreeBSD
-	- remove addslashes_r api
+	- changed addslashes_r api to addslashes
 	- changed _hex2bin to internal function
 	- rename check_int to is_strint
 	
@@ -21,8 +24,7 @@ $Id: Changes,v 1.87 2011-03-28 13:48:51 oops Exp $
 	- add join() api
 	- fixed wrong realpath_r() operation
 	- changed function declare of is_ksc5601 api
-	- remove convert_punycode_r api
-	- changed function declare of convert_punycode api
+	- changed convert_punycode_r api ot convert_punycode
 
 * Thu, Mar 24 2011
 	- changed internal variable name for conflict other programs

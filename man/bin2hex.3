@@ -1,19 +1,15 @@
-.TH bin2hex(3) 2011-03-13 "Linux Manpage" "OOPS Library's Manual"
+.TH bin2hex(3) 2011-03-30 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man bin2hex.3
-.\" 2011-03-13 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2hex.3,v 1.7 2011-03-26 04:34:39 oops Exp $
+.\" 2011-03-30 JoungKyun Kim <htt://oops.org>
+.\" $Id: bin2hex.3,v 1.8 2011-03-29 16:46:07 oops Exp $
 .SH NAME
 bin2hex \- Convert binary data into hexadecimal representation.
-.br
-bin2hex_r
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * bin2hex (const char * str);"
-.sp
-.BI "unsigned int bin2hex_r (const char * src, char ** dst);"
+.BI "char * bin2hex (const char * str, size_t * outlen);"
 
 .SH Link library
 .B \-loc
@@ -37,22 +33,17 @@ that follows BSD license.
 .SH DESCRIPTION
 The
 .BI bin2hex()
-function converts binary string to hexadecimal string. The
-
-The return value of
-.BI bin2hex()
-used static memory, so this function is not thread safe. If you want
-thread safe, use
-.BI bin2hex_r().
-When
-.BI bin2hex_r()
-occurs internal error, 2th argument dst has null. If the 2th argument dst has string array pointer, the caller should deallocate this buffer using free()
+function converts binary string to hexadecimal string. The binary string
+that is out of range is converted \'?\' character.
 
 .SH "RETURN VALUE"
-bin2hex \- hexadecimal string
-.br
-bin2hex_r \- 32bit integer that length of converted input string.
+The point of hexadecimal string
 
+When the
+.BI bin2hex()
+occurs internal error, returns null. If return value is string array pointer,
+the caller should deallocate this buffer using
+.BI free().
 
 .SH EXAMPLE
 .nf
@@ -63,15 +54,10 @@ int main (void) {
     char *dest;
     unsigned int len;
 
-    dest = bin2hex (src);
-    printf ("%s\\n", dest);
-
-    len = bin2hex_r (src, &dest);
-    printf ("%s (%d byte)\\n", dest, len);
-    free (dest) // must need!
-
-    src = "1011";
-    printf ("%c\\n", _bin2hex (src));
+    if ( (dest = bin2hex (src, * len) != null ) {
+        printf ("%s (%d)\\n", dest, len);
+        free (dest); // must need
+    }
 
     return 0;
 }
