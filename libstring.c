@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 15:03:36 $
- * $Revision: 1.76.2.5 $
+ * $Date: 2011-03-29 18:18:35 $
+ * $Revision: 1.76.2.6 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.5 2011-03-29 15:03:36 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.6 2011-03-29 18:18:35 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -298,20 +298,25 @@ char * trim_r (char * str, bool should_free) // {{{
  * to be quoted in database queries etc. These characters are single
  * quote ('), double quote ("), backslash (\) and Null byte (\\0).
  *
+ * If @e outlen argument is set null, @e addslashes() api don't count
+ * the length of return value.
+ *
  * This is binary safe.
  */
 OLIBC_API
-bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {{{
+bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{{
 {
 	/* maximum string length, worst case situation */
-	UChar	* source,
+	char	* source,
 			* target,
 			* end;
+	size_t	c;
 
 	if ( in == null || inlen < 1 )
 		return false;
 
-	oc_malloc_r (*out, sizeof (char) * (inlen * 2 + 1), false);
+	c = get_charcount (in, inlen, "'\"\\\0", 4);
+	oc_malloc_r (*out, sizeof (char) * (inlen + c) + 1, false);
 
 	source = in;
 	target = *out;
@@ -336,12 +341,8 @@ bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen) // {
 	}
 
 	*target = 0;
-	*outlen = target - (*out);
-	/*
-	// if you want to save memory
-	if ( *outlen < (inlen * 2) )
-		oc_realloc_r (*out, sizeof (char) * ((*outlen) + 1), null);
-	*/
+	if ( outlen != null )
+		*outlen = target - (*out);
 
 	return true;
 } // }}}

@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 15:03:36 $
- * $Revision: 1.29.2.3 $
+ * $Date: 2011-03-29 18:18:35 $
+ * $Revision: 1.29.2.4 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.29.2.3 2011-03-29 15:03:36 oops Exp $ */
+/* $Id: libstring.h,v 1.29.2.4 2011-03-29 18:18:35 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
@@ -40,7 +40,7 @@
 void olibc_version (void);
 
 char * addslashes (char * in, bool should_free);
-bool addslashes_r (UChar * in, size_t inlen, UChar ** out, size_t * outlen);
+bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen);
 
 void trim (char * str);
 char * trim_r (char * str, bool should_free);

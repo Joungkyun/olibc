@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man addslashes.3
 .\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: addslashes.3,v 1.9 2011-03-18 06:25:23 oops Exp $
+.\" $Id: addslashes.3,v 1.9.2.1 2011-03-29 18:18:35 oops Exp $
 .SH NAME
 addslashes \- Quote string with slashes
 
@@ -11,7 +11,7 @@ addslashes \- Quote string with slashes
 .sp
 .BI "char * addslashes (char * in, bool should_free);"
 .br
-.BI "bool addslashes_r (const char * in, size_t inlen, unsigned char ** out, size_t * outlen);"
+.BI "bool addslashes_r (const char * in, size_t inlen, char ** out, size_t * outlen);"
 
 .SH "Link library"
 .B \-loc
