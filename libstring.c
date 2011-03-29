@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 09:27:07 $
- * $Revision: 1.102 $
+ * $Date: 2011-03-29 15:00:11 $
+ * $Revision: 1.103 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.102 2011-03-29 09:27:07 oops Exp $ */
+/* $Id: libstring.c,v 1.103 2011-03-29 15:00:11 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -340,7 +340,7 @@ char * trim_r (char * str, bool should_free) // {{{
  * to be quoted in database queries etc. These characters are single
  * quote ('), double quote ("), backslash (\) and Null byte (\\0).
  *
- * The null byte is convert to string '\0'.
+ * The null byte is convert to string '\\0'.
  *
  * This is binary safe.
  */
@@ -571,87 +571,30 @@ bool is_strint (char c) // {{{
  * Color constants:
  * @code
  *     OC_ENDANSI   0
- *     OC_GRAY      1
- *     OC_BGRAY     2
- *     OC_RED       3
- *     OC_BRED      4
- *     OC_GREEN     5
- *     OC_BGREEN    6
- *     OC_YELLOW    7
- *     OC_BYELLOW   8
- *     OC_BLUE      9
- *     OC_BBLUE    10
- *     OC_MAGENTA  11
- *     OC_BMAGENTA 12
- *     OC_CYAN     13
- *     OC_BCYAN    14
- *     OC_WHITE    15
- *     OC_BWHITE   16
+ *     OC_GRAY      30
+ *     OC_BGRAY     40
+ *     OC_RED       31
+ *     OC_BRED      41
+ *     OC_GREEN     32
+ *     OC_BGREEN    42
+ *     OC_YELLOW    33
+ *     OC_BYELLOW   43
+ *     OC_BLUE      34
+ *     OC_BBLUE     44
+ *     OC_MAGENTA   35
+ *     OC_BMAGENTA  45
+ *     OC_CYAN      36
+ *     OC_BCYAN     46
+ *     OC_WHITE     37
+ *     OC_BWHITE    47
  * @endcode
  */
 OLIBC_API
 void setansi (FILE * stream, int color, bool noansi) // {{{
 {
-	int	ansi = 0;
-
-	switch ( color ) {
-		case OC_GRAY :
-			ansi = 30;
-			break;
-		case OC_BGRAY :
-			ansi = 40;
-			break;
-		case OC_RED :
-			ansi = 31;
-			break;
-		case OC_BRED :
-			ansi = 41;
-			break;
-		case OC_GREEN :
-			ansi = 32;
-			break;
-		case OC_BGREEN :
-			ansi = 42;
-			break;
-		case OC_YELLOW :
-			ansi = 33;
-			break;
-		case OC_BYELLOW :
-			ansi = 43;
-			break;
-		case OC_BLUE :
-			ansi = 34;
-			break;
-		case OC_BBLUE :
-			ansi = 44;
-			break;
-		case OC_MAGENTA :
-			ansi = 35;
-			break;
-		case OC_BMAGENTA :
-			ansi = 45;
-			break;
-		case OC_CYAN :
-			ansi = 36;
-			break;
-		case OC_BCYAN :
-			ansi = 46;
-			break;
-		case OC_WHITE :
-			ansi = 37;
-			break;
-		case OC_BWHITE :
-			ansi = 47;
-			break;
-		default :
-			ansi = 0;
-	}
-
 	if ( ! noansi ) {
-		if ( color == OC_ENDANSI )
-			fprintf (stream, "[7;0m");
-		else
-			fprintf (stream, "[1;%dm", ansi);
+		if ( color == 0 || (color > 29 && color < 38) || (color > 39 && color < 48) )
+			fprintf (stream, "[1;%dm", color);
 	}
 } // }}}
 

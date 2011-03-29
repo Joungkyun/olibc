@@ -38,11 +38,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 11:18:49 $
- * $Revision: 1.15 $
+ * $Date: 2011-03-29 15:00:11 $
+ * $Revision: 1.16 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.15 2011-03-28 11:18:49 oops Exp $ */
+/* $Id: libmisc.c,v 1.16 2011-03-29 15:00:11 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc
@@ -77,7 +77,9 @@ bool only_whitespace (CChar * stream, CInt length) // {{{
 /**
  * @brief	Get number of delimiters in the input string
  * @param	str The input string
+ * @param	sl The length of the input string
  * @param	del	The input delimiters
+ * @param	dl The length of the input delimiters
  * @return	Number of delimiters in the input string
  *
  * The get_charcount() api get number of delimiters in the input
