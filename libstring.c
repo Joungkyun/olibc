@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 13:46:14 $
- * $Revision: 1.101 $
+ * $Date: 2011-03-29 09:27:07 $
+ * $Revision: 1.102 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.101 2011-03-28 13:46:14 oops Exp $ */
+/* $Id: libstring.c,v 1.102 2011-03-29 09:27:07 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1226,10 +1226,10 @@ char * dec2bin (CChar * src, size_t * outlen) // {{{
 	*outlen = 0;
 
 	if ( src == null )
-		return 0;
+		return NULL;
 
 	if ( strlen (src) == 0 )
-		return 0;
+		return NULL;
 
 #ifdef HAVE_STRTOLL
 	OC_DEBUG ("USE strtoll\n");
