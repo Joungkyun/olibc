@@ -38,11 +38,11 @@
  * This file includes proto type of RACE code apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.17 $
+ * $Date: 2011-03-29 11:06:01 $
+ * $Revision: 1.17.2.1 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: _race.c,v 1.17 2011-03-02 17:22:04 oops Exp $ */
+/* $Id: _race.c,v 1.17.2.1 2011-03-29 11:06:01 oops Exp $ */
 #include <oc_common.h>
 #include <_race.h>
 #include <libstring.h>
@@ -352,25 +352,29 @@ static char * race_compress (char * src, int len) // {{{
 	}
 	outlen = strlen (outputstr);
 
-	if ( src[0] >= 0xffffffd8 && src[0] <= 0xffffffdc ) {
+	if ( (int) src[0] >= 0xffffffd8 && (int) src[0] <= 0xffffffdc ) {
 		OC_DEBUG ("Return Value     : NULL\n\n");
 		return "";
 	}
 
 	for ( i=0; i<len; i+=2 ) {
-		if ( src[i] == 0xffffff00 && src[i+1] == 0xffffff99 ) {
+		int p1, p2;
+		p1 = (int) src[i];
+		p2 = (int) src[i+1];
+
+		if ( p1 == 0xffffff00 && p2 == 0xffffff99 ) {
 			OC_DEBUG ("Return Value     : NULL\n\n");
 			return "";
 		}
 
-		if ( src[i] == src[0] && src[i+1] != 0xffffffff) {
-			sprintf (outputstr + outlen, "%02x", src[i+1] & 0x000000ff);
+		if ( src[i] == src[0] && p1 != 0xffffffff) {
+			sprintf (outputstr + outlen, "%02x", p2 & 0x000000ff);
 			outlen = strlen (outputstr);
 		} else if ( src[i] == src[0] && src[i+1] == 0xffffffff) {
-			sprintf (outputstr + outlen, "%02x%02x", src[i+1] & 0x000000ff, 0x99);
+			sprintf (outputstr + outlen, "%02x%02x", p2 & 0x000000ff, 0x99);
 			outlen = strlen (outputstr);
 		} else {
-			sprintf (outputstr + outlen, "%02x%02x", 0xff, src[i+1] & 0x000000ff);
+			sprintf (outputstr + outlen, "%02x%02x", 0xff, p2 & 0x000000ff);
 			outlen = strlen (outputstr);
 		}
 	}

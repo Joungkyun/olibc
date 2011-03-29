@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 10:08:14 $
- * $Revision: 1.76.2.3 $
+ * $Date: 2011-03-29 11:06:01 $
+ * $Revision: 1.76.2.4 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.3 2011-03-29 10:08:14 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.4 2011-03-29 11:06:01 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -429,7 +429,11 @@ Long64 str2long (CChar * src) // {{{
 			res += (bufno * x);
 			x *= 10;
 		}
+#ifdef __x86_64__
+		OC_DEBUG ("    => Current : %ld   \n", res);
+#else
 		OC_DEBUG ("    => Current : %lld   \n", res);
+#endif
 	}
 
 	if (minus) res *= -1;
@@ -490,8 +494,13 @@ long double str2double (CChar * src) { // {{{
 	ofree (decimal_t);
 	ofree (fraction_t);
 
+#ifdef __x86_64__
+	OC_DEBUG ("Decimal Integer  => %ld\n", decimal);
+	OC_DEBUG ("Fraction Integer => %ld\n", fraction);
+#else
 	OC_DEBUG ("Decimal Integer  => %lld\n", decimal);
 	OC_DEBUG ("Fraction Integer => %lld\n", fraction);
+#endif
 
 	fraction_f = fraction;
 
@@ -687,7 +696,11 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 		else
 			size /= 1000;
 
+#ifdef __x86_64__
+		OC_DEBUG ("INT  PART: %lu / %d = %ld\n", frac, dvd, size);
+#else
 		OC_DEBUG ("INT  PART: %llu / %d = %lld\n", frac, dvd, size);
+#endif
 		i++;
 	}
 
@@ -697,19 +710,35 @@ char * human_size_r (ULong64 size, bool sub, bool unit) // {{{
 	else
 		frac = (frac & 0x03ff) * 100 >> 10;
 
+#ifdef __x86_64__
+	OC_DEBUG ("FRAC PART: %ld\n", frac);
+#else
 	OC_DEBUG ("FRAC PART: %lld\n", frac);
+#endif
 
 	if ( sub ) {
 		char	* BYTE_C;
 		BYTE_C = (char *) numberFormat (osize, 0, '.', ',', 0);
 		sprintf (
+#ifdef __x86_64__
+			buf, "%lu.%lu %c%c (%s B%s%s)",
+#else
 			buf, "%llu.%llu %c%c (%s B%s%s)",
+#endif
 			size, frac, units[i], unit ? 'b' : 'B',
 			BYTE_C, unit ? "it" : "yte", singular
 		);
 		ofree (BYTE_C);
 	} else
-		sprintf (buf, "%llu.%llu %c%c", size, frac, units[i], unit ? 'b' : 'B');
+		sprintf (
+			buf,
+#ifdef __x86_64__
+			"%lu.%lu %c%c",
+#else
+			"%llu.%llu %c%c",
+#endif
+			size, frac, units[i], unit ? 'b' : 'B'
+		);
 
 	return buf;
 } // }}}
@@ -1181,7 +1210,6 @@ UInt long2bin (Long64 dec, char ** dst) // {{{
 {
 #ifdef __x86_64__
 	UInt	len;
-	char    * dst;
 
 	if ( (len = byte2bin (dec, dst, false)) == 0 )
 		return 0;
@@ -1282,10 +1310,10 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
  * @return	bool
  */
 OLIBC_API
-bool is_ksc5601 (UInt c1, UInt c2) // {{{
+bool is_ksc5601 (int c1, int c2) // {{{
 {
-	UChar	* c = (UChar *) ((c1 << 8) | c2);
-	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, (int) c, (int) c1, (int) c2);
+	int c = ((c1 << 8) | c2);
+	OC_DEBUG ("0x%x : 0x%x => 0x%x, %c%c\n", c1, c2, c, c1, c2);
 
 	if ( ! (c1 & 0x80) )
 		return false;
@@ -1295,19 +1323,19 @@ bool is_ksc5601 (UInt c1, UInt c2) // {{{
 		 && (c2 >= 0xa1 && c2 <= 0xfe) )
 		return true;
 
-	if ( (int) c >= 0xa1a2 && (int) c <= 0xa1fe )
+	if ( c >= 0xa1a2 && c <= 0xa1fe )
 		return true;
-	if ( (int) c >= 0xa5a1 && (int) c <= 0xa5f8 )
+	if ( c >= 0xa5a1 && c <= 0xa5f8 )
 		return true;
-	if ( (int) c >= 0xa6a1 && (int) c <= 0xa6e4 )
+	if ( c >= 0xa6a1 && c <= 0xa6e4 )
 		return true;
-	if ( (int) c >= 0xa7a1 && (int) c <= 0xa7ef )
+	if ( c >= 0xa7a1 && c <= 0xa7ef )
 		return true;
-	if ( (int) c >= 0xaaa1 && (int) c <= 0xaaf3 ) // hirakana
+	if ( c >= 0xaaa1 && c <= 0xaaf3 ) // hirakana
 		return true;
-	if ( (int) c >= 0xaba1 && (int) c <= 0xabf6 ) // katakana
+	if ( c >= 0xaba1 && c <= 0xabf6 ) // katakana
 		return true;
-	if ( (int) c >= 0xaca1 && (int) c <= 0xacf1 )
+	if ( c >= 0xaca1 && c <= 0xacf1 )
 		return true;
 
 	return false;
@@ -1331,7 +1359,7 @@ bool is_utf8 (UCChar * src) // {{{
 	if ( src == null )
 		return false;
 
-	len = strlen (src);
+	len = strlen ((CChar *) src);
 	if ( len == 0 )
 		return true;
 
@@ -1409,8 +1437,8 @@ char * charset_conv (CChar *src, CChar * from, CChar * to) // {{{
 {
 #ifdef HAVE_ICONV_H
 	iconv_t cd;
-	ICONV_CONST char * ibuf;
-	char * ibuf_t;
+	ICONV_CONST char * ibuf_t;
+	char * ibuf;
 	char * obuf, * obuf_t;
 	size_t err;
 

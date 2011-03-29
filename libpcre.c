@@ -43,12 +43,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-18 05:15:53 $
- * $Revision: 1.37 $
+ * $Date: 2011-03-29 11:06:01 $
+ * $Revision: 1.37.2.1 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.37 2011-03-18 05:15:53 oops Exp $ */
+/* $Id: libpcre.c,v 1.37.2.1 2011-03-29 11:06:01 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -284,7 +284,7 @@ static bool libpreg_compile (PregArg ** pa) // {{{
 				num_subpats;
 	CChar		* error;
 	char		* pattern = null;
-	UCChar		* tables = null;
+	UChar		* tables = null;
 
 	p = *pa;
 	oc_malloc_r (pattern, sizeof (char) * (p->reglen + 1), false);
@@ -301,7 +301,7 @@ static bool libpreg_compile (PregArg ** pa) // {{{
 		char * locale = setlocale (LC_CTYPE, null);
 
 		if ( strcmp (locale, "C") )
-			tables = pcre_maketables ();
+			tables = (UChar *) pcre_maketables ();
 	}
 #endif
 
@@ -310,7 +310,7 @@ static bool libpreg_compile (PregArg ** pa) // {{{
 
 	OC_DEBUG ("Pattern: %s\n", pattern);
 	ofree (pattern);
-	ofree ((UChar *) tables);
+	ofree (tables);
 
 	if ( p->re == null ) {
 		oc_error ("Compilation failed: %s at offset %d\n", error, erroffset);
@@ -795,7 +795,7 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 		}
 
 		if ( (count > 0 && reverse) || (count < 0 && ! reverse) )
-			goto skip_print;
+			continue;
 
 		if ( buflen == 0 ) {
 			oc_malloc (buf, sizeof (char) * chklen);
@@ -821,7 +821,6 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 		}
 
 		memcpy (buf_t, line, linelen);
-skip_print:
 	}
 
 	fclose (fp);

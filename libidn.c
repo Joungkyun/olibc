@@ -37,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:30:19 $
- * $Revision: 1.16 $
+ * $Date: 2011-03-29 11:06:01 $
+ * $Revision: 1.16.2.1 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.16 2011-03-02 17:30:19 oops Exp $ */
+/* $Id: libidn.c,v 1.16.2.1 2011-03-29 11:06:01 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -147,7 +147,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 	// remove after newline
 	{
 		char * newline;
-		if ( (newline = strchr (*dst, '\n')) != null )
+		if ( (newline = strchr ((CChar *) (*dst), '\n')) != null )
 			*newline = 0;
 	}
 
@@ -156,12 +156,12 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 		// Encoding mode
 		//
 		if ( charset == null ) {
-			p = stringprep_locale_to_utf8 (*dst);
+			p = stringprep_locale_to_utf8 ((CChar *) (*dst));
 			if ( p == null )
 				oc_error ("%s: could not convert from %s to UTF-8.\n",
 					 	 *dst, stringprep_locale_charset ());
 		} else {
-			p = charset_conv (*dst, charset, "UTF-8");
+			p = charset_conv ((CChar *) (*dst), charset, "UTF-8");
 			stringprep_locale_charset_cache = "UTF-8";
 		}
 
@@ -200,7 +200,7 @@ UInt convert_punycode_r (CChar * src, UChar ** dst, bool mode, CChar * charset) 
 		//
 		// Decoding mode
 		//
-		p = stringprep_locale_to_utf8 (*dst);
+		p = stringprep_locale_to_utf8 ((CChar *) (*dst));
 		if ( !p ) {
 			oc_error ("%s: could not convert from %s to UTF-8.\n",
 					 *dst, stringprep_locale_charset ());
@@ -301,7 +301,7 @@ char * convert_punycode (char * domain, int mode, int debug) // {{{
 	if ( len == 0 || dst == null )
 		return conv;
 
-	oc_safe_cpy (conv, dst, 512);
+	oc_safe_cpy (conv, (CChar *) dst, 512);
 	ofree (dst);
 	return conv;
 } // }}}

@@ -1,10 +1,12 @@
 Changelog
 
-$Id: Changes,v 1.65.2.3 2011-03-29 10:08:14 oops Exp $
+$Id: Changes,v 1.65.2.4 2011-03-29 11:06:01 oops Exp $
 
 * Tue, Mar 29 2011
 	- suport negative decimal on dec2bin/long2bin/bin2dec/bin2long
 	- support 64bit code on long2bin/bin2long
+	- valid build environment gcc4 and Freebsd
+	  On Freebsd system, use gmake and --with-iconv=/path configure option
 
 * Sat, Mar 26 2011
 	- fixed segfault on get_charcount

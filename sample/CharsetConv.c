@@ -2,8 +2,8 @@
 #include "test.h"
 
 int main (int argc, char ** argv) {
-	UChar src[5] = { 0, };
-	UChar * p = null,
+	char src[5] = { 0, };
+	char * p = null,
 		  * q = null;
 
 	// follow is EUC-KR "한글"

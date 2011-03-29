@@ -6,8 +6,8 @@ int main (void) {
 	unsigned char utf[7] = { 0, };
 
 	// hangul jeong
-	sprintf (euc, "%c%c", 0xc1, 0xa4);
-	sprintf (utf, "%c%c%c", 0xec, 0xa0, 0x95);
+	sprintf ((char *) euc, "%c%c", 0xc1, 0xa4);
+	sprintf ((char *) utf, "%c%c%c", 0xec, 0xa0, 0x95);
 
 	/*
 	 * is_ksc5601 test
