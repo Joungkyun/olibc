@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 07:31:44 $
- * $Revision: 1.76.2.2 $
+ * $Date: 2011-03-29 10:08:14 $
+ * $Revision: 1.76.2.3 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.2 2011-03-28 07:31:44 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.3 2011-03-29 10:08:14 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -55,27 +55,35 @@
  * @{
  */
 
-/* dec to binary template fucntion */
 /**
- * @brief	convert binary to 4 byte string type
- * @param[in]	src	The input binary
- * @param[out]	dst	Converted binary string
- * @param[in]	complete Bool. Set true filled right blank to 0.
- * @return	The length of dst variable that has converted binary string
+ * @brief   convert 4 or 8 byte decimal string to binary
+ * @param[in]   src The input decimal string
+ * @param[out]  dst Converted binary string
+ * @param[in]   complete Bool. Set true filled right blank to 0.
+ * @return  The length of dst variable that has converted binary string
  */
-static UInt Forebyte2bin (Long32 src, char ** dst, bool complete) // {{{
+static UInt byte2bin (Long64 src, char ** dst, bool complete) // {{{
 {
-	ULong32	mask = 2147483648UL;
-	Long32	m;
-	UInt	len;
+	ULong64 mask;
+	Long64  m;
+	UInt    len;
 
-	oc_malloc_r (*dst, sizeof (char) * 33, 0);
+	if ( src > INT_MAX || src < INT_MIN )
+#ifdef __x86_64__
+		mask = LONG_MAX + 1UL;
+#else
+		mask = LLONG_MAX + 1ULL;
+#endif
+	else
+		mask = INT_MAX + 1UL;
 
-	OC_DEBUG ("Buf No: %ld\n", src);
+	oc_malloc_r (*dst, sizeof (char) * 65, 0);
+
+	OC_DEBUG ("Buf No: %d\n", src);
 
 	len = 0;
 	while ( mask > 0 ) {
-		m = (Long32) src & (Long32) mask;
+		m = (Long64) src & mask;
 
 		if ( m ) {
 			memset ((*dst) + len, 49, 1);
@@ -1055,14 +1063,12 @@ char * hex2bin (CChar * src) // {{{
  * @param	src	The input binary string
  * @sa	dec2bin bin2long long2bin
  * @return	32bit integer
- * @warning
- *   The bin2long() function don't support negative.
  */
 OLIBC_API
-UInt bin2dec (CChar * src) // {{{
+Long32 bin2dec (CChar * src) // {{{
 {
-	UInt	len, i,
-			ret = 0;
+	UInt	len, i;
+	Long32	ret = 0;
 	char	var;
 
 	len = strlen (src);
@@ -1081,11 +1087,29 @@ UInt bin2dec (CChar * src) // {{{
  * @sa	long2bin bin2dec dec2bin
  * @return	64bit integer
  * @warning
- *   The bin2long() function don't support negative.
+ *    The bin2long() function caculate 64bit integer with high and
+ *    low bit on 32bit system
  */
 OLIBC_API
-ULong64 bin2long (CChar * src) // {{{
+Long64 bin2long (CChar * src) // {{{
 {
+#ifdef __x86_64__
+	Long64  ret = 0;
+	UInt    len, i;
+	char    var;
+
+	len = strlen (src);
+
+	for ( i=0 ; i<len ; i++ ) {
+		var = (src[i] == 0x30) ? 0 : 1;
+		if ( len <= 32 )
+			ret += ((Long32) var) << (len - 1 - i);
+		else
+			ret += ((Long64) var) << (len - 1 - i);
+	}
+
+	return ret;
+#else
 	ULong64	ret = 0;
 	UInt	var,
 			len;
@@ -1131,7 +1155,8 @@ b2l_low:
 		ret = combined64_high_low (v);
 	}
 
-	return over32 ? ret : var;
+	return over32 ? ret : (Long32) var;
+#endif
 } // }}}
 
 /**
@@ -1146,16 +1171,24 @@ b2l_low:
  *   this buffer using @e free()
  *
  * @warning
- *    The long2bin() function caculate 64bit integer with high and
- *    low bit for 32bit and 64bit compatibility. So, for cleary 32bit
- *    range integer, use the dec2bin() function.
+ *    On 32bit system, The long2bin() function caculate 64bit integer
+ *    with high and low bit.
  *
  * The long2bin() function convert 64bit integer to binary string.
  */
 OLIBC_API
 UInt long2bin (Long64 dec, char ** dst) // {{{
 {
-	ULong64	tmp;
+#ifdef __x86_64__
+	UInt	len;
+	char    * dst;
+
+	if ( (len = byte2bin (dec, dst, false)) == 0 )
+		return 0;
+
+	return len;
+#else
+	Long32	tmp;
 	UInt	len,
 			buflen;
 	Bit64	v;
@@ -1168,7 +1201,7 @@ UInt long2bin (Long64 dec, char ** dst) // {{{
 	if ( ! dec )
 		return 0;
 
-	if ( dec > 4294967295UL ) // 4byte ULONG_MAX
+	if ( dec > INT_MAX || dec < INT_MIN )
 		over32 = true;
 
 	len = buflen = 0;
@@ -1179,8 +1212,10 @@ UInt long2bin (Long64 dec, char ** dst) // {{{
 	tmp = over32 ? v.high : v.low;
 
 lowbit:
-	if ( (buflen = Forebyte2bin (tmp, &buf, full_print)) == 0 )
+	if ( (buflen = byte2bin ((Long64) tmp, &buf, full_print)) == 0 ) {
+		ofree (*dst);
 		return 0;
+	}
 
 	OC_DEBUG ("res -> %s (%d)\n", buf, buflen);
 
@@ -1191,11 +1226,12 @@ lowbit:
 	if ( over32 == true ) {
 		over32 = false;
 		full_print = true;
-		tmp = (Long64) v.low;
+		tmp = v.low;
 		goto lowbit;
 	}
 
 	return len;
+#endif
 } // }}}
 
 /**
@@ -1225,8 +1261,13 @@ UInt dec2bin (CChar * src, char ** dst) // {{{
 	if ( strlen (src) == 0 )
 		return 0;
 
-#ifdef HAVE_STRTOULL
+#ifdef HAVE_STRTOLL
+	OC_DEBUG ("USE strtoll\n");
+#ifdef __x86_64__
+	dec = strtol (src, null, 10);
+#else
 	dec = strtoll (src, null, 10);
+#endif
 #else
 	dec = (Long64) str2long (src);
 #endif

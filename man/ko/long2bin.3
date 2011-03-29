@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.1 2011-03-18 16:52:20 oops Exp $
+.\" $Id: long2bin.3,v 1.1.2.1 2011-03-29 10:08:15 oops Exp $
 .SH 이름
 long2bin \- 64bit 정수를 2진수 문자열로 변환
 .br
@@ -38,6 +38,7 @@ or
 .BI long2bin()
 api는 64bit 정수를 2진수 문자열로 변환한다.
 
+32bit 시스템에서,
 .BI long2bin()
 api는 32bit와 64bit 호환을 위하여 64bit 정수를 상위비트/하위비트로 쪼개어
 계산을 한다. 명확하게 32bit 범위의 정수일 경우

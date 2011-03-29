@@ -1,6 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.65.2.2 2011-03-25 18:34:29 oops Exp $
+$Id: Changes,v 1.65.2.3 2011-03-29 10:08:14 oops Exp $
+
+* Tue, Mar 29 2011
+	- suport negative decimal on dec2bin/long2bin/bin2dec/bin2long
+	- support 64bit code on long2bin/bin2long
 
 * Sat, Mar 26 2011
 	- fixed segfault on get_charcount

@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.1 2011-03-18 16:52:20 oops Exp $
+.\" $Id: long2bin.3,v 1.1.2.1 2011-03-29 10:08:15 oops Exp $
 .SH NAME
 long2bin \- Convert 64bit integer to binary string
 .br
@@ -39,7 +39,7 @@ The
 .BI long2bin()
 api convert 64bit integer to binary string.
 
-The
+On the 32bit system, the
 .BI long2bin()
 api caculate 64bit integer with high and low bit for 32bit and 64bit
 compatibility. So, for cleary 32bit range integer, use the

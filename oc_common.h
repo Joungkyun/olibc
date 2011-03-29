@@ -6,11 +6,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 07:31:44 $
- * $Revision: 1.21.2.1 $
+ * $Date: 2011-03-29 10:08:14 $
+ * $Revision: 1.21.2.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.21.2.1 2011-03-28 07:31:44 oops Exp $ */
+/* $Id: oc_common.h,v 1.21.2.2 2011-03-29 10:08:14 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -62,6 +62,7 @@
 #include <olibc/oc_type.h>
 
 #ifdef HAVE_ICONV_H
+	#define HAVE_ICONV 1 // for libidn
 	#ifndef ICONV_CONST
 		#ifdef HAVE_LIBICONV
 			#define ICONV_CONST const
@@ -69,6 +70,15 @@
 			#define ICONV_CONST
 		#endif
 	#endif
+#endif
+
+#if ! defined(__x86_64__) && ! defined(LLONG_MAX)
+	/* Minimum and maximum values a `signed long long int' can hold.  */
+	#define LLONG_MAX    9223372036854775807LL
+	#define LLONG_MIN    (-LLONG_MAX - 1LL)
+
+	/* Maximum value an `unsigned long long int' can hold.  (Minimum is 0.)  */
+	#define ULLONG_MAX   18446744073709551615ULL
 #endif
 
 UInt get_charcount (CChar * str, CChar * del);
