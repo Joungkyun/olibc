@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 17:03:40 $
- * $Revision: 1.105 $
+ * $Date: 2011-03-29 17:07:36 $
+ * $Revision: 1.106 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.105 2011-03-29 17:03:40 oops Exp $ */
+/* $Id: libstring.c,v 1.106 2011-03-29 17:07:36 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -872,11 +872,14 @@ char * bin2hex (CChar * src, size_t * outlen) // {{{
 	char	buf[5],
 			* dst;
 
+	if ( outlen != null )
+		*outlen = 0;
+
 	if ( src == null )
-		return 0;
+		return null;
 
 	if ( (len = strlen (src)) < 4 )
-		return 0;
+		return null;
 
 	oc_malloc_r (dst, sizeof (char) * (len / 4 + 1), null);
 
