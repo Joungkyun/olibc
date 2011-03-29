@@ -53,7 +53,7 @@ int main (int argc, char ** argv) {
 	 * preg_fgrep API test
 	 */
 	{
-		CChar	* path = "./test.txt";
+		const char	* path = "./test.txt";
 
 		oc_test_banner ("preg_fgrep");
 		buf = preg_fgrep ("/[\\s]+scsi_host/", path, false);
