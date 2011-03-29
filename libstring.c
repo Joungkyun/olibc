@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:18:35 $
- * $Revision: 1.76.2.6 $
+ * $Date: 2011-03-29 18:30:10 $
+ * $Revision: 1.76.2.7 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.6 2011-03-29 18:18:35 oops Exp $ */
+/* $Id: libstring.c,v 1.76.2.7 2011-03-29 18:30:10 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 
@@ -318,7 +318,7 @@ bool addslashes_r (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{
 	c = get_charcount (in, inlen, "'\"\\\0", 4);
 	oc_malloc_r (*out, sizeof (char) * (inlen + c) + 1, false);
 
-	source = in;
+	source = (char *) in;
 	target = *out;
 	end = source + inlen;
 
@@ -368,12 +368,12 @@ OLIBC_API
 char * addslashes (char * in, bool should_free) // {{{
 {
 	size_t	outlen;
-	UChar	* out;
+	char	* out;
 
 	if ( in == null )
 		return null;
 
-	if ( addslashes_r ((UChar *) in, strlen (in), &out, &outlen) == false )
+	if ( addslashes_r (in, strlen (in), &out, &outlen) == false )
 		return null;
 
 	if ( should_free )

@@ -38,11 +38,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:18:35 $
- * $Revision: 1.11.2.2 $
+ * $Date: 2011-03-29 18:30:10 $
+ * $Revision: 1.11.2.3 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.11.2.2 2011-03-29 18:18:35 oops Exp $ */
+/* $Id: libmisc.c,v 1.11.2.3 2011-03-29 18:30:10 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc
@@ -52,22 +52,24 @@
 /**
  * @brief	Get number of delimiters in the input string
  * @param	str The input string
+ * @param	sl	The length of input string
  * @param	del	The input delimiters
+ * @param	dl	The length of delimiters string
  * @return	Number of delimiters in the input string
  */
-size_t get_charcount (CChar * str, CChar * del) // {{{
+size_t get_charcount (CChar * str, size_t sl, CChar * del, size_t dl) // {{{
 {
-	size_t no, i, j, len, dlen;
+	size_t no,
+		   i,
+		   j;
 
 	if ( str == null || del == null )
 		return 0;
 
 	no = 0;
-	len = strlen (str);
-	dlen = strlen (del);
 
-	for ( i=0; i<len; i++ ) {
-		for ( j=0; j<dlen; j++ ) {
+	for ( i=0; i<sl; i++ ) {
+		for ( j=0; j<dl; j++ ) {
 			if ( str[i] == del[j] ) {
 				if ( i>0 && str[i-1] == '\\' )
 					continue;

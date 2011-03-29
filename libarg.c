@@ -38,11 +38,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-28 07:29:38 $
- * $Revision: 1.34.2.1 $
+ * $Date: 2011-03-29 18:30:10 $
+ * $Revision: 1.34.2.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.34.2.1 2011-03-28 07:29:38 oops Exp $ */
+/* $Id: libarg.c,v 1.34.2.2 2011-03-29 18:30:10 oops Exp $ */
 
 /**
  * If this constants is not defined, declare extern global variables
@@ -580,7 +580,7 @@ char ** split (CChar * src, int * oargc, CChar * delimiter) // {{{
 		return null;
 	}
 
-	delno = get_charcount (buf, delimiter);
+	delno = get_charcount (buf, len, delimiter, dlen);
 	delno++;
 	oc_malloc_r (sep, sizeof (char *) * (delno + 1), null);
 
