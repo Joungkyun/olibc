@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:14:22 $
- * $Revision: 1.110 $
+ * $Date: 2011-03-29 19:00:56 $
+ * $Revision: 1.111 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.110 2011-03-29 18:14:22 oops Exp $ */
+/* $Id: libstring.c,v 1.111 2011-03-29 19:00:56 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -505,8 +505,13 @@ double str2double (CChar * src) { // {{{
 	ofree (decimal_t);
 	ofree (fraction_t);
 
+#ifdef __x86_64__
+	OC_DEBUG ("Decimal Integer  => %ld\n", decimal);
+	OC_DEBUG ("Fraction Integer => %ld\n", fraction);
+#else
 	OC_DEBUG ("Decimal Integer  => %lld\n", decimal);
 	OC_DEBUG ("Fraction Integer => %lld\n", fraction);
+#endif
 
 	fraction_f = fraction;
 
