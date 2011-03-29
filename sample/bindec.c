@@ -24,7 +24,8 @@ int main (void) {
 			sprintf (u, "dec2bin%s", unit[i]);
 			oc_test_banner (u);
 
-			if ( (buf= dec2bin(str[i], &len)) == null ) {
+			//if ( (buf= dec2bin(str[i], &len)) == null ) {
+			if ( (buf= dec2bin(str[i], null)) == null ) {
 				printf ("failed\n");
 			} else {
 				if ( ! strcmp (bin[i], buf) ) {
@@ -44,11 +45,12 @@ int main (void) {
 			sprintf (u, "long2bin %s", unit[i]);
 			oc_test_banner (u);
 
+			//if ( (buf= long2bin (dec[i], null)) == null ) {
 			if ( (buf= long2bin (dec[i], &len)) == null ) {
 				printf ("failed\n");
 			} else {
 				if ( ! strcmp (bin[i], buf) ) {
-					printf ("ok\n");
+					printf ("ok (%d)\n", len);
 					ofree (buf);
 				} else
 					printf ("failed\n");

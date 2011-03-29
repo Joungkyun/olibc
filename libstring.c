@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 16:46:07 $
- * $Revision: 1.104 $
+ * $Date: 2011-03-29 17:03:40 $
+ * $Revision: 1.105 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.104 2011-03-29 16:46:07 oops Exp $ */
+/* $Id: libstring.c,v 1.105 2011-03-29 17:03:40 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -382,7 +382,8 @@ bool addslashes (CChar * in, size_t inlen, char ** out, size_t * outlen) // {{{
 	}
 
 	*target = 0;
-	*outlen = target - (*out);
+	if ( outlen != null )
+		*outlen = target - (*out);
 
 	return true;
 } // }}}
@@ -1059,36 +1060,45 @@ char * long2bin (Long64 dec, size_t * outlen) // {{{
 {
 #ifdef __x86_64__
 	char	* dst;
+	size_t	len = 0;
 
-	if ( (*outlen = byte2bin (dec, &dst, false)) == 0 ) {
+	if ( outlen != null )
 		*outlen = 0;
+
+	if ( (len = byte2bin (dec, &dst, false)) == 0 )
 		return null;
-	}
+
+	if ( outlen != null )
+		*outlen = len;
 
 	return dst;
 #else
 	Long32	tmp;
-	UInt	buflen;
+	size_t	buflen,
+			len = 0;
 	Bit64	v;
 	char	* buf,
 			* dst;
 	bool	over32 = false,
 			full_print = false;
 
-	*outlen = 0;
+	if ( outlen != null )
+		*outlen = 0;
 
 	if ( ! dec ) {
 		oc_strdup (dst, "0", 1);
-		*outlen = 1;
-		if ( dst == null )
-			*outlen = 0;
+		if ( outlen != null ) {
+			*outlen = 1;
+			if ( dst == null )
+				*outlen = 0;
+		}
 		return dst;
 	}
 
 	if ( dec > INT_MAX || dec < INT_MIN )
 		over32 = true;
 
-	*outlen = buflen = 0;
+	len = buflen = 0;
 	oc_malloc_r (dst, sizeof (char) * 65, 0);
 
 	v = devided64_high_low (dec);
@@ -1097,15 +1107,16 @@ char * long2bin (Long64 dec, size_t * outlen) // {{{
 lowbit:
 	if ( (buflen = byte2bin ((Long64) tmp, &buf, full_print)) == 0 ) {
 		ofree (dst);
-		*outlen = 0;
+		if ( outlen != null )
+			*outlen = 0;
 		return null;
 	}
 
 	OC_DEBUG ("res -> %s (%d)\n", buf, buflen);
-	OC_DEBUG ("res -> %s (%d)\n", dst, *outlen);
+	OC_DEBUG ("res -> %s (%d)\n", dst, len);
 
-	memcpy (dst + *outlen, buf, buflen);
-	*outlen += buflen;
+	memcpy (dst + len, buf, buflen);
+	len += buflen;
 	ofree (buf);
 
 	if ( over32 == true ) {
@@ -1114,6 +1125,9 @@ lowbit:
 		tmp = v.low;
 		goto lowbit;
 	}
+
+	if ( outlen != null )
+		*outlen = len;
 
 	return dst;
 #endif
@@ -1137,8 +1151,10 @@ OLIBC_API
 char * dec2bin (CChar * src, size_t * outlen) // {{{
 {
 	Long64	dec;
+	size_t	len = 0;
 
-	*outlen = 0;
+	if ( outlen != null )
+		*outlen = 0;
 
 	if ( src == null )
 		return NULL;
