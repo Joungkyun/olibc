@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 17:07:36 $
- * $Revision: 1.106 $
+ * $Date: 2011-03-29 17:17:06 $
+ * $Revision: 1.107 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.106 2011-03-29 17:07:36 oops Exp $ */
+/* $Id: libstring.c,v 1.107 2011-03-29 17:17:06 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -899,21 +899,29 @@ char * bin2hex (CChar * src, size_t * outlen) // {{{
 /**
  * @brief	Convert hexadecimal string to binary string
  * @param	src hexadecimal string for converting
+ * @param[out]	outlen The length of return string
  * @return	binary string
  * @sa	bin2hex
  * @exception DEALLOCATE
  *   When occurs internal error, hex2bin() returns null.
  *   If the return string array pointer is not null, the caller should
  *   deallocate this buffer using @e free()
+ *
+ * The @e hex2bin() api convert hexadecimal string to binary string.
+ * If @e outlen argument is set null, @e hex2bin() api don't count
+ * the length of return value.
  */
 OLIBC_API
-char * hex2bin (CChar * src) // {{{
+char * hex2bin (CChar * src, size_t * outlen) // {{{
 {
 	char	* data;
 	UInt	len,
 			alloc,
 			i,
 			j;
+
+	if ( outlen != null )
+		*outlen = 0;
 
 	if ( src == null )
 		return null;
@@ -932,6 +940,9 @@ char * hex2bin (CChar * src) // {{{
 		memcpy (data + j, _hex2bin (src[i]), 4);
 		j += 4;
 	}
+
+	if ( outlen != null )
+		*outlen = j;
 
 	return data;
 } // }}}

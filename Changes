@@ -1,9 +1,10 @@
 Changelog
 
-$Id: Changes,v 1.88 2011-03-29 16:46:06 oops Exp $
+$Id: Changes,v 1.89 2011-03-29 17:17:06 oops Exp $
 
 * Wed, Mar 30 2011
-	- changed hex2bin_r to hex2bin
+	- changed bin2hex_r to bin2hex
+	- add outlen parameter on hex2bin api
 
 * Mon, Mar 28 2011
 	- changed proto type of dec2bin, long2bin api

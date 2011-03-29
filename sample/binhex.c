@@ -33,10 +33,10 @@ go_bin2hex_fail:
 			buf = strdup ("fd");
 
 		oc_test_banner ("hex2bin");
-		tmp = hex2bin (buf);
+		tmp = hex2bin (buf, null);
 		ofree (buf);
 
-		if ( ! strcmp (src, tmp) )
+		if ( tmp != null && ! strcmp (src, tmp) )
 			printf ("ok\n");
 		else
 			printf ("failed\n");
