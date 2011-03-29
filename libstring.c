@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 17:24:36 $
- * $Revision: 1.108 $
+ * $Date: 2011-03-29 17:56:55 $
+ * $Revision: 1.109 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.108 2011-03-29 17:24:36 oops Exp $ */
+/* $Id: libstring.c,v 1.109 2011-03-29 17:56:55 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>
@@ -1177,7 +1177,6 @@ OLIBC_API
 char * dec2bin (CChar * src, size_t * outlen) // {{{
 {
 	Long64	dec;
-	size_t	len = 0;
 
 	if ( outlen != null )
 		*outlen = 0;
