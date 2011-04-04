@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.38 2011-03-25 10:35:43 oops Exp $
+# $Id: Makefile.in,v 1.39 2011-04-04 12:21:00 oops Exp $
 srcdir			= @srcdir@
 top_srcdir		= @top_srcdir@
 builddir		= @builddir@
@@ -113,7 +113,7 @@ olibc-config:
 install: install-doc install-header
 	$(MKDIR) $(DESTDIR)$(bindir)
 	$(MKDIR) $(DESTDIR)$(libdir)
-	for i in olibc ogc oc ; do \
+	for i in olibc oc ogc ; do \
 		$(P_LIBTOOL) $$i-config $(DESTDIR)$(bindir) ; \
 		$(L_LIBTOOL) lib$$i.la $(DESTDIR)$(libdir)/lib$$i.la ; \
 		$(LIBTOOL) --finish $(libdir) ; \
