@@ -37,11 +37,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 12:14:41 $
- * $Revision: 1.18 $
+ * $Date: 2011-04-04 09:12:27 $
+ * $Revision: 1.19 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.18 2011-03-25 12:14:41 oops Exp $ */
+/* $Id: libidn.c,v 1.19 2011-04-04 09:12:27 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>
@@ -266,11 +266,11 @@ char * convert_punycode (CChar * src, CChar * charset) // {{{
 	return dst;
 #else
 	oc_error ("olibc was compiled without iconv library\n");
-	return domain;
+	return src;
 #endif
 #else
 	oc_error ("olibc was compiled without libidn\n");
-	return domain;
+	return src;
 #endif
 } // }}}
 
