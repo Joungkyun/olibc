@@ -1,3 +1,22 @@
+/*
+ *  Copyright (C) 2011 JoungKyun.Kim <http://oops.org/>
+ *
+ *  This file is part of olibc.
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ */
+
 /** 
  * @file	libidn.h
  * @brief	IDN API header file
@@ -5,11 +24,11 @@
  * This file includes proto type of idn apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 12:14:41 $
- * $Revision: 1.12 $
+ * $Date: 2011-04-05 06:09:58 $
+ * $Revision: 1.13 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.h,v 1.12 2011-03-25 12:14:41 oops Exp $ */
+/* $Id: libidn.h,v 1.13 2011-04-05 06:09:58 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 

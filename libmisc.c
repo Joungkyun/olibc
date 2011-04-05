@@ -29,6 +29,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  * -----------------------------------------------------------------------------
+ *  This file is part of olibc.
  */
 
 /** 
@@ -38,11 +39,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:14:22 $
- * $Revision: 1.17 $
+ * $Date: 2011-04-05 06:09:58 $
+ * $Revision: 1.18 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.17 2011-03-29 18:14:22 oops Exp $ */
+/* $Id: libmisc.c,v 1.18 2011-04-05 06:09:58 oops Exp $ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc

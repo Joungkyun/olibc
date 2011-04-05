@@ -1,5 +1,7 @@
 /*
- *  Copyright (C) 2011 JoungKyun.Kim
+ *  Copyright (C) 2011 JoungKyun.Kim <http://oops.org/>
+ *
+ *  This file is part of olibc.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -11,9 +13,8 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
 
 /** 
@@ -37,11 +38,11 @@
  * @sa	http://www.gnu.org/software/libidn/
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-04 09:12:27 $
- * $Revision: 1.19 $
+ * $Date: 2011-04-05 06:09:58 $
+ * $Revision: 1.20 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.c,v 1.19 2011-04-04 09:12:27 oops Exp $ */
+/* $Id: libidn.c,v 1.20 2011-04-05 06:09:58 oops Exp $ */
 #include <oc_common.h>
 #include <libidn.h>
 #include <libstring.h>

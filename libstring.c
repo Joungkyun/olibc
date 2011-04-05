@@ -13,9 +13,10 @@
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
  *
- *     * Neither the name of the JoungKyun.Kim nor the names of its
- *       contributors may be used to endorse or promote products derived from
- *       this software without specific prior written permission.
+ *     * Neither the name of JoungKyun.Kim nor the url of oops.org
+ *       nor the names of their contributors may be used to endorse or
+ *       promote products derived from this software without specific prior
+ *       written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,6 +30,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  * -----------------------------------------------------------------------------
+ *  This file is part of olibc.
  */
 
 /** 
@@ -38,12 +40,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 19:00:56 $
- * $Revision: 1.111 $
+ * $Date: 2011-04-05 06:09:58 $
+ * $Revision: 1.112 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.111 2011-03-29 19:00:56 oops Exp $ */
+/* $Id: libstring.c,v 1.112 2011-04-05 06:09:58 oops Exp $ */
 #include <oc_common.h>
 #include <libstring.h>
 #include <libarg.h>

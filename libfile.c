@@ -13,9 +13,10 @@
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
  *
- *     * Neither the name of the JoungKyun.Kim nor the names of its
- *       contributors may be used to endorse or promote products derived from
- *       this software without specific prior written permission.
+ *     * Neither the name of JoungKyun.Kim nor the url of oops.org
+ *       nor the names of their contributors may be used to endorse or
+ *       promote products derived from this software without specific prior
+ *       written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -29,6 +30,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  * -----------------------------------------------------------------------------
+ *  This file is part of olibc.
  */
 
 /** 
@@ -38,11 +40,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-26 04:55:17 $
- * $Revision: 1.38 $
+ * $Date: 2011-04-05 06:09:58 $
+ * $Revision: 1.39 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.38 2011-03-26 04:55:17 oops Exp $ */
+/* $Id: libfile.c,v 1.39 2011-04-05 06:09:58 oops Exp $ */
 #include <oc_common.h>
 
 #include <limits.h>
