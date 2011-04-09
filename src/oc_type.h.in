@@ -41,11 +41,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:03:05 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: oc_type.h.in,v 1.2 2011-04-09 16:03:05 oops Exp $ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H
@@ -56,6 +56,11 @@
 #include <unistd.h>
 #include <limits.h>
 #include <stdint.h>
+
+# ifdef __cplusplus
+extern "C"
+{
+# endif
 
 /************ architecure **********/
 #if defined(__x86_64) || defined(__amd64)
@@ -283,5 +288,9 @@ typedef struct {
 		memmove (dst, src, size); \
 		memset (dst + size, 0, 1); \
 	}
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif

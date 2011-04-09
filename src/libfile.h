@@ -40,15 +40,20 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:03:05 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: libfile.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 
 #include <olibc/oc_type.h>
+
+# ifdef __cplusplus
+extern "C"
+{
+# endif
 
 /** @defgroup file_exists_constant file_exsits constants
  * These constants are used by file_exsists() api, and defined
@@ -71,6 +76,9 @@ extern size_t readfile (CChar * path, char ** buf);
 extern bool writefile (CChar * path, CChar * data, size_t size, bool mode);
 extern char * realpath_r (CChar * path);
 
+# ifdef __cplusplus
+}
+# endif
 #endif
 /*
  * Local variables:

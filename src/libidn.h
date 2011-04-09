@@ -24,15 +24,20 @@
  * This file includes proto type of idn apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:03:05 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.h,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: libidn.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 
 #include <olibc/oc_type.h>
+
+# ifdef __cplusplus
+extern "C"
+{
+# endif
 
 #define ENDANSI		0
 #define GRAY		1
@@ -54,6 +59,10 @@
 
 extern CChar * stringprep_locale_charset_cache;
 extern char * convert_punycode (CChar * src, CChar * charset);
+
+# ifdef __cplusplus
+}
+# endif
 #endif
 
 /*

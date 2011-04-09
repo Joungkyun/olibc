@@ -44,7 +44,7 @@
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 /*
- * $Id: libpcre.h,v 1.1 2011-04-09 15:54:21 oops Exp $
+ * $Id: libpcre.h,v 1.2 2011-04-09 16:03:05 oops Exp $
  *
  * Copyright (C) 2011 JoungKyun.Kim
  *
@@ -75,6 +75,11 @@
 #include <pcre.h>
 #endif
 
+# ifdef __cplusplus
+extern "C"
+{
+# endif
+
 extern char * preg_quote (CChar * src, CChar * delim);
 extern char * preg_replace (char * regex, char * replace, char * subject, int * retlen);
 extern char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no);
@@ -83,6 +88,9 @@ extern char * preg_fgrep (CChar * regex, CChar * path, bool reverse);
 extern bool preg_match (CChar * regex, CChar * subject);
 extern int preg_match_r (CChar * regex, CChar * subject, CChar *** matches);
 
+# ifdef __cplusplus
+}
+# endif
 #endif
 /*
  * Local variables:

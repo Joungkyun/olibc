@@ -40,15 +40,20 @@
  * This file includes proto type of command line argument apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:03:05 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.h,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: libarg.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
 #include <olibc/oc_type.h>
+
+# ifdef __cplusplus
+extern "C"
+{
+# endif
 
 /**
  * @brief long option structure for o_getopt API
@@ -86,6 +91,10 @@ extern int o_getopt (
 extern char ** argv_make (CChar * stream, int * oargc);
 extern void ofree_array (char ** argv_array);
 extern int get_whitespace (CChar * src);
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif
 /*

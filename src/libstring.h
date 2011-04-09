@@ -40,15 +40,20 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:03:05 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: libstring.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 
 #include <olibc/oc_type.h>
+
+# ifdef __cplusplus
+extern "C"
+{
+# endif
 
 #define OC_ENDANSI	0   //!< declare ansi end
 #define OC_GRAY		30  //!< declare ansi color gray
@@ -105,6 +110,10 @@ extern char * dec2bin (CChar * src, size_t * outlen);
 extern bool is_ksc5601 (int c1, int c2);
 extern bool is_utf8 (UCChar * src);
 extern char * charset_conv (CChar * src, CChar * from, CChar * to);
+
+# ifdef __cplusplus
+}
+# endif
 #endif
 
 /*

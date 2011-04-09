@@ -40,20 +40,29 @@
  * This file includes proto type of time apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:03:05 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.h,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: libtime.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
 #ifndef LIBTIME_H
 #define LIBTIME_H
 
 #include <olibc/oc_type.h>
 
+# ifdef __cplusplus
+extern "C"
+{
+# endif
+
 /*
  * Return current Unix timestamp with microseconds
  */
 extern double microtime (void);
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif
 /*
