@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@/olibc@COMPAT_VERSION@
+
+Name: libolibc@COMPAT_VERSION@
+Description: High level c library for easly c coding
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lolibc@COMPAT_VERSION@
+Cflags: -I${includedir} @CFLAGS@

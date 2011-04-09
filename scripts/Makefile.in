@@ -49,7 +49,8 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.in,v 1.7 2011-04-09 15:54:21 oops Exp $
+# $Id: Makefile.in,v 1.1 2011-04-09 15:54:21 oops Exp $
+
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -73,9 +74,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = man
-DIST_COMMON = $(dist_man_MANS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+subdir = scripts
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/olibc-config.in $(srcdir)/olibc.pc.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
 	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
@@ -86,23 +87,22 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/olibc-config.h \
 	$(top_builddir)/src/oc_type.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = olibc.pc olibc-config
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgconfigdir)"
+binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
+SCRIPTS = $(bin_SCRIPTS)
 depcomp =
 am__depfiles_maybe =
 SOURCES =
 DIST_SOURCES =
-man3dir = $(mandir)/man3
-am__installdirs = "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(ko_man3dir)"
-NROFF = nroff
-MANS = $(dist_man_MANS)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-ko_man3DATA_INSTALL = $(INSTALL_DATA)
-DATA = $(ko_man3_DATA)
+pkgconfigDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(pkgconfig_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -204,45 +204,13 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-@COMPAT_FALSE@EXTRA_DIST = ko/addslashes.3 ko/argv_make.3 ko/bin2dec.3 ko/bin2hex.3 \
-@COMPAT_FALSE@			 ko/bin2long.3 ko/char2int.3 ko/charset_conv.3 \
-@COMPAT_FALSE@			 ko/convert_punycode.3 ko/dec2bin.3 ko/file_exists.3 \
-@COMPAT_FALSE@			 ko/file_status.3 ko/get_whitespace.3 ko/hex2bin.3 \
-@COMPAT_FALSE@			 ko/human_size.3 ko/is_ksc5601.3 ko/is_strint.3 ko/is_utf8.3 \
-@COMPAT_FALSE@			 ko/join.3 ko/long2bin.3 ko/microtime.3 ko/numberFormat.3 \
-@COMPAT_FALSE@			 ko/o_getopt.3 ko/ofree_array.3 ko/preg_fgrep.3 ko/preg_grep.3 \
-@COMPAT_FALSE@			 ko/preg_match.3 ko/preg_match_r.3 ko/preg_quote.3 \
-@COMPAT_FALSE@			 ko/preg_replace.3 ko/preg_replace_arr.3 ko/readfile.3 \
-@COMPAT_FALSE@			 ko/realpath_r.3 ko/setansi.3 ko/split.3 ko/str2double.3 \
-@COMPAT_FALSE@			 ko/str2long.3 ko/strtolower.3 ko/strtoupper.3 ko/trim.3 \
-@COMPAT_FALSE@			 ko/trim_r.3 ko/writefile.3
-
-@COMPAT_FALSE@dist_man_MANS = addslashes.3 argv_make.3 bin2dec.3 bin2hex.3 bin2long.3 \
-@COMPAT_FALSE@				char2int.3 charset_conv.3 convert_punycode.3 dec2bin.3 \
-@COMPAT_FALSE@				file_exists.3 file_status.3 get_whitespace.3 hex2bin.3 \
-@COMPAT_FALSE@				human_size.3 is_ksc5601.3 is_strint.3 is_utf8.3 join.3 \
-@COMPAT_FALSE@				long2bin.3 microtime.3 numberFormat.3 o_getopt.3 \
-@COMPAT_FALSE@				ofree_array.3 preg_fgrep.3 preg_grep.3 preg_match.3 \
-@COMPAT_FALSE@				preg_match_r.3 preg_quote.3 preg_replace.3 preg_replace_arr.3 \
-@COMPAT_FALSE@				readfile.3 realpath_r.3 setansi.3 split.3 str2double.3 \
-@COMPAT_FALSE@				str2long.3 strtolower.3 strtoupper.3 trim.3 trim_r.3 \
-@COMPAT_FALSE@				writefile.3
-
-@COMPAT_FALSE@ko_man3dir = $(mandir)/ko/man3
-@COMPAT_FALSE@ko_man3_DATA = ko/addslashes.3 ko/argv_make.3 ko/bin2dec.3 ko/bin2hex.3 \
-@COMPAT_FALSE@			 ko/bin2long.3 ko/char2int.3 ko/charset_conv.3 \
-@COMPAT_FALSE@			 ko/convert_punycode.3 ko/dec2bin.3 ko/file_exists.3 \
-@COMPAT_FALSE@			 ko/file_status.3 ko/get_whitespace.3 ko/hex2bin.3 \
-@COMPAT_FALSE@			 ko/human_size.3 ko/is_ksc5601.3 ko/is_strint.3 ko/is_utf8.3 \
-@COMPAT_FALSE@			 ko/join.3 ko/long2bin.3 ko/microtime.3 ko/numberFormat.3 \
-@COMPAT_FALSE@			 ko/o_getopt.3 ko/ofree_array.3 ko/preg_fgrep.3 ko/preg_grep.3 \
-@COMPAT_FALSE@			 ko/preg_match.3 ko/preg_match_r.3 ko/preg_quote.3 \
-@COMPAT_FALSE@			 ko/preg_replace.3 ko/preg_replace_arr.3 ko/readfile.3 \
-@COMPAT_FALSE@			 ko/realpath_r.3 ko/setansi.3 ko/split.3 ko/str2double.3 \
-@COMPAT_FALSE@			 ko/str2long.3 ko/strtolower.3 ko/strtoupper.3 ko/trim.3 \
-@COMPAT_FALSE@			 ko/trim_r.3 ko/writefile.3
-
-all: all-am
+bin_SCRIPTS = olibc-config ogc-config oc-config
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = olibc.pc ogc.pc oc.pc
+DISTCLEANFILES = *.pc *-config
+BUILT_SOURCES = oc.in ogc.in
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -254,9 +222,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  --ignore-deps man/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  --ignore-deps scripts/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  --ignore-deps man/Makefile
+	  $(AUTOMAKE) --foreign  --ignore-deps scripts/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -274,6 +242,29 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+olibc.pc: $(top_builddir)/config.status $(srcdir)/olibc.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+olibc-config: $(top_builddir)/config.status $(srcdir)/olibc-config.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f $$d$$p; then \
+	    f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
+	    echo " $(binSCRIPT_INSTALL) '$$d$$p' '$(DESTDIR)$(bindir)/$$f'"; \
+	    $(binSCRIPT_INSTALL) "$$d$$p" "$(DESTDIR)$(bindir)/$$f"; \
+	  else :; fi; \
+	done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
+	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+	done
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -284,67 +275,22 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-man3: $(man3_MANS) $(man_MANS)
+install-pkgconfigDATA: $(pkgconfig_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(man3dir)" || $(mkdir_p) "$(DESTDIR)$(man3dir)"
-	@list='$(man3_MANS) $(dist_man3_MANS) $(nodist_man3_MANS)'; \
-	l2='$(man_MANS) $(dist_man_MANS) $(nodist_man_MANS)'; \
-	for i in $$l2; do \
-	  case "$$i" in \
-	    *.3*) list="$$list $$i" ;; \
-	  esac; \
-	done; \
-	for i in $$list; do \
-	  if test -f $(srcdir)/$$i; then file=$(srcdir)/$$i; \
-	  else file=$$i; fi; \
-	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
-	  case "$$ext" in \
-	    3*) ;; \
-	    *) ext='3' ;; \
-	  esac; \
-	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-	  inst=`echo $$inst | sed -e 's/^.*\///'`; \
-	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-	  echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man3dir)/$$inst'"; \
-	  $(INSTALL_DATA) "$$file" "$(DESTDIR)$(man3dir)/$$inst"; \
-	done
-uninstall-man3:
-	@$(NORMAL_UNINSTALL)
-	@list='$(man3_MANS) $(dist_man3_MANS) $(nodist_man3_MANS)'; \
-	l2='$(man_MANS) $(dist_man_MANS) $(nodist_man_MANS)'; \
-	for i in $$l2; do \
-	  case "$$i" in \
-	    *.3*) list="$$list $$i" ;; \
-	  esac; \
-	done; \
-	for i in $$list; do \
-	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
-	  case "$$ext" in \
-	    3*) ;; \
-	    *) ext='3' ;; \
-	  esac; \
-	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-	  inst=`echo $$inst | sed -e 's/^.*\///'`; \
-	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-	  echo " rm -f '$(DESTDIR)$(man3dir)/$$inst'"; \
-	  rm -f "$(DESTDIR)$(man3dir)/$$inst"; \
-	done
-install-ko_man3DATA: $(ko_man3_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(ko_man3dir)" || $(mkdir_p) "$(DESTDIR)$(ko_man3dir)"
-	@list='$(ko_man3_DATA)'; for p in $$list; do \
+	test -z "$(pkgconfigdir)" || $(mkdir_p) "$(DESTDIR)$(pkgconfigdir)"
+	@list='$(pkgconfig_DATA)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(ko_man3DATA_INSTALL) '$$d$$p' '$(DESTDIR)$(ko_man3dir)/$$f'"; \
-	  $(ko_man3DATA_INSTALL) "$$d$$p" "$(DESTDIR)$(ko_man3dir)/$$f"; \
+	  echo " $(pkgconfigDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgconfigdir)/$$f'"; \
+	  $(pkgconfigDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgconfigdir)/$$f"; \
 	done
 
-uninstall-ko_man3DATA:
+uninstall-pkgconfigDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(ko_man3_DATA)'; for p in $$list; do \
+	@list='$(pkgconfig_DATA)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(ko_man3dir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(ko_man3dir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(pkgconfigdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(pkgconfigdir)/$$f"; \
 	done
 tags: TAGS
 TAGS:
@@ -354,7 +300,6 @@ CTAGS:
 
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/ko
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -382,13 +327,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
-all-am: Makefile $(MANS) $(DATA)
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
+all-am: Makefile $(SCRIPTS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(man3dir)" "$(DESTDIR)$(ko_man3dir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgconfigdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -408,10 +355,14 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+@COMPAT_FALSE@install-exec-hook:
+@COMPAT_FALSE@install-data-hook:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -430,13 +381,17 @@ info: info-am
 
 info-am:
 
-install-data-am: install-ko_man3DATA install-man
+install-data-am: install-pkgconfigDATA
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
-install-exec-am:
+install-exec-am: install-binSCRIPTS
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 
 install-info: install-info-am
 
-install-man: install-man3
+install-man:
 
 installcheck-am:
 
@@ -456,21 +411,50 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am uninstall-ko_man3DATA uninstall-man
-
-uninstall-man: uninstall-man3
+uninstall-am: uninstall-binSCRIPTS uninstall-info-am \
+	uninstall-pkgconfigDATA
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-exec install-exec-am \
-	install-info install-info-am install-ko_man3DATA install-man \
-	install-man3 install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am uninstall uninstall-am uninstall-info-am \
-	uninstall-ko_man3DATA uninstall-man uninstall-man3
+	install-binSCRIPTS install-data install-data-am \
+	install-data-hook install-exec install-exec-am \
+	install-exec-hook install-info install-info-am install-man \
+	install-pkgconfigDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am \
+	uninstall-binSCRIPTS uninstall-info-am uninstall-pkgconfigDATA
 
+
+oc.in:
+	cp -af olibc-config oc-config
+	cp -af olibc.pc oc.pc
+	$(PERL) -pi -e "s/prog=\"olibc/prog=\"oc/g" oc-config
+
+	$(PERL) -pi -e "s/-lolibc$(COMPAT_VERSION)/-loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)/g" oc.pc
+	$(PERL) -pi -e "s/libolibc$(COMPAT_VERSION)/liboc$(COMPAT_VERSION)/g" oc.pc
+
+ogc.in:
+	cp -af olibc-config ogc-config
+	cp -af olibc.pc ogc.pc
+	$(PERL) -pi -e "s/prog=\"olibc/prog=\"ogc/g" ogc-config
+
+	$(PERL) -pi -e "s/-lolibc$(COMPAT_VERSION)/-logc$(COMPAT_VERSION) -loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)/g" ogc.pc
+	$(PERL) -pi -e "s/libolibc$(COMPAT_VERSION)/libogc$(COMPAT_VERSION)/g" ogc.pc
+
+@COMPAT_TRUE@install-exec-hook:
+@COMPAT_TRUE@	for i in olibc ogc oc; do \
+@COMPAT_TRUE@		desti="$$i"$(COMPAT_VERSION); \
+@COMPAT_TRUE@		mv $(DESTDIR)$(bindir)/$$i-config $(DESTDIR)$(bindir)/$$desti-config; \
+@COMPAT_TRUE@	done
+
+@COMPAT_TRUE@install-data-hook:
+@COMPAT_TRUE@	for i in olibc ogc oc; do \
+@COMPAT_TRUE@		desti="$$i"$(COMPAT_VERSION); \
+@COMPAT_TRUE@		mv $(DESTDIR)$(pkgconfigdir)/$$i.pc \
+@COMPAT_TRUE@			$(DESTDIR)$(pkgconfigdir)/$$desti.pc; \
+@COMPAT_TRUE@	done
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

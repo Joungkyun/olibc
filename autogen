@@ -1,16 +1,18 @@
 #!/bin/sh
 #
-# $Id: autogen,v 1.6 2011-02-06 15:11:19 oops Exp $
+# $Id: autogen,v 1.7 2011-04-09 15:54:19 oops Exp $
 # require autoconf > 2.59 & automake > 1.8
 #
 
-aclocal -I ./m4 --force >& /dev/null && autoconf --force && autoheader --force && libtoolize --force
-rm -rf autom4te* *~ aclocal.m4 config.guess config.sub ltmain.sh
-touch install-sh
+opt=
 
-for i in config.guess config.sub ltmain.sh
-do
-    cp -af /usr/share/libtool/${i} ./
-done
+[ "$1" = "--install" ] && opt="$1"
+
+rm -f configure
+autoreconf $opt
+
+if [ -n "$opt" ]; then
+	rm -rf po ABOUT-NLS
+fi
 
 exit 0

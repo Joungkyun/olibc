@@ -1,15 +1,21 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.34 2011-03-25 11:43:38 oops Exp $
+# $Id: configure.ac,v 1.35 2011-04-09 15:54:19 oops Exp $
 
 #
 AC_PREREQ(2.59)
 
 AC_INIT([olibc], [1.0.0], [http://oops.org])
-#AM_INIT_AUTOMAKE([1.8 gnits])
-AC_CONFIG_SRCDIR([libstring.h])
-AC_CONFIG_HEADER([olibc-config.h oc_type.h])
+#AC_CONFIG_MACRO_DIR([./m4])
+
+AC_CONFIG_AUX_DIR([build])
+AM_INIT_AUTOMAKE([-Wall -Werror -Wno-override foreign no-dependencies])
+AM_MAINTAINER_MODE
+#AM_SILENT_RULES([yes])
+
+AC_CONFIG_SRCDIR([src/oc_type.h.in])
+AC_CONFIG_HEADER([src/olibc-config.h src/oc_type.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
 AC_SUBST(SONAME_INFO)
@@ -33,194 +39,71 @@ AC_SUBST(LIBIDN_VERSOIN)
 LIBIDN_NAME=libidn
 LIBIDN_VERSION=0.3.7
 
-AC_ARG_WITH(iconv,
-[  --with-iconv=PATH     compiled with iconv library.])
-
-#AC_ARG_WITH(pcre,
-#[  --with-pcre=PATH      compiled with pcre frontend api support. [[default: /usr]]])
-
 # Checks for programs.
+AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_AWK
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
-
-#AC_PATH_PROG(MAKE, make)
-#if test ! -f "$ac_cv_path_MAKE"; then
-#  AC_MSG_ERROR(Can't not found make)
-#fi
+#AM_GNU_GETTEXT(external)
+#AM_GNU_GETTEXT_VERSION(0.17)
+AM_ICONV
 
 AC_PATH_PROG(PERL, perl)
 if test ! -f "$ac_cv_path_PERL"; then
   AC_MSG_ERROR(Can't not found perl)
 fi
 
-AC_PATH_PROG(HEAD, head)
-if test ! -f "$ac_cv_path_HEAD"; then
-  AC_MSG_ERROR(Can't not found head)
+AC_PATH_PROG(DATE, date)
+if test ! -f "$ac_cv_path_DATE"; then
+	AC_MSG_ERROR(Can't not found date)
 fi
 
-AC_PATH_PROG(CP, cp)
-if test ! -f "$ac_cv_path_CP"; then
-  AC_MSG_ERROR(Can't not found cp)
-fi
+AC_SUBST(PACKAGE_DATE)
+PACKAGE_DATE=$($DATE +"%a %b %d %Y")
 
-AC_PATH_PROG(AR, ar)
-if test ! -f "$ac_cv_path_AR"; then
-  AC_MSG_ERROR(Can't not found ar)
-fi
+AX_GCC_VISIBILITY
+AX_COMPAT_OPTION
 
-AC_PATH_PROG(RANLIB, ranlib)
-if test ! -f "$ac_cv_path_RANLIB"; then
-  AC_MSG_ERROR(Can't not found ranlib)
-fi
-
-AC_PATH_PROG(STRIP, strip)
-if test ! -f "$ac_cv_path_STRIP"; then
-  AC_MSG_ERROR(Can't not found strip)
-fi
-
-AC_PATH_PROG(LS, ls)
-if test ! -f "$ac_cv_path_LS"; then
-  AC_MSG_ERROR(Can't not found ls)
-fi
-
-AC_PATH_PROG(RM, rm)
-if test ! -f "$ac_cv_path_RM"; then
-  AC_MSG_ERROR(Can't not found rm)
-fi
-
-AC_PATH_PROG(MKDIR, mkdir)
-if test ! -f "$ac_cv_path_MKDIR"; then
-  AC_MSG_ERROR(Can't not found mkdir)
-fi
-
-AC_PATH_PROG(GZIP, gzip)
-if test ! -f "$ac_cv_path_GZIP"; then
-  AC_MSG_ERROR(Can't not found gzip)
-fi
-
-AC_PATH_PROG(MV, mv)
-if test ! -f "$ac_cv_path_MV"; then
-  AC_MSG_ERROR(Can't not found mv)
-fi
-
-if test "x$with_iconv" != "x"; then
-  if test -f "$with_iconv" ; then
-    chk_ext=`echo $with_iconv | ${SED} 's!.*\.\([^.]\+\)$!\1!g'`
-    if test "$chk_ext" = "so" -a "$chk_ext" = "a"; then
-      with_iconv=`echo $with_iconv | ${SED} 's!/[^/]*$!!g'`
-      iconvlib="-L$with_iconv"
-      dnl CHECK_RPATH(iconvlib, $with_iconv)
-
-      iconvchk=`echo $with_iconv | ${GERP} '/lib$'`
-      if test -n "$iconvchk"; then
-        with_iconv=`echo $with_iconv | ${SED} 's!/lib$!!g'`
-      fi
-    fi
-  elif test -d "$with_iconv" ; then
-    if test -f $with_iconv/lib/libiconv.a -o -f $with_iconv/lib/libiconv.so; then
-      iconvlib="-L$with_iconv/lib"
-      dnl CHECK_RPATH(iconvlib, $with_iconv/lib)
-    fi
-  else
-    iconvlib=
-  fi
-
-  LDFLAGS="$iconvlib $LDFLAGS"
-
-  AC_CHECK_LIB(iconv, iconv_open,, [AC_MSG_ERROR([Can't not found iconv library (-liconv)])])
-
-  # check of iconv.h
-  if test -f "$with_iconv/include/iconv.h" -o "$with_iconv/include/giconv.h"; then
-    inschk=`echo $CPPFLAGS | ${GREP} "I$with_iconv/include " 2> /dev/null`
-    if test -z "$inschk"; then
-      CPPFLAGS="-I$with_iconv/include $CPPFLAGS"
-    fi
-  fi
-fi
-
-#if test "x$with_pcre" != "x"; then
-#  SEARCHPATH="$with_pcre /usr /usr/local /opt"
-#
-#  for i in $SEARCHPATH
-#  do
-#    if test -f "$i/lib/libpcre.so" -o -f "$i/lib/libpcre.a"; then
-#      pcrelib="L$i/lib"
-#    elif test -f "$i/lib64/libpcre.so" -o -f "$i/lib64/libpcre.a"; then
-#      pcrelib="L$i/lib64"
-#    fi
-#  done
-#
-#  if test -z "$pcrelib"; then
-#    if test -f "/lib/libpcre.so" -o -f "/lib/libpcre.a"; then
-#      pcrelib="L/lib"
-#    elif test -f "/lib64/libpcre.so" -o -f "/lib64/libpcre.a"; then
-#      pcrelib="L/lib64"
-#    fi
-#  fi
-#
-#  libchk=`echo $LDFLAGS | ${GREP} "${pcrelib} "`
-#  if test -z "$libchk"; then
-#    LDFLAGS="-$pcrelib $LDFLAGS"
-#  fi
-#
-#
-#  for i in $SEARCHPATH
-#  do
-#    if test -f "$i/include/pcre/pcre.h"; then
-#      pcreinc="I$i/include/pcre"
-#    elif test -f "$i/include/pcre.h"; then
-#      pcreinc="I$i/include"
-#    fi
-#  done
-#
-#  libchk=`echo $LDFLAGS | ${GREP} "${pcreinc} "`
-#  if test -z "$pcreinc"; then
-#    CPPLFAGS="-${pcreinc} $CPPLFAGS"
-#  fi
-#fi
-#
-#AC_CHECK_LIB(
-#  pcre, pcre_compile,,
-#  [AC_MSG_ERROR([Can't not found pcre library (-lpcre)])]
-#)
-
+# Checks for libraries.
 AC_CHECK_LIB(rt, clock_gettime,,[])
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([langinfo.h libintl.h locale.h time.h sys/time.h \
 				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h \
-				  iconv.h stdbool.h])
-
-if test "$GCC" = "yes"; then
-	GCC_MAJOR_VERSION=`$CC --version | $HEAD -n 1 | $PERL -pe 's|^([[^0-9]]*)([[0-9]]+)\..*|\2|g'`
-	if test $GCC_MAJOR_VERSION -ge 4; then
-		CFLAGS="$CFLAGS -fvisibility=hidden"
-	fi
-fi
-
-# Checks for typedefs, structures, and compiler characteristics for libidn.
-AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
+				  iconv.h stdbool.h inttypes.h locale.h stddef.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
+AC_C_VOLATILE
 #AC_CHECK_SIZEOF(long)
 #AC_CHECK_TYPES([ushort, uint, ulong, uchar])
 
+# for libidn
+AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
+
 # Checks for library functions.
+AC_FUNC_LSTAT
+AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 AC_FUNC_MALLOC
+AC_FUNC_MEMCMP
+AC_FUNC_REALLOC
 AC_FUNC_STAT
 AC_CHECK_FUNCS([strtoll gettimeofday setlocale memmove bcopy strerror])
 
 AC_CONFIG_FILES([Makefile
-                 man/Makefile
-				 sample/Makefile
+				 src/Makefile
+				 test/Makefile
+				 man/Makefile
                  pcrelib/Makefile
-                 libidn/Makefile])
+                 libidn/Makefile
+				 scripts/Makefile
+				 scripts/olibc.pc
+				 scripts/olibc-config])
 AC_OUTPUT

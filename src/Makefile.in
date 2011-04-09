@@ -49,9 +49,10 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.in,v 1.5 2011-04-09 15:54:20 oops Exp $
+# $Id: Makefile.in,v 1.1 2011-04-09 15:54:21 oops Exp $
 
-SOURCES = $(libbuiltin_idn_la_SOURCES)
+
+SOURCES = $(liboc@COMPAT_VERSION@_la_SOURCES) $(libogc@COMPAT_VERSION@_la_SOURCES) $(libolibc@COMPAT_VERSION@_la_SOURCES)
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -75,9 +76,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = libidn
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in AUTHORS \
-	COPYING.LIB
+subdir = src
+DIST_COMMON = $(include_HEADERS) $(noinst_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/oc_type.h.in $(srcdir)/olibc-config.h.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
 	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
@@ -86,15 +88,30 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/src/olibc-config.h \
-	$(top_builddir)/src/oc_type.h
+CONFIG_HEADER = olibc-config.h oc_type.h
 CONFIG_CLEAN_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
-libbuiltin_idn_la_LIBADD =
-am_libbuiltin_idn_la_OBJECTS = idna.lo nfkc.lo profiles.lo punycode.lo \
-	stringprep.lo rfc3454.lo toutf8.lo
-libbuiltin_idn_la_OBJECTS = $(am_libbuiltin_idn_la_OBJECTS)
-DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/src -I$(top_builddir)/src
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
+libLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(lib_LTLIBRARIES)
+am_liboc@COMPAT_VERSION@_la_OBJECTS = libarg.lo libfile.lo libmisc.lo \
+	libpcre.lo libstring.lo libtime.lo
+liboc@COMPAT_VERSION@_la_OBJECTS =  \
+	$(am_liboc@COMPAT_VERSION@_la_OBJECTS)
+am_libogc@COMPAT_VERSION@_la_OBJECTS =  \
+	libogc@COMPAT_VERSION@_la-libidn.lo
+libogc@COMPAT_VERSION@_la_OBJECTS =  \
+	$(am_libogc@COMPAT_VERSION@_la_OBJECTS)
+am_libolibc@COMPAT_VERSION@_la_OBJECTS = libarg.lo libfile.lo \
+	libidn.lo libmisc.lo libpcre.lo libstring.lo libtime.lo
+libolibc@COMPAT_VERSION@_la_OBJECTS =  \
+	$(am_libolibc@COMPAT_VERSION@_la_OBJECTS)
+DEFAULT_INCLUDES = -I. -I$(srcdir) -I. -I.
 depcomp =
 am__depfiles_maybe =
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -105,8 +122,14 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libbuiltin_idn_la_SOURCES)
-DIST_SOURCES = $(libbuiltin_idn_la_SOURCES)
+SOURCES = $(liboc@COMPAT_VERSION@_la_SOURCES) \
+	$(libogc@COMPAT_VERSION@_la_SOURCES) \
+	$(libolibc@COMPAT_VERSION@_la_SOURCES)
+DIST_SOURCES = $(liboc@COMPAT_VERSION@_la_SOURCES) \
+	$(libogc@COMPAT_VERSION@_la_SOURCES) \
+	$(libolibc@COMPAT_VERSION@_la_SOURCES)
+includeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(include_HEADERS) $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -195,7 +218,7 @@ host_alias = @host_alias@
 host_cpu = @host_cpu@
 host_os = @host_os@
 host_vendor = @host_vendor@
-includedir = @includedir@
+includedir = @includedir@/olibc@COMPAT_VERSION@
 infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
@@ -210,17 +233,39 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+lib_LTLIBRARIES = libolibc@COMPAT_VERSION@.la liboc@COMPAT_VERSION@.la \
+	libogc@COMPAT_VERSION@.la
 AM_CFLAGS = -Wall
-AM_CPPFLAGS = -I$(top_srcdir)
-noinst_LTLIBRARIES = libbuiltin_idn.la
-libbuiltin_idn_la_SOURCES = config.h gunicomp.h gunidecomp.h \
-	idna.h punycode.h stringprep.h \
-	idna.c nfkc.c profiles.c punycode.c stringprep.c rfc3454.c \
-	toutf8.c
+AM_LDFLAGS = -version-info $(SONAME_INFO)
+AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/pcrelib
+include_HEADERS = oc_type.h libarg.h libfile.h libidn.h \
+				  libpcre.h libstring.h libtime.h
 
-BUILT_SOURCES = config.h idn-int.h
-DISTCLEANFILES = $(BUILT_SOURCES)
-all: $(BUILT_SOURCES)
+noinst_HEADERS = oc_common.h
+libolibc@COMPAT_VERSION@_la_SOURCES = oc_common.h \
+	libarg.c libfile.c libidn.c libmisc.c libpcre.c libstring.c \
+	libtime.c
+
+libolibc@COMPAT_VERSION@_la_LIBADD = $(top_srcdir)/pcrelib/libbuiltin_pcre.la \
+	$(top_srcdir)/libidn/libbuiltin_idn.la
+
+libolibc@COMPAT_VERSION@_la_DEPENDENCIES = $(top_srcdir)/pcrelib/libbuiltin_pcre.la \
+	$(top_srcdir)/libidn/libbuiltin_idn.la
+
+liboc@COMPAT_VERSION@_la_SOURCES = oc_common.h \
+	libarg.c libfile.c libmisc.c libpcre.c libstring.c \
+	libtime.c
+
+liboc@COMPAT_VERSION@_la_LIBADD = $(top_srcdir)/pcrelib/libbuiltin_pcre.la
+liboc@COMPAT_VERSION@_la_DEPENDENCIES = $(top_srcdir)/pcrelib/libbuiltin_pcre.la
+libogc@COMPAT_VERSION@_la_SOURCES = oc_common.h libidn.c
+libogc@COMPAT_VERSION@_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/libidn
+libogc@COMPAT_VERSION@_la_LIBADD = $(top_srcdir)/libidn/libbuiltin_idn.la liboc@COMPAT_VERSION@.la
+libogc@COMPAT_VERSION@_la_DEPENDENCIES = $(top_srcdir)/libidn/libbuiltin_idn.la \
+	liboc@COMPAT_VERSION@.la
+
+DISTCLEANFILES = *~
+all: olibc-config.h oc_type.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
@@ -234,9 +279,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  --ignore-deps libidn/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  --ignore-deps src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  --ignore-deps libidn/Makefile
+	  $(AUTOMAKE) --foreign  --ignore-deps src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -255,16 +300,65 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+olibc-config.h: stamp-h1
+	@if test ! -f $@; then \
+	  rm -f stamp-h1; \
+	  $(MAKE) stamp-h1; \
+	else :; fi
+
+stamp-h1: $(srcdir)/olibc-config.h.in $(top_builddir)/config.status
+	@rm -f stamp-h1
+	cd $(top_builddir) && $(SHELL) ./config.status src/olibc-config.h
+$(srcdir)/olibc-config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) $(top_srcdir)/acconfig.h
+	cd $(top_srcdir) && $(AUTOHEADER)
+	rm -f stamp-h1
+	touch $@
+
+oc_type.h: stamp-h2
+	@if test ! -f $@; then \
+	  rm -f stamp-h2; \
+	  $(MAKE) stamp-h2; \
+	else :; fi
+
+stamp-h2: $(srcdir)/oc_type.h.in $(top_builddir)/config.status
+	@rm -f stamp-h2
+	cd $(top_builddir) && $(SHELL) ./config.status src/oc_type.h
+
+distclean-hdr:
+	-rm -f olibc-config.h stamp-h1 oc_type.h stamp-h2
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  p=$(am__strip_dir) \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
+	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
+	done
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libbuiltin_idn.la: $(libbuiltin_idn_la_OBJECTS) $(libbuiltin_idn_la_DEPENDENCIES) 
-	$(LINK)  $(libbuiltin_idn_la_LDFLAGS) $(libbuiltin_idn_la_OBJECTS) $(libbuiltin_idn_la_LIBADD) $(LIBS)
+liboc@COMPAT_VERSION@.la: $(liboc@COMPAT_VERSION@_la_OBJECTS) $(liboc@COMPAT_VERSION@_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(liboc@COMPAT_VERSION@_la_LDFLAGS) $(liboc@COMPAT_VERSION@_la_OBJECTS) $(liboc@COMPAT_VERSION@_la_LIBADD) $(LIBS)
+libogc@COMPAT_VERSION@.la: $(libogc@COMPAT_VERSION@_la_OBJECTS) $(libogc@COMPAT_VERSION@_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libogc@COMPAT_VERSION@_la_LDFLAGS) $(libogc@COMPAT_VERSION@_la_OBJECTS) $(libogc@COMPAT_VERSION@_la_LIBADD) $(LIBS)
+libolibc@COMPAT_VERSION@.la: $(libolibc@COMPAT_VERSION@_la_OBJECTS) $(libolibc@COMPAT_VERSION@_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libolibc@COMPAT_VERSION@_la_LDFLAGS) $(libolibc@COMPAT_VERSION@_la_OBJECTS) $(libolibc@COMPAT_VERSION@_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -281,6 +375,9 @@ distclean-compile:
 .c.lo:
 	$(LTCOMPILE) -c -o $@ $<
 
+libogc@COMPAT_VERSION@_la-libidn.lo: libidn.c
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libogc@COMPAT_VERSION@_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libogc@COMPAT_VERSION@_la-libidn.lo `test -f 'libidn.c' || echo '$(srcdir)/'`libidn.c
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
@@ -290,6 +387,23 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-includeHEADERS: $(include_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(includedir)" || $(mkdir_p) "$(DESTDIR)$(includedir)"
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(includeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includedir)/$$f'"; \
+	  $(includeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includedir)/$$f"; \
+	done
+
+uninstall-includeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(includedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(includedir)/$$f"; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -301,11 +415,11 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS:  $(HEADERS) $(SOURCES) olibc-config.h.in oc_type.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS) olibc-config.h.in oc_type.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -317,11 +431,11 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS:  $(HEADERS) $(SOURCES) olibc-config.h.in oc_type.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	list='$(SOURCES) $(HEADERS) olibc-config.h.in oc_type.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
 	  done | \
@@ -367,12 +481,13 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
-all-am: Makefile $(LTLIBRARIES)
+check: check-am
+all-am: Makefile $(LTLIBRARIES) $(HEADERS) olibc-config.h oc_type.h
 installdirs:
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"; do \
+	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
+	done
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -397,16 +512,16 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+@COMPAT_FALSE@install-data-hook:
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-libtool distclean-tags
+	distclean-hdr distclean-libtool distclean-tags
 
 dvi: dvi-am
 
@@ -418,9 +533,11 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-includeHEADERS
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
-install-exec-am:
+install-exec-am: install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -445,24 +562,26 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-info-am
+	clean-libLTLIBRARIES clean-libtool ctags distclean \
+	distclean-compile distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-data-hook install-exec install-exec-am \
+	install-includeHEADERS install-info install-info-am \
+	install-libLTLIBRARIES install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-includeHEADERS \
+	uninstall-info-am uninstall-libLTLIBRARIES
 
 
-config.h: $(top_srcdir)/src/oc_common.h
-	$(AM_V_GEN)rm -f ./config.h || true
-	$(AM_V_GEN)$(LN_S) -f $(top_srcdir)/src/oc_common.h ./config.h
+@COMPAT_TRUE@install-data-hook:
+@COMPAT_TRUE@	$(PERL) -pi -e "s!<olibc/!<olibc@COMPAT_VERSION@/!g" $(DESTDIR)$(includedir)/*.h
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
