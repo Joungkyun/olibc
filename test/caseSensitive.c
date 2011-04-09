@@ -33,7 +33,7 @@
  * This file is part of olibc.
  */
 
-/* $Id: caseSensitive.c,v 1.1 2011-04-09 15:54:22 oops Exp $ */
+/* $Id: caseSensitive.c,v 1.2 2011-04-09 16:24:57 oops Exp $ */
 
 #include <olibc/libstring.h>
 #include "test.h"
@@ -42,7 +42,7 @@ int main (void) {
 	char * src,
 		 * apiname;
 
-	oc_strdup (src, "aAbBcC", 6);
+	src = strdup ("aAbBcC");
 
 	/*
 	 * strtolower test

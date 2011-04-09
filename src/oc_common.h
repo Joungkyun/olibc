@@ -41,11 +41,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-09 16:24:57 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: oc_common.h,v 1.2 2011-04-09 16:24:57 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -113,6 +113,138 @@
 #define safe_lstat(x, y) lstat (x, y)
 #endif
 
+/*
+ * Definition about memory api
+ */
+
+#define oc_error_debug(...) \
+	{ \
+		fprintf (stderr, "DEBUG: %s(%s:%d): ", __func__, __FILE__, __LINE__); \
+		fprintf (stderr, __VA_ARGS__); \
+	};
+
+#ifdef __OCDEBUG__
+	#define OC_DEBUG(...) oc_error_debug (__VA_ARGS__)
+	#define oc_error(...) oc_error_debug ( __VA_ARGS__)
+#else
+	#define OC_DEBUG(...)
+	#define oc_error(...) \
+		{ \
+			fprintf (stderr, "OC ERROR: "); \
+			fprintf (stderr, __VA_ARGS__); \
+		}
+#endif
+
+#ifdef __OCMEMDEBUG__
+	#define OC_MEM_DEBUG(...) oc_error_debug (__VA_ARGS__)
+#else
+	#define OC_MEM_DEBUG(...)
+#endif
+
+
+#define oc_malloc(v, size) \
+	{ \
+		OC_MEM_DEBUG("Memory allocation\n"); \
+		v = malloc (size); \
+	}
+	
+#define oc_realloc(v, size) \
+	{ \
+		void * ptr_oc_ival; \
+		OC_MEM_DEBUG("Memory reallocation\n"); \
+		if ( (ptr_oc_ival = realloc (v, size)) == NULL ) { \
+			ofree (v); \
+			v = NULL; \
+		} else { \
+			v = ptr_oc_ival; \
+		} \
+	}
+
+#define oc_strdup(v, val, size) \
+	{ \
+		OC_DEBUG ("strdup add size : %d + %d\n", size, (size < 4) ? 4 : 1); \
+		oc_malloc(v, size + ((size < 4) ? 4 : 1)); \
+		if ( v != NULL ) { \
+			memcpy (v, val, size); \
+			memset (v + size, 0, 1); \
+		} \
+	}
+
+#define ofree(v) \
+	{ \
+		OC_MEM_DEBUG ("Memory free%s\n", v == NULL ? ": NULL" : ""); \
+		if ( v != NULL ) { \
+			free (v); \
+			v = NULL; \
+		} \
+	}
+
+#define OC_DEF_EXIT    0
+#define OC_DEF_RETURN  1
+#define OC_DEF_MALLOC  0
+#define OC_DEF_REALLOC 1
+
+#define oc_malloc_originate(type, v, size, ret, result) \
+	{ \
+		if ( type == OC_DEF_REALLOC ) { oc_realloc (v, size); } \
+		else { oc_malloc (v, size); } \
+		if ( v == NULL ) { \
+			oc_error ("%s: memory %sallocation failed\n", __func__, type ? "re" : ""); \
+			if ( result == OC_DEF_RETURN ) return ret; \
+			exit (1); \
+		} \
+		if ( type == OC_DEF_MALLOC ) { memset (v, 0, size); } \
+	}
+
+/*
+ * v -> allocated variable
+ * size -> allocated size
+ * ret -> if failed allocat, return value
+ */
+#define oc_malloc_r(v, size, ret) \
+	oc_malloc_originate (OC_DEF_MALLOC, v, size, ret, OC_DEF_RETURN)
+
+#define oc_realloc_r(v, size, ret) \
+	oc_malloc_originate (OC_DEF_REALLOC, v, size, ret, OC_DEF_RETURN)
+
+#define oc_malloc_die(v, size) \
+	oc_malloc_originate (OC_DEF_MALLOC, v, size, ret, OC_DEF_EXIT)
+
+#define oc_realloc_die(v, size) \
+	oc_malloc_originate (OC_DEF_REALLOC, v, size, ret, OC_DEF_EXIT)
+
+#define oc_strdup_originate(v, data, ret, result) \
+	{ \
+		oc_strdup (v, data, strlen (data)); \
+		if ( v == NULL ) { \
+			if ( result == OC_DEF_RETURN ) \
+				return ret; \
+			exit (1); \
+		} \
+	}
+
+#define oc_strdup_r(v, data, ret) \
+		 oc_strdup_originate (v, data, ret, OC_DEF_RETURN)
+
+#define oc_strdup_e(v, data, ret) \
+		 oc_strdup_originate (v, data, ret, OC_DEF_EXIT)
+
+
+#define oc_safe_cpy(dst, src, size) \
+	{ \
+		UInt cpylen_oc_ival; \
+		cpylen_oc_ival = strlen (src); \
+		cpylen_oc_ival = (cpylen_oc_ival > (size-1)) ? size - 1 : cpylen_oc_ival; \
+		memmove (dst, src, cpylen_oc_ival); \
+		memset (dst + cpylen_oc_ival, 0, 1); \
+	}
+
+#define oc_safe_bcpy(dst, src, srclen, size) \
+	{ \
+		size = (srclen > (size-1)) ? size - 1 : srclen; \
+		memmove (dst, src, size); \
+		memset (dst + size, 0, 1); \
+	}
 
 bool only_whitespace (CChar * stream, CInt length);
 size_t get_charcount (CChar * str, size_t sl, CChar * del, size_t dl);

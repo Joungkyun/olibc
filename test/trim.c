@@ -33,7 +33,7 @@
  * This file is part of olibc.
  */
 
-/* $Id: trim.c,v 1.1 2011-04-09 15:54:22 oops Exp $ */
+/* $Id: trim.c,v 1.2 2011-04-09 16:24:57 oops Exp $ */
 
 #include <olibc/libstring.h>
 #include "test.h"
@@ -45,7 +45,7 @@ int main (void) {
 
 	oc_test_banner ("trim");
 
-	oc_strdup (src, "\tab!c tt  \t\n", 12);
+	src = strdup ("\tab!c tt  \t\n");
 	if ( src == null ) {
 		Failure ("memory allocat");
 		return 0;
@@ -62,7 +62,7 @@ int main (void) {
 	{
 		char * buf;
 
-		oc_strdup (src, "\tab!c tt  \t\n", 12);
+		src = strdup ("\tab!c tt  \t\n");
 		if ( src == null ) {
 			Failure ("memory allocat");
 			return 0;
