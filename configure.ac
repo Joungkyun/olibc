@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.36 2011-04-12 16:24:05 oops Exp $
+# $Id: configure.ac,v 1.37 2011-04-12 17:08:47 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -99,6 +99,8 @@ AC_FUNC_REALLOC
 AC_FUNC_STAT
 AC_CHECK_FUNCS([strtoll gettimeofday setlocale memmove bcopy strerror])
 
+AX_STATIC_BINDIR
+
 AC_CONFIG_FILES([Makefile
 				 src/Makefile
 				 test/Makefile
@@ -106,6 +108,7 @@ AC_CONFIG_FILES([Makefile
                  pcrelib/Makefile
                  libidn/Makefile
 				 scripts/Makefile
+				 m4/olibc.m4
 				 scripts/olibc.pc
 				 scripts/olibc-config])
 AC_OUTPUT

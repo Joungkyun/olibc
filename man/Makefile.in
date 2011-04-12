@@ -49,7 +49,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.in,v 1.7 2011-04-09 15:54:21 oops Exp $
+# $Id: Makefile.in,v 1.8 2011-04-12 17:08:47 oops Exp $
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -80,6 +80,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
 	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
 	$(top_srcdir)/m4/ax_gcc_visibiliity.m4 \
+	$(top_srcdir)/m4/ax_static_bindir.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -202,6 +203,7 @@ prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+static_bindir = @static_bindir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 @COMPAT_FALSE@EXTRA_DIST = ko/addslashes.3 ko/argv_make.3 ko/bin2dec.3 ko/bin2hex.3 \

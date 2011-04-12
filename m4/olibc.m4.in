@@ -1,0 +1,122 @@
+dnl 
+dnl                       Written by JoungKyun.Kim
+dnl            Copyright (c) 2011 JoungKyun.Kim <http://oops.org>
+dnl 
+dnl ----------------------------------------------------------------------------
+dnl Redistribution and use in source and binary forms, with or without
+dnl modification, are permitted provided that the following conditions are met:
+dnl 
+dnl     * Redistributions of source code must retain the above copyright notice,
+dnl       this list of conditions and the following disclaimer.
+dnl 
+dnl     * Redistributions in binary form must reproduce the above copyright
+dnl       notice, this list of conditions and the following disclaimer in the
+dnl       documentation and/or other materials provided with the distribution.
+dnl 
+dnl     * Neither the name of JoungKyun.Kim nor the url of oops.org
+dnl       nor the names of their contributors may be used to endorse or
+dnl       promote products derived from this software without specific prior
+dnl       written permission.
+dnl 
+dnl THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+dnl AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+dnl IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+dnl ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+dnl LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+dnl CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+dnl SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+dnl INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+dnl CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+dnl ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+dnl POSSIBILITY OF SUCH DAMAGE.
+dnl ----------------------------------------------------------------------------
+dnl  This file is part of olibc.
+dnl
+dnl  $Id: olibc.m4.in,v 1.1 2011-04-12 17:08:47 oops Exp $
+dnl 
+
+AC_SUBST(OLIBC_LDFALGS)
+AC_SUBST(OLIBC_CPPFLAGS)
+AC_SUBST(OC_LDFALGS)
+AC_SUBST(OC_CPPFLAGS)
+AC_SUBST(OGC_LDFALGS)
+AC_SUBST(OGC_CPPFLAGS)
+
+AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
+[
+	AC_ARG_WITH(olibc,
+		[  --with-olibc=PATH       path of olibc-config [[default: @static_bindir@/olibc@COMPAT_VERSION@-config]]])
+
+	if test "x$with_olibc" != "x" && test "x$with_olibc" != "xno"; then
+		if test "x$with_olibc" = "xyes"; then
+			olibcconfig="@static_bindir@/olibc@COMPAT_VERSION@-config"
+		else
+			olibcconfig="$with_olibc"
+		fi
+	else
+		olibcconfig="@static_bindir@/olibc@COMPAT_VERSION@-config"
+	fi
+
+	AC_MSG_CHECKING(for olibc@COMPAT_VERSION@-config path)
+	if test ! -f "$olibcconfig" || test ! -x "$olibcconfig"; then
+		AC_MSG_ERROR(can't find $olibcconfig)
+	else
+		AC_MSG_RESULT([$olibcconfig])
+	fi
+
+	OLIBC_LDFLAGS="`$olibcconfig --link-ld`"
+	OLIBC_CPPFLAGS="`$olibcconfig --includes`"
+])
+
+AC_DEFUN([AX_OC@COMPAT_VERSION@],
+[
+	AC_ARG_WITH(oc,
+		[  --with-oc=PATH       path of oc-config [[default: @static_bindir@/oc@COMPAT_VERSION@-config]]])
+
+	if test "x$with_oc" != "x" && test "x$with_oc" != "xno"; then
+		if test "x$with_oc" = "xyes"; then
+			occonfig="@static_bindir@/oc@COMPAT_VERSION@-config"
+		else
+			occonfig="$with_oc"
+		fi
+	else
+		occonfig="@static_bindir@/oc@COMPAT_VERSION@-config"
+	fi
+
+	AC_MSG_CHECKING(for oc@COMPAT_VERSION@-config path)
+	if test ! -f "$occonfig" || test ! -x "$occonfig"; then
+		AC_MSG_ERROR(can't find $occonfig)
+	else
+		AC_MSG_RESULT([$occonfig])
+	fi
+
+	OC_LDFLAGS="`$occonfig --link-ld`"
+	OC_CPPFLAGS="`$occonfig --includes`"
+])
+
+AC_DEFUN([AX_OGC@COMPAT_VERSION@],
+[
+	AC_ARG_WITH(ogc,
+		[  --with-ogc=PATH       path of ogc-config [[default: @static_bindir@/ogc@COMPAT_VERSION@-config]]])
+
+	if test "x$with_ogc" != "x" && test "x$with_ogc" != "xno"; then
+		if test "x$with_ogc" = "xyes"; then
+			ogcconfig="@static_bindir@/ogc@COMPAT_VERSION@-config"
+		else
+			ogcconfig="$with_ogc"
+		fi
+	else
+		ogcconfig="@static_bindir@/ogc@COMPAT_VERSION@-config"
+	fi
+
+	AC_MSG_CHECKING(for ogc@COMPAT_VERSION@-config path)
+	if test ! -f "$ogcconfig" || test ! -x "$ogcconfig"; then
+		AC_MSG_ERROR(can't find $ogcconfig)
+	else
+		AC_MSG_RESULT([$ogcconfig])
+	fi
+
+	OGC_LDFLAGS="`$ogcconfig --link-ld`"
+	OGC_CPPFLAGS="`$ogcconfig --includes`"
+])
+

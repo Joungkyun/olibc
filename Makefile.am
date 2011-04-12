@@ -33,7 +33,11 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.1 2011-04-09 15:54:19 oops Exp $
+# $Id: Makefile.am,v 1.2 2011-04-12 17:08:46 oops Exp $
+#
+
+DISTCLEANFILES =
+BUILT_SOURCES =
 
 EXTRA_DIST = COPYING.BSD COPYING.LGPL Changes LICENCE olibc.spec
 
@@ -46,16 +50,27 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = libidn pcrelib src man test scripts
 
-BUILT_SOURCES = olibcdir
+BUILT_SOURCES += olibcdir
 
 olibcdir:
 	if test ! -L olibc; then \
 		$(AM_V_GEN)$(LN_S) src olibc; \
 	fi
 
-DISTCLEANFILES = olibc
+DISTCLEANFILES += olibc
+
+m4dir = $(datadir)/aclocal
+dist_m4_DATA = m4/olibc@COMPAT_VERSION@.m4
+
+if COMPAT
+BUILT_SOURCES += m4/olibc@COMPAT_VERSION@.m4
+DISTCLEANFILES += olibc m4/olibc@COMPAT_VERSION@.m4
+m4/olibc@COMPAT_VERSION@.m4:
+	mv m4/olibc.m4 m4/olibc@COMPAT_VERSION@.m4
+endif
 
 dist-hook:
+	rm -f $(distdir)/m4/olibc.m4
 	rm -f $(distdir)/libidn/config.h
 	rm -f $(distdir)/pcrelib/config.h
 	$(PERL) -pi -e \

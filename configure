@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='COMPAT_VERSION GCC_MAJOR_VERSION GCC_MINOR_VERSION GCC_PATCH_VERSION SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT SONAME_INFO SONAME_VERSION SONAME_MAJOR SONAME_MINOR SONAME_REVISION LIBIDN_NAME LIBIDN_VERSOIN CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP LN_S build build_cpu build_vendor build_os host host_cpu host_vendor host_os ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL LIBICONV LTLIBICONV PERL DATE PACKAGE_DATE COMPAT_TRUE COMPAT_FALSE LIBOBJS LTLIBOBJS'
+ac_subst_vars='COMPAT_VERSION GCC_MAJOR_VERSION GCC_MINOR_VERSION GCC_PATCH_VERSION static_bindir SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT SONAME_INFO SONAME_VERSION SONAME_MAJOR SONAME_MINOR SONAME_REVISION LIBIDN_NAME LIBIDN_VERSOIN CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP LN_S build build_cpu build_vendor build_os host host_cpu host_vendor host_os ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL LIBICONV LTLIBICONV PERL DATE PACKAGE_DATE COMPAT_TRUE COMPAT_FALSE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -14333,7 +14333,31 @@ fi
 done
 
 
-                                                                                          ac_config_files="$ac_config_files Makefile src/Makefile test/Makefile man/Makefile pcrelib/Makefile libidn/Makefile scripts/Makefile scripts/olibc.pc scripts/olibc-config"
+
+	if test -n "`echo $bindir | grep exec_prefix`"; then
+		if test "$exec_prefix" = "$prefix"; then
+			if test "$prefix" = "NONE"; then
+				static_bindir="$ac_default_prefix/bin"
+			else
+				static_bindir="$prefix/bin"
+			fi
+		else
+			if test "$exec_prefix" = "NONE"; then
+				if test "$prefix" = "NONE"; then
+					static_bindir="$ac_default_prefix/bin"
+				else
+					static_bindir="$prefix/bin"
+				fi
+			else
+				static_bindir="$exec_prefix/bin"
+			fi
+		fi
+	else
+		static_bindir="$bindir"
+	fi
+
+
+                                                                                                    ac_config_files="$ac_config_files Makefile src/Makefile test/Makefile man/Makefile pcrelib/Makefile libidn/Makefile scripts/Makefile m4/olibc.m4 scripts/olibc.pc scripts/olibc-config"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -14908,6 +14932,7 @@ do
   "pcrelib/Makefile" ) CONFIG_FILES="$CONFIG_FILES pcrelib/Makefile" ;;
   "libidn/Makefile" ) CONFIG_FILES="$CONFIG_FILES libidn/Makefile" ;;
   "scripts/Makefile" ) CONFIG_FILES="$CONFIG_FILES scripts/Makefile" ;;
+  "m4/olibc.m4" ) CONFIG_FILES="$CONFIG_FILES m4/olibc.m4" ;;
   "scripts/olibc.pc" ) CONFIG_FILES="$CONFIG_FILES scripts/olibc.pc" ;;
   "scripts/olibc-config" ) CONFIG_FILES="$CONFIG_FILES scripts/olibc-config" ;;
   "$ac_stdint_h" ) CONFIG_COMMANDS="$CONFIG_COMMANDS $ac_stdint_h" ;;
@@ -14972,6 +14997,7 @@ s,@COMPAT_VERSION@,$COMPAT_VERSION,;t t
 s,@GCC_MAJOR_VERSION@,$GCC_MAJOR_VERSION,;t t
 s,@GCC_MINOR_VERSION@,$GCC_MINOR_VERSION,;t t
 s,@GCC_PATCH_VERSION@,$GCC_PATCH_VERSION,;t t
+s,@static_bindir@,$static_bindir,;t t
 s,@SHELL@,$SHELL,;t t
 s,@PATH_SEPARATOR@,$PATH_SEPARATOR,;t t
 s,@PACKAGE_NAME@,$PACKAGE_NAME,;t t
