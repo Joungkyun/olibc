@@ -1,5 +1,5 @@
 /*
- * $Id: mainpage.dox,v 1.3 2011-03-21 06:47:05 oops Exp $
+ * $Id: mainpage.dox,v 1.4 2011-04-12 17:53:06 oops Exp $
  */
 /**
  * @mainpage    OOPS high level c library
@@ -16,8 +16,34 @@
  *
  * @section     Program Program Name
  *  - olibc (OOPS C library)
+ *  - Support library
+ *   - @b @e libolibc.(so|a)
+ *    - LGPL license
+ *    - Include all symbols
+ *   - @b @e liboc.(so|a)
+ *    - FreeBSD license
+ *    - Include all symbols except idn symbols
+ *   - @b @e libogc.(so|a)
+ *    - LGPL license
+ *    - Include only idn symbols
+ *
+ * @section	    Library Link olibc
+ *  - You can choise olibc-config or oc-config or ogc-config according to LICENSE.
+ *  - Command line
+ *   - gcc `olibc-config --includes` sample.c `olibc-config --link-ld`
+ *  - Make
+ *   - make sample CPPFLAGS="`olibc-config --includes`" LDFLAGS="`olibc-config --link-ld`"
+ *
+ *  - Autotools
+ *   - configure.ac or configure.in
+ *    - @b @e AX_OLIBC macro : make OLIBC_CPPFLAGS and OLIBC_LDFALGS variables
+ *    - @b @e AX_OGC macro  : make OGC_CPPFLAGS and OGC_LDFALGS variables
+ *    - @b @e AX_OC macro   : make OC_CPPFLAGS and OC_LDFALGS variables
+ *   - Makefile.in or Makefile.am
+ *    - CPPFLAGS = \@CPPFLAGS\@ \$(OLIBC_LDFALGS)
+ *    - LDFFLAGS = \@LDFLAGS\@ \$(OLIBC_LDFLAGS)
  *
  * @section     MODIFYINFO Modify Info
  *  - Written: JoungKyun.Kim
- *  - Date: 2011/03/21
+ *  - Date: 2011/04/13
  */
