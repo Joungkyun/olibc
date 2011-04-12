@@ -45,12 +45,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date: 2011-04-12 18:11:48 $
+ * $Revision: 1.2 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id: libpcre.c,v 1.2 2011-04-12 18:11:48 oops Exp $ */
 
 #include <oc_common.h>
 #include <libpcre.h>
@@ -860,13 +860,13 @@ char * preg_fgrep (CChar * regex, CChar * path, bool reverse) // {{{
 OLIBC_API
 char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no) // {{{
 {
-	int i, blen = 0;
+	int i;
 	char * buf[regarr_no];
 	char * subj;
 
 	for (i = 0; i<regarr_no; i++ ) {
 		subj = (i > 0) ? buf[i-1] : subject;
-		buf[i] = preg_replace (*regex++, *replace++, subj, &blen);
+		buf[i] = preg_replace (*regex++, *replace++, subj, null);
 		if ( i > 0 )
 			ofree (buf[i-1]);
 	}
@@ -908,7 +908,8 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 				alloc_len,			/* Actual allocated length */
 				match_len,			/* Length of the current match */
 				backref,			/* Backreference number */
-				replace_len = 0;	/* Length of replacement string */
+				replace_len = 0,	/* Length of replacement string */
+				len = 0;			/* Length of return value */
 	char		* result,			/* Result of replacement */
 				* new_buf,			/* Temporary buffer for re-allocation */
 				* walkbuf,			/* Location of current replacement in the result */
@@ -918,7 +919,8 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 				* replace_end = null,	/* End of replacement string */
 				walk_last;			/* Last walked character */
 
-	*retlen = 0;
+	if ( retlen != null )
+		*retlen = 0;
 
 	if ( regex == null && subject == null )
 		return null;
@@ -974,7 +976,7 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 			/* Set the match location in subject */
 			match = subject + pa->offsets[0];
 
-			new_len = *retlen + pa->offsets[0] - pa->start_offset; /* part before the match */
+			new_len = len + pa->offsets[0] - pa->start_offset; /* part before the match */
 			
 			/* do regular substitution */
 			walk = replace;
@@ -1000,16 +1002,16 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 			if (new_len + 1 > alloc_len) {
 				alloc_len = 1 + alloc_len + 2 * new_len;
 				new_buf = malloc(alloc_len);
-				memcpy(new_buf, result, *retlen);
+				memcpy(new_buf, result, len);
 				ofree(result);
 				result = new_buf;
 			}
 			/* copy the part of the string before the match */
-			memcpy(&result[*retlen], piece, match-piece);
-			*retlen += match-piece;
+			memcpy(&result[len], piece, match-piece);
+			len += match-piece;
 
 			/* copy replacement and backrefs */
-			walkbuf = result + *retlen;
+			walkbuf = result + len;
 			
 			/* do regular backreference copying */
 			walk = replace;
@@ -1035,7 +1037,7 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 			}
 			*walkbuf = '\0';
 			/* increment the result length by how much we've added to the string */
-			*retlen += walkbuf - (result + *retlen);
+			len += walkbuf - (result + len);
 
 		} else { /* Failed to match */
 			/* If we previously set PCRE_NOTEMPTY after a null match,
@@ -1045,21 +1047,21 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 			if (pa->g_notempty != 0 && pa->start_offset < pa->subjlen) {
 				pa->offsets[0] = pa->start_offset;
 				pa->offsets[1] = pa->start_offset + 1;
-				memcpy(&result[*retlen], piece, 1);
-				(*retlen)++;
+				memcpy(&result[len], piece, 1);
+				(len)++;
 			} else {
-				new_len = *retlen + pa->subjlen - pa->start_offset;
+				new_len = len + pa->subjlen - pa->start_offset;
 				if (new_len + 1 > alloc_len) {
 					alloc_len = new_len + 1; /* now we know exactly how long it is */
 					new_buf = malloc (alloc_len * sizeof(char));
-					memcpy(new_buf, result, *retlen);
+					memcpy(new_buf, result, len);
 					ofree(result);
 					result = new_buf;
 				}
 				/* stick that last bit of string on our output */
-				memcpy(&result[*retlen], piece, pa->subjlen - pa->start_offset);
-				*retlen += pa->subjlen - pa->start_offset;
-				result[*retlen] = '\0';
+				memcpy(&result[len], piece, pa->subjlen - pa->start_offset);
+				len += pa->subjlen - pa->start_offset;
+				result[len] = '\0';
 				break;
 			}
 		}
@@ -1075,6 +1077,8 @@ char * preg_replace (char * regex, char * replace, char * subject, int * retlen)
 	}
 	
 	libpreg_arg_free (&pa);
+	if ( retlen != null )
+		*retlen = len;
 
 	return result;
 } // }}}
