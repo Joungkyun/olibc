@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.35 2011-04-09 15:54:19 oops Exp $
+# $Id: configure.ac,v 1.36 2011-04-12 16:24:05 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -17,6 +17,8 @@ AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([src/oc_type.h.in])
 AC_CONFIG_HEADER([src/olibc-config.h src/oc_type.h])
 AC_PREFIX_DEFAULT([/usr/local])
+
+AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 
 AC_SUBST(SONAME_INFO)
 AC_SUBST(SONAME_VERSION)
