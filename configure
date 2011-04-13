@@ -3511,6 +3511,83 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+
+
+  HAVE_VISIBILITY=0
+  if test -n "$GCC"; then
+    echo "$as_me:$LINENO: checking for simple visibility declarations" >&5
+echo $ECHO_N "checking for simple visibility declarations... $ECHO_C" >&6
+    if test "${gl_cv_cc_visibility+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+      gl_save_CFLAGS="$CFLAGS"
+      CFLAGS="$CFLAGS -fvisibility=hidden"
+      cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+extern __attribute__((__visibility__("hidden"))) int hiddenvar;
+         extern __attribute__((__visibility__("default"))) int exportedvar;
+         extern __attribute__((__visibility__("hidden"))) int hiddenfunc (void);
+         extern __attribute__((__visibility__("default"))) int exportedfunc (void);
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  gl_cv_cc_visibility=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+gl_cv_cc_visibility=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+      CFLAGS="$gl_save_CFLAGS"
+fi
+
+    echo "$as_me:$LINENO: result: $gl_cv_cc_visibility" >&5
+echo "${ECHO_T}$gl_cv_cc_visibility" >&6
+    if test $gl_cv_cc_visibility = yes; then
+      CFLAGS="$CFLAGS -fvisibility=hidden"
+      HAVE_VISIBILITY=1
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_VISIBILITY $HAVE_VISIBILITY
+_ACEOF
+
+    fi
+  fi
+
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -4182,7 +4259,6 @@ echo "$as_me:$LINENO: result: $lt_cv_deplibs_check_method" >&5
 echo "${ECHO_T}$lt_cv_deplibs_check_method" >&6
 file_magic_cmd=$lt_cv_file_magic_cmd
 deplibs_check_method=$lt_cv_deplibs_check_method
-
 
 
 
@@ -5112,7 +5188,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5115 "configure"' > conftest.$ac_ext
+  echo '#line 5191 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5670,7 +5746,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:5673: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:5749: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6872,7 +6948,7 @@ linux-gnu*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*)
-    echo '#line 6875 "configure"' > conftest.$ac_ext
+    echo '#line 6951 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7620,7 +7696,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7623 "configure"
+#line 7699 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7718,7 +7794,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7721 "configure"
+#line 7797 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9522,68 +9598,6 @@ fi
 
 
 PACKAGE_DATE=$($DATE +"%a %b %d %Y")
-
-
-if test "$GCC" = "yes"; then
-
-if test $GCC = "yes"; then
-	if test -z "$PERL"; then
-		# Extract the first word of "perl", so it can be a program name with args.
-set dummy perl; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_PERL+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PERL in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PERL="$PERL" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PERL="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-PERL=$ac_cv_path_PERL
-
-if test -n "$PERL"; then
-  echo "$as_me:$LINENO: result: $PERL" >&5
-echo "${ECHO_T}$PERL" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-		if test ! -f "$ac_cv_path_PERL"; then
-			{ { echo "$as_me:$LINENO: error: Can't not found perl" >&5
-echo "$as_me: error: Can't not found perl" >&2;}
-   { (exit 1); exit 1; }; }
-		fi
-	fi
-
-	if test -n "$PERL"; then
-		GCC_VERSION="`$CC -dumpversion 2> /dev/null | $PERL -pe 's/([0-9]+)\.([0-9]+)\.([0-9]+)/GCC_MAJOR_VERSION=\1;GCC_MINOR_VERSION=\2;GCC_PATCH_VERSION=\3;/g'`"
-		eval "$GCC_VERSION"
-	fi
-fi
-
-    if test $GCC_MAJOR_VERSION -ge 4; then
-        CFLAGS="$CFLAGS -fvisibility=hidden"
-    fi
-fi
 
 
 	if test -z "$PERL"; then

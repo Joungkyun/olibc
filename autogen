@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: autogen,v 1.7 2011-04-09 15:54:19 oops Exp $
+# $Id: autogen,v 1.8 2011-04-13 09:25:10 oops Exp $
 # require autoconf > 2.59 & automake > 1.8
 #
 
@@ -14,5 +14,7 @@ autoreconf $opt
 if [ -n "$opt" ]; then
 	rm -rf po ABOUT-NLS
 fi
+
+rm -rf autom4te.cache *~
 
 exit 0

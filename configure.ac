@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.37 2011-04-12 17:08:47 oops Exp $
+# $Id: configure.ac,v 1.38 2011-04-13 09:25:10 oops Exp $
 
 #
 AC_PREREQ(2.59)
@@ -45,6 +45,7 @@ LIBIDN_VERSION=0.3.7
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
+AX_GL_VISIBILITY
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -66,7 +67,6 @@ fi
 AC_SUBST(PACKAGE_DATE)
 PACKAGE_DATE=$($DATE +"%a %b %d %Y")
 
-AX_GCC_VISIBILITY
 AX_COMPAT_OPTION
 
 # Checks for libraries.
