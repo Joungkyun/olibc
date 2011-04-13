@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: olibc-config.in,v 1.1 2011-04-09 15:54:21 oops Exp $
+# $Id: olibc-config.in,v 1.2 2011-04-13 04:53:36 oops Exp $
 
 prog="olibc@COMPAT_VERSION@"
 prefix="@prefix@"
@@ -95,13 +95,13 @@ while test $# -gt 0; do
 			echo $CFLAGS
 			;;
 		--cppflags)
-			echo $CPPFLAGS
+			echo "-I$includedir"
 			;;
 		--ldflags)
-			echo $LDFALGS
+			echo "-L$libdir"
 			;;
 		--libs)
-			echo $LIBS
+			echo "-l$prog ${dependency_libs}"
 			;;
 		--includes)
 			echo "-I$includedir"
