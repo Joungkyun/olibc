@@ -49,7 +49,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.in,v 1.7 2011-04-13 09:32:55 oops Exp $
+# $Id: Makefile.in,v 1.8 2011-04-13 10:39:55 oops Exp $
 
 SOURCES = $(libbuiltin_pcre_la_SOURCES)
 
@@ -82,7 +82,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
 	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
 	$(top_srcdir)/m4/ax_gcc_visibiliity.m4 \
-	$(top_srcdir)/m4/ax_static_bindir.m4 \
+	$(top_srcdir)/m4/ax_static_bindir.m4 $(top_srcdir)/m4/iconv.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
