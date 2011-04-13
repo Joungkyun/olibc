@@ -1,5 +1,5 @@
 /*
- * $Id: mainpage.dox,v 1.4 2011-04-12 17:53:06 oops Exp $
+ * $Id: mainpage.dox,v 1.5 2011-04-13 08:12:34 oops Exp $
  */
 /**
  * @mainpage    OOPS high level c library
@@ -36,12 +36,18 @@
  *
  *  - Autotools
  *   - configure.ac or configure.in
- *    - @b @e AX_OLIBC macro : make OLIBC_CPPFLAGS and OLIBC_LDFALGS variables
- *    - @b @e AX_OGC macro  : make OGC_CPPFLAGS and OGC_LDFALGS variables
- *    - @b @e AX_OC macro   : make OC_CPPFLAGS and OC_LDFALGS variables
- *   - Makefile.in or Makefile.am
- *    - CPPFLAGS = \@CPPFLAGS\@ \$(OLIBC_LDFALGS)
- *    - LDFFLAGS = \@LDFLAGS\@ \$(OLIBC_LDFLAGS)
+ *    - @b @e AX_OLIBC macro
+ *     - add olibc library, dependency library and header location on @b LIBS, @b LDFLAGS, @b CPPFALGS
+ *     - defined @b HAVE_OC_TYPE_H, @b HAVE_LIBOLIBC constant in krisp-config.h
+ *     - If AX_OLIBC macro have any argument as @b AX_OLIBC(1), configure script will stop when library will check fail.
+ *    - @b @e AX_OGC macro
+ *     - add ogc library, dependency library and header location on @b LIBS, @b LDFLAGS, @b CPPFALGS
+ *     - defined @b HAVE_OC_TYPE_H, @b HAVE_LIBOGC constant in krisp-config.h
+ *     - If AX_OGC macro have any argument as @b AX_OGC(1), configure script will stop when library will check fail.
+ *    - @b @e AX_OC macro
+ *     - add oc library, dependency library and header location on @b LIBS, @b LDFLAGS, @b CPPFALGS
+ *     - defined @b HAVE_OC_TYPE_H, @b HAVE_LIBOC constant in krisp-config.h
+ *     - If AX_OC macro have any argument as @b AX_OC(1), configure script will stop when library will check fail.
  *
  * @section     MODIFYINFO Modify Info
  *  - Written: JoungKyun.Kim

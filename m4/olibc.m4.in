@@ -32,14 +32,14 @@ dnl POSSIBILITY OF SUCH DAMAGE.
 dnl ----------------------------------------------------------------------------
 dnl  This file is part of olibc.
 dnl
-dnl  $Id: olibc.m4.in,v 1.2 2011-04-13 06:06:10 oops Exp $
+dnl  $Id: olibc.m4.in,v 1.3 2011-04-13 08:12:34 oops Exp $
 dnl 
 
-AC_SUBST(OLIBC_LDFALGS)
+AC_SUBST(OLIBC_LDFLAGS)
 AC_SUBST(OLIBC_CPPFLAGS)
-AC_SUBST(OC_LDFALGS)
+AC_SUBST(OC_LDFLAGS)
 AC_SUBST(OC_CPPFLAGS)
-AC_SUBST(OGC_LDFALGS)
+AC_SUBST(OGC_LDFLAGS)
 AC_SUBST(OGC_CPPFLAGS)
 
 AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
@@ -65,7 +65,24 @@ AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
 			AC_MSG_RESULT([$olibcconfig])
 		fi
 
+		#
+		# Library check
+		#
 		OLIBC_LDFLAGS="`$olibcconfig --ldflags`"
+		OLD_LDFLAGS="$LDFLAGS"
+		LDFLAGS="$OLIBC_LDFLAGS"
+		AC_CHECK_LIB(
+			olibc, join, [
+			AC_DEFINE(
+				[HAVE_LIBOLIBC], 1,
+				[Define to 1 if you have the `olibc' library (-lolibc).]
+			)
+			LIBS="`$olibcconfig --libs` $LIBS"],[
+			if test $# -gt 0; then
+				AC_MSG_ERROR([Can't not found olibc library (-lolibc)])
+			fi]
+		)
+		LDFLAGS="$OLD_LDFLAGS"
 
 		ret_ldflags=0
 		for check_ldflags in $LDFLAGS
@@ -77,10 +94,11 @@ AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
 				break
 			fi
 		done
+		test $ret_ldflags -eq 0 && LDFLAGS="$OLIBC_LDFLAGS $LDFLAGS"
 
-		test $ret_ldflags -eq 0 && LDFLAGS="$LDFLAGS $OLIBC_LDFLAGS"
-		AC_CHECK_LIB(olibc, join,,)
-
+		#
+		# Header check
+		#
 		OLIBC_INCLUDES="`$olibcconfig --includes`"
 
 		ret_cppflags=0
@@ -93,7 +111,81 @@ AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
 				break
 			fi
 		done
-		test $ret_cppflags -eq 0 && CPPFLAGS="$CPPFLAGS $OLIBC_INCLUDES"
+		test $ret_cppflags -eq 0 && CPPFLAGS="$OLIBC_INCLUDES $CPPFLAGS"
+		AC_CHECK_HEADERS(oc_type.h)
+	fi
+])
+
+AC_DEFUN([AX_OGC@COMPAT_VERSION@],
+[
+	AC_ARG_WITH(ogc,
+		[  --with-ogc=PATH         path of ogc-config [[default: @static_bindir@/ogc@COMPAT_VERSION@-config]]])
+
+	if test "x$with_ogc" != "xno"; then
+		if test "x$with_ogc" != "x"; then
+			if test "x$with_ogc" = "xyes"; then
+				ogcconfig="@static_bindir@/ogc@COMPAT_VERSION@-config"
+			else
+				ogcconfig="$with_ogc"
+			fi
+		else
+			ogcconfig="@static_bindir@/ogc@COMPAT_VERSION@-config"
+		fi
+
+		AC_MSG_CHECKING(for ogc@COMPAT_VERSION@-config path)
+		if test ! -f "$ogcconfig" || test ! -x "$ogcconfig"; then
+			AC_MSG_ERROR(can't find $ogcconfig)
+		else
+			AC_MSG_RESULT([$ogcconfig])
+		fi
+
+		#
+		# Library check
+		#
+		OGC_LDFLAGS="`$ogcconfig --ldflags`"
+		OLD_LDFLAGS="$LDFLAGS"
+		LDFLAGS="$OGC_LDFLAGS"
+		AC_CHECK_LIB(
+			ogc, join, [
+			AC_DEFINE(
+				[HAVE_LIBOGC], 1,
+				[Define to 1 if you have the `ogc' library (-logc).]
+			)
+			LIBS="`$ogcconfig --libs` $LIBS"],[
+			if test $# -gt 0; then
+				AC_MSG_ERROR([Can't not found ogc library (-logc)])
+			fi]
+		)
+		LDFLAGS="$OLD_LDFLAGS"
+
+		ret_ldflags=0
+		for check_ldflags in $LDFLAGS
+		do
+			test -z "$OGC_LDFLAGS" && break
+	
+			if test "$check_ldflags" = "$OGC_LDFLAGS"; then
+				ret_ldflags=1
+				break
+			fi
+		done
+		test $ret_ldflags -eq 0 && LDFLAGS="$OGC_LDFLAGS $LDFLAGS"
+
+		#
+		# Header check
+		#
+		OGC_INCLUDES="`$ogcconfig --includes`"
+
+		ret_cppflags=0
+		for check_cppflags in $CPPFLAGS
+		do
+			test -z "$OGC_INCLUDES" && break
+
+			if test "$check_cppflags" = "$OGC_INCLUDES"; then
+				ret_cppflags=1
+				break
+			fi
+		done
+		test $ret_cppflags -eq 0 && CPPFLAGS="$OGC_INCLUDES $CPPFLAGS"
 		AC_CHECK_HEADERS(oc_type.h)
 	fi
 ])
@@ -121,7 +213,24 @@ AC_DEFUN([AX_OC@COMPAT_VERSION@],
 			AC_MSG_RESULT([$occonfig])
 		fi
 
+		#
+		# Library check
+		#
 		OC_LDFLAGS="`$occonfig --ldflags`"
+		OLD_LDFLAGS="$LDFLAGS"
+		LDFLAGS="$OC_LDFLAGS"
+		AC_CHECK_LIB(
+			oc, join, [
+			AC_DEFINE(
+				[HAVE_LIBOC], 1,
+				[Define to 1 if you have the `oc' library (-loc).]
+			)
+			LIBS="`$occonfig --libs` $LIBS"],[
+			if test $# -gt 0; then
+				AC_MSG_ERROR([Can't not found oc library (-loc)])
+			fi]
+		)
+		LDFLAGS="$OLD_LDFLAGS"
 
 		ret_ldflags=0
 		for check_ldflags in $LDFLAGS
@@ -133,79 +242,25 @@ AC_DEFUN([AX_OC@COMPAT_VERSION@],
 				break
 			fi
 		done
+		test $ret_ldflags -eq 0 && LDFLAGS="$OC_LDFLAGS $LDFLAGS"
 
-		test $ret_ldflags -eq 0 && LDFLAGS="$LDFLAGS $OC_LDFLAGS"
-		AC_CHECK_LIB(oc, join,,)
-
+		#
+		# Header check
+		#
 		OC_INCLUDES="`$occonfig --includes`"
 
 		ret_cppflags=0
 		for check_cppflags in $CPPFLAGS
 		do
-			test -z "$O_INCLUDES" && break
+			test -z "$OC_INCLUDES" && break
 
-			if test "$check_cppflags" = "$O_INCLUDES"; then
+			if test "$check_cppflags" = "$OC_INCLUDES"; then
 				ret_cppflags=1
 				break
 			fi
 		done
-		test $ret_cppflags -eq 0 && CPPFLAGS="$CPPFLAGS $O_INCLUDES"
+		test $ret_cppflags -eq 0 && CPPFLAGS="$OC_INCLUDES $CPPFLAGS"
 		AC_CHECK_HEADERS(oc_type.h)
 	fi
 ])
 
-AC_DEFUN([AX_OGC@COMPAT_VERSION@],
-[
-	AC_ARG_WITH(ogc,
-		[  --with-ogc=PATH       path of ogc-config [[default: @static_bindir@/ogc@COMPAT_VERSION@-config]]])
-
-	if test "x$with_ogc" != "xno"; then
-		if test "x$with_ogc" != "x"; then
-			if test "x$with_ogc" = "xyes"; then
-				ogcconfig="@static_bindir@/ogc@COMPAT_VERSION@-config"
-			else
-				ogcconfig="$with_ogc"
-			fi
-		else
-			ogcconfig="@static_bindir@/ogc@COMPAT_VERSION@-config"
-		fi
-
-		AC_MSG_CHECKING(for ogc@COMPAT_VERSION@-config path)
-		if test ! -f "$ogcconfig" || test ! -x "$ogcconfig"; then
-			AC_MSG_ERROR(can't find $ogcconfig)
-		else
-			AC_MSG_RESULT([$ogcconfig])
-		fi
-
-		OGC_LDFLAGS="`$ogcconfig --ldflags`"
-
-		ret_ldflags=0
-		for check_ldflags in $LDFLAGS
-		do
-			test -z "$OGC_LDFLAGS" && break
-	
-			if test "$check_ldflags" = "$OGC_LDFLAGS"; then
-				ret_ldflags=1
-				break
-			fi
-		done
-
-		test $ret_ldflags -eq 0 && LDFLAGS="$LDFLAGS $OGC_LDFLAGS"
-		AC_CHECK_LIB(ogc, convert_punycode,,)
-
-		OGC_INCLUDES="`$ogcconfig --includes`"
-
-		ret_cppflags=0
-		for check_cppflags in $CPPFLAGS
-		do
-			test -z "$OGC_INCLUDES" && break
-
-			if test "$check_cppflags" = "$OGC_INCLUDES"; then
-				ret_cppflags=1
-				break
-			fi
-		done
-		test $ret_cppflags -eq 0 && CPPFLAGS="$CPPFLAGS $OGC_INCLUDES"
-		AC_CHECK_HEADERS(oc_type.h)
-	fi
-])
