@@ -33,10 +33,11 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.1 2011-04-09 15:54:20 oops Exp $
+# $Id: Makefile.am,v 1.2 2011-04-13 10:53:21 oops Exp $
 
 AM_CFLAGS = -Wall
 AM_CPPFLAGS = -I$(top_srcdir)
+LIBS = $(LTLIBICONV)
 
 noinst_LTLIBRARIES = libbuiltin_idn.la
 libbuiltin_idn_la_SOURCES = config.h gunicomp.h gunidecomp.h \
