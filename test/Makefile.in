@@ -49,7 +49,7 @@
 # This file is part of libimginfo.
 #
 
-# $Id: Makefile.in,v 1.3 2011-04-13 09:25:10 oops Exp $
+# $Id: Makefile.in,v 1.4 2011-04-13 09:32:55 oops Exp $
 
 SOURCES = $(CharsetConv_SOURCES) PregGrep.c PregMatch.c PregQuote.c PregReplace.c addslashes.c argvMake.c bindec.c binhex.c caseSensitive.c charset.c fileExists.c getWhitespace.c humanSize.c microtime.c oGetopt.c punycode.c readfile.c realpath_r.c setansi.c split.c str2long.c trim.c
 

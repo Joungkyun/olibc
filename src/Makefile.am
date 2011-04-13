@@ -33,7 +33,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.1 2011-04-09 15:54:21 oops Exp $
+# $Id: Makefile.am,v 1.2 2011-04-13 09:32:55 oops Exp $
 
 includedir = @includedir@/olibc@COMPAT_VERSION@
 
@@ -47,7 +47,7 @@ lib_LTLIBRARIES =
 
 AM_CFLAGS = -Wall
 AM_LDFLAGS = -version-info $(SONAME_INFO)
-AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/pcrelib
+AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/libidn -I$(top_srcdir)/pcrelib
 
 include_HEADERS = oc_type.h libarg.h libfile.h libidn.h \
 				  libpcre.h libstring.h libtime.h
