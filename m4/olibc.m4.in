@@ -32,7 +32,7 @@ dnl POSSIBILITY OF SUCH DAMAGE.
 dnl ----------------------------------------------------------------------------
 dnl  This file is part of olibc.
 dnl
-dnl  $Id: olibc.m4.in,v 1.3 2011-04-13 08:12:34 oops Exp $
+dnl  $Id: olibc.m4.in,v 1.4 2011-04-13 08:21:23 oops Exp $
 dnl 
 
 AC_SUBST(OLIBC_LDFLAGS)
@@ -69,7 +69,7 @@ AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
 		# Library check
 		#
 		OLIBC_LDFLAGS="`$olibcconfig --ldflags`"
-		OLD_LDFLAGS="$LDFLAGS"
+		olibc_OLD_LDFLAGS="$LDFLAGS"
 		LDFLAGS="$OLIBC_LDFLAGS"
 		AC_CHECK_LIB(
 			olibc, join, [
@@ -82,7 +82,7 @@ AC_DEFUN([AX_OLIBC@COMPAT_VERSION@],
 				AC_MSG_ERROR([Can't not found olibc library (-lolibc)])
 			fi]
 		)
-		LDFLAGS="$OLD_LDFLAGS"
+		LDFLAGS="$olibc_OLD_LDFLAGS"
 
 		ret_ldflags=0
 		for check_ldflags in $LDFLAGS
@@ -143,7 +143,7 @@ AC_DEFUN([AX_OGC@COMPAT_VERSION@],
 		# Library check
 		#
 		OGC_LDFLAGS="`$ogcconfig --ldflags`"
-		OLD_LDFLAGS="$LDFLAGS"
+		olibc_OLD_LDFLAGS="$LDFLAGS"
 		LDFLAGS="$OGC_LDFLAGS"
 		AC_CHECK_LIB(
 			ogc, join, [
@@ -156,7 +156,7 @@ AC_DEFUN([AX_OGC@COMPAT_VERSION@],
 				AC_MSG_ERROR([Can't not found ogc library (-logc)])
 			fi]
 		)
-		LDFLAGS="$OLD_LDFLAGS"
+		LDFLAGS="$olibc_OLD_LDFLAGS"
 
 		ret_ldflags=0
 		for check_ldflags in $LDFLAGS
@@ -217,7 +217,7 @@ AC_DEFUN([AX_OC@COMPAT_VERSION@],
 		# Library check
 		#
 		OC_LDFLAGS="`$occonfig --ldflags`"
-		OLD_LDFLAGS="$LDFLAGS"
+		olibc_OLD_LDFLAGS="$LDFLAGS"
 		LDFLAGS="$OC_LDFLAGS"
 		AC_CHECK_LIB(
 			oc, join, [
@@ -230,7 +230,7 @@ AC_DEFUN([AX_OC@COMPAT_VERSION@],
 				AC_MSG_ERROR([Can't not found oc library (-loc)])
 			fi]
 		)
-		LDFLAGS="$OLD_LDFLAGS"
+		LDFLAGS="$olibc_OLD_LDFLAGS"
 
 		ret_ldflags=0
 		for check_ldflags in $LDFLAGS
