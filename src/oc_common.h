@@ -41,11 +41,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 16:24:57 $
- * $Revision: 1.2 $
+ * $Date: 2011-04-13 09:36:16 $
+ * $Revision: 1.3 $
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.2 2011-04-09 16:24:57 oops Exp $ */
+/* $Id: oc_common.h,v 1.3 2011-04-13 09:36:16 oops Exp $ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H
@@ -87,7 +87,7 @@
 #		define OLIBC_API __declspec(dllimport)
 #	endif
 #else
-#	if defined(__GNUC__) && __GNUC__ >= 4
+#	ifdef HAVE_VISIBILITY
 #		define OLIBC_API __attribute__ ((visibility("default")))
 #	else
 #		define OLIBC_API
