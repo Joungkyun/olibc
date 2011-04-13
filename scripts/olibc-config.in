@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: olibc-config.in,v 1.2 2011-04-13 04:53:36 oops Exp $
+# $Id: olibc-config.in,v 1.3 2011-04-13 06:06:10 oops Exp $
 
 prog="olibc@COMPAT_VERSION@"
 prefix="@prefix@"
@@ -29,6 +29,7 @@ Usage: ${prog}-config [OPTION]
 Known values for OPTION are:
   --prefix[=DIR]    change prefix to DIR
   --includedir      print location where headers are installed
+  --libdir          print location where libraries are installed
   --cc              print C compiler name
   --cpp             print C preprocessor name and any required options
   --cflags          print C compiler flags
@@ -84,6 +85,9 @@ while test $# -gt 0; do
 			;;
 		--includedir)
 			echo "${includedir}"
+			;;
+		--libdir)
+			echo "${libdir}"
 			;;
 		--cc)
 			echo $CC
