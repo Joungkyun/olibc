@@ -37,7 +37,7 @@
 
 AM_CFLAGS = -Wall
 AM_CPPFLAGS = -I$(top_srcdir)
-LIBS = $(LTLIBICONV)
+LIBS += $(LTLIBICONV)
 
 noinst_LTLIBRARIES = libbuiltin_idn.la
 libbuiltin_idn_la_SOURCES = config.h gunicomp.h gunidecomp.h \
