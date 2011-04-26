@@ -49,7 +49,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.in,v 1.44 2011-04-13 10:39:55 oops Exp $
+# $Id: Makefile.am,v 1.2 2011-04-12 17:08:46 oops Exp $
 #
 
 srcdir = @srcdir@
@@ -88,7 +88,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
 	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
 	$(top_srcdir)/m4/ax_gcc_visibiliity.m4 \
 	$(top_srcdir)/m4/ax_static_bindir.m4 $(top_srcdir)/m4/iconv.m4 \
-	$(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
