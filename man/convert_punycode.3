@@ -1,79 +1,57 @@
-.TH convert_punycode(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
+.TH convert_punycode(1) 2003-09-08 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man convert_punycode.3
-.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
-.\" $Id: convert_punycode.3,v 1.9 2011-03-25 12:14:41 oops Exp $
-.SH NAME
-convert_punycode \- Convert between punycode and international domain.
+.\" nroff -man convert_punycode.1
+.\" 2003-09-08 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: convert_punycode.3,v 1.4 2003-09-18 06:43:57 oops Exp $
+.SH 이름
+convert_punycode
 
-.SH SYNOPSIS
-.B #include <olibc/libidn.h>
+.SH 사용법
+.B #include <olibc/libstring.h>
 .sp
-.BI "char * convert_punycode_r (const char * src, bool mode, const char * charset)"
+.BI "char * convert_punycode (char * domain, int mode, int debug);"
 
-.SH "Link Library"
-.B \-logc
-or
-.B \-lolibc
-.br
+.SH 설명
+convert_punycode 함수는 com/net/org 에 사용이 되는 muitibyte 도메인의 punycode 변환을
+위하여 사용이 된다.
 
-The libraries are include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-
-.SH DESCRIPTION
-These apis convert to punycode from international domain or
-convert to international domain from punycode
+이 함수를 사용하기 위해서는 olibc 빌드시에 iconv library 를 link 해 줘야 한다.
 
 .TP
-.B src
+.B domain
 .br
-International domain for converting
+변환할 멀티바이트/punycode 도메인을 지정
 
 .TP
 .B mode
 .br
-encode(set false) or decode(set true)
+0 을 지정하면, 멀티바이트 도메인을 punycode 로 변환하며, 1을 지정하면 punycode 도메인을
+멀티바이트 도메인으로 변환한다.
 
 .TP
-.B charset
+.B debug
 .br
-The character set of international domain
+debug 옵션
 
-.SH "RETURN VALUE"
-The pointer of converted domain. When occurs internal error,
-.B convert punycode()
-returns null. If the return string array pointer is not null,
-the caller should deallocate this buffer using
-.B free()
-
-.SH EXAMPLE
+.SH 예제
 .nf
-#include <olibc/libidn.h>
+#include <olibc/libstring.h>
 
-int main (void) {
-    char x[32] = "한글도메인.kr";
-    char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
-	char * buf;
+char x[32] = "한글도메인.kr";
+char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
 
-    buf = convert_punycode (x, false, "EUC-KR");
-    if ( buf != NULL ) {
-        printf ("%s\\n", buf);
-        free (buf);
-    }
-
-    buf = convert_punycode (y, true, "EUC-KR");
-    if ( buf != NULL ) {
-        printf ("%s\\n", buf);
-        free (buf);
-    }
-
-    return 0;
-}
+printf ("%s\\n", convert_punycode (x, 0, 1));
+printf ("%s\\n", convert_punycode (y, 1, 1));
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 참조
+convert_punycode(1)
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+LGPL 2.1 License

@@ -1,0 +1,75 @@
+** File Function
+
+$Id: file.txt,v 1.4 2003-09-19 11:01:23 oops Exp $
+
+File 관련 high level 함수이다.
+
+
+int file_exits (char *path, int mode)
+
+    path 가 존재하는지 여부를 체크를 한다. 모드를 지정하면, 해당 path 의 타입까지 체
+    크를 하여 결과를 반환한다.
+
+    path 는 체크할 경로를 지정하면 mode 는 아래의 상수를 참고한다.
+
+    _IS_NCHK  0 =>   별 체크를 하지 않는다. 해당 경로의 존재 여부만 체크한다.
+    _IS_FILE  1 =>   path 가 파일 인지를 체크한다.
+    _IS_DIR   2 =>   path 가 디렉토리 인지를 체크한다.
+    _IS_SLINK 3 =>   path 가 심볼릭 링크 인지를 체크한다.
+    _IS_CDEV  4 =>   path 가 캐릭터 디바이스 인지를 체크한다.
+    _IS_BDEV  5 =>   path 가 블럭 디바이스 인지를 체크한다.
+    _IS_FIFO  6 =>   path 가 FIFO 인지를 체크한다.
+    _IS_SOCK  7 =>   path 가 소켓 인지를 체크한다.
+
+    참이며 1을 거짓이며 0을 반환한다.
+
+    ex) #include <olibc/libfile.h>
+
+        char *path = "/vars";
+
+        printf ("ANY  : %d\n", file_exists (path, _IS_NCHK));
+        printf ("FILE : %d\n", file_exists (path, _IS_FILE));
+        printf ("DIR  : %d\n", file_exists (path, _IS_DIR));
+        printf ("SLINK: %d\n", file_exists (path, _IS_SLINK));
+        printf ("CDEV : %d\n", file_exists (path, _IS_CDEV));
+        printf ("BDEV : %d\n", file_exists (path, _IS_BDEV));
+        printf ("FIFO : %d\n", file_exists (path, _IS_FIFO));
+        printf ("SOCK : %d\n", file_exists (path, _IS_SOCK));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * fileread (char * path)
+
+    파일 내용을 반환한다.
+
+    반환된 값은 반드시 메모리 해제 (free) 를 해 주어야 한다.
+
+    ex) #include <olibc/libfile.h>
+
+        char *text;
+        char *path = "/etc/hosts";
+
+        text = fileread (path);
+        printf ("%s\n", text);
+        free (text);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+int writefile (char * filename, char * str, int mode)
+
+    str 을 filename 에 기록한다. mode 가 1 이면, filename 이 존재할 경우 해당 파일에
+    이어서 작성을 하며, 0 이거나 해당 파일이 없으면, filename 을 새로 기록한다.
+
+    이 함수는 기록에 성공했을 경우 0을 반환하며, 실패했을 경우 -1 을 반환한다.
+
+    ex) #include <olibc/libfile.h>
+
+    char *text = "asdf";
+    char *path = "/etc/hosts";
+
+    printf ("%d\\n", writefile (path, text, 0));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
