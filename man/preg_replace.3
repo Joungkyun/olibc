@@ -1,149 +1,71 @@
-.TH preg_replace(3) 2011-03-17 "Linux Manpage" "OOPS Library's Manual"
+.TH preg_replace(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man preg_replace.3 | less
-.\" 2011-03-17 JoungKyun Kim <htt://oops.org>
-.\" $Id: preg_replace.3,v 1.7 2011-03-17 12:23:09 oops Exp $
-.SH NAME
-preg_replace \- Perform a regular expression search and replace
-.br
-preg_replace_arr
+.\" nroff -man preg_replace | less
+.\" 2003-08-31 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+preg_replace
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libpcre.h>
 .sp
 .BI "char * preg_replace (char *regex, char *replace, char *subject, int *retlen);"
-.br
-.BI "char * preg_replace_arr (char ** regex, char ** replace, char * subject, int regarr_no);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
+.SH 설명
+.B preg_replace
+함수는 정규식에 의하여 원하는 문자를 변환하는 함수이다. 정규식은
+.B perl 호환
+정규식을 따르며, php 의 preg_replace 함수와 동일하나, 배열을 지원하지 않으며,
+e 옵션과 callback 이 지원되지 않는다.
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-The
-.BI preg_replace()
-function is C API of
-.B PHP preg_replace()
-and use some of
-.B PHP preg_replace()
-code. But can't use \'e\' pattern modifier and don't support
-callback function.
-
-Searches subject for matches to pattern and replaces them with
-replacement. If matches are found, the new subject will be returned,
-otherwise will be returned NULL if an error occurred.
-
-The
-.BI preg_replace_arr()
-is same as the
-.BI preg_replace
-except that
-.B regex
-and
-.B replace
-are string array.
+UTF8 은 시스템의 pcrelib 에 의존을 한다.
 
 .TP
 .B regex
 .br
-The pattern to search for. The rule of regex is
-.B "/PATTERN/PATTERN_MODIFIER".
-On
-.BI preg_replace_arr(),
-this is string array.
+정규식을 지정한다. 정규식은
+.B "/정규식/옵션"
+과 같이 지정을 한다.
 
 .TP
 .B replace
 .br
-Will replacing string.
-On
-.BI preg_replace_arr(),
-this is string array.
+정규식에 의하여 변경될 문자열을 지정을 한다.
 
 .TP
 .B subject
 .br
-The input string.
+정규식으로 체크할 원본 문자열을 지정한다.
 
 .TP
 .B retlen
 .br
-The length of returned string. See also
-.B regarr_no
-about the
-.BI preg_replace_arr()
-api.
+변경된 후의 문자열 길이를 반환한다.
 
-.TP
-.B regarr_no
-.br
-Length of
-.B regex
-and
-.B replace arrays.
-Length of
-.B regex array
-is must same as length of
-.B replace array.
+.SH 반환값
+이 함수가 리턴한 값은 메모리 해제(free)를 해 줘야 한다.
 
-.SH "RETURN VALUE"
-Character pointer of The replaced string.
-When occurs internal error,
-.BI preg_replace()
-returns null. If the return character pointer is not null,
-the caller should deallocate this buffer using
-.BI free().
-
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libpcre.h>
 
-int main (void) {
-    char * result;
+char *result;
 
-    {
-        int len;
+result = preg_replace("/xx/i", "!!", "SeeEEeex");
+printf ("%s\\n", result);
 
-        result = preg_replace ("/xx/i", "!!", "SeeEEeex", &len);
-        printf ("%s\\n", result);
-
-        free (result);
-    }
-
-    {
-        char * regex[3] = { "/X/", "Y", "Z" };
-        char * rep[3] = { "x", "y", "z" };
-
-        result = preg_replace_arr (regex, rep, "opqrstuvwXYZ", 3);
-        printf ("%s\\n", result);
-
-        free (result);
-    }
-
-    return 0;
-}
+free (result);
 .fi
 
-.SH "SEE ALSO"
-preg_quote(3), preg_grep(3), preg_fgrep(3)
+.SH 참조
+preg_quote(1), preg_replace_arr(1), preg_grep(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.08.31 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+PHP License 2.02
+.br
+http://www.php.net/license/2_02.txt 를 참고 하도록 한다.

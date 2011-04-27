@@ -1,88 +1,71 @@
-.TH human_size(3) 2011-03-27 "Linux Manpage" "OOPS Library's Manual"
+.TH human_size(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man human_size.3
-.\" 2011-03-27 JoungKyun Kim <htt://oops.org>
-.\" $Id: human_size.3,v 1.9 2011-03-26 19:42:37 oops Exp $
-.SH NAME
-human_size \- convert number to human readable
+.\" nroff -man human_size.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+human_size
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * human_size (ULong64 size, bool sub, bool unit);"
+.BI "char * human_size (double size, int sub, int unit);;"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
+.SH 설명
+숫자를 읽기 쉬운 단위로 환산을 하여 문자열로 반환을 한다. 반환값은 소수점 2 자리에서
+잘린다.
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-The
-.BI human_size()
-apis are convert to unit for human readable. The return value
-support decimal porint under 2 digits.
-
-Now, these apis are supported byte and bit unit.
+현재 지원되는 단위는 byte 와 bit 이다.
 
 .TP
 .B size
 .br
-The input 64bit integer
+변환할 수를 지정한다.
 
 .TP
 .B sub
 .br
-Set true, return with original size with 3 digit format.
+1 로 지정을 하면,
+.B 117.74 MB (123,456,789 Bytes)
+와 같이 원본 수를 같이 반환을 한다.
 
 .TP
 .B unit
 .br
-Set true, caculation with Byte, else with Bit.
+Byte 와 Bit 를 지정한다.
+.B 0
+을 지정하면
+.B Bit
+,
+.B 1
+을 지정하면
+.B Byte
+로 계산이 된다.
 
-.SH "RETURN VALUE"
-strping pointer of formatted string by human read.
+.SH 반환값
+Byte 단위와 Bit 단위를 자동으로 변환을 하여 문자열로 반환을 한다.
 
-The
-.BI human_size()
-api occurs internal error, the
-.BI human_size() returns null. If the return string array
-pointer is not null, the caller should deallocate this buffer
-using
-.BI free().
-
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    long no = 123456789;
-    char *data;
+double no = 123456789;
+char *data;
 
-    data = human_size ((ULong64) no, 1, 0);
-    printf ("%s\\n", data);
-    if ( data != null )
-        free (data);
+data = malloc(128);
 
-    return 0;
-}
+strcpy (data, human_size(no,1,0));
+
+printf ("%s\\n", data);
+free (data);
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.
