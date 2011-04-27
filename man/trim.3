@@ -1,108 +1,79 @@
-.TH trim(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH trim(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man trim.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: trim.3,v 1.7 2011-03-18 06:52:43 oops Exp $
-.SH ì´ë¦„
-trim \- Remove white space on behind and forward on strings.
-.br
-trim_r
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: trim.3,v 1.3 2004-02-18 16:17:15 oops Exp $
+.SH ÀÌ¸§
+trim
 
-.SH SYNOPSIS
+.SH »ç¿ë¹ı
 .B #include <olibc/libstring.h>
 .sp
-.BI "void trim (char * str);"
-.br
-.BI "char * trim_r (char * str, bool should_free);"
+.BI "void trim(char *str);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
+.SH ¶óÀÌºê·¯¸® ¸µÅ©
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+¶Ç´Â
 
-.SH DESCRIPTION
-Remove white space on behind and forward on the input string.
+.B gcc source -l libolibc
+.br
 
-.BI trim()
-api trimed original source string, but
-.BI trim_r()
-api returns trimed string and original string is not changed.
+libolibc ¸¦ Á¤ÀûÀ¸·Î ¸µÅ©ÇÒ °æ¿ì¿¡´Â LGPL2 ¿¡ ±Ù°ÅÇÏ¿© »ç¿ëÀÌ °¡´ÉÇÏ¸ç, liboc ¸¦
+Á¤ÀûÀ¸·Î ¸µÅ©ÇÒ °æ¿ì¿¡´Â BPL ¿¡ ±Ù°ÅÇÑ´Ù.
+
+.SH ¼³¸í
+¹®ÀÚ¿­ ¾Õ/µÚÀÇ °ø¹é¹®ÀÚ¸¦ Á¦°ÅÇÑ´Ù.
+
+php ÀÇ trim ÇÔ¼ö¿Í µ¿ÀÏÇÏ°Ô ÀÛµ¿À» ÇÏÁö¸¸, °ªÀ» ¸®ÅÏÇÏÁö´Â ¾Ê´Â´Ù. void ÇüÀ¸·Î ÀÛµ¿À»
+ÇÏ¸ç, perl ÀÇ chomp ¿Í °°ÀÌ È£ÃâÀ» ÇÏ¿© º¯°æÇÏ°íÀÚ ÇÏ´Â º¯¼ö ÀÚÃ¼¸¦ º¯°æÀ» ÇÑ´Ù. ¸¸¾à
+º¯¼ö ¿øÇüÀ» ¼öÁ¤ÇÏ°í ½ÍÁö ¾Ê´Ù¸é,
+.B trim_r
+ÇÔ¼ö¸¦ ÀÌ¿ëÇÏµµ·Ï ÇÑ´Ù.
 
 .TP
 .B str
 .br
-The input string. This is must allocated static memory.
+°ø¹é ¹®ÀÚ¸¦ Á¦°ÅÇÒ ¹®ÀÚ¿­À» ÁöÁ¤ÇÑ´Ù. ´Ü, ÀÌ ÀÎÀÚ´Â ¹İµå½Ã ¸Ş¸ğ¸® ÇÒ´çÀÌ µÇ¾î ÀÖ¾î¾ß¸¸
+ÇÑ´Ù.
 
-.TP
-.B should_free (trim_r() only)
-.br
-Set
-.B true,
-Should be freed memory of str argument.
+.SH ¹İÈ¯°ª
+¾øÀ½
 
-.SH "RETURN VALUE"
-The
-.BI trim()
-api has no return value.
-
-.BI trim_r()
-api returns pointer of trimed string. When occurs internal error,
-.BI trim_r()
-returns null. If the return string array pointer is not null,
-the caller should deallocate this buffer using
-.BI free().
-
-.SH EXAMPLE
+.SH ¿¹Á¦
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    char *str;
+char *str;
 
-    str = malloc (sizeof (char) * 32);
-    strcpy (str, "   asdf   ");
+str = malloc (sizeof (char) * 32);
+strcpy (str, "   asdf   ");
 
-    /* remove white space behind or after str variable */
-    trim (str);
-    printf ("%s\\n", str);
+/* str º¯¼öÀÇ ¾Õ/µÚ °ø¹éÀ» »èÁ¦ */
+trim (str);
+printf ("%s\\n", str);
 
-    free (str);
-    return 0;
-}
+free (str);
 .fi
 
-.B The follow sample is wrong.
+.B ´ÙÀ½ÀÇ ¿¹Á¦´Â Àß¸øµÈ »ç¿ëÀÌ´Ù.
 
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    char * str = "    asdf    ";
+char *str = "    asdf    ";
 
-    /* str variable is dynamic allocated */
-    trim (str);
-    printf ("%s\\n", str);
-
-    return 0;
-}
+/* str º¯¼ö¿¡ ¸Ş¸ğ¸® ÇÒ´çÀÌ µÇ¾î ÀÖÁö ¾Ê´Ù */
+trim (str);
+printf ("%s\\n", str);
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH ÂüÁ¶
+trim(1)
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH ÀÛ¼º
+2004.02.19 ±èÁ¤±Õ <http://www.oops.org>
+
+.SH ¹ö±×
+¹ö±×°¡ ¹ß°ßÀÌ µÇ¸é http://www.oops.org ·Î ¸®Æ÷ÆÃÀ» ºÎÅ¹ÇÑ´Ù.

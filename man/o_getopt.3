@@ -1,133 +1,142 @@
-.TH o_getopt(3) 2011-03-05 "Linux Manpage" "OOPS C Library's Manual"
+.TH o_getopt(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man o_getopt.3
-.\" 2011-03-04 JoungKyun Kim <htt://oops.org>
-.\" $Id: o_getopt.3,v 1.13 2011-03-22 16:05:11 oops Exp $
-.SH NAME
-o_getopt \- Parse command-line options
+.\" nroff -man o_getopt.1
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: o_getopt.3,v 1.7 2004-02-18 16:17:15 oops Exp $
+.SH 이름
+o_getopt
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libarg.h>
 .sp
-.BI "o_getopt(int argc, const char **argv, const char *opt, const o_option *longopt);"
+.BI "o_getopt ( int argc, char **argv, const char *opt, const struct o_option, *longopt);"
 
-.SH Link library
-.B \-loc
-or
-.B \-lolibc
+.SH 라이브러리 링크
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+또는
 
-.SH DESCRIPTION
-The
-.BI o_getopt()
-api parses the command\-line arguments similarly
-.BI getopt_long(3).
-Its arguments argc and argv are the argument count
-and array as passed to the main() function on program invocation.
+.B gcc source -l libolibc
+.br
 
-After parsing,
-.BI o_cmdarg
-global array variable has rest arguments
-in the order except the option and option value arguments.
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
-Before call
-.BI o_getopt(),
-you need to initialize follow 2 variables.
+.SH 설명
+command line 에서 넘어온 문자열을 getopt 함수와 유사하게 분석을 한다. o_getop
+함수는 short 형 옵션과 long 형 옵션을 모두 지원을 하며, 이 함수를 사용하고 난
+후에는 command line 에서 넘어온 문자열에서 옵션에 해당하는 부분을 제외한 나머지
+값들이 차례로 o_cmdarg 배열 변수에 남게 된다.
+
+이 함수는 o_optarg, o_optlen, o_cmdarg, _ogetopt_cmd_int, _ogetopt_chk_int 의 전역
+변수를 생성/사용하게 된며, 이 함수를 사용하기 전에는
 
 .nf
 _ogetopt_cmd_int = 0;
-_ogetopt_chk_int = \-1;
+_ogetopt_chk_int = -1;
 .fi
 
-After using variables of
-.BI o_getopt(),
-the o_cmdarg variable is deallocated with
-.BI ofree_array() function.
+두 변수를 초기화 해 줘야 한다.
 
-If option has values, this value is saved on
+이 함수를 사용한 후에는
+.BI ofree_array
+함수로
+.BI o_cmdarg
+배열 변수를 메모리 해제해 줘야
+한다.
+
 .BI o_optarg
-variable that size is 1024 byte and
+는 해당 옵션의 값을 받게 되며 1024 이상의 문자열은 잘라진다.
 .BI o_optlen
-variable is allocated length of
-.BI o_optarg variable.
+은
+o_optarg 의 길이를 가지게 된다.
+.BI o_cmdarg
+변수는 argv[0] 과 옵션/옵션값에 해당되는 문자열만 제외하고, 나머지 명령행들을
+공백문자로 분리하여 순서대로 배열로 가지게 된다.
 
-.TP
-.B argc
-.br
-Number of command\-line arguments
+.BI o_cmdarg
+배열의 수는
+.BI _ogetopt_cmd_int
+에 저장이 된다.
 
-.TP
-.B argv
-.br
-Array of command\-line arguments
+이 함수에서 사용하는 변수들은 다음과 같다.
 
-.TP
-.B opt
-.br
-The string containing the legitimate option characters. Same as 3th
-argument of getopt_long. See also 'man 3 getopt_long'
+.BI argc
+는 명령행에서 넘어온 argv 배열의 갯수를 지정한다.
 
-.TP
-.B longopt
-.br
-The pointer to the first element of an array of struct o_option declared
-in <olibc/libarg.h>. This is same as 4th argument of getopt_long. See also
-\'man 3 getopt_long\'
-.br
-.br
-If you don't want to use longopt, you can set NULL.
+.BI argv
+는 명령행에서 넘어온 argv 배열을 지정한다.
 
-structure of longopt is follows:
+.BI opt
+는 명령행에서 넘어온 argv 에서 옵션과 그 값을 체크하는 문자열을 가지게 된다.
+opt 는 문자열로, 사용할 각 옵션을 문자열로 나열을 하며,  옵션의 값이 필요한 경우에는
+옵션 문자 뒤에
+.BI ':'
+문자를 붙이도록 한다. 예를들어 a, b, c 라는 옵션을 사용을 하려고
+하고, b 옵션의 경우 값이 있어야 한다면, opt 변수는 다음과 같이 지정이 된다.
+
+o_getopt (argc, argv, "ab:c", NULL);
+
+.BI longopt
+는 opt 가 shot 형의 옵션을 지정하는 것에 반하여, longopt 는 long 형의 옵션을 정의한
+struct 를 지정한다.
+
+longopt 의 struct 구조는 다음과 같다.
 
 .nf
-typedef struct {
-    char *name;     // Name of long option
-    int required    // flag of argument option value
-    int value       // The value to return
-} o_option;
+struct o_option {
+    char *name;     // long 옵션 이름
+    int required    // 옵션의 값이 있어야 하는지 여부
+    int value       // long 옵션과 대응될 shot 옵션
+};
 .fi
 
-For example, \-b options must have option value and, long options of \-b option
-is \-\-best, you can set follows:
+
+예를 들어, -b 옵션이 옵션값이 필요하고, long 옵션 --best 를 -b 에 매치할 경우에는
 
 .nf
-static o_option longopt[] = {
+strcut o_option longopt[] = {
     { "best", required_arguments, 'b' }
 };
 .fi
 
-If you set no_arguments on 2th argument, option value is none.
+와 같이 지정이 된다. 가운데의 required_arguments 는 옵션의 값이 있어야 한다는 것이며,
+이를 위해 사용되는 상수는 requried_arguments 와 no_arguments 가 있다.
 
-If you don't use long option, you can set NULL 4th argument of
-.BI o_getopt().
+long option 을 사용하지 않으려면
+
+o_getopt (argc, argv, "ab:c", NULL);
+
+과 같이 사용할 수 있으며, 사용을 하려면, longopt struct 를 정의한 다음
+
+o_getopt (argc, argv, "ab:c", longopt);
+
+와 같이 지정을 한다.
+
+o_getopt 의 리턴값이 -1 일 경우에는 파싱이 종료됨을 의미한다.
 
 
-.SH "RETURN VALUE"
-Returns option character. If returns \-1, close to parse command\-line
-arguments.
+.SH 반환값
+옵션 charactor 가 반환이 되며, -1 일 리턴되면 넘어온 값의 파싱이 완료 되었음을
+의미한다.
 
-.SH EXAMPLE
+
+.SH 예제
 .nf
-The command\-line argument is follows:
+명령행이
 
-.nf
-/usr/bin/parse_getopt \-a arg1 \-b log
-.fi
+/usr/bin/parse_getopt -a arg1 -b log
 
-And \-b option don't have option value.
+이며 -b 옵션은 따로 옵션 값이 없을 경우의 예를 든다.  이 명령행을 long 형 옵션
+으로 사용할 경우에는
+
+/usr/bin/parse_getopt --append=arg1 --best log 또는
+/usr/bin/parse_getopt --append arg1 --best log
+
+과 같이 사용할 경우이다. long 옵션의 값은 '=' 문자로 정의할 수 있으며, 또는 공
+백 문자로 정의할 수 있다.
+
 
 #include <olibc/libarg.h>
 
@@ -136,24 +145,24 @@ int main (int argc, char **argv) {
     char app[1024];
     int  bestopt = 0;
 
-    static o_option longopt[] = {
+    static struct o_option longopt[] = {
         { "append", required_arguments, 'a' },
         { "best", no_arguments, 'b' },
         { 0, 0, 0 }
     };
 
+    /* 안해줘도 괜찮지만, 해 주는 것이 좋다. */
     _ogetopt_cmd_int = 0;
-    _ogetopt_chk_int = \-1;
+    _ogetopt_chk_int = -1;
 
-    /* parsing command\-line arguments */
-    while ( (opt = o_getopt (argc, (const char **) argv, "a:b", longopt)) != \-1 ) {
+    /* 옵션 값을 파싱 */
+    while ( (opt = o_getopt (argc, argv, "a:b", longopt)) != -1 ) {
        switch (opt) {
            case 'a' :
               if ( o_optlen > 0 ) {
                   strcpy (app, o_optarg);
               } else {
-                  fprintf (stderr, "no argument with \-%c option\\n", opt);
-                  ofree_arry (o_cmdarg);
+                  fprintf (stderr, "no argument with -%c option\\n", opt);
                   exit (1);
               }
               break;
@@ -161,16 +170,14 @@ int main (int argc, char **argv) {
               bestopt = 1;
               break;
            default:
-              fprintf (stderr, "usage: %s [\-a optarg|\-b] [log|conf]\\n", argv[0]);
-              ofree_array (o_cmdarg);
+              fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);
               exit (1);
        }
     }
 
-    /* confirm command\-line */
+    /* 명령행을 확인 */
     if ( _ogetopt_cmd_int != 1 ) {
-        fprintf (stderr, "usage: %s [\-a optarg|\-b] [log|conf]\\n", argv[0]);
-        ofree_array (o_cmdarg);
+        fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);
         exit (1);
     }
 
@@ -179,21 +186,21 @@ int main (int argc, char **argv) {
     } else if ( ! strcmp (o_cmdarg[0], "conf") ) {
         ...
     } else {
-        fprintf (stderr, "usage: %s [\-a optarg|\-b] [log|conf]\\n", argv[0]);
+        fprintf (stderr, "usage: %s [-a optarg|-b] [log|conf]\\n", argv[0]);
         exit (1);
     }
 
 
-    /* must need */
+    /* 꼭 해줘야 한다. */
     ofree_array (o_cmdarg);
 }
 .fi
 
-.SH "SEE ALSO"
-getopt(3), getopt_long(3), argv_make(3), ofree_array(3)
+.SH 참고
+argv_make(1), ofree_array(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2004.02.19 김정균 <http://www.oops.org>
 
-.SH BUGS
-Report to QnA bulletin board of http://oops.org
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.

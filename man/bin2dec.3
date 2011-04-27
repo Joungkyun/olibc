@@ -1,82 +1,49 @@
-.TH bin2dec(3) 2011-03-10 "Linux Manpage" "OOPS Library's Manual"
+.TH bin2dec(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man bin2dec.3
-.\" 2011-03-10 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2dec.3,v 1.8 2011-03-28 13:03:13 oops Exp $
-.SH NAME
-bin2dec \- Convert binary string to 32bit integer
-.br
-bin2long \- Convert binary string to 64bit integer
+.\" nroff -man bin2dec.1
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: bin2dec.3,v 1.3 2004-02-18 16:17:15 oops Exp $
+.SH 이름
+bin2dec
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "Long32 bin2dec (const char * str)"
-.br
-.BI "Long64 bin2long (const char * str)"
+.BI "int bin2dec (char *str);"
 
-.SH Link library
-.B \-loc
-or
-.B \-lolibc
+.SH 라이브러리 링크
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+또는
 
-.SH DESCRIPTION
-The
-.BI bin2dec()
-and
-.BI bin2long()
-functions are convert binary numeric string to signed decimal integer.
+.B gcc source -l libolibc
+.br
 
-The
-.BI bin2dec()
-function convert signed 32bit integer and, the
-.BI bin2long()
-function convert signed 64bit integer. The
-.BI bin2long()
-function caculate 64bit integer with high bit and low bit on 32bit system.
-So for cleary 32bit range integer on 32bit system, use the
-.BI bin2dec()
-function.
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
-.SH EXAMPLE
+.SH 설명
+2진수 형태의 문자열을 십진수로 변환을 한다.
+
+
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    Long32 x = 0;
-    Long64 v = 0;
-    char * y = "11011000";
-    char * w = "1001010100000010111110010000000000";
+int x = 0;
+char y = "11011000";
 
-    x = bin2dec (y);
-    v = bin2long (w);
+x = bin2dec (y);
 
-    printf ("%u\\n", x);
-    printf ("%llu\\n", v);
-
-    return 0;
-}
+printf ("%c\\n", x);
 .fi
 
-.SH "SEE ALSO"
-hex2bin(3)
+.SH 참고
+hex2bin(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2004.02.19 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.

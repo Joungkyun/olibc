@@ -1,133 +1,69 @@
-.TH split(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH split(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man split.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: split.3,v 1.11 2011-03-24 16:11:40 oops Exp $
-.SH NAME
-split \- Split a string by string.
-.br
-join \- Join array elements with a string.
+.\" nroff -man split.1
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: split.3,v 1.3 2004-02-18 16:17:15 oops Exp $
+.SH 이름
+split
 
-.SH SYNOPSIS
-.B #include <olibc/libstring.h>
+.SH 사용법
+.B #include <olibc/libarg.h>
 .sp
-.BI "char ** split (const char * stream, int * argc, const char * delimiter);"
-.br
-.BI "char * join (const char * glue, const char ** sep);"
+.BI "char * split (char *stream, int *argc, char *delimiter);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
+.SH 라이브러리 링크
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+또는
 
-.SH DESCRIPTION
-The
-.BI split()
-api returns an array of strings, each of which is a substring of string
-formed by splitting it on boundaries formed by the string delimiter.
-
-.TP
-.B stream
+.B gcc source -l libolibc
 .br
-The input string.
 
-.TP
-.B argc
-.br
-Number of return arraies
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
-.TP
-.B delimiter
-.br
-The boundary string.
+.SH 설명
+문자열을 주어진 delimiter 에 의해서 배열로 반환한다. delimiter 는 문자열로
+지정을 하며, 지정된 문자열은 charactor 단위로 문자열을 쪼개게 된다. 이는
+delimiter 가 'ab' 로 지정이 되었을 경우 'ab' 로 쪼개는 것이 아니라 'a' 또는
+'b' 로 쪼개는 것을 의미한다.
 
-.PP
-The
-.BI join()
-api join array elements with a glue string.
+또한, 주어진 문자열 중, delimiter 에 지정된 charactor 과 매치가 되는 글
+자가 있더라도 매치가 되는 글자 앞에 '\\' 가 있을 경우에는 무시가 된다.
 
-.TP
-.B glue
-.br
-Connected string. If set null, glue has empty string internally.
+stream 은 원본 문자열을 지정한다.
 
-.TP
-.B sep
-.br
- The array of strings to join.
+argc 는 생성된 배열의 수를 반환한다.
 
-.SH "RETURN VALUE"
-The
-.BI split()
-api returns the pointer of string array. If delimiter or src is an
-empty string (""),
-.BI split()
-api will return null.
+delimiter 는 배열로 구분할 문자열을 지정한다.
 
-The last element of return array is null terminating, and each
-element's front or backend white spaces are removed.
+.SH 반환값
+생성된 배열은 ofree_array 함수로 메모리 해제를 해 주어야 한다.
+stream 이나 delimiter 가 주어지지 않으면 NULL 을 반환을 한다.
 
-When occurs internal error,
-.BI split()
-returns null. If the return string array pointer is not null,
-the caller should deallocate this buffer using
-.BI ofree_array().
-
-The
-.BI join()
-api returns the point of string.
-
-When occurs internal error,
-.BI join()
-returns null. If the return string pointer is not null,
-the caller should deallocate this buffer using
-.BI free().
-
-.SH EXAMPLE
+.SH 예제
 .nf
-#include <olibc/libstring.h>
-#include <olibc/libarg.h> // for ofree_array()
+#include <olibc/libarg.h>
 
-int main (void) {
-    char ** sep;
-    char *a = "abcA abcAabc ";
-    char *j;
-    int i, j;
+char ** sep;
+char *a = "abcAabcAabc";
+int i, j;
 
-    sep = split (a, &i, "A");
+sep = split (files, &i, "A");
 
-    for (j = 0; j < i; j++) {
-        printf ("** %s\\n", sep[j]);
-    }
-
-    j = join ("A", sep);
-    printf ("%s\n", j);
-
-    free (j);
-    ofree_array (sep);
-    return 0;
+for (j = 0; j < i; j++) {
+          printf ("** %s\\n", sep[i]);
 }
+
+ofree_array (sep);
 .fi
 
-.SH "SEE ALSO"
-ofree_array(3)
+.SH 참고
+ofree_array(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2004.02.19 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
