@@ -20,7 +20,7 @@
  */
 
 #if HAVE_CONFIG_H
-# include <config.h>
+# include <olibc-config.h>
 #endif
 
 #include <stdio.h>
@@ -29,15 +29,32 @@
 
 #include "stringprep.h"
 
+#ifdef HAVE_ICONV_H
+# define HAVE_ICONV 1
+/* Define as const if the declaration of iconv() needs const. */
+# define ICONV_CONST
+#endif
+
+#define ENABLE_NLS
+
+#ifndef HAVE_LOCALE_H
+#undef ENABLE_NLS
+#endif
+
+#ifndef HAVE_LANGINFO_H
+#undef ENABLE_NLS
+#endif
+
 #if defined(HAVE_ERRNO_H) || defined(_LIBC)
 # include <errno.h>
 #endif
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
 # include <iconv.h>
 
 # ifdef ENABLE_NLS
 #  include <langinfo.h>
+#  include <locale.h>
 # endif
 
 static const char *
@@ -67,8 +84,7 @@ stringprep_locale_charset_slow (void)
   return "ASCII";
 }
 
-OLIBC_API
-const char *stringprep_locale_charset_cache = NULL;
+static const char *stringprep_locale_charset_cache = NULL;
 
 /**
  * stringprep_locale_charset:
@@ -137,11 +153,15 @@ stringprep_convert (const char *str,
       return p;
     }
 
-  p = (char *) malloc (strlen (str) + 1);
-  if (p == NULL) {
+  cd = iconv_open (to_codeset, from_codeset);
+
+  if (cd == (iconv_t) - 1)
     return NULL;
-  }
+
+  p = (char *) malloc (strlen (str) + 1);
   strcpy (p, str);
+  if (p == NULL)
+    return NULL;
   len = strlen (p);
   startp = p;
   inbytes_remaining = len;
@@ -149,18 +169,6 @@ stringprep_convert (const char *str,
 
   outbytes_remaining = outbuf_size - 1;	/* -1 for nul */
   outp = dest = malloc (outbuf_size);
-  if ( outp == NULL ) {
-      free (p);
-      return NULL;
-  }
-
-  cd = iconv_open (to_codeset, from_codeset);
-
-  if (cd == (iconv_t) -1) {
-    free (p);
-    free (outp);
-    return NULL;
-  }
 
 again:
 

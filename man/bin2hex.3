@@ -1,85 +1,72 @@
-.TH bin2hex(3) 2011-03-30 "Linux Manpage" "OOPS Library's Manual"
+.TH bin2hex(1) 2004-02-03 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man bin2hex.3
-.\" 2011-03-30 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2hex.3,v 1.9 2011-03-29 17:24:36 oops Exp $
-.SH NAME
-bin2hex \- Convert binary data into hexadecimal representation.
+.\" nroff -man bin2hex.1
+.\" 2004-02-03 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: bin2hex.3,v 1.1 2004-02-03 08:45:21 oops Exp $
+.SH 이름
+bin2hex
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * bin2hex (const char * str, size_t * outlen);"
+.BI "char * bin2hex (char *str);"
+.sp
+.BI "char * _bin2hex (char c);"
 
-.SH Link library
-.B \-loc
-or
-.B \-lolibc
-.br
+.SH 설명
+bin2hex 은 2진수 형태의 문자열을 16진수의 문자열로 반환한다.
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+_bin2hex 은 길이 4의 이진수 문자열을 16진수 형태의 캐릭터로 반환을 한다.
 
-.SH DESCRIPTION
-The
-.BI bin2hex()
-function converts binary string to hexadecimal string. The binary string
-that is out of range is converted \'?\' character.
 
-.TP
-.B str
-.br
-The input binary string
+.SH 반환값
+16진수 형태의 문자열로 반환.
 
-.TP
-.B outlen
-.br
-The length of return value. This argument is set null, don't count
-length of return string.
-
-.SH "RETURN VALUE"
-The point of hexadecimal string
-
-When the
-.BI bin2hex()
-occurs internal error, returns null. If return value is string array pointer,
-the caller should deallocate this buffer using
-.BI free().
-
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    const char *src = "101100101110010011100100";
-    char *dest;
-    unsigned int len;
+char *data = "101100101110010011100100";
+int i, j, len;
+char tmp[5];
+static char buf[1024] = { 0, };
 
-    if ( (dest = bin2hex (src, * len) != null ) {
-        printf ("%s (%d)\\n", dest, len);
-        free (dest); // must need
-    }
+len = strlen (str);
 
-    return 0;
+for ( i = 0, j = 0; i < len; i += 4, j++ ) {
+    memst (tmp, 0, 5);
+    strncpy ( tmp, str + i, 4 );
+    if ( strlen (tmp) < 4 ) continue;
+
+    memset ( buf + j, _bin2hex (tmp), 1);
 }
 
+printf ("%s\\n", buf);
 .fi
 
-.SH "SEE ALSO"
-hex2bin(3), hex2bin_r(3)
+위의 코드는 bin2hex 의 원형이 된다.
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.nf
+#include <olibc/libstring.h>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+char *data = "101100101110010011100100";
+char *ret;
+
+ret = bin2hex (data);
+
+printf ("%s\\n", ret);
+.fi
+
+.SH 참고
+hex2bin(1)
+
+.SH 작성
+2004.02.03 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

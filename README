@@ -1,25 +1,12 @@
-$Id: README,v 1.6 2011-04-12 17:16:56 oops Exp $
+$Id: README,v 1.3 2003-09-19 12:27:53 oops Exp $
 olibc - oops C library
 
-JoungKyun.Kim 2011/03/21 http://oops.org
+작성: 김정균 2003.09.09 http://www.oops.org
 
-The olibc library is high level api for you easily c programing. See also
-sample code in sample/ directory and man pages.
+olibc 는 C 프로그래밍을 간편하게 도와주는 high level 의 함수이다. olibc 의 함수들에
+대해서는 doc 디렉토리의 file.txt, preg.txt, string.txt, time.txt 를 참고를 한다. 또
+한, 함수들은 man 함수이름 으로 사용법을 숙지할 수 있다.
 
-When you developed with olibc, you can use olibc-config or oc-config or
-ogc-config.
-
-When linking with libtool, an application should do something like:
-  LDFLAGS="`oc-config --link-libtool`"
-or when linking directly:
-  LDFLAGS="`oc-config --link-ld`"
-
-See also 'oc-config --help' command
-
-If you autotools, you can use AX_OLIBC or AX_OC or AX_OGC macro.
-If declare OC_AX in the configure.ac or configure.in, you can use
-OC_LDFALGS and OC_CPPFLAGS variables on Makefile.in.
-
-CPPFLAGS = @CPPFLAGS@ $(OC_CPPFLAGS)
-LDFLAGS = @LDFLAGS@ $(OC_LDFLAGS)
-
+olibc 를 이용을 하여 개발을 할 경우에는 olibc-config 를 실행을 하여, 필요한 library
+를 link 해 줘야 한다. olibc-config --libs 를 실행을 하면 필요한 link 목록을 확인할
+수 있다.

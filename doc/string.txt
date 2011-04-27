@@ -1,0 +1,434 @@
+** String Function
+
+$Id: string.txt,v 1.4 2004-02-03 08:44:05 oops Exp $
+
+String 관련 함수들은 문자열 변환과 관련된 high level 의 함수들이다.
+
+
+char * addslashes(char *str, int should_free)
+
+    데이터 베이스 쿼리와 같이 인용된 부분 앞에 백슬래쉬를 붙여 반환한다. 이런 문자에
+    는 작은 따옴표 ('), 큰 따옴표 ("), 백슬래쉬 (\), 그리고 NULL (null byte)이 있다.
+
+    should_free 인자는 1을 줄 경우 str 을 addslashes 내부에서 메모리 해제 (free)
+    를 시도한다. 0 일 경우에는 아무 작동을 하지 않는다.
+
+    이 함수는 php 의 addslashes 와 동일하게 작동을 한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *buf;
+        char *str;
+
+        str= malloc (sizeof (char) * 32);
+        strcpy (str, "abc'def'gh\"ij\"klmn");
+
+        /* str 변수는 addslashes 함수 내부에서 메모리 해제가 된다 */
+        buf = addslashes (str, 1);
+        printf ("%s\n", buf);
+
+        free (buf);
+
+    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
+
+
+void trim (char *str);
+
+    문자열의 앞, 뒤의 공백 문자를 제거한다.
+
+    php 의 trim 함수와 동일하게 작동을 하지만 값을 리턴하지는 않는다. void 형으로 작
+    동을 하며, perl 의 chomp 와 같이 void 로 실행을 하여 str 인자의 앞뒤 공백을 제거
+    한다. 만약 str 의 변형을 원하지 않는다면 trim_r 함수를 사용하도록 한다.
+
+    주의할 것은, str 변수는 반드시 메모리 할당이 되어 있어야만 한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *str;
+
+        str = malloc (sizeof (char) * 32);
+        strcpy (str, "   asdf   ");
+
+        /* str 변수의 앞/뒤 공백을 삭제 */
+        trim (str);
+        printf ("%s\n", str);
+
+        free (str);
+
+
+
+        다음의 예제는 잘못된 사용이다.
+
+
+
+        #include <olibc/libstring.h>
+
+        char *str = "    asdf    ";
+
+        /* str 변수에 메모리 할당이 되어 있지 않다 */
+        trim (str);
+        printf ("%s\n", str);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * trim_r (char *str, int should_free)
+
+    문자열의 앞, 뒤의 공백 문자를 제거한다.
+
+    trim 함수와 동일하게 작동을 하나, str 인자를 변형하지 않으며, 새로운 메모리 주소
+    를 할당을 한다. 그러므로 리턴된 값을 반드시 메모리 해제를 해 주어야 한다.
+
+    should_free 인자는 1을 줄 경우 str 을 addslashes 내부에서 메모리 해제 (free)
+    를 시도한다. 0 일 경우에는 아무 작동을 하지 않는다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *str = "    asdf    ";
+        char *buf;
+
+        /* str 변수의 앞/뒤 공백을 삭제 */
+        buf = trim_r (str, 0);
+        printf ("STR: %s\BUF: n%s\n", str, buf);
+
+        free (buf);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+long long str2long (char *s)
+
+    숫자로 구성된 문자열을 long long 타입으로 변환한다.
+
+    이 함수는 정수 19자리 까지 유효하다. (음수 포함)
+
+    ex) #include <olibc/libstring.h>
+
+        char *buf = "1234567890123456789";
+        long long no = 0;
+
+        a = str2long (buf);
+
+        printf ("%lld\n", a);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+long double str2double (char *s)
+
+    숫자로 구성된 문자열을 long double 타입으로 변환한다.
+
+    이 함수는 소수점 6자리 정수부분 19 자리 까지 유효하다 (음수 포함)
+
+    단, double 형이기 때문에 소수점 6자리의 경우 정수 부분은 14자리 까지 정확한 계산
+    이 가능하며, 그 이상의 경우에는 소수점은 정확한 값이 나오지 않는다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *buf = "11111.234";
+        long double no = 0;
+    
+        a = str2long (buf);
+
+        printf ("%Lf\n", a);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+int char2int (char c)
+
+    캐릭터를 int 형으로 변환한다. 캐릭터가 정수가 아닌 경우에는 -1 을 반환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *str = "123";
+        int no = 0, i = 0, x = 1, res = 0;
+
+        for (i=strlen(str) - 1; i >= 0; i--) {
+          if ( (no = char2int (str[i])) > 0 ) {
+            res += no;
+            x * 10;
+          }
+        }
+
+        printf ("%d\n", res);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+int check_int (char c)
+
+    해당 캐릭터가 정수인지 아닌지를 체크한다.
+
+    정수이면 1 을 리턴하고, 아니면 0을 리턴한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *str = "12c3";
+        int no = 0, i = 0, x = 1, res = 0;
+
+        for (i=strlen(str) - 1; i >= 0; i--) {
+          if ( check_int (str[i]) ) {
+            printf ("%c is int", str[i]);            
+          } else {
+            printf ("%c is not int", str[i]);            
+          }
+        }
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+void setansi (FILE *stream, int color, int nosnsi)
+
+   파일 스트림의 출력 문자열의 색상을 지정한다.
+
+   stream 은 표준출력, 표준에러, 파일스트림을 지정한다.
+
+   color 는 색상을 지정한다. 색상은 다음의 상수를 참고한다.
+
+   ENDANSI     0
+   GRAY        1
+   BGRAY       2
+   RED         3
+   BRED        4
+   GREEN       5
+   BGREEN      6
+   YELLOW      7
+   BYELLOW     8
+   BLUE        9
+   BBLUE       10
+   MAGENTA     11
+   BMAGENTA    12
+   CYAN        13
+   BCYAN       14
+   WHITE       15
+   BWHITE      16
+
+   색상 출력을 하였으면, 꼭 ENDANSI 상수를 이용하여 종료를 해 줘야 한다.
+
+   noansi 는 이 함수가 아무작동을 안하도록 한다.
+
+   ex) #include <olibc/libstring.h>
+
+       char *path = "/vars";
+
+       setansi (stdout, GRAY, 0);
+       printf ("ANY  : %d\n", file_exists (path, _IS_NCHK));
+       setansi (stdout, ENDANSI, 0);
+       setansi (stdout, BLUE, 0);
+       printf ("FILE : %d\n", file_exists (path, _IS_FILE));
+       setansi (stdout, ENDANSI, 0);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * human_size (double size, int sub, int unit);
+
+    숫자를 읽기 쉬운 단위로 환산을 하여 문자열로 반환을 한다. 반환값은 소수점 2 자리에
+    서 잘린다.
+
+    size 는 변환할 수를 지정한다.
+    sub 를 지정하면, 117.74 MB (123,456,789 Bytes) 와 같이 원본 수를 같이 반환을 한다.
+    unit 은 Byte 와 Bit 를 지정한다. 0 을 지정하면 Bit, 1을 지정하면 Byte 로 계산이 된
+    다.
+
+    ex) #include <olibc/libstring.h>
+        double no = 123456789;
+        char *data;
+
+        data = malloc(128);
+
+        strcpy (data, human_size(no,1,0));
+
+        printf ("%s\n", data);
+        free (data);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int print)
+
+    숫자에 읽기 쉽도록 자리수를 나누어, 문자열로 반환한다.
+
+    d 는 원형 숫자를 지정한다.
+    dec 는 소수점의 자리수를 지정한다.
+    dec_point 는 소수점을 표시할 캐릭터를 지정한다.
+    thousand_sep 는 자리수를 표시할 캐릭터를 지정한다.
+    print 를 1로 지정을 하면, 출력을 하고 NULL 을 반환한다.
+
+    이 함수를 사용한 후에는 꼭 반환 값을 메모리 해제를 해야 한다.
+
+    ex) #include <olibc/libstring.h>
+        double no = 123456789;
+        char *data;
+
+        data = (char *) numberFormat (size, 0, '.', ',', 0);
+
+        printf ("%s\n", data);
+        free (data);
+
+    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
+
+
+void strtolower (char *str)
+
+    문자열을 소문자로 변경한다.
+
+    주의할 것은 원본 str 을 변형한다는 것이다.  
+
+    ex) #include <olibc/libstring.h>
+
+        char data[5] = "DaTa";
+
+        printf ("%s\n", strtolower (data));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+void strtoupper (char *str)
+
+    문자열을 대문자로 변경한다.
+
+    주의할 것은 원본 str 을 변형한다는 것이다.
+
+    ex) #include <olibc/libstring.h>
+
+        char data[5] = "DaTa";
+
+        printf ("%s\n", strtoupper (data));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char _bin2hex (char *s)
+
+    길이가 4인 2진수 형태의 문자열을 16진수 형태의 캐릭터로 반환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *data = "101100101110010011100100";
+        int i, j, len;
+        char tmp[5];
+        static char buf[1024] = { 0, };
+
+        len = strlen (str);
+
+        for ( i = 0, j = 0; i < len; i += 4, j++ ) {
+            memst (tmp, 0, 5);
+            strncpy ( tmp, str + i, 4 );
+            if ( strlen (tmp) < 4 ) continue;
+
+            memset ( buf + j, _bin2hex (tmp), 1);
+        }
+
+        printf ("%s\\n", buf);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * bin2hex (char *str)
+
+    2진수 형태의 문자열을 16진수의 문자열로 반환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *data = "101100101110010011100100";
+        char *ret;
+
+        ret = bin2hex (data);
+
+        printf ("%s\\n", ret);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * _hex2bin (char c)
+
+    8진수의 캐릭터를 이진수의 문자열로 반환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *data = "6EA7";
+        char ret[17];
+        int i,j;
+
+        memset (ret, '\0', sizeof (ret));
+
+        for (i=0, j=0; i<strlen(data); i++) {
+            memcpy (ret + j, _hex2bin (data[i]), 4);
+            j += 4;
+        }
+    
+        printf ("%s\n", ret);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * hex2bin (char *str)
+
+    16 진수 형태의 문자열을 이진수의 문자열로 반환한다.
+    반환값은 메모리 해제(free)를 해야 한다.
+
+    ex) #include <olibc/libstring.h>
+
+        char *data = "6EA7";
+        char *ret;
+
+        ret = hex2bin (data);
+
+        printf ("%s\n", ret);
+        free (ret);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+int bin2dec (char *src)
+
+    바이너리 형태의 문자열을 10진수로 변환한다.
+
+    ex) #include <olibc/libstring.h>
+
+        int x = 0;
+        char y = "11011000";
+
+        x = bin2dec (y);
+
+        printf ("%c\n", x);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+char * convert_racecode (char * domain, int mode, int debug)
+
+    멀티바이트 도메인 (com/net/org) 에 사용되는 race 변환 함수
+
+    domain 은 변경할 멀티바이트 도메인 또는 racecode 도메인을 지정
+    mode 는 0을 지정할 경우 멀티바이트 도메인을 racecode 로 변환하며, 1을 지정할 경우
+    racecode 도메인을 멀티바이트 도메인으로 변환함.
+
+    system 의 iconv library 가 필요함.
+
+    ex) #include <olibc/libstring.h>
+
+        char x[32] = "한글도메인.com";
+        char y[64] = "bq--3dkvzlqawpcluvghpa.com";
+
+        printf ("%s\n", convert_racecode (x, 0, 1));
+        printf ("%s\n", convert_racecode (y, 1, 1));
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>
+
+char * convert_punycode (char *domain, int mode, int debug)
+
+    로컬 다국어 도메인에 사용되는 punycode 변환 함수
+
+    domain 은 변경할 멀티바이트 도메인 또는 punycode 도메인을 지정
+    mode 는 0을 지정할 경우 멀티바이트 도메인을 punycode 로 변환하며, 1을 지정할 경우
+    punycode 도메인을 멀티바이트 도메인으로 변환함.
+
+    ex) #include <olibc/libstring.h>
+
+        char x[32] = "한글도메인.kr";
+        char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
+
+        printf ("%s\n", convert_punycode (x, 0, 0));
+        printf ("%s\n", convert_punycode (y, 1, 0));
+
+    저작권: LGPL 2.1 License
+
