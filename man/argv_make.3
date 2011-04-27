@@ -1,88 +1,62 @@
-.TH argv_make(3) 2011-03-09 "Linux Manpage" "OOPS Library's Manual"
+.TH argv_make(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man argv_make.3
-.\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: argv_make.3,v 1.7 2011-03-12 17:26:14 oops Exp $
-.SH NAME
-argv_make \- Make string array with the input string using white space delimiters
+.\" nroff -man argv_make.1
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: argv_make.3,v 1.2 2004-02-18 16:17:15 oops Exp $
+.SH 이름
+argv_make
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libarg.h>
 .sp
-.BI "char ** argv_make (const char * stream, int * argc);"
+.BI "char * argv_make (char *stream, int *argc);"
 
-.SH Link library
-.B \-loc
-or
-.B \-lolibc
+.SH 라이브러리 링크
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+또는
 
-.SH DESCRIPTION
-The
-.BI argv_make()
-function make string array with white space ([ \\n\\t]) delimiters from
-the input string. The last array element has NULL terminator.
-
-The white space in the quoted string is preserved.
-
-.TP
-.BI stream
+.B gcc source -l libolibc
 .br
-The input string
 
-.TP
-.BI argc
-.br
-Pointer of string array
+libolibc 를 정적으로 링크할 경우에는 LGPL2 에 근거하여 사용이 가능하며, liboc 를
+정적으로 링크할 경우에는 BPL 에 근거한다.
 
-.SH "RETURN VALUE"
-Pointer of string array. When occurs internal error, argv_make() returns null.
-If the return string array pointer is not null, the caller should deallocate
-this buffer using
-.BI ofree_array()
+.SH 설명
+문자열을 공백문자를 기준으로 배열로 변환을 한다. 쉽게 command line 의 명령행이 argv
+변수로 되는 것과 동일하게 생각할 수 있다.
 
-.SH EXAMPLE
+stream 은 입력할 문자열을 지정하며, argc 는 생성된 배열의 수가 반영이 된다.
+
+.SH 반환값
+생성된 배열은 ofree_array 함수로 메모리 해제를 해 주어야 한다.
+
+.SH 예제
 .nf
 #include <olibc/libarg.h>
 
-int main (void) {
-    char * string = "arg1 arg2 arg3 \\"arg4 arg5\\"";
-    char ** ary;
-    char ** scan;
-    int aryno, i;
+char * string = "arg1 arg2 arg3 \\"arg4 arg5\\"";
+char ** argv;
+char ** scan;
+int argc, i;
 
-    ary = argv_make (string, &aryno);
+argv = argv_make (string, &argc);
 
-    printf ("## Number of array : %d\\n", aryno);
+printf ("## 생성된 배열의 수 : %d\\n", argc);
 
-    for ( scan = ary, i=0; *scan != NULL; scan++, i++ ) {
-        printf ("[%d] %s\\n", i, *scan);
-    }
-
-    ofree_array (ary);
-
-    return 0;
+for ( scan = argv, i=0; *scan != NULL; scan++, i++ ) {
+    printf ("[%d] %s\\n", *scan);
 }
+
+ofree_array (argv);
 .fi
 
-.SH "SEE ALSO"
-ofree_array(3)
+.SH 참고
+ofree_array(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2004.02.19 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.

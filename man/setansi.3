@@ -1,114 +1,100 @@
-.TH setansi(3) 2011-03-26 "Linux Manpage" "OOPS Library's Manual"
+.TH setansi(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man setansi.3
-.\" 2011-03-26 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.11 2011-03-29 18:22:43 oops Exp $
-.SH NAME
-setansi \- Set ansi color
+.\" nroff -man setansi.1
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: setansi.3,v 1.3 2004-02-18 16:17:15 oops Exp $
+.SH ÀÌ¸§
+setansi
 
-.SH SYNOPSIS
+.SH »ç¿ë¹ı
 .B #include <olibc/libstring.h>
 .sp
-.BI "void setansi (FILE * stream, int color, bool noansi);"
+.BI "int setansi(FILE *stream, int color, int mode);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
+.SH ¶óÀÌºê·¯¸® ¸µÅ©
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+¶Ç´Â
 
-.SH DESCRIPTION
-Print magic character of ansi color on the file stream. If you want to stop
-ansi mode, recall this function with
-.B ENDANSI
-constant.
+.B gcc source -l libolibc
+.br
+
+libolibc ¸¦ Á¤ÀûÀ¸·Î ¸µÅ©ÇÒ °æ¿ì¿¡´Â LGPL2 ¿¡ ±Ù°ÅÇÏ¿© »ç¿ëÀÌ °¡´ÉÇÏ¸ç, liboc ¸¦
+Á¤ÀûÀ¸·Î ¸µÅ©ÇÒ °æ¿ì¿¡´Â BPL ¿¡ ±Ù°ÅÇÑ´Ù.
+
+.SH ¼³¸í
+ÆÄÀÏ ½ºÆ®¸²ÀÇ Ãâ·Â ¹®ÀÚ¿­ÀÇ »ö»óÀ» ÁöÁ¤ÇÑ´Ù. ÀÌ ÇÔ¼ö¸¦ »ç¿ëÇÑ ÈÄ¿¡,
+´Ù½Ã ENDANSI »ó¼ö¸¦ ÀÌ¿ëÇÏ¿© ÀçÈ£ÃâÀ» ÇØ Áà¾ß ÇÑ´Ù.
 
 .TP
 .B stream
 .br
-.B stdin, stdout or stderr,
-and so on.
+»ö»óÀ» Ãâ·ÂÇÒ Ç¥ÁØÃâ·Â/Ç¥ÁØ¿¡·¯/ÆÄÀÏ½ºÆ®¸² À» ÁöÁ¤ÇÑ´Ù.
 
 .TP
 .B color
 .br
-olibc color constants. See also follows:
+´ÙÀ½ÀÇ »ó¼ö¸¦ Âü°íÇÑ´Ù.
 
-.B OC_ENDANSI 0
+.B ENDANSI 0
 .br
-.B OC_GRAY 30
+.B GRAY 1
 .br
-.B OC_BGRAY 40
+.B BGRAY 2
 .br
-.B OC_RED 31
+.B RED 3
 .br
-.B OC_BRED 41
+.B BRED 4
 .br
-.B OC_GREEN 32
+.B GREEN 5
 .br
-.B OC_BGREEN 42
+.B BGREEN 6
 .br
-.B OC_YELLOW 33
+.B YELLOW 7
 .br
-.B OC_BYELLOW 43
+.B BYELLOW 8
 .br
-.B OC_BLUE 34
+.B BLUE 9
 .br
-.B OC_BBLUE 44
+.B BBLUE 10
 .br
-.B OC_MAGENTA 35
+.B MAGENTA 11
 .br
-.B OC_BMAGENTA 45
+.B BMAGENTA 12
 .br
-.B OC_CYAN 36
+.B CYAN 13
 .br
-.B OC_BCYAN 46
+.B BCYAN 14
 .br
-.B OC_WHITE 37
+.B WHITE 15
 .br
-.B OC_BWHITE 47
+.B BWHITE 16
 
 .TP
 .B noansi
 .br
-Set true, this function don't operate.
+0 ÀÌ ¾Æ´Ï¸é, ÀÌ ÇÔ¼ö°¡ ¾Æ¹«·± ÀÛµ¿À» ÇÏÁö ¾Êµµ·Ï ÇÑ´Ù.
 
-.SH "RETURN VALUE"
-ì—†ìŒ
+.SH ¹İÈ¯°ª
+¾øÀ½
 
-.SH EXAMPLE
+.SH ¿¹Á¦
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    char * path = "/vars";
+char *path = "/vars";
 
-    setansi (stdout, OC_GRAY, 0);
-    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
-    setansi (stdout, OC_ENDANSI, 0);
-    setansi (stdout, OC_BLUE, 0);
-    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
-    setansi (stdout, OC_ENDANSI, 0);
-
-    return 0;
-}
+setansi (stdout, GRAY, 0);
+printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
+setansi (stdout, ENDANSI, 0);
+setansi (stdout, BLUE, 0);
+printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
+setansi (stdout, ENDANSI, 0);
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH ÀÛ¼º
+2004.02.19 ±èÁ¤±Õ <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH ¹ö±×
+¹ö±×°¡ ¹ß°ßÀÌ µÇ¸é http://www.oops.org ·Î ¸®Æ÷ÆÃÀ» ºÎÅ¹ÇÑ´Ù.

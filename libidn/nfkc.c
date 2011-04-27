@@ -20,7 +20,7 @@
  */
 
 #if HAVE_CONFIG_H
-# include <config.h>
+# include <olibc-config.h>
 #endif
 
 #include <stdlib.h>
@@ -75,15 +75,16 @@
 
 typedef enum
 {
-	G_NORMALIZE_DEFAULT,
-	G_NORMALIZE_NFD = G_NORMALIZE_DEFAULT,
-	G_NORMALIZE_DEFAULT_COMPOSE,
-	G_NORMALIZE_NFC = G_NORMALIZE_DEFAULT_COMPOSE,
-	G_NORMALIZE_ALL,
-	G_NORMALIZE_NFKD = G_NORMALIZE_ALL,
-	G_NORMALIZE_ALL_COMPOSE,
-	G_NORMALIZE_NFKC = G_NORMALIZE_ALL_COMPOSE
-} GNormalizeMode;
+  G_NORMALIZE_DEFAULT,
+  G_NORMALIZE_NFD = G_NORMALIZE_DEFAULT,
+  G_NORMALIZE_DEFAULT_COMPOSE,
+  G_NORMALIZE_NFC = G_NORMALIZE_DEFAULT_COMPOSE,
+  G_NORMALIZE_ALL,
+  G_NORMALIZE_NFKD = G_NORMALIZE_ALL,
+  G_NORMALIZE_ALL_COMPOSE,
+  G_NORMALIZE_NFKC = G_NORMALIZE_ALL_COMPOSE
+}
+GNormalizeMode;
 
 /* Code from GLIB gutf8.c starts here. */
 
@@ -150,22 +151,22 @@ typedef enum
 
 
 static const gchar utf8_skip_data[256] = {
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1,
-	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-	2, 2, 2, 2, 2, 2, 2,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5,
-	5, 5, 5, 6, 6, 1, 1
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+  2, 2, 2, 2, 2, 2, 2,
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5,
+  5, 5, 5, 6, 6, 1, 1
 };
 
 const gchar *const g_utf8_skip = utf8_skip_data;
@@ -187,40 +188,39 @@ const gchar *const g_utf8_skip = utf8_skip_data;
 static glong
 g_utf8_strlen (const gchar * p, gssize max)
 {
-	glong len = 0;
-	const gchar *start = p;
-	g_return_val_if_fail (p != NULL || max == 0, 0);
+  glong len = 0;
+  const gchar *start = p;
+  g_return_val_if_fail (p != NULL || max == 0, 0);
 
-	if (max < 0)
+  if (max < 0)
+    {
+      while (*p)
 	{
-		while (*p)
-		{
-			p = g_utf8_next_char (p);
-			++len;
-		}
+	  p = g_utf8_next_char (p);
+	  ++len;
 	}
-	else
+    }
+  else
+    {
+      if (max == 0 || !*p)
+	return 0;
+
+      p = g_utf8_next_char (p);
+
+      while (p - start < max && *p)
 	{
-		if (max == 0 || !*p)
-			return 0;
-
-		p = g_utf8_next_char (p);
-
-		while (p - start < max && *p)
-		{
-			++len;
-			p = g_utf8_next_char (p);
-		}
-
-		/*
-		 * only do the last len increment if we got a complete
-		 * char (don't count partial chars)
-		 */
-		if (p - start == max)
-			++len;
+	  ++len;
+	  p = g_utf8_next_char (p);
 	}
 
-	return len;
+      /* only do the last len increment if we got a complete
+       * char (don't count partial chars)
+       */
+      if (p - start == max)
+	++len;
+    }
+
+  return len;
 }
 
 /*
@@ -238,16 +238,16 @@ g_utf8_strlen (const gchar * p, gssize max)
 static gunichar
 g_utf8_get_char (const gchar * p)
 {
-	int i, mask = 0, len;
-	gunichar result;
-	unsigned char c = (unsigned char) *p;
+  int i, mask = 0, len;
+  gunichar result;
+  unsigned char c = (unsigned char) *p;
 
-	UTF8_COMPUTE (c, mask, len);
-	if (len == -1)
-		return (gunichar) - 1;
-	UTF8_GET (result, p, i, mask, len);
+  UTF8_COMPUTE (c, mask, len);
+  if (len == -1)
+    return (gunichar) - 1;
+  UTF8_GET (result, p, i, mask, len);
 
-	return result;
+  return result;
 }
 
 /*
@@ -264,52 +264,52 @@ g_utf8_get_char (const gchar * p)
 static int
 g_unichar_to_utf8 (gunichar c, gchar * outbuf)
 {
-	guint len = 0;
-	int first;
-	int i;
+  guint len = 0;
+  int first;
+  int i;
 
-	if (c < 0x80)
-	{
-		first = 0;
-		len = 1;
-	}
-	else if (c < 0x800)
-	{
-		first = 0xc0;
-		len = 2;
-	}
-	else if (c < 0x10000)
-	{
-		first = 0xe0;
-		len = 3;
-	}
-	else if (c < 0x200000)
-	{
-		first = 0xf0;
-		len = 4;
-	}
-	else if (c < 0x4000000)
-	{
-		first = 0xf8;
-		len = 5;
-	}
-	else
-	{
-		first = 0xfc;
-		len = 6;
-	}
+  if (c < 0x80)
+    {
+      first = 0;
+      len = 1;
+    }
+  else if (c < 0x800)
+    {
+      first = 0xc0;
+      len = 2;
+    }
+  else if (c < 0x10000)
+    {
+      first = 0xe0;
+      len = 3;
+    }
+  else if (c < 0x200000)
+    {
+      first = 0xf0;
+      len = 4;
+    }
+  else if (c < 0x4000000)
+    {
+      first = 0xf8;
+      len = 5;
+    }
+  else
+    {
+      first = 0xfc;
+      len = 6;
+    }
 
-	if (outbuf)
+  if (outbuf)
+    {
+      for (i = len - 1; i > 0; --i)
 	{
-		for (i = len - 1; i > 0; --i)
-		{
-			outbuf[i] = (c & 0x3f) | 0x80;
-			c >>= 6;
-		}
-		outbuf[0] = c | first;
+	  outbuf[i] = (c & 0x3f) | 0x80;
+	  c >>= 6;
 	}
+      outbuf[0] = c | first;
+    }
 
-	return len;
+  return len;
 }
 
 /*
@@ -331,90 +331,90 @@ g_unichar_to_utf8 (gunichar c, gchar * outbuf)
 static gunichar *
 g_utf8_to_ucs4_fast (const gchar * str, glong len, glong * items_written)
 {
-	gint j, charlen;
-	gunichar *result;
-	gint n_chars, i;
-	const gchar *p;
+  gint j, charlen;
+  gunichar *result;
+  gint n_chars, i;
+  const gchar *p;
 
-	g_return_val_if_fail (str != NULL, NULL);
+  g_return_val_if_fail (str != NULL, NULL);
 
-	p = str;
-	n_chars = 0;
-	if (len < 0)
+  p = str;
+  n_chars = 0;
+  if (len < 0)
+    {
+      while (*p)
 	{
-		while (*p)
-		{
-			p = g_utf8_next_char (p);
-			++n_chars;
-		}
+	  p = g_utf8_next_char (p);
+	  ++n_chars;
 	}
-	else
+    }
+  else
+    {
+      while (p < str + len && *p)
 	{
-		while (p < str + len && *p)
-		{
-			p = g_utf8_next_char (p);
-			++n_chars;
-		}
+	  p = g_utf8_next_char (p);
+	  ++n_chars;
 	}
+    }
 
-	result = g_new (gunichar, n_chars + 1);
-	if (!result)
-		return NULL;
+  result = g_new (gunichar, n_chars + 1);
+  if (!result)
+    return NULL;
 
-	p = str;
-	for (i = 0; i < n_chars; i++)
+  p = str;
+  for (i = 0; i < n_chars; i++)
+    {
+      gunichar wc = ((unsigned char *) p)[0];
+
+      if (wc < 0x80)
 	{
-		gunichar wc = ((unsigned char *) p)[0];
-
-		if (wc < 0x80)
-		{
-			result[i] = wc;
-			p++;
-		}
-		else
-		{
-			if (wc < 0xe0)
-			{
-				charlen = 2;
-				wc &= 0x1f;
-			}
-			else if (wc < 0xf0)
-			{
-				charlen = 3;
-				wc &= 0x0f;
-			}
-			else if (wc < 0xf8)
-			{
-				charlen = 4;
-				wc &= 0x07;
-			}
-			else if (wc < 0xfc)
-			{
-				charlen = 5;
-				wc &= 0x03;
-			}
-			else
-			{
-				charlen = 6;
-				wc &= 0x01;
-			}
-
-			for (j = 1; j < charlen; j++)
-			{
-				wc <<= 6;
-				wc |= ((unsigned char *) p)[j] & 0x3f;
-			}
-
-			result[i] = wc;
-			p += charlen;
-		}
+	  result[i] = wc;
+	  p++;
 	}
-	result[i] = 0;
+      else
+	{
+	  if (wc < 0xe0)
+	    {
+	      charlen = 2;
+	      wc &= 0x1f;
+	    }
+	  else if (wc < 0xf0)
+	    {
+	      charlen = 3;
+	      wc &= 0x0f;
+	    }
+	  else if (wc < 0xf8)
+	    {
+	      charlen = 4;
+	      wc &= 0x07;
+	    }
+	  else if (wc < 0xfc)
+	    {
+	      charlen = 5;
+	      wc &= 0x03;
+	    }
+	  else
+	    {
+	      charlen = 6;
+	      wc &= 0x01;
+	    }
 
-	if (items_written)
-		*items_written = i;
+	  for (j = 1; j < charlen; j++)
+	    {
+	      wc <<= 6;
+	      wc |= ((unsigned char *) p)[j] & 0x3f;
+	    }
 
-	return result;
+	  result[i] = wc;
+	  p += charlen;
+	}
+    }
+  result[i] = 0;
+
+  if (items_written)
+    *items_written = i;
+
+  return result;
 }
 
 /*
@@ -443,52 +443,52 @@ g_ucs4_to_utf8 (const gunichar * str,
 		glong len,
 		glong * items_read, glong * items_written, GError ** error)
 {
-	gint result_length;
-	gchar *result = NULL;
-	gchar *p;
-	gint i;
+  gint result_length;
+  gchar *result = NULL;
+  gchar *p;
+  gint i;
 
-	result_length = 0;
-	for (i = 0; len < 0 || i < len; i++)
+  result_length = 0;
+  for (i = 0; len < 0 || i < len; i++)
+    {
+      if (!str[i])
+	break;
+
+      if (str[i] >= 0x80000000)
 	{
-		if (!str[i])
-			break;
+	  if (items_read)
+	    *items_read = i;
 
-		if (str[i] >= 0x80000000)
-		{
-			if (items_read)
-				*items_read = i;
-
-			/*
-			   g_set_error (error, G_CONVERT_ERROR,
-			   G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
-			   "Character out of range for UTF-8");
-		    */
-			goto err_out;
-		}
-
-		result_length += UTF8_LENGTH (str[i]);
+	  /*
+	  g_set_error (error, G_CONVERT_ERROR,
+		       G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
+		       "Character out of range for UTF-8");
+	   */
+	  goto err_out;
 	}
 
-	result = g_malloc (result_length + 1);
-	if (!result)
-		return NULL;
-	p = result;
+      result_length += UTF8_LENGTH (str[i]);
+    }
 
-	i = 0;
-	while (p < result + result_length)
-		p += g_unichar_to_utf8 (str[i++], p);
+  result = g_malloc (result_length + 1);
+  if (!result)
+    return NULL;
+  p = result;
 
-	*p = '\0';
+  i = 0;
+  while (p < result + result_length)
+    p += g_unichar_to_utf8 (str[i++], p);
 
-	if (items_written)
-		*items_written = p - result;
+  *p = '\0';
+
+  if (items_written)
+    *items_written = p - result;
 
 err_out:
-	if (items_read)
-		*items_read = i;
+  if (items_read)
+    *items_read = i;
 
-	return result;
+  return result;
 }
 
 /* Code from GLIB gunidecomp.c starts here. */
@@ -537,38 +537,38 @@ err_out:
 static void
 g_unicode_canonical_ordering (gunichar * string, gsize len)
 {
-	gsize i;
-	int swap = 1;
+  gsize i;
+  int swap = 1;
 
-	while (swap)
+  while (swap)
+    {
+      int last;
+      swap = 0;
+      last = COMBINING_CLASS (string[0]);
+      for (i = 0; i < len - 1; ++i)
 	{
-		int last;
-		swap = 0;
-		last = COMBINING_CLASS (string[0]);
-		for (i = 0; i < len - 1; ++i)
+	  int next = COMBINING_CLASS (string[i + 1]);
+	  if (next != 0 && last > next)
+	    {
+	      gsize j;
+	      /* Percolate item leftward through string.  */
+	      for (j = i + 1; j > 0; --j)
 		{
-			int next = COMBINING_CLASS (string[i + 1]);
-			if (next != 0 && last > next)
-			{
-				gsize j;
-				/* Percolate item leftward through string.  */
-				for (j = i + 1; j > 0; --j)
-				{
-					gunichar t;
-					if (COMBINING_CLASS (string[j - 1]) <= next)
-						break;
-					t = string[j];
-					string[j] = string[j - 1];
-					string[j - 1] = t;
-					swap = 1;
-				}
-				/* We're re-entering the loop looking at the old
-				   character again.  */
-				next = last;
-			}
-			last = next;
+		  gunichar t;
+		  if (COMBINING_CLASS (string[j - 1]) <= next)
+		    break;
+		  t = string[j];
+		  string[j] = string[j - 1];
+		  string[j - 1] = t;
+		  swap = 1;
 		}
+	      /* We're re-entering the loop looking at the old
+	         character again.  */
+	      next = last;
+	    }
+	  last = next;
 	}
+    }
 }
 
 /* http://www.unicode.org/unicode/reports/tr15/#Hangul
@@ -578,104 +578,104 @@ g_unicode_canonical_ordering (gunichar * string, gsize len)
 static void
 decompose_hangul (gunichar s, gunichar * r, gsize * result_len)
 {
-	gint SIndex = s - SBase;
+  gint SIndex = s - SBase;
 
-	/* not a hangul syllable */
-	if (SIndex < 0 || SIndex >= SCount)
+  /* not a hangul syllable */
+  if (SIndex < 0 || SIndex >= SCount)
+    {
+      if (r)
+	r[0] = s;
+      *result_len = 1;
+    }
+  else
+    {
+      gunichar L = LBase + SIndex / NCount;
+      gunichar V = VBase + (SIndex % NCount) / TCount;
+      gunichar T = TBase + SIndex % TCount;
+
+      if (r)
 	{
-		if (r)
-			r[0] = s;
-		*result_len = 1;
+	  r[0] = L;
+	  r[1] = V;
 	}
-	else
+
+      if (T != TBase)
 	{
-		gunichar L = LBase + SIndex / NCount;
-		gunichar V = VBase + (SIndex % NCount) / TCount;
-		gunichar T = TBase + SIndex % TCount;
-
-		if (r)
-		{
-			r[0] = L;
-			r[1] = V;
-		}
-
-		if (T != TBase)
-		{
-			if (r)
-				r[2] = T;
-			*result_len = 3;
-		}
-		else
-			*result_len = 2;
+	  if (r)
+	    r[2] = T;
+	  *result_len = 3;
 	}
+      else
+	*result_len = 2;
+    }
 }
 
 /* returns a pointer to a null-terminated UTF-8 string */
 static const gchar *
 find_decomposition (gunichar ch, gboolean compat)
 {
-	int start = 0;
-	int end = G_N_ELEMENTS (decomp_table);
+  int start = 0;
+  int end = G_N_ELEMENTS (decomp_table);
 
-	if (ch >= decomp_table[start].ch && ch <= decomp_table[end - 1].ch)
+  if (ch >= decomp_table[start].ch && ch <= decomp_table[end - 1].ch)
+    {
+      while (TRUE)
 	{
-		while (TRUE)
+	  int half = (start + end) / 2;
+	  if (ch == decomp_table[half].ch)
+	    {
+	      int offset;
+
+	      if (compat)
 		{
-			int half = (start + end) / 2;
-			if (ch == decomp_table[half].ch)
-			{
-				int offset;
-
-				if (compat)
-				{
-					offset = decomp_table[half].compat_offset;
-					if (offset == G_UNICODE_NOT_PRESENT_OFFSET)
-						offset = decomp_table[half].canon_offset;
-				}
-				else
-				{
-					offset = decomp_table[half].canon_offset;
-					if (offset == G_UNICODE_NOT_PRESENT_OFFSET)
-						return NULL;
-				}
-
-				return &(decomp_expansion_string[offset]);
-			}
-			else if (half == start)
-				break;
-			else if (ch > decomp_table[half].ch)
-				start = half;
-			else
-				end = half;
+		  offset = decomp_table[half].compat_offset;
+		  if (offset == G_UNICODE_NOT_PRESENT_OFFSET)
+		    offset = decomp_table[half].canon_offset;
 		}
-	}
+	      else
+		{
+		  offset = decomp_table[half].canon_offset;
+		  if (offset == G_UNICODE_NOT_PRESENT_OFFSET)
+		    return NULL;
+		}
 
-	return NULL;
+	      return &(decomp_expansion_string[offset]);
+	    }
+	  else if (half == start)
+	    break;
+	  else if (ch > decomp_table[half].ch)
+	    start = half;
+	  else
+	    end = half;
+	}
+    }
+
+  return NULL;
 }
 
 /* L,V => LV and LV,T => LVT  */
-	static gboolean
+static gboolean
 combine_hangul (gunichar a, gunichar b, gunichar * result)
 {
-	gint LIndex = a - LBase;
-	gint SIndex = a - SBase;
+  gint LIndex = a - LBase;
+  gint SIndex = a - SBase;
 
-	gint VIndex = b - VBase;
-	gint TIndex = b - TBase;
+  gint VIndex = b - VBase;
+  gint TIndex = b - TBase;
 
-	if (0 <= LIndex && LIndex < LCount && 0 <= VIndex && VIndex < VCount)
-	{
-		*result = SBase + (LIndex * VCount + VIndex) * TCount;
-		return TRUE;
-	}
-	else if (0 <= SIndex && SIndex < SCount && (SIndex % TCount) == 0
-			&& 0 <= TIndex && TIndex <= TCount)
-	{
-		*result = a + TIndex;
-		return TRUE;
-	}
+  if (0 <= LIndex && LIndex < LCount && 0 <= VIndex && VIndex < VCount)
+    {
+      *result = SBase + (LIndex * VCount + VIndex) * TCount;
+      return TRUE;
+    }
+  else if (0 <= SIndex && SIndex < SCount && (SIndex % TCount) == 0
+	   && 0 <= TIndex && TIndex <= TCount)
+    {
+      *result = a + TIndex;
+      return TRUE;
+    }
 
-	return FALSE;
+  return FALSE;
 }
 
 #define CI(Page, Char) \
@@ -689,197 +689,276 @@ combine_hangul (gunichar a, gunichar b, gunichar * result)
 static gboolean
 combine (gunichar a, gunichar b, gunichar * result)
 {
-	gushort index_a, index_b;
+  gushort index_a, index_b;
 
-	if (combine_hangul (a, b, result))
-		return TRUE;
+  if (combine_hangul (a, b, result))
+    return TRUE;
 
-	index_a = COMPOSE_INDEX (a);
+  index_a = COMPOSE_INDEX (a);
 
-	if (index_a >= COMPOSE_FIRST_SINGLE_START && index_a < COMPOSE_SECOND_START)
+  if (index_a >= COMPOSE_FIRST_SINGLE_START && index_a < COMPOSE_SECOND_START)
+    {
+      if (b == compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][0])
 	{
-		if (b == compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][0])
-		{
-			*result =
-				compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][1];
-			return TRUE;
-		}
-		else
-			return FALSE;
+	  *result =
+	    compose_first_single[index_a - COMPOSE_FIRST_SINGLE_START][1];
+	  return TRUE;
 	}
-
-	index_b = COMPOSE_INDEX (b);
-
-	if (index_b >= COMPOSE_SECOND_SINGLE_START)
-	{
-		if (a ==
-				compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][0])
-		{
-			*result =
-				compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][1];
-			return TRUE;
-		}
-		else
-			return FALSE;
-	}
-
-	if (index_a >= COMPOSE_FIRST_START && index_a < COMPOSE_FIRST_SINGLE_START
-			&& index_b >= COMPOSE_SECOND_START
-			&& index_b < COMPOSE_SECOND_SINGLE_START)
-	{
-		gunichar res =
-			compose_array[index_a - COMPOSE_FIRST_START][index_b -
-			COMPOSE_SECOND_START];
-
-		if (res)
-		{
-			*result = res;
-			return TRUE;
-		}
-	}
-
+      else
 	return FALSE;
-}
+    }
 
+  index_b = COMPOSE_INDEX (b);
+
+  if (index_b >= COMPOSE_SECOND_SINGLE_START)
+    {
+      if (a ==
+	  compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][0])
+	{
+	  *result =
+	    compose_second_single[index_b - COMPOSE_SECOND_SINGLE_START][1];
+	  return TRUE;
+	}
+      else
+	return FALSE;
+    }
+
+  if (index_a >= COMPOSE_FIRST_START && index_a < COMPOSE_FIRST_SINGLE_START
+      && index_b >= COMPOSE_SECOND_START
+      && index_b < COMPOSE_SECOND_SINGLE_START)
+    {
+      gunichar res =
+	compose_array[index_a - COMPOSE_FIRST_START][index_b -
+						     COMPOSE_SECOND_START];
+
+      if (res)
+	{
+	  *result = res;
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
 
 static gunichar *
 _g_utf8_normalize_wc (const gchar * str, gssize max_len, GNormalizeMode mode)
 {
-	gsize n_wc;
-	gunichar *wc_buffer;
-	const char *p;
-	gsize last_start;
-	gboolean do_compat = (mode == G_NORMALIZE_NFKC || mode == G_NORMALIZE_NFKD);
-	gboolean do_compose = (mode == G_NORMALIZE_NFC || mode == G_NORMALIZE_NFKC);
+  gsize n_wc;
+  gunichar *wc_buffer;
+  const char *p;
+  gsize last_start;
+  gboolean do_compat = (mode == G_NORMALIZE_NFKC || mode == G_NORMALIZE_NFKD);
+  gboolean do_compose = (mode == G_NORMALIZE_NFC || mode == G_NORMALIZE_NFKC);
 
-	n_wc = 0;
-	p = str;
-	while ((max_len < 0 || p < str + max_len) && *p)
+  n_wc = 0;
+  p = str;
+  while ((max_len < 0 || p < str + max_len) && *p)
+    {
+      const gchar *decomp;
+      gunichar wc = g_utf8_get_char (p);
+
+      if (wc >= 0xac00 && wc <= 0xd7af)
 	{
-		const gchar *decomp;
-		gunichar wc = g_utf8_get_char (p);
+	  gsize result_len;
+	  decompose_hangul (wc, NULL, &result_len);
+	  n_wc += result_len;
+	}
+      else
+	{
+	  decomp = find_decomposition (wc, do_compat);
 
-		if (wc >= 0xac00 && wc <= 0xd7af)
-		{
-			gsize result_len;
-			decompose_hangul (wc, NULL, &result_len);
-			n_wc += result_len;
-		}
-		else
-		{
-			decomp = find_decomposition (wc, do_compat);
-
-			if (decomp)
-				n_wc += g_utf8_strlen (decomp, -1);
-			else
-				n_wc++;
-		}
-
-		p = g_utf8_next_char (p);
+	  if (decomp)
+	    n_wc += g_utf8_strlen (decomp, -1);
+	  else
+	    n_wc++;
 	}
 
-	wc_buffer = g_new (gunichar, n_wc + 1);
-	if (!wc_buffer)
-		return NULL;
+      p = g_utf8_next_char (p);
+    }
 
-	last_start = 0;
-	n_wc = 0;
-	p = str;
-	while ((max_len < 0 || p < str + max_len) && *p)
+  wc_buffer = g_new (gunichar, n_wc + 1);
+  if (!wc_buffer)
+    return NULL;
+
+  last_start = 0;
+  n_wc = 0;
+  p = str;
+  while ((max_len < 0 || p < str + max_len) && *p)
+    {
+      gunichar wc = g_utf8_get_char (p);
+      const gchar *decomp;
+      int cc;
+      gsize old_n_wc = n_wc;
+
+      if (wc >= 0xac00 && wc <= 0xd7af)
 	{
-		gunichar wc = g_utf8_get_char (p);
-		const gchar *decomp;
-		int cc;
-		gsize old_n_wc = n_wc;
+	  gsize result_len;
+	  decompose_hangul (wc, wc_buffer + n_wc, &result_len);
+	  n_wc += result_len;
+	}
+      else
+	{
+	  decomp = find_decomposition (wc, do_compat);
 
-		if (wc >= 0xac00 && wc <= 0xd7af)
-		{
-			gsize result_len;
-			decompose_hangul (wc, wc_buffer + n_wc, &result_len);
-			n_wc += result_len;
-		}
-		else
-		{
-			decomp = find_decomposition (wc, do_compat);
-
-			if (decomp)
-			{
-				const char *pd;
-				for (pd = decomp; *pd != '\0'; pd = g_utf8_next_char (pd))
-					wc_buffer[n_wc++] = g_utf8_get_char (pd);
-			}
-			else
-				wc_buffer[n_wc++] = wc;
-		}
-
-		if (n_wc > 0)
-		{
-			cc = COMBINING_CLASS (wc_buffer[old_n_wc]);
-
-			if (cc == 0)
-			{
-				g_unicode_canonical_ordering (wc_buffer + last_start,
-						n_wc - last_start);
-				last_start = old_n_wc;
-			}
-		}
-
-		p = g_utf8_next_char (p);
+	  if (decomp)
+	    {
+	      const char *pd;
+	      for (pd = decomp; *pd != '\0'; pd = g_utf8_next_char (pd))
+		wc_buffer[n_wc++] = g_utf8_get_char (pd);
+	    }
+	  else
+	    wc_buffer[n_wc++] = wc;
 	}
 
-	if (n_wc > 0)
+      if (n_wc > 0)
 	{
-		g_unicode_canonical_ordering (wc_buffer + last_start,
-				n_wc - last_start);
-		last_start = n_wc;
+	  cc = COMBINING_CLASS (wc_buffer[old_n_wc]);
+
+	  if (cc == 0)
+	    {
+	      g_unicode_canonical_ordering (wc_buffer + last_start,
+					    n_wc - last_start);
+	      last_start = old_n_wc;
+	    }
 	}
 
-	wc_buffer[n_wc] = 0;
+      p = g_utf8_next_char (p);
+    }
 
-	/* All decomposed and reordered */
+  if (n_wc > 0)
+    {
+      g_unicode_canonical_ordering (wc_buffer + last_start,
+				    n_wc - last_start);
+      last_start = n_wc;
+    }
 
-	if (do_compose && n_wc > 0)
+  wc_buffer[n_wc] = 0;
+
+  /* All decomposed and reordered */
+
+  if (do_compose && n_wc > 0)
+    {
+      gsize i, j;
+      int last_cc = 0;
+      last_start = 0;
+
+      for (i = 0; i < n_wc; i++)
 	{
-		gsize i, j;
-		int last_cc = 0;
-		last_start = 0;
+	  int cc = COMBINING_CLASS (wc_buffer[i]);
 
-		for (i = 0; i < n_wc; i++)
-		{
-			int cc = COMBINING_CLASS (wc_buffer[i]);
+	  if (i > 0 &&
+	      (last_cc == 0 || last_cc != cc) &&
+	      combine (wc_buffer[last_start], wc_buffer[i],
+		       &wc_buffer[last_start]))
+	    {
+	      for (j = i + 1; j < n_wc; j++)
+		wc_buffer[j - 1] = wc_buffer[j];
+	      n_wc--;
+	      i--;
 
-			if (i > 0 &&
-					(last_cc == 0 || last_cc != cc) &&
-					combine (wc_buffer[last_start], wc_buffer[i],
-						&wc_buffer[last_start]))
-			{
-				for (j = i + 1; j < n_wc; j++)
-					wc_buffer[j - 1] = wc_buffer[j];
-				n_wc--;
-				i--;
+	      if (i == last_start)
+		last_cc = 0;
+	      else
+		last_cc = COMBINING_CLASS (wc_buffer[i - 1]);
 
-				if (i == last_start)
-					last_cc = 0;
-				else
-					last_cc = COMBINING_CLASS (wc_buffer[i - 1]);
+	      continue;
+	    }
 
-				continue;
-			}
+	  if (cc == 0)
+	    last_start = i;
 
-			if (cc == 0)
-				last_start = i;
-
-			last_cc = cc;
-		}
+	  last_cc = cc;
 	}
+    }
 
-	wc_buffer[n_wc] = 0;
+  wc_buffer[n_wc] = 0;
 
-	return wc_buffer;
+  return wc_buffer;
 }
 
+/*
+ * g_utf8_normalize:
+ * @str: a UTF-8 encoded string.
+ * @len: length of @str, in bytes, or -1 if @str is nul-terminated.
+ * @mode: the type of normalization to perform.
+ *
+ * Converts a string into canonical form, standardizing
+ * such issues as whether a character with an accent
+ * is represented as a base character and combining
+ * accent or as a single precomposed character. You
+ * should generally call g_utf8_normalize() before
+ * comparing two Unicode strings.
+ *
+ * The normalization mode %G_NORMALIZE_DEFAULT only
+ * standardizes differences that do not affect the
+ * text content, such as the above-mentioned accent
+ * representation. %G_NORMALIZE_ALL also standardizes
+ * the "compatibility" characters in Unicode, such
+ * as SUPERSCRIPT THREE to the standard forms
+ * (in this case DIGIT THREE). Formatting information
+ * may be lost but for most text operations such
+ * characters should be considered the same.
+ * For example, g_utf8_collate() normalizes
+ * with %G_NORMALIZE_ALL as its first step.
+ *
+ * %G_NORMALIZE_DEFAULT_COMPOSE and %G_NORMALIZE_ALL_COMPOSE
+ * are like %G_NORMALIZE_DEFAULT and %G_NORMALIZE_ALL,
+ * but returned a result with composed forms rather
+ * than a maximally decomposed form. This is often
+ * useful if you intend to convert the string to
+ * a legacy encoding or pass it to a system with
+ * less capable Unicode handling.
+ *
+ * Return value: a newly allocated string, that is the
+ *   normalized form of @str.
+ **/
+static gchar *
+g_utf8_normalize (const gchar * str, gssize len, GNormalizeMode mode)
+{
+  gunichar *result_wc = _g_utf8_normalize_wc (str, len, mode);
+  gchar *result;
+
+  result = g_ucs4_to_utf8 (result_wc, -1, NULL, NULL, NULL);
+  g_free (result_wc);
+
+  return result;
+}
 
 /* Public Libidn API starts here. */
+
+/**
+ * stringprep_utf8_to_unichar:
+ * @p: a pointer to Unicode character encoded as UTF-8
+ *
+ * Converts a sequence of bytes encoded as UTF-8 to a Unicode character.
+ * If @p does not point to a valid UTF-8 encoded character, results are
+ * undefined.
+ *
+ * Return value: the resulting character.
+ **/
+uint32_t
+stringprep_utf8_to_unichar (const char *p)
+{
+  return g_utf8_get_char (p);
+}
+
+/**
+ * stringprep_unichar_to_utf8:
+ * @c: a ISO10646 character code
+ * @outbuf: output buffer, must have at least 6 bytes of space.
+ *       If %NULL, the length will be computed and returned
+ *       and nothing will be written to @outbuf.
+ *
+ * Converts a single character to UTF-8.
+ *
+ * Return value: number of bytes written.
+ **/
+int
+stringprep_unichar_to_utf8 (uint32_t c, char *outbuf)
+{
+  return g_unichar_to_utf8 (c, outbuf);
+}
 
 /**
  * stringprep_utf8_to_ucs4:
@@ -899,7 +978,7 @@ _g_utf8_normalize_wc (const gchar * str, gssize max_len, GNormalizeMode mode)
 uint32_t *
 stringprep_utf8_to_ucs4 (const char *str, ssize_t len, size_t * items_written)
 {
-	return g_utf8_to_ucs4_fast (str, (glong) len, (glong *) items_written);
+  return g_utf8_to_ucs4_fast (str, (glong) len, (glong *) items_written);
 }
 
 /**
@@ -922,10 +1001,38 @@ stringprep_utf8_to_ucs4 (const char *str, ssize_t len, size_t * items_written)
  **/
 char *
 stringprep_ucs4_to_utf8 (const uint32_t * str, ssize_t len,
-		size_t * items_read, size_t * items_written)
+			 size_t * items_read, size_t * items_written)
 {
-	return g_ucs4_to_utf8 (str, len, (glong *) items_read,
-			(glong *) items_written, NULL);
+  return g_ucs4_to_utf8 (str, len, (glong *) items_read,
+			 (glong *) items_written, NULL);
+}
+
+/**
+ * stringprep_utf8_nfkc_normalize:
+ * @str: a UTF-8 encoded string.
+ * @len: length of @str, in bytes, or -1 if @str is nul-terminated.
+ *
+ * Converts a string into canonical form, standardizing
+ * such issues as whether a character with an accent
+ * is represented as a base character and combining
+ * accent or as a single precomposed character.
+ *
+ * The normalization mode is NFKC (ALL COMPOSE).  It standardizes
+ * differences that do not affect the text content, such as the
+ * above-mentioned accent representation. It standardizes the
+ * "compatibility" characters in Unicode, such as SUPERSCRIPT THREE to
+ * the standard forms (in this case DIGIT THREE). Formatting
+ * information may be lost but for most text operations such
+ * characters should be considered the same. It returns a result with
+ * composed forms rather than a maximally decomposed form.
+ *
+ * Return value: a newly allocated string, that is the
+ *   NFKC normalized form of @str.
+ **/
+char *
+stringprep_utf8_nfkc_normalize (const char *str, ssize_t len)
+{
+  return g_utf8_normalize (str, len, G_NORMALIZE_NFKC);
 }
 
 /**
@@ -942,12 +1049,12 @@ stringprep_ucs4_to_utf8 (const uint32_t * str, ssize_t len,
 uint32_t *
 stringprep_ucs4_nfkc_normalize (uint32_t * str, ssize_t len)
 {
-	char *p;
-	uint32_t *result_wc;
+  char *p;
+  uint32_t *result_wc;
 
-	p = stringprep_ucs4_to_utf8 (str, len, 0, 0);
-	result_wc = _g_utf8_normalize_wc (p, -1, G_NORMALIZE_NFKC);
-	free (p);
+  p = stringprep_ucs4_to_utf8 (str, len, 0, 0);
+  result_wc = _g_utf8_normalize_wc (p, -1, G_NORMALIZE_NFKC);
+  free (p);
 
-	return result_wc;
+  return result_wc;
 }

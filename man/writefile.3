@@ -1,85 +1,48 @@
-.TH writefile(3) 2011-03-24 "Linux Manpage" "OOPS Library's Manual"
+.TH writefile(1) 2004-02-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man writefile.3
-.\" 2011-03-24 JoungKyun Kim <htt://oops.org>
-.SH ì´ë¦„
-writefile \- Writes data to a file.
+.\" nroff -man writefile.1
+.\" 2004-02-19 JoungKyun Kim <htt://www.oops.org>
+.SH ÀÌ¸§
+writefile
 
-.SH SYNOPSIS
+.SH »ç¿ë¹ı
 .B #include <olibc/libfile.h>
 .sp
-.BI "size_t writefile (const char * path, const char * data, size_t size, bool mode);"
+.BI "int writefile (char * filename, char * str, int mode);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
+.SH ¶óÀÌºê·¯¸® ¸µÅ©
+.B gcc source -l liboc
 .br
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+¶Ç´Â
 
-.SH DESCRIPTION
-Writes data to a file.
-
-The
-.BI writefile()
-api is binary safe.
-
-.TP
-.B path
+.B gcc source -l libolibc
 .br
-Path to the file where to write the data.
 
-.TP
-.B data
-.br
-The data to write.
+libolibc ¸¦ Á¤ÀûÀ¸·Î ¸µÅ©ÇÒ °æ¿ì¿¡´Â LGPL2 ¿¡ ±Ù°ÅÇÏ¿© »ç¿ëÀÌ °¡´ÉÇÏ¸ç, liboc ¸¦
+Á¤ÀûÀ¸·Î ¸µÅ©ÇÒ °æ¿ì¿¡´Â BPL ¿¡ ±Ù°ÅÇÑ´Ù.
 
-.TP
-.B size
-.br
-The length of data
+.SH ¼³¸í
+str À» filename ¿¡ ±â·ÏÇÑ´Ù. mode °¡ 1 ÀÌ¸é, filename ÀÌ Á¸ÀçÇÒ °æ¿ì
+ÇØ´ç ÆÄÀÏ¿¡ ÀÌ¾î¼­ ÀÛ¼ºÀ» ÇÏ¸ç, 0 ÀÌ°Å³ª ÇØ´ç ÆÄÀÏÀÌ ¾øÀ¸¸é, filename
+À» »õ·Î ±â·ÏÇÑ´Ù.
 
-.TP
-.B mode
-Bool. Set true, append and set false, new file.
+.SH ¹İÈ¯°ª
+ÀÌ ÇÔ¼ö´Â ±â·Ï¿¡ ¼º°øÇßÀ» °æ¿ì 0À» ¹İÈ¯ÇÏ¸ç, ½ÇÆĞÇßÀ» °æ¿ì -1 À» ¹İÈ¯
+ÇÑ´Ù.
 
-.SH "RETURN VALUE"
-bool
-
-.SH EXAMPLE
+.SH ¿¹Á¦
 .nf
 #include <olibc/libfile.h>
 
-int main (void) {
-    char *text = "asdf";
-    char *path = "/etc/hosts";
+char *text = "asdf";
+char *path = "/etc/hosts";
 
-    if ( writefile (path, text, strlen (text), 0) == false )
-        printf ("failed\\n");
-    else
-        printf ("success\\n");
-
-    return 0;
-}
+printf ("%d\\n", writefile (path, text, 0));
 .fi
 
-.SH "SEE ALSO"
-readfile(3)
+.SH ÀÛ¼º
+2004.02.19 ±èÁ¤±Õ <http://www.oops.org>
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
-
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH ¹ö±×
+¹ö±×°¡ ¹ß°ßÀÌ µÇ¸é http://www.oops.org ·Î ¸®Æ÷ÆÃÀ» ºÎÅ¹ÇÑ´Ù.
