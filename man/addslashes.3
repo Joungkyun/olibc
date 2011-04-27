@@ -1,15 +1,17 @@
-.TH addslashes(3) 2011-03-26 "Linux Manpage" "OOPS C Library's Manual"
+.TH addslashes(3) 2011-03-09 "Linux Manpage" "OOPS C Library's Manual"
 .\" Process with
 .\" nroff -man addslashes.3
 .\" 2011-03-09 JoungKyun Kim <htt://oops.org>
-.\" $Id: addslashes.3,v 1.13 2011-03-29 17:24:36 oops Exp $
+.\" $Id: addslashes.3,v 1.9 2011-03-18 06:25:23 oops Exp $
 .SH NAME
 addslashes \- Quote string with slashes
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "bool addslashes (const char * in, size_t inlen, char ** out, size_t * outlen);"
+.BI "char * addslashes (char * in, bool should_free);"
+.br
+.BI "bool addslashes_r (const char * in, size_t inlen, unsigned char ** out, size_t * outlen);"
 
 .SH "Link library"
 .B \-loc
@@ -33,11 +35,12 @@ that follows BSD license.
 .SH DESCRIPTION
 Returns a string with backslashes before characters that need
 to be quoted in database queries etc. These characters are single
- quote ('), double quote ("), backslash (\\) and NULL byte (\\0).
+ quote ('), double quote ("), backslash (\\).
 
-The NULL byte is convert to string '\\0'.
+This is not binary safe. If you want to binary safe, use
+.B addslashes_r().
 
-This is binary safe.
+This function has same operation with addslashes() of PHP.
 
 .TP
 .B in
@@ -45,33 +48,16 @@ This is binary safe.
 The given string for qouting
 
 .TP
-.B inlen
+.B should_free
 .br
-The length of
-.B in
-argument.
-
-.TP
-.B out
-.br
-Save converted string.
-
-.TP
-.B outlen
-.br
-Save length of converted string. This argument is set null, don't count
-length of return string.
+bool / set true, free memory of in argument into
+.B addslashes().
 
 .SH "RETURN VALUE"
-.B bool
-
-When occurs internal error, 3th argument
-.B out
-of
+The point of quoted string. When occurs internal error,
 .B addslashes()
-has null. If the 3the argument
-.B out
-is not null, the caller should deallocate this buffer using
+returns null. If the return string array pointer is not null,
+the caller should deallocate this buffer using
 .B free()
 
 .SH EXAMPLE
@@ -79,21 +65,17 @@ is not null, the caller should deallocate this buffer using
 #include <olibc/libstring.h>
 
 int main (void) {
+    char * buf;
     char * str;
-    char * in;
-    char * out;
-    size_t outlen;
 
     str = malloc (sizeof (char) * 32);
     strcpy (str, "abc'def'gh\\"ij\\"klmn");
 
     // free memory str variabl into addslashes()
-    if ( addslashes (str, strlen (str), &out, &outlen) != false ) {
-    	printf ("%s\\n", out);
-        free (out);
-    }
+    buf = addslashes (str, 1);
+    printf ("%s\\n", buf);
 
-    free (str);
+    free (buf);
 
     return 0;
 }

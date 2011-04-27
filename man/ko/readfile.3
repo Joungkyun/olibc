@@ -1,15 +1,19 @@
-.TH readfile(3) 2011-03-24 "Linux Manpage" "OOPS Library's Manual"
+.TH readfile(3) 2011-03-16 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man readfile.3
-.\" 2011-03-24 JoungKyun Kim <htt://oops.org>
-.\" $Id: readfile.3,v 1.4 2011-03-24 05:48:56 oops Exp $
+.\" 2011-03-16 JoungKyun Kim <htt://oops.org>
+.\" $Id: readfile.3,v 1.2 2011-03-16 11:42:38 oops Exp $
 .SH 이름
 readfile \- 파일을 읽는다.
+.br
+fileread \- readfile의 alias
 
 .SH 사용법
 .B #include <olibc/libfile.h>
 .sp
-.BI "size_t readfile (const char * path, char ** buf);"
+.BI "char * fileread (const char * path);"
+.br
+.BI "char * readfile (const char * path);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -31,34 +35,15 @@ or
 를 이용해야 한다.
 
 .SH 설명
-파일을 내용 읽어
-.B buf
-에 저장하고 읽은 길이를 반환한다.
-
-.TP
-.BI path
-.br
-읽을 파일의 경로를 지정한다.
-
-.TP
-.BI buf
-.br
-파일의 내용을 저장한다.
-.BI readfile()
-api 수행이
-.B 실패
-할 경우
-.B null
-값을 가지게 된디.
-
-성공적으로 수행이 되었다면,
-.B buf
-는
-.BI free()
-api를 이용하여 메모리를 반환해 줘야 한다.
+파일을 내용을 반환한다.
 
 .SH 반환값
-읽은 파일의 길이를 반환한다.
+파일의 내용을 담은 포인터를 반환한다. 반환된 값은 반드시 메모리
+해제 (free) 를 해 주어야 한다. 파일 읽기를 실패했을 경우, NULL을
+반환한다.
+
+.BI fileread()
+는 다음 버전 부터 없어진다. readfile을 사용하도록 한다.
 
 .SH 예제
 .nf
@@ -67,15 +52,10 @@ api를 이용하여 메모리를 반환해 줘야 한다.
 int main (void) {
     char *text;
     char *path = "/etc/hosts";
-    size_t len;
 
-    len = readfile (path, &text);
-    if ( text != null ) {
-        printf ("%s\\n", text);
-        free (text);
-    } else {
-        printf ("failed\\n");
-    }
+    text = readfile (path);
+    printf ("%s\\n", text);
+    free (text);
 
     return 0;
 }

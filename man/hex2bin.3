@@ -2,14 +2,14 @@
 .\" Process with
 .\" nroff -man hex2bin.3
 .\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: hex2bin.3,v 1.9 2011-03-29 17:17:06 oops Exp $
+.\" $Id: hex2bin.3,v 1.7 2011-03-18 10:50:18 oops Exp $
 .SH NAME
 hex2bin \- Convert hexadecimal string to binary string
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * hex2bin (char *str, size_t * outlen);"
+.BI "char * hex2bin (char *str);"
 
 .SH "Link library"
 .B \-loc
@@ -33,18 +33,6 @@ that follows BSD license.
 .SH DESCRIPTION
 Convert hexadecimal string to binary string
 
-.TP
-.B str
-.br
-The input hexadecimal string
-
-.TP
-.B outlen
-.br
-The length of return value. If this argument set null,
-.BI hex2bin()
-api don't count the length of return value.
-
 .SH "RETURN VALUE"
 The pointer of binary string. When occurs internal error,
 .BI hex2bin()
@@ -59,18 +47,17 @@ null, the caller should deallocate this buffer using
 int main (void) {
     char * data = "6EA7";
     char * ret;
-    size_t len;
 
-    ret = hex2bin (data, &len);
+    ret = hex2bin (data);
 
-    printf ("%s (%d)\\n", ret, len);
+    printf ("%s\\n", ret);
     free (ret);
     return 0;
 }
 .fi
 
 .SH "SEE ALSO"
-bin2dec(3), bin2hex(3)
+bin2dec(3), bin2hex(3), bin2hex_r(3)
 
 .SH AUTHOR
 JoungKyun.Kim <http://oops.org>

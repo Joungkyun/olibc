@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man setansi.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.4 2011-03-29 18:22:43 oops Exp $
+.\" $Id: setansi.3,v 1.1 2011-03-18 16:18:45 oops Exp $
 .SH 이름
 setansi \- ansi 색상 설정
 
@@ -46,39 +46,39 @@ BSD 라이센스의 적용을 원한다면
 .br
 다음의 상수를 참고한다.
 
-.B OC_ENDANSI 0
+.B ENDANSI 0
 .br
-.B OC_GRAY 30
+.B GRAY 1
 .br
-.B OC_BGRAY 40
+.B BGRAY 2
 .br
-.B OC_RED 31
+.B RED 3
 .br
-.B OC_BRED 41
+.B BRED 4
 .br
-.B OC_GREEN 31
+.B GREEN 5
 .br
-.B OC_BGREEN 42
+.B BGREEN 6
 .br
-.B OC_YELLOW 31
+.B YELLOW 7
 .br
-.B OC_BYELLOW 43
+.B BYELLOW 8
 .br
-.B OC_BLUE 31
+.B BLUE 9
 .br
-.B OC_BBLUE 44
+.B BBLUE 10
 .br
-.B OC_MAGENTA 35
+.B MAGENTA 11
 .br
-.B OC_BMAGENTA 45
+.B BMAGENTA 12
 .br
-.B OC_CYAN 36
+.B CYAN 13
 .br
-.B OC_BCYAN 46
+.B BCYAN 14
 .br
-.B OC_WHITE 37
+.B WHITE 15
 .br
-.B OC_BWHITE 47
+.B BWHITE 16
 
 .TP
 .B noansi
@@ -95,12 +95,12 @@ true로 설정이 되면, 이 함수는 아무런 작동을 하지 않는다.
 int main (void) {
     char * path = "/vars";
 
-    setansi (stdout, OC_GRAY, 0);
-    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
-    setansi (stdout, OC_ENDANSI, 0);
-    setansi (stdout, OC_BLUE, 0);
-    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
-    setansi (stdout, OC_ENDANSI, 0);
+    setansi (stdout, GRAY, 0);
+    printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
+    setansi (stdout, ENDANSI, 0);
+    setansi (stdout, BLUE, 0);
+    printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
+    setansi (stdout, ENDANSI, 0);
 
     return 0;
 }

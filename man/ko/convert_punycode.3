@@ -2,14 +2,18 @@
 .\" Process with
 .\" nroff -man convert_punycode.3
 .\" 2011-03-14 JoungKyun Kim <htt://oops.org>
-.\" $Id: convert_punycode.3,v 1.2 2011-03-25 12:14:41 oops Exp $
+.\" $Id: convert_punycode.3,v 1.1 2011-03-14 04:57:26 oops Exp $
 .SH 이름
 convert_punycode \- 다국어 도메인을 변환
+.br
+convert_punycode_r
 
 .SH 사용법
 .B #include <olibc/libidn.h>
 .sp
-.BI "char * convert_punycode_r (const char * src, bool mode, const char * charset)"
+.BI "char * convert_punycode (char * domain, int mode, int debug);"
+.br
+.BI "unsigned int convert_punycode_r (const char * src, unsigned char ** dst, bool mode, const char * charset)"
 
 .SH 라이브러리 링크
 .B \-logc
@@ -31,7 +35,7 @@ API는
 을 구현하기 위한 punycode 변환을 위하여 사용이 된다.
 
 .TP
-.B src
+.B domain
 .br
 변환할
 .B IDN
@@ -40,16 +44,19 @@ API는
 .TP
 .B mode
 .br
-encoding시에 false, decoding시에 true를 지정한다.
+encoding시에 0, decoding시에 1을 지정한다.
 
 .TP
-.B charset
+.B debug
 .br
-International doman name의 문자셋을 지정한다.
+debug 옵션.
+.B Deprecated.
+0.1.3 부터는 API호환을 위하여 존재만 하며, 빌드시에 -D__OCDEBUG__ 를 이용하도록 한다.
 
 .SH 반환값
-변환된 문자열의 포인터가 반환된다. 반환된 포인터는 메모리
-해제(free)를 해 줘야 한다.
+변환된 문자열의 포인트를 반환한다.
+.BI convert_punycode
+API는 static으로 할당된 memory의 pointer를 할당하기 때문에 thread safe하지 못하다. thread safe를 원한다면 convert_punycode_r() API를 사용하라.
 
 .SH 예제
 .nf
