@@ -1,79 +1,69 @@
-.TH hex2bin(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH hex2bin(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man hex2bin.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: hex2bin.3,v 1.9 2011-03-29 17:17:06 oops Exp $
-.SH NAME
-hex2bin \- Convert hexadecimal string to binary string
+.\" nroff -man hex2bin.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: hex2bin.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.SH 이름
+hex2bin
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * hex2bin (char *str, size_t * outlen);"
+.BI "char * hex2bin (char *str);"
+.sp
+.BI "char * _hex2bin (char c);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
+.SH 설명
+hex2bin 은 16진수 형태의 문자열을 이진수의 문자열로 반환한다.
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+_hex2bin 은 캐릭터를 이진수 형태의 문자열로 반환을 한다.
 
-.SH DESCRIPTION
-Convert hexadecimal string to binary string
 
-.TP
-.B str
-.br
-The input hexadecimal string
+.SH 반환값
+이진수 형태의 문자열로 반환. hex2bin 의 반환 값은 꼭 메모리 해제(free)를 해야 한다.
 
-.TP
-.B outlen
-.br
-The length of return value. If this argument set null,
-.BI hex2bin()
-api don't count the length of return value.
-
-.SH "RETURN VALUE"
-The pointer of binary string. When occurs internal error,
-.BI hex2bin()
-returns null. If the return string array pointer is not
-null, the caller should deallocate this buffer using
-.BI free().
-
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    char * data = "6EA7";
-    char * ret;
-    size_t len;
+char *data = "6EA7";
+char ret[17];
+int i,j;
 
-    ret = hex2bin (data, &len);
+memset (ret, '\0', sizeof (ret));
 
-    printf ("%s (%d)\\n", ret, len);
-    free (ret);
-    return 0;
+for (i=0, j=0; i<strlen(data); i++) {
+    memcpy (ret + j, _hex2bin (data[i]), 4);
+    j += 4;
 }
+
+printf ("%s\\n", ret);
 .fi
 
-.SH "SEE ALSO"
-bin2dec(3), bin2hex(3)
+위의 코드는 hex2bin 의 원형이 된다.
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.nf
+#include <olibc/libstring.h>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+char *data = "6EA7";
+char *ret;
+
+ret = hex2bin (data);
+
+printf ("%s\\n", ret);
+free (ret);
+.fi
+
+.SH 참고
+bin2dec(1)
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.
