@@ -1,67 +1,36 @@
-.TH microtime(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH microtime(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man microtime.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: microtime.3,v 1.6 2011-03-18 06:21:01 oops Exp $
-.SH NAME
-microtime \- get current micro seconds.
+.\" nroff -man microtime.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: microtime.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.SH 이름
+microtime
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "double microtime (void);"
+.BI "double microtime(void);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
+.SH 설명
+현재의 microtime 을 구한다.
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
+.SH 반환값
+더블타입의 현재 마이크로 시간
 
-.SH DESCRIPTION
-Return current micro seconds. If system support
-.B realtime kernel
-and builds with
-.BI clock_gettime()
-api, the
-.BI microtime()
-api support nano seconds.
-
-On system that support both
-.BI clock_gettime()
-and
-.BI gettimeofday()
-,
-.BI microtime()
-api does not supported.
-
-.SH "RETURN VALUE"
-The current micro seconds with double type.
-
-.SH EXAMPLE
+.SH 예제
 .nf
-#include <olibc/libtime.h>
+#include <olibc/libstring.h>
 
-int main (void) {
-    printf ("%f\\n", microtime());
-    return 0;
-}
+printf ("%f\\n", microtime);
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

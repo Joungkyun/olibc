@@ -1,94 +1,70 @@
-.TH numberFormat(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH numberFormat(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man numberFormat.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: numberFormat.3,v 1.8 2011-03-26 19:42:37 oops Exp $
-.SH NAME
-numberFormat \- Format a number with grouped thousands
+.\" nroff -man numberFormat.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: numberFormat.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.SH ÀÌ¸§
+numberFormat
 
-.SH SYNOPSIS
+.SH »ç¿ë¹ý
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * numberFormat (double d, int dec, char dec_point, char thousand_sep, bool print);"
+.BI "char * numberFormat (double d, int dec, char dec_point, char thousand_sep, int print);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
-
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-Format a number with grouped thousands.
+.SH ¼³¸í
+¼ýÀÚ¿¡ ÀÐ±â ½±µµ·Ï ÀÚ¸®¼ö¸¦ ³ª´©¾î, ¹®ÀÚ¿­·Î ¹ÝÈ¯ÇÑ´Ù.
 
 .TP
 .B d
 .br
-The number being formatted.
+º¯È¯ÇÒ ¿øÇü ¼ýÀÚ¸¦ ÁöÁ¤ÇÑ´Ù.
 
 .TP
 .B dec
 .br
-Sets the number of decimal points.
+¼Ò¼öÁ¡ÀÇ ÀÚ¸®¼ö¸¦ ÁöÁ¤
 
 .TP
 .B dec_point
 .br
-Sets the separator for the decimal point.
+¼Ò¼öÁ¡À» Ç¥½ÃÇÒ Ä³¸¯ÅÍ¸¦ ÁöÁ¤
 
 .TP
 .B thousand_sep
 .br  
-Sets the thousands separator.
+ÀÚ¸®¼ö¸¦ Ç¥½ÃÇÒ Ä³¸¯ÅÍ¸¦ ÁöÁ¤
 
 .TP
 .B print
 .br
-if set true, returns null.
+1·Î ÁöÁ¤À» ÇÏ¸é, Ãâ·ÂÀ» ÇÏ°í NULL À» ¹ÝÈ¯
 
-.SH ë°˜í™˜ê°’
-The pointer of formatted string. When occurs internal error,
-.BI numberFormat()
-returns null. If the return string array pointer is not null,
-the caller should deallocate this buffer using
-.BI free()
+.SH ¹ÝÈ¯°ª
+ÀÚ¸®¼ö¸¦ ±¸ºÐÇÑ ¹®ÀÚ¿­·Î ¹ÝÈ¯. ÀÌ ÇÔ¼ö°¡ ¸®ÅÏÇÑ °ªÀº ¸Þ¸ð¸® ÇØÁ¦(free)¸¦
+ÇØ Áà¾ß ÇÑ´Ù.
 
-.SH EXAMPLE
+.SH ¿¹Á¦
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    double no = 123456789;
-    char *data;
+double no = 123456789;
+char *data;
 
-    data = malloc(128);
+data = malloc(128);
 
-    strcpy (data, numberFormat(no,1,0));
+strcpy (data, numberFormat(no,1,0));
 
-    printf ("%s\\n", data);
-    free (data);
-
-    return 0;
-}
+printf ("%s\\n", data);
+free (data);
 .fi
 
-.SH "SEE ALSO"
-human_size(3)
+.SH ÀÛ¼º
+2003.09.04 ±èÁ¤±Õ <http://www.oops.org>
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH ¹ö±×
+¹ö±×°¡ ¹ß°ßÀÌ µÇ¸é http://www.oops.org ·Î ¸®Æ÷ÆÃÀ» ºÎÅ¹ÇÑ´Ù.
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH ÀúÀÛ±Ç
+PHP License 2.02
+.br
+http://www.php.net/license/2_02.txt ¸¦ Âü°í ÇÏµµ·Ï ÇÑ´Ù.
