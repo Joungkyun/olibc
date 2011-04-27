@@ -1,0 +1,17 @@
+** TIME Function
+
+$Id: time.txt,v 1.2 2003-09-18 06:43:57 oops Exp $
+
+
+시간 관련 high level 함수이다.
+
+
+double microtime (void)
+
+    현재의 microtime 을 구한다.
+
+    ex) #include <olibc/libtime.h>
+
+        printf ("%f\n", microtime);
+
+    저작권: BPL License v.1 <http://devel.oops.org/document/bpl>

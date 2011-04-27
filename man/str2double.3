@@ -1,1 +1,56 @@
-.so man3/str2long.3
+.TH str2double(1) 2003-09-04 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man str2double.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: str2double.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.SH 이름
+str2double
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "long double str2double(char *str);"
+
+.SH 설명
+숫자로 구성된 문자열을 long double 타입으로 변환한다.
+
+이 함수는 소수점 6자리 정수부분 19 자리 까지 유효하다 (음수 포함)
+
+단,
+.B double
+형이기 때문에 소수점 6자리의 경우 정수 부분은 14자리 까지 정확한
+계산이 가능하며, 그 이상의 경우에는 소수점은 정확한 값이 나오지 않는다.
+
+.TP
+.B str
+.br
+숫자로 구성된 문자열을 넣는다
+
+.SH 반환값
+long double 의 형태로 변환하여 반환
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+char *buf = "1234567890123456789";
+long long no = 0;
+
+a = str2double (buf);
+
+printf ("%lld\\n", a);
+.fi
+
+.SH 참조
+check_int(1) char2int(1) str2long(1)
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

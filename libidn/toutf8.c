@@ -19,26 +19,29 @@
  *
  */
 
-#if HAVE_CONFIG_H
-# include <config.h>
+#include "internal.h"
+/* Define as const if the declaration of iconv() needs const. */
+#define ICONV_CONST
+
+#define ENABLE_NLS
+
+#ifndef HAVE_LOCALE_H
+#undef ENABLE_NLS
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "stringprep.h"
-
-#if defined(HAVE_ERRNO_H) || defined(_LIBC)
-# include <errno.h>
+#ifndef HAVE_LANGINFO_H
+#undef ENABLE_NLS
 #endif
 
 #ifdef HAVE_ICONV_H
-# include <iconv.h>
 
-# ifdef ENABLE_NLS
-#  include <langinfo.h>
-# endif
+#include <stdio.h>
+#include <iconv.h>
+
+#ifdef ENABLE_NLS
+#include <langinfo.h>
+#include <locale.h>
+#endif
 
 static const char *
 stringprep_locale_charset_slow (void)
@@ -48,7 +51,7 @@ stringprep_locale_charset_slow (void)
   if (charset && *charset)
     return charset;
 
-# ifdef ENABLE_NLS
+#ifdef ENABLE_NLS
   {
     char *p;
 
@@ -62,13 +65,12 @@ stringprep_locale_charset_slow (void)
     if (charset && *charset)
       return charset;
   }
-# endif
+#endif
 
   return "ASCII";
 }
 
-OLIBC_API
-const char *stringprep_locale_charset_cache = NULL;
+static const char *stringprep_locale_charset_cache = NULL;
 
 /**
  * stringprep_locale_charset:
@@ -128,20 +130,16 @@ stringprep_convert (const char *str,
   int len;
 
   if (strcmp (to_codeset, from_codeset) == 0)
-    {
-      char *p;
-      p = malloc (strlen (str) + 1);
-      if (!p)
-	return NULL;
-      strcpy (p, str);
-      return p;
-    }
+    return (char *) strdup (str);
 
-  p = (char *) malloc (strlen (str) + 1);
-  if (p == NULL) {
+  cd = iconv_open (to_codeset, from_codeset);
+
+  if (cd == (iconv_t) - 1)
     return NULL;
-  }
-  strcpy (p, str);
+
+  p = (char *) strdup (str);
+  if (p == NULL)
+    return NULL;
   len = strlen (p);
   startp = p;
   inbytes_remaining = len;
@@ -149,18 +147,6 @@ stringprep_convert (const char *str,
 
   outbytes_remaining = outbuf_size - 1;	/* -1 for nul */
   outp = dest = malloc (outbuf_size);
-  if ( outp == NULL ) {
-      free (p);
-      return NULL;
-  }
-
-  cd = iconv_open (to_codeset, from_codeset);
-
-  if (cd == (iconv_t) -1) {
-    free (p);
-    free (outp);
-    return NULL;
-  }
 
 again:
 
@@ -218,7 +204,7 @@ again:
   return dest;
 }
 
-#else /* HAVE_ICONV */
+#else
 
 const char *
 stringprep_locale_charset ()
@@ -230,17 +216,13 @@ char *
 stringprep_convert (const char *str,
 		    const char *to_codeset, const char *from_codeset)
 {
-  char *p;
-  fprintf (stderr, "libidn: warning: libiconv not installed, cannot "
-	   "convert data to UTF-8\n");
-  p = malloc (strlen (str) + 1);
-  if (!p)
-    return NULL;
-  strcpy (p, str);
-  return p;
+  //fprintf (stderr,
+//	   "warning: cannot convert data to UTF-8, returning source\n");
+ // fprintf (stderr, "warning: this indicate a badly installed GNU Libidn\n");
+  return strdup (str);
 }
 
-#endif /* HAVE_ICONV */
+#endif
 
 /**
  * stringprep_locale_to_utf8:
