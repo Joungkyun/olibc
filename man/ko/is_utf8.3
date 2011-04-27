@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man is_utf8.3
 .\" 2011-03-21 JoungKyun Kim <htt://oops.org>
-.\" $Id: is_utf8.3,v 1.2 2011-03-25 11:36:09 oops Exp $
+.\" $Id: is_utf8.3,v 1.1 2011-03-21 06:44:53 oops Exp $
 .SH 이름
 is_utf8 \- utf8인지 아닌지를 검사
 .br
@@ -13,7 +13,7 @@ is_ksc5601 \- 2byte가 ksc5601인지 아닌지를 검사
 .sp
 .BI "bool is_utf8 (unsigned const char * src);"
 .br
-.BI "bool is_ksc5601 (int c1, int c2);"
+.BI "bool is_ksc5601 (UInt c1, UInt c2);"
 
 .SH 라이브러리 링크
 .B \-loc

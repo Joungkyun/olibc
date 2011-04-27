@@ -2,14 +2,14 @@
 .\" Process with
 .\" nroff -man o_getopt.3
 .\" 2011-03-04 JoungKyun Kim <htt://oops.org>
-.\" $Id: o_getopt.3,v 1.13 2011-03-22 16:05:11 oops Exp $
+.\" $Id: o_getopt.3,v 1.12 2011-03-08 17:48:56 oops Exp $
 .SH NAME
 o_getopt \- Parse command-line options
 
 .SH SYNOPSIS
 .B #include <olibc/libarg.h>
 .sp
-.BI "o_getopt(int argc, const char **argv, const char *opt, const o_option *longopt);"
+.BI "o_getopt(int argc, char **argv, const char *opt, const struct o_option, *longopt);"
 
 .SH Link library
 .B \-loc
@@ -93,18 +93,18 @@ If you don't want to use longopt, you can set NULL.
 structure of longopt is follows:
 
 .nf
-typedef struct {
+struct o_option {
     char *name;     // Name of long option
     int required    // flag of argument option value
     int value       // The value to return
-} o_option;
+};
 .fi
 
 For example, \-b options must have option value and, long options of \-b option
 is \-\-best, you can set follows:
 
 .nf
-static o_option longopt[] = {
+strcut o_option longopt[] = {
     { "best", required_arguments, 'b' }
 };
 .fi
@@ -136,7 +136,7 @@ int main (int argc, char **argv) {
     char app[1024];
     int  bestopt = 0;
 
-    static o_option longopt[] = {
+    static struct o_option longopt[] = {
         { "append", required_arguments, 'a' },
         { "best", no_arguments, 'b' },
         { 0, 0, 0 }
@@ -146,7 +146,7 @@ int main (int argc, char **argv) {
     _ogetopt_chk_int = \-1;
 
     /* parsing command\-line arguments */
-    while ( (opt = o_getopt (argc, (const char **) argv, "a:b", longopt)) != \-1 ) {
+    while ( (opt = o_getopt (argc, argv, "a:b", longopt)) != \-1 ) {
        switch (opt) {
            case 'a' :
               if ( o_optlen > 0 ) {

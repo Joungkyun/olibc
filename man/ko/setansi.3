@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man setansi.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.4 2011-03-29 18:22:43 oops Exp $
+.\" $Id: setansi.3,v 1.1.2.1 2011-03-29 18:24:11 oops Exp $
 .SH 이름
 setansi \- ansi 색상 설정
 
@@ -95,12 +95,12 @@ true로 설정이 되면, 이 함수는 아무런 작동을 하지 않는다.
 int main (void) {
     char * path = "/vars";
 
-    setansi (stdout, OC_GRAY, 0);
-    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
-    setansi (stdout, OC_ENDANSI, 0);
-    setansi (stdout, OC_BLUE, 0);
-    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
-    setansi (stdout, OC_ENDANSI, 0);
+    setansi (stdout, GRAY, 0);
+    printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
+    setansi (stdout, ENDANSI, 0);
+    setansi (stdout, BLUE, 0);
+    printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
+    setansi (stdout, ENDANSI, 0);
 
     return 0;
 }

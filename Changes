@@ -1,51 +1,199 @@
 Changelog
 
-$Id: Changes,v 1.92 2011-04-12 18:12:31 oops Exp $
-
-* Wed, Apr 13 2011
-	- add olibc m4 script
-	- enable set null on last argument of preg_replace api
-
-* Sun, Apr 10 2011
-	- chaned build environment with automake
+$Id: Changes,v 1.65.2.6 2011-03-29 18:42:12 oops Exp $
 
 * Wed, Mar 30 2011
-	- changed bin2hex_r to bin2hex
-	- add outlen parameter on hex2bin api
+	- backport setansi from 1.0.x
+	- <release 0.1.4>
 
-* Mon, Mar 28 2011
-	- changed proto type of dec2bin, long2bin api
-	- oc_malloc_originate padding 0 on default.
-	- support 64bit caculation bin2long/long2bin on 64bit system
-
-* Sun, Mar 27 2011
-	- removed human_size_r
+* Tue, Mar 29 2011
+	- suport negative decimal on dec2bin/long2bin/bin2dec/bin2long
+	- support 64bit code on long2bin/bin2long
+	- valid build environment gcc4 and Freebsd
+	  On Freebsd system, use gmake and --with-iconv=/path configure option
 
 * Sat, Mar 26 2011
-	- changed function declare of str2double api
-	- support GCC4 and FreeBSD
-	- changed addslashes_r api to addslashes
-	- changed _hex2bin to internal function
-	- rename check_int to is_strint
-	
+	- fixed segfault on get_charcount
+
 * Fri, Mar 25 2011
-	- add join() api
 	- fixed wrong realpath_r() operation
-	- changed function declare of is_ksc5601 api
-	- changed convert_punycode_r api ot convert_punycode
 
-* Thu, Mar 24 2011
-	- changed internal variable name for conflict other programs
-	- add file_status() api
+* Thu, Mar  3 2011
+	- add sample code
+	- < release 0.1.3 >
 
-* Wed, Mar 23 2011
-	- removed fileread api. use readfile api
-	- readfile and writefile api are binary safe. (changed proto type)
-    - On append mode of writefile api, don't add newline any more at first.
+* Wed, Mar  2 2011
+	- fixed long2bin that returns 0 when input argument is smaller than
+	  max of 32bit integer
 
-* Tue, Mar 22 2011
-	- redefine type declare with stdint
+* Sun, Feb 20 2011
+	- fixed memory leak of preg_match
+	- add preg_match_r
+	- update exbeded pcre library to 8.12
+	- rewrite preg_grep
 
-* Mon, Mar 21 2011
-	- start 1.0 branch
+* Sat, Feb 19 2011
+	- remove convert_racecode api
+	- add is_utf8 api
+
+* Tue, Feb 15 2011
+	- add charset_conv
+
+* Sat, Feb 12 2011
+	- fixed trim that return 0 byte about 1byte string
+	- thread safe about errno
+	- rewrite str2double, strtoupper, strtolower
+	- rewrite libfile.c
+
+* Sun, Feb  8 2011
+	- add addslashes_r for binary safe
+
+* Sun, Feb  7 2011
+	- fixed trim api that don't remove back spaces.
+
+* Sun, Feb  6 2011
+	- fixed idn memory leak
+	- adjust GCC visibility extension
+
+* Sat, Dec  5 2009
+	- add is_ksc5601
+
+* Fri, Oct 20 2009
+	- add realpath_r
+
+* Fri, Jun  9 2006
+	- update autogen
+	- start 0.1.3
+
+* Thu, Sep  1 2005
+	- fixed CAN-2005-2491 in pcrelib
+	- < release 0.1.2 >
+
+* Mon, Aug  9 2004
+	- changed filename commoh.h to oc_common.h
+	- fixed typo in Makefile.in
+	- < release 0.1.1 >
+
+* Fri, Aug  6 2004
+	- fixed iconv problem on liboc that conflict gpl license problem
+	- imported libtool system
+
+* Mon, Jun 21 2004
+	- Support FreeBSD
+	- added ax_create_stdint_h.m4 file
+	- allow autoconf 2.59 and automake 1.8
+
+* Wed, Feb 18 2004
+	- < release 0.1.0 >
+
+* Wed, Feb 18 2004
+	by JoungKyun Kim <http://oops.org>
+	- fixed miss declaration on stringprep_locale_charset_cache variable
+	- fixed invalid function type
+	- removed routine case of return 0 on o_getopt function
+	- devided license with BPL and LGPL (liboc and libogc)
+
+* Tue, Feb 10 2004
+	by JoungKyun Kim <http://oops.org>
+	- changed stringprep_locale_charset_cache to extern
+
+* Sat, Feb  7 2004
+	by JoungKyun Kim <http://oops.org>
+	- changed exit code to return source variable on idn code
+
+* Wed, Feb  4 2004
+	by JoungKyun Kim <http://oops.org>
+	- updated libidn library 0.3.7
+	- < release 0.0.8 >
+
+* Tue, Feb  3 2003
+	by JoungKyun Kim <http://oops.org>
+	- added bin2hex function
+	- fixed convert_racecode ugly parsing bug
+
+* Mon, Nov 10 2003
+	by JoungKyun Kim <http://oops.org>
+	- update trim_r and trim function
+	- < release 0.0.7 >
+
+* Mon, Nov 10 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed ugly return value of trim and trim_r
+	- < release 0.0.6 >
+
+* Fri, Nov  7 2003
+	by JoungKyun Kim <http://oops.org>
+	- added split function
+	- rewrite argv_make function
+	- < release 0.0.5 >
+
+* Thu, Nov  6 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed print gabage string problem on fileread function
+
+* Thu, Oct 30 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed segmentation fault that free array variable with argv_make
+
+* Tue, Oct 28 2003
+	by JoungKyun Kim <http://oops.org>
+	- added argument function
+          argv_make
+          ofree_array
+          get_whitespace
+          o_getopt
+	- fixed typo in olibc-config.h.in
+
+* Sat, Sep 27 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed miss memory allocation
+	- added safely free function
+
+* Fri, Sep 26 2003
+	by JoungKyun Kim <http://oops.org>
+	- changed to real size intead of sizeof on memset
+	- < release 0.0.4 >
+
+* Thu, Sep 25 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed tmp variable reset size
+
+* Sat, Sep 20 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed return wrong value on str2long, str2double function
+
+* Sat, Sep 20 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed gabage problem on lib_preg_parse function
+	- added olibc_version function
+	- < release 0.0.3 >
+
+* Fri, Sep 19 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed blank return fileread function
+	- move to libfile.h from libstring.h on fileread function
+	- added writefile function
+	- removed strip option on Makefile
+
+* Thu, Sep 18 2003
+	by JoungKyun Kim <http://oops.org>
+	- changed exit to return when not racecode domain on _race.c
+	- added CVS id
+
+* Sun, Sep 14 2003
+	by JoungKyun Kim <http://oops.org>
+	- fixed group expression bug on lib_preg_match function
+	- modified Makefile
+	- fixed typo man page
+
+* Tue, Sep 09 2003
+	by JoungKyun Kim <http://oops.org>
+	- added internal pcre library
+	- added internal idn library
+	- fixed typo
+	- < release 0.0.2 >
+
+* Mon, Sep 08 2003
+	by JoungKyun Kim <http://oops.org>
+	- < relase 0.0.1 >
 

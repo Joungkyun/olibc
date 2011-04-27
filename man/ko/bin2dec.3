@@ -2,18 +2,18 @@
 .\" Process with
 .\" nroff -man bin2dec.3
 .\" 2011-03-10 JoungKyun Kim <htt://oops.org>
-.\" $Id: bin2dec.3,v 1.3 2011-03-28 13:03:13 oops Exp $
+.\" $Id: bin2dec.3,v 1.1.2.1 2011-03-29 10:08:15 oops Exp $
 .SH 이름
-bin2dec \- 2진수 문자열을 signed 4byte 정수로 변환
+bin2dec \- 2진수 문자열을 4byte 정수로 변환
 .br
-bin2long \- 2진수 문자열을 signed 8byte 정수로 변환
+bin2long \- 2진수 문자열을 8byte 정수로 변환
 
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "Long32 bin2dec (const char * str)"
+.BI "int bin2dec (const char * str)"
 .br
-.BI "Long64 bin2long (const char * str)"
+.BI "long long bin2long (const char * str)"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -27,27 +27,29 @@ or
 에는
 .BI "LGPL2 symbol"
 이 포함되어 있으므로 이 라이브러리를
-링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고, BSD 라이센스의 적용을
-원한다면
+링크하려면 LGPL2의 영향을 받는다. idn관련 api를 사용하지 않고,
+BSD 라이센스의 적용을 원한다면
 .B liboc.so
 나
 .B liboc.a
 를 이용해야 한다.
 
 .SH 설명
-2진수 형태의 문자열을 signed 십진수로 변환을 한다.
+2진수 형태의 문자열을 십진수로 변환을 한다.
 .br
 .BI bin2dec()
 함수는 32bit까지 처리가 가능하며,
 .BI bin2long()
 함수는 64bit까지 처리가 가능하다.
 
-32bit 시스템에서
+32bit 시스템에서,
 .BI bin2long()
 함수는 32/64bit machine의 호환을 위하여 64bit integer를 상위/하위 비트를
 나누어서 계산을 하므로 명확하게 32bit 범위의 수를 변환한 경우에는
 .BI bin2dec()
 함수를 사용하는 것이 좋다.
+
+bin2dec() 와 bin2long() 함수는 음수를 지원하지 않는다.
 
 
 .SH 예제
@@ -55,10 +57,10 @@ or
 #include <olibc/libstring.h>
 
 int main (void) {
-    Long32 x = 0;
-    Long64 v = 0;
-    char * y = "11011000";
-    char * w = "1001010100000010111110010000000000";
+    int x = 0;
+    long long v = 0;
+    char y = "11011000";
+    char w = "1001010100000010111110010000000000";
 
     x = bin2dec (y);
     v = bin2long (w);

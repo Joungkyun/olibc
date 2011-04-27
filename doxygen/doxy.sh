@@ -1,7 +1,7 @@
 #!/bin/sh
 
 rmoctype=0
-cd /home/repos/cvs/oops/olibc/head
+cd /home/repos/cvs/oops/olibc/olibc-0
 
 [ ! -f "mainpage.dox" ] && ln -sf doxygen/mainpage.dox ./
 if [ ! -f oc_type.h ]; then

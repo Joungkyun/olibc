@@ -1,8 +1,8 @@
-.TH setansi(3) 2011-03-26 "Linux Manpage" "OOPS Library's Manual"
+.TH setansi(3) 2011-03-19 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man setansi.3
-.\" 2011-03-26 JoungKyun Kim <htt://oops.org>
-.\" $Id: setansi.3,v 1.11 2011-03-29 18:22:43 oops Exp $
+.\" 2011-03-19 JoungKyun Kim <htt://oops.org>
+.\" $Id: setansi.3,v 1.8.2.1 2011-03-29 18:24:11 oops Exp $
 .SH NAME
 setansi \- Set ansi color
 
@@ -57,15 +57,15 @@ olibc color constants. See also follows:
 .br
 .B OC_BRED 41
 .br
-.B OC_GREEN 32
+.B OC_GREEN 31
 .br
 .B OC_BGREEN 42
 .br
-.B OC_YELLOW 33
+.B OC_YELLOW 31
 .br
 .B OC_BYELLOW 43
 .br
-.B OC_BLUE 34
+.B OC_BLUE 31
 .br
 .B OC_BBLUE 44
 .br
@@ -96,12 +96,12 @@ Set true, this function don't operate.
 int main (void) {
     char * path = "/vars";
 
-    setansi (stdout, OC_GRAY, 0);
-    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
-    setansi (stdout, OC_ENDANSI, 0);
-    setansi (stdout, OC_BLUE, 0);
-    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
-    setansi (stdout, OC_ENDANSI, 0);
+    setansi (stdout, GRAY, 0);
+    printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
+    setansi (stdout, ENDANSI, 0);
+    setansi (stdout, BLUE, 0);
+    printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
+    setansi (stdout, ENDANSI, 0);
 
     return 0;
 }

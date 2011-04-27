@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.5 2011-03-29 18:57:57 oops Exp $
+.\" $Id: long2bin.3,v 1.1.2.1 2011-03-29 10:08:15 oops Exp $
 .SH 이름
 long2bin \- 64bit 정수를 2진수 문자열로 변환
 .br
@@ -11,9 +11,9 @@ dec2bin \- 10진수 문자열을 2진수 문자열로 변환
 .SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * long2bin (Long64 src, size_t * outlen);"
+.BI "unsigned int long2bin (long long src, char ** dst);"
 .sp
-.BI "char * dec2bin (const char * src, size_t * outlen);"
+.BI "unsigned int dec2bin (const char * src, char ** dst);"
 
 .SH 라이브러리 링크
 .B \-loc
@@ -38,9 +38,12 @@ or
 .BI long2bin()
 api는 64bit 정수를 2진수 문자열로 변환한다.
 
+32bit 시스템에서,
 .BI long2bin()
 api는 32bit와 64bit 호환을 위하여 64bit 정수를 상위비트/하위비트로 쪼개어
-계산을 한다.
+계산을 한다. 명확하게 32bit 범위의 정수일 경우
+.BI dec2bin()
+api를 이용하는 것을 권장한다.
 
 .TP
 .B src
@@ -48,9 +51,9 @@ api는 32bit와 64bit 호환을 위하여 64bit 정수를 상위비트/하위비
 입력된 64bit 정수
 
 .TP
-.B outlen
+.B dst
 .br
-반한된 이진 문자열의 길이. 이 변수를 null로 선언을 하면, 길이를 세지 않는다.
+변환된 이진수 문자열
 
 .PP
 .BI dec2bin()
@@ -62,14 +65,16 @@ api는 10진수 문자열을 이진수 문자열로 변환을 한다.
 입력할 10진수 문자열
 
 .TP
-.B outlen
+.B dst
 .br
-반한된 이진 문자열의 길이. 이 변수를 null로 선언을 하면, 길이를 세지 않는다.
+변환된 이진수 문자열
 
 .SH 반환값
-변환된 이진수 문자열의포인터.
-
-반환값이 NULL이 아닐 경우, 반드시
+변환된 이진수 문자열의 길이. 내부 에러가 발생했을 경우 두번째 파라미터
+.B dst
+는 NULL값을 가진다. 만약
+.B dst
+의 값이 NULL이 아닐 경우, 반드시
 .BI free()
 api로 메모리를 해제해 줘야 한다.
 
@@ -78,17 +83,19 @@ api로 메모리를 해제해 줘야 한다.
 #include <olibc/libstring.h>
 
 int main (void) {
-    Long64  src = 1000;
+    long long src = 1000;
     char    * dec = "1000";
     char    * dst;
-    size_t  len;
+    unsigned int len;
 
-    if ( (dst = long2bin (src, &len)) ) {
+    len = long2bin (src, &dst);
+    if ( dst != null ) {
         printf ("%s\\n", dst);
         free (dst);
     }
 
-    if ( (dst = dec2bin (dec, &len)) ) {
+    len = dec2bin (dec, &dst);
+    if ( dst != null ) {
         printf ("%s\\n", dst);
         free (dst);
     }

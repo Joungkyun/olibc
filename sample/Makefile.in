@@ -1,0 +1,30 @@
+# $Id: Makefile.in,v 1.1.2.2 2011-03-29 11:06:01 oops Exp $
+top_builddir	= ..
+CC			= @CC@ -Wall
+LIBTOOL		= @LIBTOOL@
+CFLAGS		= @CFLAGS@
+CPPFLAGS	= -I. -I.. @CPPFLAGS@
+LDFLAGS		:= -L$(top_builddir)/.libs -lolibc @LDFLAGS@ @LIBS@
+SRC			:= $(wildcard *.c)
+COMMANDS	:= $(SRC:.c=)
+RM			= @RM@ -f
+
+all: $(COMMANDS)
+
+%: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $< $(LDFLAGS)
+
+confirm: $(COMMANDS)
+	@if test -f "./test.ln"; then \
+		rm -f test.ln; \
+	fi
+	@ln -sf test.txt test.ln; \
+	for i in $(COMMANDS); do \
+		LD_LIBRARY_PATH=$(top_builddir)/.libs ./$$i; \
+	done;
+	@if test -f "./test.ln"; then \
+		rm -f test.ln; \
+	fi
+
+clean:
+	-$(RM) $(COMMANDS)

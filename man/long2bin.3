@@ -2,7 +2,7 @@
 .\" Process with
 .\" nroff -man long2bin.3
 .\" 2011-03-19 JoungKyun Kim <htt://oops.org>
-.\" $Id: long2bin.3,v 1.5 2011-03-29 18:57:57 oops Exp $
+.\" $Id: long2bin.3,v 1.1.2.1 2011-03-29 10:08:15 oops Exp $
 .SH NAME
 long2bin \- Convert 64bit integer to binary string
 .br
@@ -11,9 +11,9 @@ dec2bin \- Convert decimal string to binary
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * long2bin (Long64 src, size_t * outlen);"
+.BI "unsigned int long2bin (long long src, char ** dst);"
 .sp
-.BI "char * dec2bin (const char * src, size_t * outlen);"
+.BI "unsigned int dec2bin (const char * src, char ** dst);"
 
 .SH Link library
 .B \-loc
@@ -39,10 +39,12 @@ The
 .BI long2bin()
 api convert 64bit integer to binary string.
 
-The
+On the 32bit system, the
 .BI long2bin()
 api caculate 64bit integer with high and low bit for 32bit and 64bit
-compatibility.
+compatibility. So, for cleary 32bit range integer, use the
+.BI dec2bin()
+api.
 
 .TP
 .B src
@@ -50,10 +52,9 @@ compatibility.
 The input 64bit ingeter
 
 .TP
-.B outlen
+.B dst
 .br
-The length of return string. This argument is set null, don't count
-length of return string.
+The converted binary string
 
 .PP
 The
@@ -66,17 +67,16 @@ api convert decimal string to binary string.
 The input deciaml string
 
 .TP
-.B outlen
+.B dst
 .br
-The length of return string. This argument is set null, don't count
-length of return string.
+The converted binary string
 
 .SH "RETURN VALUE"
-The pointer of binary string.
-
-When occurs internal error, the return value has null.
-If the return value is not null, the caller should deallocate
-this buffer using
+Length of binary string. When occurs internal error, 2th argument
+.B dst
+has null value. If the
+.B dst
+argument has not null, the caller should deallocate this buffer using
 .BI free().
 
 .SH EXAMPLE
@@ -84,17 +84,19 @@ this buffer using
 #include <olibc/libstring.h>
 
 int main (void) {
-    Long64  src = 1000;
-    char    * dec = "-1000";
+    long long src = 1000;
+    char    * dec = "1000";
     char    * dst;
-    size_t  len;
+    unsigned int len;
 
-    if ( (dst = long2bin (src, &len)) != null ) {
+    len = long2bin (src, &dst);
+    if ( dst != null ) {
         printf ("%s\\n", dst);
         free (dst);
     }
 
-    if ( (dst = dec2bin (dec, &len)) != null ) {
+    len = dec2bin (dec, &dst);
+    if ( dst != null ) {
         printf ("%s\\n", dst);
         free (dst);
     }

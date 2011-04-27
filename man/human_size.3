@@ -1,15 +1,19 @@
-.TH human_size(3) 2011-03-27 "Linux Manpage" "OOPS Library's Manual"
+.TH human_size(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man human_size.3
-.\" 2011-03-27 JoungKyun Kim <htt://oops.org>
-.\" $Id: human_size.3,v 1.9 2011-03-26 19:42:37 oops Exp $
+.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
+.\" $Id: human_size.3,v 1.7 2011-03-18 09:05:18 oops Exp $
 .SH NAME
 human_size \- convert number to human readable
+.br
+human_size_r
 
 .SH SYNOPSIS
 .B #include <olibc/libstring.h>
 .sp
-.BI "char * human_size (ULong64 size, bool sub, bool unit);"
+.BI "char * human_size (double size, int sub, int unit);"
+.br
+.BI "char * human_size_r (ULong64 size, bool sub, bool unit);"
 
 .SH "Link library"
 .B \-loc
@@ -31,8 +35,9 @@ or
 that follows BSD license.
 
 .SH DESCRIPTION
-The
 .BI human_size()
+와
+.BI human_size_r()
 apis are convert to unit for human readable. The return value
 support decimal porint under 2 digits.
 
@@ -46,20 +51,26 @@ The input 64bit integer
 .TP
 .B sub
 .br
-Set true, return with original size with 3 digit format.
+Set 1, return with original size with 3 digit format.
 
 .TP
 .B unit
 .br
-Set true, caculation with Byte, else with Bit.
+Set 1, caculation with Byte, else with Bit.
 
 .SH "RETURN VALUE"
 strping pointer of formatted string by human read.
 
-The
-.BI human_size()
-api occurs internal error, the
-.BI human_size() returns null. If the return string array
+.BI humna_size()
+api returns static memory, so it is not thread safe. If you
+want to thread safe, use
+.BI humna_size_r()
+api.
+
+When
+.BI human_size_r()
+api  occurs internal error,
+.BI human_size_r() returns null. If the return string array
 pointer is not null, the caller should deallocate this buffer
 using
 .BI free().
@@ -69,10 +80,12 @@ using
 #include <olibc/libstring.h>
 
 int main (void) {
-    long no = 123456789;
+    double no = 123456789;
     char *data;
 
-    data = human_size ((ULong64) no, 1, 0);
+    printf ("%s\\n", human_size (no, 1, 0));
+
+    data = human_size_r ((unsigned long long) no, 1, 0);
     printf ("%s\\n", data);
     if ( data != null )
         free (data);

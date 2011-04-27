@@ -1,38 +1,41 @@
+%define major 0
+%define minor 1
+%define rev   4
 Summary: useful high level C library
-Summary(ko): ìœ ìš©í•œ í•˜ì´ë ˆë²¨ C ë¼ì´ë¸ŒëŸ¬ë¦¬
+Summary(ko): À¯¿ëÇÑ ÇÏÀÌ·¹º§ C ¶óÀÌºê·¯¸®
 Name: olibc
-Version: @PACKAGE_VERSION@
+Version: %{major}.%{minor}.%{rev}
 Release: 1
 Epoch: 21
-License: BSD/LGPL
+License: BPL/LGPL
 Group: System Environment/Libraries
 Source0: http://mirror.oops.org/pub/oops/olibc/%{name}-%{version}.tar.bz2
 URL: http://devel.oops.org
 Buildroot: /var/tmp/%{name}-%{version}-root
 
 Packager: JoungKyun.Kim <http://oops.org>
-Vendor: oops.org
+Vendor: OOPS Development ORG
 
 %description
 The olibc (oops C library) is useful high level c library. You can make 
 easy code with olibc
 
 %description -l ko
-olibc ëŠ” ì•„ì£¼ ìœ ìš©í•œ C ë¼ì´ë¸ŒëŸ¬ë¦¬ì´ë‹¤. ì´ ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ì´ìš©í•˜ì—¬ C ì½”ë“œë¥¼
-ì‰½ê²Œ ì‘ì„±í•  ìˆ˜ ìˆë‹¤.
+olibc ´Â ¾ÆÁÖ À¯¿ëÇÑ C ¶óÀÌºê·¯¸®ÀÌ´Ù. ÀÌ ¶óÀÌºê·¯¸®¸¦ ÀÌ¿ëÇÏ¿© C ÄÚµå¸¦
+½±°Ô ÀÛ¼ºÇÒ ¼ö ÀÖ´Ù.
 
 %package devel
 Summary: Header and object files for development using oops C libraries.
-Summary(ko): olibc ë¥¼ ì´ìš©í•˜ì—¬ ê°œë°œí•˜ê¸° ìœ„í•œ header íŒŒì¼ê³¼ ëª©ì  íŒŒì¼ë“¤
-Group: system Environment/Libraries
+Summary(ko): olibc ¸¦ ÀÌ¿ëÇÏ¿© °³¹ßÇÏ±â À§ÇÑ header ÆÄÀÏ°ú ¸ñÀû ÆÄÀÏµé
+Group: ystem Environment/Libraries
 
 %description devel
 The olibc-devel package contains the header and object files necessary
 for developing programs which use the olibc libraries.
 
 %description devel -l ko
-olibc-devel íŒ¨í‚¤ì§€ëŠ” olibc ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ì´ìš©í•˜ì—¬ ê°œë°œì„ í•˜ê¸° ìœ„í•œ ëª©ì 
-ì½”ë“œì™€ í—¤ë” íŒŒì¼ë“¤ì„ í¬í•¨í•˜ê³  ìˆë‹¤.
+olibc-devel ÆĞÅ°Áö´Â olibc ¶óÀÌºê·¯¸®¸¦ ÀÌ¿ëÇÏ¿© °³¹ßÀ» ÇÏ±â À§ÇÑ ¸ñÀû
+ÄÚµå¿Í Çì´õ ÆÄÀÏµéÀ» Æ÷ÇÔÇÏ°í ÀÖ´Ù.
 
 %prep
 %{__rm} -rf %{buildroot}
@@ -42,7 +45,7 @@ olibc-devel íŒ¨í‚¤ì§€ëŠ” olibc ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ì´ìš©í•˜ì—¬ ê°œë°œì„ í•˜ê¸° 
 CFLAGS="$RPM_OPT_FLAGS" \
 CXXFLAGS="$RPM_OPT_FLAGS" \
 FFLAGS="$RPM_OPT_FLAGS" \
-%{configure}
+%{configure} --includedir=%{_includedir}/olibc
 %{__make}
 
 %install
@@ -63,16 +66,78 @@ make DESTDIR=%{buildroot} install
 
 %files devel
 %defattr(0644,root,root,0755)
-%{_bindir}/*-config
+%{_bindir}/oc-config
+%{_bindir}/ogc-config
+%{_bindir}/olibc-config
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
-%{_libdir}/pkgconfig/*.pc
 %{_includedir}/olibc/*.h
 %{_mandir}/man3/*.3.*
 %{_mandir}/ko/man3/*.3.*
 
 %changelog
-* @PACKAGE_DATE@ JoungKyun.Kim <http://oops.org> @PACKAGE_VERSION@-1
-- release version @PACKAGE_VERSION@
+* Wed Mar 30 2011 JoungKyun.Kim <http://oops.org> 0.1.4-1
+- update 0.1.4
+
+* Thu Mar 21 2011 JoungKyun.Kim <http://oops.org> 0.1.3-1
+- update 0.1.3
+
+* Thu Sep  1 2005 JoungKyun.Kim <http://oops.org> 0.1.2-1
+- fixed  CAN-2005-2491 in pcrelib under 0.1.1
+- update 0.1.2
+
+* Mon Aug  9 2004 JoungKyun.Kim <http://oops.org> 0.1.1-1
+- update 0.1.1
+
+* Fri Feb 20 2004 JoungKyun.Kim <http://oops.org> 0.1.0-1
+- update 0.1.0
+
+* Thu Feb  5 2004 JoungKyun.Kim <http://oops.org> 0.0.8-1
+- update 0.0.8
+
+* Fri Nov 10 2003 JoungKyun.Kim <http://oops.org> 0.0.7-1
+- update 0.0.7
+
+* Fri Nov 10 2003 JoungKyun.Kim <http://oops.org> 0.0.6-1
+- update 0.0.6
+
+* Fri Nov  7 2003 JoungKyun.Kim <http://oops.org> 0.0.5-1
+- update 0.0.5
+
+* Sat Sep 27 2003 JoungKyun.Kim <http://oops.org> 0.0.4-2
+- added official patch 1
+
+* Fri Sep 26 2003 JoungKyun.Kim <http://oops.org> 0.0.4-1
+- update 0.0.4
+
+* Thu Sep 25 2003 JoungKyun.Kim <http://oops.org> 0.0.3-3
+- fixed tmp variable reset size
+
+* Sat Sep 20 2003 JoungKyun.Kim <http://oops.org> 0.0.3-2
+- added official patch 1
+  this bug is seriously --; (str2long, str2double)
+
+* Sat Sep 20 2003 JoungKyun.Kim <http://oops.org> 0.0.3-1
+- update 0.0.3
+
+* Thu Sep 18 2003 JoungKyun.Kim <http://oops.org> 0.0.2-5
+- added second official patch
+
+* Sun Sep 14 2003 JoungKyun.Kim <http://oops.org> 0.0.2-4
+- fixed lib_preg_match bug
+
+* Wed Sep 10 2003 JoungKyun.Kim <http://oops.org> 0.0.2-3
+- changed don't memory free return value of convert_punyconv
+
+* Tue Sep  9 2003 JoungKyun.Kim <http://oops.org> 0.0.2-2
+- fixed trash print
+
+* Tue Sep  9 2003 JoungKyun.Kim <http://oops.org> 0.0.2-1
+- 0.0.2 release
+- added internal libidn
+- added internal pcrelib
+
+* Tue Sep  9 2003 JoungKyun.Kim <http://oops.org> 0.0.1-1
+- first build
 

@@ -23,21 +23,34 @@
 # include <config.h>
 #endif
 
+#include <oc_common.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "stringprep.h"
 
+#define ENABLE_NLS
+
+#ifndef HAVE_LOCALE_H
+#undef ENABLE_NLS
+#endif
+
+#ifndef HAVE_LANGINFO_H
+#undef ENABLE_NLS
+#endif
+
 #if defined(HAVE_ERRNO_H) || defined(_LIBC)
 # include <errno.h>
 #endif
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
 # include <iconv.h>
 
 # ifdef ENABLE_NLS
 #  include <langinfo.h>
+#  include <locale.h>
 # endif
 
 static const char *
@@ -67,7 +80,6 @@ stringprep_locale_charset_slow (void)
   return "ASCII";
 }
 
-OLIBC_API
 const char *stringprep_locale_charset_cache = NULL;
 
 /**
