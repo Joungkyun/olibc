@@ -1,114 +1,97 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.38 2011-04-13 09:25:10 oops Exp $
+# $Id: configure.ac,v 1.11 2004-02-18 16:17:15 oops Exp $
 
 #
-AC_PREREQ(2.59)
+AC_PREREQ(2.53)
 
-AC_INIT([olibc], [1.0.0], [http://oops.org])
-#AC_CONFIG_MACRO_DIR([./m4])
-
-AC_CONFIG_AUX_DIR([build])
-AM_INIT_AUTOMAKE([-Wall -Werror -Wno-override foreign no-dependencies])
-AM_MAINTAINER_MODE
-#AM_SILENT_RULES([yes])
-
-AC_CONFIG_SRCDIR([src/oc_type.h.in])
-AC_CONFIG_HEADER([src/olibc-config.h src/oc_type.h])
+AC_INIT([olibc], [0.1.0], [http://www.oops.org])
+AC_CONFIG_SRCDIR([libstring.h])
+AC_CONFIG_HEADER([olibc-config.h])
 AC_PREFIX_DEFAULT([/usr/local])
 
-AC_DEFUN([AC_DATAROOTDIR_CHECKED])
+SONAME_MAJOR=0
+SONAME_MINOR=0
+SONAME_REVISION=1
 
-AC_SUBST(SONAME_INFO)
-AC_SUBST(SONAME_VERSION)
 AC_SUBST(SONAME_MAJOR)
 AC_SUBST(SONAME_MINOR)
 AC_SUBST(SONAME_REVISION)
 
-SONAME_MAJOR=1
-SONAME_MINOR=0
-SONAME_REVISION=0
-SONAME_VERSION=$SONAME_MAJOR.$SONAME_MINOR.$SONAME_REVISION
-
-SONAME_VALUE=$(($SONAME_MAJOR + $SONAME_MINOR))
-SONAME_INFO="$SONAME_VALUE:$SONAME_REVISION:$SONAME_MINOR"
-
-# for libidn
-AC_SUBST(LIBIDN_NAME)
-AC_SUBST(LIBIDN_VERSOIN)
-
-LIBIDN_NAME=libidn
-LIBIDN_VERSION=0.3.7
-
 # Checks for programs.
-AC_PROG_CXX
 AC_PROG_CC
-AC_PROG_CPP
-AX_GL_VISIBILITY
 AC_PROG_INSTALL
 AC_PROG_LN_S
+AC_PROG_AWK
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL
-#AM_GNU_GETTEXT(external)
-#AM_GNU_GETTEXT_VERSION(0.17)
-AM_ICONV
+
+AC_PATH_PROG(MAKE, make)
+if test ! -f "$ac_cv_path_MAKE"; then
+  AC_MSG_ERROR(Can't not found make)
+fi
 
 AC_PATH_PROG(PERL, perl)
 if test ! -f "$ac_cv_path_PERL"; then
   AC_MSG_ERROR(Can't not found perl)
 fi
 
-AC_PATH_PROG(DATE, date)
-if test ! -f "$ac_cv_path_DATE"; then
-	AC_MSG_ERROR(Can't not found date)
+AC_PATH_PROG(CP, cp)
+if test ! -f "$ac_cv_path_CP"; then
+  AC_MSG_ERROR(Can't not found cp)
 fi
 
-AC_SUBST(PACKAGE_DATE)
-PACKAGE_DATE=$($DATE +"%a %b %d %Y")
+AC_PATH_PROG(AR, ar)
+if test ! -f "$ac_cv_path_AR"; then
+  AC_MSG_ERROR(Can't not found ar)
+fi
 
-AX_COMPAT_OPTION
+AC_PATH_PROG(STRIP, strip)
+if test ! -f "$ac_cv_path_STRIP"; then
+  AC_MSG_ERROR(Can't not found strip)
+fi
 
-# Checks for libraries.
-AC_CHECK_LIB(rt, clock_gettime,,[])
+AC_PATH_PROG(LS, ls)
+if test ! -f "$ac_cv_path_LS"; then
+  AC_MSG_ERROR(Can't not found ls)
+fi
+
+AC_PATH_PROG(RM, rm)
+if test ! -f "$ac_cv_path_RM"; then
+  AC_MSG_ERROR(Can't not found rm)
+fi
+
+AC_PATH_PROG(MKDIR, mkdir)
+if test ! -f "$ac_cv_path_MKDIR"; then
+  AC_MSG_ERROR(Can't not found mkdir)
+fi
+
+AC_PATH_PROG(GZIP, gzip)
+if test ! -f "$ac_cv_path_GZIP"; then
+  AC_MSG_ERROR(Can't not found gzip)
+fi
+
+AC_PATH_PROG(MV, mv)
+if test ! -f "$ac_cv_path_MV"; then
+  AC_MSG_ERROR(Can't not found mv)
+fi
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([langinfo.h libintl.h locale.h time.h sys/time.h \
-				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h \
-				  iconv.h stdbool.h inttypes.h locale.h stddef.h])
+AC_CHECK_HEADERS([langinfo.h libintl.h locale.h stdlib.h string.h sys/time.h unistd.h errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h iconv.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
-AC_C_VOLATILE
-#AC_CHECK_SIZEOF(long)
-#AC_CHECK_TYPES([ushort, uint, ulong, uchar])
-
-# for libidn
-AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
 
 # Checks for library functions.
-AC_FUNC_LSTAT
-AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 AC_FUNC_MALLOC
-AC_FUNC_MEMCMP
-AC_FUNC_REALLOC
 AC_FUNC_STAT
-AC_CHECK_FUNCS([strtoll gettimeofday setlocale memmove bcopy strerror])
-
-AX_STATIC_BINDIR
+AC_CHECK_FUNCS([gettimeofday memmove memset setlocale strchr strdup])
 
 AC_CONFIG_FILES([Makefile
-				 src/Makefile
-				 test/Makefile
-				 man/Makefile
+                 man/Makefile
                  pcrelib/Makefile
-                 libidn/Makefile
-				 scripts/Makefile
-				 m4/olibc.m4
-				 scripts/olibc.pc
-				 scripts/olibc-config])
+                 libidn/Makefile])
 AC_OUTPUT

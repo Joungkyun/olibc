@@ -1,0 +1,21 @@
+** TIME Function
+
+$Id: time.txt,v 1.3 2004-02-18 16:17:15 oops Exp $
+
+
+시간 관련 high level 함수이다.
+
+이 함수들을 사용 하기 위해서는 liboc 또는 libolibc 라이브러리를 링크해야 한다.
+
+주의할 것은 libolibc 라이브러리는 LGPL2 원형 함수가 포함이 되어 있으므로, LGPL2에 위
+반되지 않아야 한다.
+
+
+double microtime (void)
+
+    현재의 microtime 을 구한다.
+
+    ex) #include <olibc/libtime.h>
+
+        printf ("%f\n", microtime);
+
