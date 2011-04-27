@@ -1,51 +1,11 @@
-Changelog
+* Tue, Sep 09 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- added internal pcre library
+	- added internal idn library
+	- fixed typo
+	- release 0.0.2
 
-$Id: Changes,v 1.92 2011-04-12 18:12:31 oops Exp $
-
-* Wed, Apr 13 2011
-	- add olibc m4 script
-	- enable set null on last argument of preg_replace api
-
-* Sun, Apr 10 2011
-	- chaned build environment with automake
-
-* Wed, Mar 30 2011
-	- changed bin2hex_r to bin2hex
-	- add outlen parameter on hex2bin api
-
-* Mon, Mar 28 2011
-	- changed proto type of dec2bin, long2bin api
-	- oc_malloc_originate padding 0 on default.
-	- support 64bit caculation bin2long/long2bin on 64bit system
-
-* Sun, Mar 27 2011
-	- removed human_size_r
-
-* Sat, Mar 26 2011
-	- changed function declare of str2double api
-	- support GCC4 and FreeBSD
-	- changed addslashes_r api to addslashes
-	- changed _hex2bin to internal function
-	- rename check_int to is_strint
-	
-* Fri, Mar 25 2011
-	- add join() api
-	- fixed wrong realpath_r() operation
-	- changed function declare of is_ksc5601 api
-	- changed convert_punycode_r api ot convert_punycode
-
-* Thu, Mar 24 2011
-	- changed internal variable name for conflict other programs
-	- add file_status() api
-
-* Wed, Mar 23 2011
-	- removed fileread api. use readfile api
-	- readfile and writefile api are binary safe. (changed proto type)
-    - On append mode of writefile api, don't add newline any more at first.
-
-* Tue, Mar 22 2011
-	- redefine type declare with stdint
-
-* Mon, Mar 21 2011
-	- start 1.0 branch
+* Mon, Sep 08 2003
+	by JoungKyun Kim <http://www.oops.org>
+	- relase 0.0.1
 

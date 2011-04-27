@@ -1,126 +1,80 @@
-.TH file_exists(3) 2011-03-16 "Linux Manpage" "OOPS Library's Manual"
+.TH file_exists(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man file_exists.3
-.\" 2011-03-16 JoungKyun Kim <htt://oops.org>
-.\" $Id: file_exists.3,v 1.8 2011-03-24 11:29:24 oops Exp $
-.SH NAME
-file_exists \- Checks whether a file or directory exists
-.br
-file_status \- Checks type of a file or a directory
+.\" nroff -man file_exists.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+file_exists
 
-.SH SYNOPSIS
-.B #include <olibc/libfile.h>
+.SH 사용법
+.B #include <olibc/libstring.h>
 .sp
-.BI "int file_exists (const char * path, int mode);"
-.br
-.BI "int file_status (const char * path);"
+.BI "int file_exists(char *path, int mode);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
-
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-The
-.BI file_exsits()
-api hecks whether a file or directory exists with mode.
+.SH 설명
+해당 경로가 존재하는지 여부를 체크한다. 모드를 지정하면 해당 경로의 타입까지
+체크가 가능하다.
 
 .TP
 .B path
 .br
-Path to the file or directory
+체크할 경로를 지정한다.
 
 .TP
 .B mode
 .br
-check conditions.
+다음의 상수를 참고한다.
 
 .br
-.B OC_IS_NCHK 0
-=> check only exists
+.B _IS_NCHK 0
+=> 해당 경로의 존재 여부만 체크한다.
 .br
-.B OC_IS_FILE 1
-=> check whether is regular file or not
+.B _IS_FILE 1
+=> path 가 파일 인지를 체크
 .br
-.B OC_IS_DIR 2
-=> check whether is regular directory or not
+.B _IS_DIR 2
+=> path 가 디렉토리 인지를 체크
 .br
-.B OC_IS_SLINK 3
-=> check whether is symbolic link or not
+.B _IS_SLINK 3
+=> path 가 심볼릭 링크 인지를 체크
 .br
-.B OC_IS_CDEV 4
-=> check whether is character device or not
+.B _IS_CDEV 4
+=> path 가 캐릭터 디바이스 인지를 체크
 .br
-.B OC_IS_BDEV 5
-=> check whether is block device or not
+.B _IS_BDEV 5
+=> path 가 블럭 디바이스 인지를 체크
 .br
-.B OC_IS_FIFO 6
-=> check whether is FIFO or not
+.B _IS_FIFO 6
+=> path 가 FIFO 인지를 체크
 .br
-.B OC_IS_SOCK 7
-=> check whether is socket or not
+.B _IS_SOCK 7
+=> path 가 소켓 인지를 체크
 
-.PP
-The
-.BI file_status()
-api checks type of a file or a directory.
+.SH 반환값
+참이면 1을 반환하고, 거짓이면 0을 반환한다.
 
-.TP
-.B path
-.br
-Path to the file or directory
-
-
-.SH "RETURN VALUE"
-The
-.BI file_exists()
-api retruns true on success, otherwise returns false.
-
-The
-.BI file_status()
-api return constant of file type or false.
-
-.SH EXAMPLE
+.SH 예제
 .nf
-#include <olibc/libfile.h>
+#include <olibc/libstring.h>
 
-int main (void) {
-    char * path = "/var";
+char *path = "/vars";
 
-    printf ("ANY  : %d\\n", file_exists (path, OC_IS_NCHK));
-    printf ("FILE : %d\\n", file_exists (path, OC_IS_FILE));
-    printf ("DIR  : %d\\n", file_exists (path, OC_IS_DIR));
-    printf ("SLINK: %d\\n", file_exists (path, OC_IS_SLINK));
-    printf ("CDEV : %d\\n", file_exists (path, OC_IS_CDEV));
-    printf ("BDEV : %d\\n", file_exists (path, OC_IS_BDEV));
-    printf ("FIFO : %d\\n", file_exists (path, OC_IS_FIFO));
-    printf ("SOCK : %d\\n", file_exists (path, OC_IS_SOCK));
-
-    printf (
-        "%s is %s directory\\n",
-        (file_exists (path) == OC_IS_DIR) ? "" : "not"
-    );
-
-    return 0;
-}
+printf ("ANY  : %d\\n", file_exists (path, _IS_NCHK));
+printf ("FILE : %d\\n", file_exists (path, _IS_FILE));
+printf ("DIR  : %d\\n", file_exists (path, _IS_DIR));
+printf ("SLINK: %d\\n", file_exists (path, _IS_SLINK));
+printf ("CDEV : %d\\n", file_exists (path, _IS_CDEV));
+printf ("BDEV : %d\\n", file_exists (path, _IS_BDEV));
+printf ("FIFO : %d\\n", file_exists (path, _IS_FIFO));
+printf ("SOCK : %d\\n", file_exists (path, _IS_SOCK));
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

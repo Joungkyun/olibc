@@ -1,80 +1,53 @@
-.TH char2int(3) 2011-02-10 "Linux Manpage" "OOPS C Library's Manual"
+.TH char2int(1) 2003-09-04 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man char2int.3
-.\" 2011-03-04 JoungKyun Kim <htt://oops.org>
-.\" $Id: char2int.3,v 1.9 2011-03-26 05:08:16 oops Exp $
-.SH NAME
-char2int \- convert to integer from char
+.\" nroff -man char2int.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+char2int
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "int char2int (const char c);"
+.BI "int char2int(char c);"
 
-.SH Link library
-.B \-loc
-or
-.B \-lolibc
-.br
-
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-The
-.BI char2int()
-api convert to integer a character that is ascii between 48 and 57.
-This api is similar the
-.BI atoi()
-api.
+.SH 설명
+캐릭터를 int 형으로 변환한다.
 
 .TP
-.B char c
+.B c
 .br
-The input numeric character (character 0 \- 9)
+정수로 변경 할 캐릭터를 지정한다.
 
-.SH "RETURN VALUE"
-Return an integer. If a charactor is out of ascii range between 48 and 57,
-return \-1.
+.SH 반환값
+정수로 변환이 불가능 하면 -1을 반환한다.
 
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    char * str = "123";
-    int no = 0,
-        i = 0,
-        x = 1,
-        res = 0;
+char *str = "123";
+int no = 0, i = 0, x = 1, res = 0;
 
-    for ( i=strlen(str) \- 1; i >= 0; i\-\- ) {
-        if ( (no = char2int (str[i])) > 0 ) {
-            res += (no * x);
-            x *= 10;
-        }
-    }
-    printf ("%d\\n", res);
-
-    return 0;
+for (i=strlen(str) - 1; i >= 0; i--) {
+  if ( (no = char2int (str[i])) > 0 ) {
+    res += no;
+    x * 10;
+  }
 }
+
+printf ("%d\\n", res);
 .fi
 
-.SH "SEE ALSO"
-is_strint(3) str2double(3) str2long(3)
+.SH 참조
+check_int(1) str2double(1) str2long(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

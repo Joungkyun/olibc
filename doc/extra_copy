@@ -1,0 +1,11 @@
+라이센스 정보
+
+oops C library 에 적용되는 라이센스는 다음과 같다.
+
+BOB Please License version 1
+PHP License 2.02 (PHP_COPY)
+GNU GENERAL PUBLIC LICENSE Version 2 (GPL2_COPY)
+GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 (PHP_COPY)
+
+각 라이센스는 각 함수마다 별도로 지정이 되어 있지 않을 경우에는
+기본적으로 BPL v1 을 따른다.

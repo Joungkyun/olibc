@@ -1,120 +1,48 @@
-.TH preg_match(3) 2011-03-17 "Linux Manpage" "OOPS Library's Manual"
+.TH preg_match(1) 2003-09-08 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man preg_match.3
-.\" 2011-03-17 JoungKyun Kim <htt://oops.org>
-.\" $Id: preg_match.3,v 1.7 2011-03-16 15:50:38 oops Exp $
-.SH NAME
-preg_match \- Perform a regular expression match.
-.br
-preg_match_r \- Perform a regular expression match and save matched string.
+.\" nroff -man preg_match.1
+.\" 2003-09-08 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+preg_match
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libpcre.h>
 .sp
-.BI "int preg_match (const char * regex, const char * subject);"
-.br
-.BI "int preg_match_r (const char * regex, const char * subject, const char *** matched);"
+.BI "char * preg_match (char *regex, char *subject);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
-
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-Searches subject for a match to the regular expression given in regex.
-
-.BI preg_match_r()
-api save the results of search on 3th argument.
-.B matches[0]
-will contain the text that matched the full pattern,
-.B matches[1]
-will have the text that matched the first captured parenthesized
-subpattern, and so on.
-
-When occurs internal error, 3th argument matches of
-.BI preg_match_r()
-has null value. If the matches argument has not null, the caller should
-deallocate this buffer using
-.BI free().
+.SH 설명
+.B preg_match
+는 정규식이 매치가 되면 1을 리턴하고, 매치 되지 않으면 0 을 리턴한다.
 
 .TP
 .B regex
 .br
-The pattern to search for, as a string.
+체크할 정규식을 지정
 
 .TP
 .B subject
 .br
-The input string.
+검사할 문자열
 
-.TP
-.B matches of preg_match_r()
-.br
-array of matched strings
+.SH 반환값
+정수
 
-.SH "RETURN VALUE"
-.BI preg_match:
-.TP
-true
-.br
-Success
-.TP
-false
-.br
-Failure
-
-.TP
-.BI preg_match_r:
-
-.TP
-.BI > 0
-.br
-Success: value is the number of elements filled in
-.TP
-0
-.br
-Internal failed
-.TP
--1
-.br
-Failed to match
-
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libpcre.h>
 
-int main (void) {
-    char * x = "abcd1234\\\\n6943Aaa";
-    const char ** matches;
-    printf ("%d\\n", preg_match ("/[0-9][a-z]/i", x));
-
-    if ( preg_match_r ("/([3])([A])([a])/", x, &matches) ) {
-        int i;
-        for ( i=0; i<4; i++ )
-            printf ("%s\\n", matches[i]);
-    }
-
-    return 0;
-}
+char *x = "abcd1234\\n6943Aaa";
+printf ("%d\\n", preg_match ("/[0-9][a-z]/i", x));
 
 .fi
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.08.31 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

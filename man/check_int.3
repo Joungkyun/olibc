@@ -1,0 +1,52 @@
+.TH check_int(1) 2003-08-31 "Linux Manpage" "OOPS Library's Manual"
+.\" Process with
+.\" nroff -man check_int.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.SH 이름
+check_int
+
+.SH 사용법
+.B #include <olibc/libstring.h>
+.sp
+.BI "int check_int(char c);"
+
+.SH 설명
+해당 캐릭터가 정수인지 아닌지를 체크한다.
+
+.TP
+.B c
+.br
+캐릭터를 지정한다.
+
+.SH 반환값
+정수이면 1을 반환하고, 아니면 0을 반환한다.
+
+.SH 예제
+.nf
+#include <olibc/libstring.h>
+
+char *str = "12c3";
+int no = 0, i = 0, x = 1, res = 0;
+
+for (i=strlen(str) - 1; i >= 0; i--) {
+  if ( check_int (str[i]) ) {
+    printf ("%c is int", str[i]);
+  } else {
+    printf ("%c is not int", str[i]);
+  }
+}
+.fi
+
+.SH 참조
+char2int(1) str2double(1) str2long(1)
+
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
+
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.

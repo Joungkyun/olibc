@@ -1,0 +1,119 @@
+** PREG Function
+
+PREG 관련 함수들은 PHP 4 의 PCRE extension 에서 빌려온 코드들과 새로 만들어진 몇몇
+코드들이 존재를 한다.
+
+PREG 함수들은 pcrelib 를 이용한 펄 호환 정규식을 사용하는 함수들이다.
+
+
+
+char * preg_quote (char *string, char *delimiters)
+
+    preg 함수를 사용할 때의 정규식과 충돌하는 문자를 escape 처리를 한다. 2 번째 인자
+    가 NULL 이면, 기본 문자열만 변환을 하며, delimiters 을 지정하면 지정한 문자가 추
+    가로 escape 처리가 된다.
+
+    기본으로 처리하는 문자는 다음과 같다.
+
+       '.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!',
+       '>', '<', '|', ','
+
+    보통은 정규식의 구분자를 /asdf/ 와 같이 사용하기 때문에 delimiters에 "/" 를 기본
+    으로 사용을 한다.
+
+    이 함수는 php 의 preg_quote 함수와 동일하게 작동을 한다.
+
+    이 함수를 사용한 후에는 return 된 값을 메모리 해제 (free) 를 해 주어야 한다.
+
+    ex) #include <olibc/libpcre.h>
+        char *regex;
+        char *buf;
+        char *string = "asdf/asfd";
+
+        buf = preg_quote (string, "/");
+        regex = malloc ( sizeof (char) * ( strlen(buf) + 3 ));
+        sprintf (regex, "/%s/", buf);
+
+        printf ("%s\n", preg_replace(regex, "!!", "aaasdf/asdfbb"));
+
+        free (buf);
+        free (regex);
+
+    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
+        
+
+char * preg_replace (char *regex, char *replace, char *subject, int *retlen)
+
+    preg_replace 함수는 subject 를 regex 패턴에 따라 replace 로 변환한다.  retlen 은
+    변환된 문자열의 길이를 반환한다.
+
+    return 된 값은 메모리 해제 (free) 를 해 주어야 한다.
+
+    정규식의 옵션은 php 의 정규식 문서를 참고하며, e 옵션과 callback은 지원하지 않는
+    다. (UTF8 은 시스템의 pcre lib 버전에 의존한다.)
+
+    ex) #include <olibc/libpcre.h>
+        char *result;
+        int len;
+
+        result = preg_replace("/xx/i", "!!", "SeeEEeex", &len);
+        printf ("%s\n", result);
+
+        free (result);
+
+    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
+
+
+char * preg_replace_arr (char *regex[], char *replace[], char *subject, int arrno)
+
+    preg_replace_arr 함수는 regex 와 replace 를 배열로 정의하여 처리가 가능하ㄷ. 단,
+    regex 와 replace 의 배열 수는 동일해야 하며, arrno 는 배열의 숫자를 정의해 준다.
+
+    ex) #include <olibc/libpcre.h>
+
+        char *result;
+        char *regex[3] = { "/X/", "Y", "Z" };
+        char *rep[3] = { "x", "y", "z" };
+ 
+        result = preg_replace_arr (regex, rep, "opqrstuvwXYZ", 3);
+        printf ("%s\n", result);
+
+        free (result);
+
+    저작권: PHP License 2.02 <http://www.php.net/license/2_02.txt>
+
+
+char * preg_grep (char *regex, char *str, int opt)
+
+    preg_grep 은 시스템의 grep 과 비슷하게 작동을 한다. 하지만, 정규식은 pcre 정규식
+    이 적용이 된다.
+
+    regex 는 조건식이며, str 은 체크할 문자열이다. 이는 행단위로 체크를 한다. opt 는
+    grep 의 -v 옵션과 같다. 1을 적용하면 match 되지 않는 행만 리턴이 된다.
+
+    리턴된 값은 반드시 메모리 해제 (free) 를 해야 한다.
+
+    ex) #include <olibc/libpcre.h>
+
+        char *buf;
+        char *string = "asdf\nqwer";
+
+        buf = preg_grep ("/ASDF/i", string, 0);
+        printf ("%s\n", buf);
+
+        free (buf);
+
+    BPL License v.1 <http://devel.oops.org/document/bpl>
+
+
+int preg_match ( char *regex, char *subject )
+
+    preg_match 는 정규식이 매치가 되면 1을 리턴하고, 매치 되지 않으면 0 을 리턴한다.
+
+    ex) #include <olibc/libpcre.h>
+
+        char *x = "abcd1234\n6943Aaa";
+
+        printf ("%d\n", preg_match ("/[0-9][a-z]/i", x));
+
+    BPL License v.1 <http://devel.oops.org/document/bpl>
