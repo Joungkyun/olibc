@@ -1,87 +1,51 @@
-.TH str2long(3) 2011-03-18 "Linux Manpage" "OOPS Library's Manual"
+.TH str2long(1) 2003-09-04 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
-.\" nroff -man str2long.3
-.\" 2011-03-18 JoungKyun Kim <htt://oops.org>
-.\" $Id: str2long.3,v 1.8 2011-03-26 05:08:16 oops Exp $
-.SH NAME
-str2long \- convert to 64bit integer from string
-.br
-str2double \- convert to double integer from string
+.\" nroff -man str2long.1
+.\" 2003-09-04 JoungKyun Kim <htt://www.oops.org>
+.\" $Id: str2long.3,v 1.2 2003-09-18 06:43:57 oops Exp $
+.SH 이름
+str2long
 
-.SH SYNOPSIS
+.SH 사용법
 .B #include <olibc/libstring.h>
 .sp
-.BI "long long str2long (const char * src);"
-.br
-.BI "long double str2double (const char * str);"
+.BI "long long str2long(char *str);"
 
-.SH "Link library"
-.B \-loc
-or
-.B \-lolibc
-.br
+.SH 설명
+숫자로 구성된 문자열을 long long 타입으로 변환한다.
 
-.B libolibc.so
-and
-.B libolibc.a
-include
-.B "LGPL2 symbols,"
-so links this library, your object or binary is follows LGPL2.
-If you don't need idn library and, don't want LGPL 2 effects,
-use
-.B liboc.so
-or
-.B liboc.a
-that follows BSD license.
-
-.SH DESCRIPTION
-The
-.BI str2long()
-aip conveted string of numeric type to 64bit integer. If system
-support
-.BI strtoll(),
-the
-.BI str2long()
-api use
-.BI strtoll().
-
-The
-.BI str2double()
-api conveted string of double numeric type to integer that
-casted double integer.
+이 함수는 정수 19자리 까지 유효하다. (음수 포함)
 
 .TP
-.B src
+.B str
 .br
-The input numeric string.
+숫자로 구성된 문자열을 넣는다
 
-.SH "RETURN VALUE"
-64bit integer and double integer
+.SH 반환값
+long long 의 형태의 정수를 반환
 
-.SH EXAMPLE
+.SH 예제
 .nf
 #include <olibc/libstring.h>
 
-int main (void) {
-    char *buf = "1234567890123456789";
-    char *bufd = "1234567890123456789.1234";
-    long long a = 0;
-    long double b = 0;
+char *buf = "1234567890123456789";
+long long no = 0;
 
-    a = str2long (buf);
-    b = str2double (bufd);
+a = str2long (buf);
 
-    printf ("%lld\\n", a);
-    printf ("%Lf\\n", b);
-    return 0;
-}
+printf ("%lld\\n", a);
 .fi
 
-.SH "SEE ALSO"
-is_strint(3) char2int(3)
+.SH 참조
+check_int(1) char2int(1) str2double(1)
 
-.SH AUTHOR
-JoungKyun.Kim <http://oops.org>
+.SH 작성
+2003.09.04 김정균 <http://www.oops.org>
 
-.SH BUGS
-Please report bug on QnA bulletin board on http://oops.org/
+.SH 버그
+버그가 발견이 되면 http://www.oops.org 로 리포팅을 부탁한다.
+
+.SH 저작권
+BPL License v.1
+.br
+http://devel.oops.org/document/bpl 을 참고 하도록 한다.
