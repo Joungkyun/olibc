@@ -36,20 +36,15 @@
  *
  *  - Autotools
  *   - configure.ac or configure.in
- *    - @b @e AX_OLIBC macro
- *     - add olibc library, dependency library and header location on @b LIBS, @b LDFLAGS, @b CPPFALGS
- *     - defined @b HAVE_OC_TYPE_H, @b HAVE_LIBOLIBC constant in krisp-config.h
- *     - If AX_OLIBC macro have any argument as @b AX_OLIBC(1), configure script will stop when library will check fail.
- *    - @b @e AX_OGC macro
- *     - add ogc library, dependency library and header location on @b LIBS, @b LDFLAGS, @b CPPFALGS
- *     - defined @b HAVE_OC_TYPE_H, @b HAVE_LIBOGC constant in krisp-config.h
- *     - If AX_OGC macro have any argument as @b AX_OGC(1), configure script will stop when library will check fail.
- *    - @b @e AX_OC macro
- *     - add oc library, dependency library and header location on @b LIBS, @b LDFLAGS, @b CPPFALGS
- *     - defined @b HAVE_OC_TYPE_H, @b HAVE_LIBOC constant in krisp-config.h
- *     - If AX_OC macro have any argument as @b AX_OC(1), configure script will stop when library will check fail.
+ *    - @b @e AX_OLIBC([libtool|ld], [1|0])
+ *     - first argument
+ *      - @b @e libtool : call olibc-config --link-libtool
+ *      - @b @e ld      : call olibc-config --link-ld
+ *     - second argument
+ *      - @b @e 1 : stop configure process if can't find olibc library or header file.
+ *      - @b @e 0 : skip configure process if can't find olibc library or header file.
  *
  * @section     MODIFYINFO Modify Info
  *  - Written: JoungKyun.Kim
- *  - Date: 2011/04/13
+ *  - Date: 2011/04/30
  */
