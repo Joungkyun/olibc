@@ -107,6 +107,9 @@ while test $# -gt 0; do
 		--libs)
 			echo "-l$prog ${LIBS}"
 			;;
+		--libname)
+			echo -n "$prog"
+			;;
 		--includes)
 			echo "-I$includedir"
 			;;
