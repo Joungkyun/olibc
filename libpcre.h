@@ -9,7 +9,7 @@
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 /*
- * $Id: libpcre.h,v 1.14 2011-03-01 04:17:47 oops Exp $
+ * $Id$
  *
  * Copyright (C) 2011 JoungKyun.Kim
  *

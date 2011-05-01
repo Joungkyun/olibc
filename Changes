@@ -1,6 +1,6 @@
 Changelog
 
-$Id: Changes,v 1.65.2.6 2011-03-29 18:42:12 oops Exp $
+$Id$
 
 * Wed, Mar 30 2011
 	- backport setansi from 1.0.x

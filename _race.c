@@ -38,11 +38,11 @@
  * This file includes proto type of RACE code apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 11:06:01 $
- * $Revision: 1.17.2.1 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: _race.c,v 1.17.2.1 2011-03-29 11:06:01 oops Exp $ */
+/* $Id$ */
 #include <oc_common.h>
 #include <_race.h>
 #include <libstring.h>

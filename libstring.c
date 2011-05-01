@@ -38,12 +38,12 @@
  * This file includes string apis for a convenient string handling.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:38:23 $
- * $Revision: 1.76.2.8 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libstring.c,v 1.76.2.8 2011-03-29 18:38:23 oops Exp $ */
+/* $Id$ */
 #include <oc_common.h>
 #include <libstring.h>
 

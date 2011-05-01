@@ -58,7 +58,7 @@ diff -urNp lib.new/Makefile.in lib/Makefile.in
 --- lib.new/Makefile.in	2004-08-07 05:26:15.000000000 +0900
 +++ lib/Makefile.in	2004-01-23 01:40:10.000000000 +0900
 @@ -1,40 +1,566 @@
--#$Id: 0.3.7.diff,v 1.2 2011-02-19 17:02:59 oops Exp $
+-#$Id$
 -top_builddir	= ..
 -CC		= @CC@ -Wall
 -SHELL		= @SHELL@

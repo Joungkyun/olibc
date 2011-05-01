@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: autogen,v 1.6 2011-02-06 15:11:19 oops Exp $
+# $Id$
 # require autoconf > 2.59 & automake > 1.8
 #
 

@@ -38,11 +38,11 @@
  * This file includes file apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-25 09:21:48 $
- * $Revision: 1.27.2.1 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.c,v 1.27.2.1 2011-03-25 09:21:48 oops Exp $ */
+/* $Id$ */
 #include <oc_common.h>
 
 #include <limits.h>

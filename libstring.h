@@ -5,11 +5,11 @@
  * This file includes proto type of string apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 18:24:11 $
- * $Revision: 1.29.2.5 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libstring.h,v 1.29.2.5 2011-03-29 18:24:11 oops Exp $ */
+/* $Id$ */
 #ifndef LIBSTRING_H
 #define LIBSTRING_H
 

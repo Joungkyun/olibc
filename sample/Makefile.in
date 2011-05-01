@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.1.2.2 2011-03-29 11:06:01 oops Exp $
+# $Id$
 top_builddir	= ..
 CC			= @CC@ -Wall
 LIBTOOL		= @LIBTOOL@

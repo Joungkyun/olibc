@@ -6,11 +6,11 @@
  * data structures, and defination macro.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-29 10:08:14 $
- * $Revision: 1.8.2.2 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_type.h.in,v 1.8.2.2 2011-03-29 10:08:14 oops Exp $ */
+/* $Id$ */
 
 #ifndef OC_TYPE_H
 #define OC_TYPE_H

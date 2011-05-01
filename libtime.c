@@ -38,11 +38,11 @@
  * This file includes time apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-02 17:22:04 $
- * $Revision: 1.14 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libtime.c,v 1.14 2011-03-02 17:22:04 oops Exp $ */
+/* $Id$ */
 #include <oc_common.h>
 
 #ifdef HAVE_LIBRT

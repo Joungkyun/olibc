@@ -5,11 +5,11 @@
  * This file includes proto type of command line argument apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-03-01 04:17:47 $
- * $Revision: 1.11 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.h,v 1.11 2011-03-01 04:17:47 oops Exp $ */
+/* $Id$ */
 #ifndef LIBARG_H
 #define LIBARG_H
 
