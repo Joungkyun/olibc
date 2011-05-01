@@ -45,12 +45,12 @@
  * @sa http://pcre.org
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-12 18:11:48 $
- * $Revision: 1.2 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 
-/* $Id: libpcre.c,v 1.2 2011-04-12 18:11:48 oops Exp $ */
+/* $Id$ */
 
 #include <oc_common.h>
 #include <libpcre.h>

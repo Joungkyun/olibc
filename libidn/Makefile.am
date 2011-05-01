@@ -33,7 +33,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.2 2011-04-13 10:53:21 oops Exp $
+# $Id$
 
 AM_CFLAGS = -Wall
 AM_CPPFLAGS = -I$(top_srcdir)

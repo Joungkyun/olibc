@@ -40,11 +40,11 @@
  * This file includes proto type of file apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 16:03:05 $
- * $Revision: 1.2 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libfile.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
+/* $Id$ */
 #ifndef LIBFILE_H
 #define LIBFILE_H
 

@@ -41,11 +41,11 @@
  * proto type of internal apis.
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-13 09:36:16 $
- * $Revision: 1.3 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: oc_common.h,v 1.3 2011-04-13 09:36:16 oops Exp $ */
+/* $Id$ */
 
 #ifndef OC_COMMON_H
 #define OC_COMMON_H

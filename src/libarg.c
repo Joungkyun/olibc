@@ -40,11 +40,11 @@
  * This file includes command line argument apis for easliy using
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libarg.c,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id$ */
 
 /**
  * If this constants is not defined, declare extern global variables

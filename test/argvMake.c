@@ -33,7 +33,7 @@
  * This file is part of olibc.
  */
 
-/* $Id: argvMake.c,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id$ */
 
 #include <olibc/libarg.h>
 #include "test.h"

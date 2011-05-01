@@ -33,7 +33,7 @@
  * This file is part of olibc.
  */
 
-/* $Id: caseSensitive.c,v 1.2 2011-04-09 16:24:57 oops Exp $ */
+/* $Id$ */
 
 #include <olibc/libstring.h>
 #include "test.h"

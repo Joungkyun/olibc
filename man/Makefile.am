@@ -33,7 +33,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.1 2011-04-09 15:54:21 oops Exp $
+# $Id$
 
 if ! COMPAT
 EXTRA_DIST = ko/addslashes.3 ko/argv_make.3 ko/bin2dec.3 ko/bin2hex.3 \

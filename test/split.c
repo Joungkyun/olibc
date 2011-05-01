@@ -33,7 +33,7 @@
  * This file is part of olibc.
  */
 
-/* $Id: split.c,v 1.1 2011-04-09 15:54:22 oops Exp $ */
+/* $Id$ */
 
 #include <olibc/libarg.h>
 #include <olibc/libstring.h>

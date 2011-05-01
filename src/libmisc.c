@@ -39,11 +39,11 @@
  * This file includes internal apis of olibc
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 15:54:21 $
- * $Revision: 1.1 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libmisc.c,v 1.1 2011-04-09 15:54:21 oops Exp $ */
+/* $Id$ */
 #include <oc_common.h>
 
 /** @defgroup global_internalfunc Global internal functions of olibc

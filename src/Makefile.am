@@ -33,7 +33,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.3 2011-04-13 10:53:21 oops Exp $
+# $Id$
 
 includedir = @includedir@/olibc@COMPAT_VERSION@
 

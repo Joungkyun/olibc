@@ -24,11 +24,11 @@
  * This file includes proto type of idn apis
  *
  * @author	JoungKyun.Kim <http://oops.org>
- * $Date: 2011-04-09 16:03:05 $
- * $Revision: 1.2 $
+ * $Date$
+ * $Revision$
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
-/* $Id: libidn.h,v 1.2 2011-04-09 16:03:05 oops Exp $ */
+/* $Id$ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 

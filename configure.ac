@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for oops C library
 #
-# $Id: configure.ac,v 1.38 2011-04-13 09:25:10 oops Exp $
+# $Id$
 
 #
 AC_PREREQ(2.59)

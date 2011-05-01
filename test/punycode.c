@@ -17,7 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
 
-/* $Id: punycode.c,v 1.1 2011-04-09 15:54:22 oops Exp $ */
+/* $Id$ */
 
 #include <olibc/libstring.h>
 #include <olibc/libidn.h>

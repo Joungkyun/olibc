@@ -33,7 +33,7 @@
 # This file is part of libimginfo.
 #
 
-# $Id: Makefile.am,v 1.1 2011-04-09 15:54:21 oops Exp $
+# $Id$
 
 AM_CFLAGS = -Wall
 AM_CPPFLAGS = -I$(top_srcdir)

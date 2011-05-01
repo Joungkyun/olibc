@@ -49,7 +49,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.3 2011-04-13 10:53:21 oops Exp $
+# $Id$
 
 
 SOURCES = $(liboc@COMPAT_VERSION@_la_SOURCES) $(libogc@COMPAT_VERSION@_la_SOURCES) $(libolibc@COMPAT_VERSION@_la_SOURCES)

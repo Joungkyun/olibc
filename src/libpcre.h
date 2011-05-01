@@ -44,7 +44,7 @@
  * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
  */
 /*
- * $Id: libpcre.h,v 1.2 2011-04-09 16:03:05 oops Exp $
+ * $Id$
  *
  * Copyright (C) 2011 JoungKyun.Kim
  *

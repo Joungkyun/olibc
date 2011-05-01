@@ -33,7 +33,7 @@
 # This file is part of olibc.
 #
 
-# $Id: Makefile.am,v 1.2 2011-04-12 17:08:46 oops Exp $
+# $Id$
 #
 
 DISTCLEANFILES =
