@@ -17,7 +17,7 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl 
 dnl $Id$
 
-AC_DEFUN([AX_IDN],
+AC_DEFUN([AX_PCRE],
 [
 	AC_ARG_WITH(pcre,
 		[  --with-pcre=PATH        prefix of pcre [[default: /usr]]])
