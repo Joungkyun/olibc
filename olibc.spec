@@ -10,6 +10,9 @@ Source0: http://mirror.oops.org/pub/oops/olibc/%{name}-%{version}.tar.bz2
 URL: http://devel.oops.org
 Buildroot: /var/tmp/%{name}-%{version}-root
 
+BuildRequires: libidn-devel pcre-devel
+Requires: libidn pcre
+
 Packager: JoungKyun.Kim <http://oops.org>
 Vendor: oops.org
 
