@@ -47,7 +47,7 @@ lib_LTLIBRARIES =
 
 AM_CFLAGS = -Wall
 AM_LDFLAGS = -version-info $(SONAME_INFO)
-AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/libidn -I$(top_srcdir)/pcrelib
+AM_CPPFLAGS = -I$(top_srcdir)
 LIBS += $(LTLIBICONV)
 
 include_HEADERS = oc_type.h libarg.h libfile.h libidn.h \
@@ -59,24 +59,19 @@ lib_LTLIBRARIES += libolibc@COMPAT_VERSION@.la
 libolibc@COMPAT_VERSION@_la_SOURCES = oc_common.h \
 	libarg.c libfile.c libidn.c libmisc.c libpcre.c libstring.c \
 	libtime.c
-libolibc@COMPAT_VERSION@_la_LIBADD = $(top_srcdir)/pcrelib/libbuiltin_pcre.la \
-	$(top_srcdir)/libidn/libbuiltin_idn.la
-libolibc@COMPAT_VERSION@_la_DEPENDENCIES = $(top_srcdir)/pcrelib/libbuiltin_pcre.la \
-	$(top_srcdir)/libidn/libbuiltin_idn.la
+libolibc@COMPAT_VERSION@_la_LIBADD = -lpcre -lidn
 
 lib_LTLIBRARIES += liboc@COMPAT_VERSION@.la
 liboc@COMPAT_VERSION@_la_SOURCES = oc_common.h \
 	libarg.c libfile.c libmisc.c libpcre.c libstring.c \
 	libtime.c
-liboc@COMPAT_VERSION@_la_LIBADD = $(top_srcdir)/pcrelib/libbuiltin_pcre.la
-liboc@COMPAT_VERSION@_la_DEPENDENCIES = $(top_srcdir)/pcrelib/libbuiltin_pcre.la
+liboc@COMPAT_VERSION@_la_LIBADD = -lpcre
 
 lib_LTLIBRARIES += libogc@COMPAT_VERSION@.la
 libogc@COMPAT_VERSION@_la_SOURCES = oc_common.h libidn.c
-libogc@COMPAT_VERSION@_la_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/libidn
-libogc@COMPAT_VERSION@_la_LIBADD = $(top_srcdir)/libidn/libbuiltin_idn.la liboc@COMPAT_VERSION@.la
-libogc@COMPAT_VERSION@_la_DEPENDENCIES = $(top_srcdir)/libidn/libbuiltin_idn.la \
-	liboc@COMPAT_VERSION@.la
+libogc@COMPAT_VERSION@_la_CPPFLAGS = -I$(top_srcdir)
+libogc@COMPAT_VERSION@_la_LIBADD = -lidn liboc@COMPAT_VERSION@.la
+libogc@COMPAT_VERSION@_la_DEPENDENCIES = liboc@COMPAT_VERSION@.la
 
 DISTCLEANFILES = *~
 

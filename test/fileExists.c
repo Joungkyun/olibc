@@ -59,5 +59,5 @@ int main (void) {
 	else
 		Failure ("Not dir\n");
 
-	return 0;
+	return ret;
 }

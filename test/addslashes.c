@@ -48,12 +48,13 @@ int main (void) {
 	oc_test_banner ("addslashes");
 	if ( addslashes (src, strlen (src), &buf, &buflen) == false ) {
 		Failure ("memory allocated failed");
-		return 0;
+		return 1;
 	}
 
 	if ( buflen != 28 ) {
 		Failure ("The buf length is not matched");
-		return 0;
+		ofree (buf);
+		return 1;
 	}
 
 	if ( ! strcmp (buf, dst) )
@@ -63,5 +64,5 @@ int main (void) {
 
 	ofree (buf);
 
-	return 0;
+	return ret;
 }

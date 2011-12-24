@@ -102,5 +102,5 @@ int main (void) {
 			Failure ("");
 	}
 
-	return 0;
+	return ret;
 }

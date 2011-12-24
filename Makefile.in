@@ -85,10 +85,10 @@ DIST_COMMON = README $(am__configure_deps) $(am__dist_doc_DATA_DIST) \
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
-	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
 	$(top_srcdir)/m4/ax_gcc_visibiliity.m4 \
 	$(top_srcdir)/m4/ax_static_bindir.m4 $(top_srcdir)/m4/iconv.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/idn.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/pcre.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -166,8 +166,6 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LIBICONV = @LIBICONV@
-LIBIDN_NAME = @LIBIDN_NAME@
-LIBIDN_VERSOIN = @LIBIDN_VERSOIN@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -240,7 +238,7 @@ EXTRA_DIST = COPYING.BSD COPYING.LGPL Changes LICENCE olibc.spec
 @COMPAT_FALSE@docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)
 @COMPAT_FALSE@dist_doc_DATA = COPYING.BSD COPYING.LGPL INSTALL README LICENCE
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = libidn pcrelib src man test scripts
+SUBDIRS = src man test scripts
 m4dir = $(datadir)/aclocal
 dist_m4_DATA = m4/olibc@COMPAT_VERSION@.m4
 all: $(BUILT_SOURCES)
@@ -708,8 +706,6 @@ olibcdir:
 
 dist-hook:
 	rm -f $(distdir)/m4/olibc.m4
-	rm -f $(distdir)/libidn/config.h
-	rm -f $(distdir)/pcrelib/config.h
 	$(PERL) -pi -e \
 		"s/\@PACKAGE_VERSION\@/$(VERSION)/g" \
 		 $(distdir)/$(PACKAGE).spec

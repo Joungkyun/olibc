@@ -48,7 +48,7 @@ endif
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = libidn pcrelib src man test scripts
+SUBDIRS = src man test scripts
 
 BUILT_SOURCES += olibcdir
 
@@ -71,8 +71,6 @@ endif
 
 dist-hook:
 	rm -f $(distdir)/m4/olibc.m4
-	rm -f $(distdir)/libidn/config.h
-	rm -f $(distdir)/pcrelib/config.h
 	$(PERL) -pi -e \
 		"s/\@PACKAGE_VERSION\@/$(VERSION)/g" \
 		 $(distdir)/$(PACKAGE).spec

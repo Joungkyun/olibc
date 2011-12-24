@@ -24,9 +24,6 @@
 
 @BOTTOM@
 
-#define HAVE_LIBIDN 1
-#define HAVE_LIBPCRE 1
-
 #define ENABLE_NLS 1
 #ifndef HAVE_SETLOCALE_H
 #undef ENABLE_NLS

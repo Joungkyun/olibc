@@ -44,7 +44,6 @@ int main (void) {
 			path_c[PATH_MAX + 1] = { 0, },
 			* buf = null,
 			* apiname;
-	int		ret = 0;
 
 	oc_test_banner ("realpath_r");
 
@@ -62,7 +61,6 @@ int main (void) {
 	else {
 go_fail:
 		Failure ("");
-		ret++;
 	}
 	ofree (buf);
 

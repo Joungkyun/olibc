@@ -128,5 +128,5 @@ int main (int argc, char ** argv) {
 			ofree (buf);
 	}
 
-	return 0;
+	return ret;
 }

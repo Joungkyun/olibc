@@ -48,5 +48,5 @@ int main (void) {
 	else
 		Failure ("");
 
-	return 0;
+	return ret;
 }

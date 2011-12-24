@@ -79,10 +79,10 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/olibc-config.in $(srcdir)/olibc.pc.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_compat_option.m4 \
-	$(top_srcdir)/m4/ax_create_stdint_h.m4 \
 	$(top_srcdir)/m4/ax_gcc_visibiliity.m4 \
 	$(top_srcdir)/m4/ax_static_bindir.m4 $(top_srcdir)/m4/iconv.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/idn.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/pcre.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -138,8 +138,6 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LIBICONV = @LIBICONV@
-LIBIDN_NAME = @LIBIDN_NAME@
-LIBIDN_VERSOIN = @LIBIDN_VERSOIN@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -434,7 +432,7 @@ oc.in:
 	cp -af olibc.pc oc.pc
 	$(PERL) -pi -e "s/prog=\"olibc/prog=\"oc/g" oc-config
 
-	$(PERL) -pi -e "s/-lolibc$(COMPAT_VERSION)/-loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)/g" oc.pc
+	$(PERL) -pi -e "s!-lolibc$(COMPAT_VERSION)!-loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)!g" oc.pc
 	$(PERL) -pi -e "s/libolibc$(COMPAT_VERSION)/liboc$(COMPAT_VERSION)/g" oc.pc
 
 ogc.in:
@@ -442,7 +440,7 @@ ogc.in:
 	cp -af olibc.pc ogc.pc
 	$(PERL) -pi -e "s/prog=\"olibc/prog=\"ogc/g" ogc-config
 
-	$(PERL) -pi -e "s/-lolibc$(COMPAT_VERSION)/-logc$(COMPAT_VERSION) -loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)/g" ogc.pc
+	$(PERL) -pi -e "s!-lolibc$(COMPAT_VERSION)!-logc$(COMPAT_VERSION) -loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)!g" ogc.pc
 	$(PERL) -pi -e "s/libolibc$(COMPAT_VERSION)/libogc$(COMPAT_VERSION)/g" ogc.pc
 
 @COMPAT_TRUE@install-exec-hook:

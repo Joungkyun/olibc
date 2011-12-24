@@ -34,13 +34,6 @@ SONAME_VERSION=$SONAME_MAJOR.$SONAME_MINOR.$SONAME_REVISION
 SONAME_VALUE=$(($SONAME_MAJOR + $SONAME_MINOR))
 SONAME_INFO="$SONAME_VALUE:$SONAME_REVISION:$SONAME_MINOR"
 
-# for libidn
-AC_SUBST(LIBIDN_NAME)
-AC_SUBST(LIBIDN_VERSOIN)
-
-LIBIDN_NAME=libidn
-LIBIDN_VERSION=0.3.7
-
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
@@ -75,7 +68,7 @@ AC_CHECK_LIB(rt, clock_gettime,,[])
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([langinfo.h libintl.h locale.h time.h sys/time.h \
-				  errno.h ctype.h sys/type.h sys/stat.h pcre/pcre.h \
+				  errno.h ctype.h sys/type.h sys/stat.h \
 				  iconv.h stdbool.h inttypes.h locale.h stddef.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -87,9 +80,6 @@ AC_C_VOLATILE
 #AC_CHECK_SIZEOF(long)
 #AC_CHECK_TYPES([ushort, uint, ulong, uchar])
 
-# for libidn
-AX_CREATE_STDINT_H(libidn/idn-int.h, sys/types.h)
-
 # Checks for library functions.
 AC_FUNC_LSTAT
 AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
@@ -99,14 +89,15 @@ AC_FUNC_REALLOC
 AC_FUNC_STAT
 AC_CHECK_FUNCS([strtoll gettimeofday setlocale memmove bcopy strerror])
 
+AX_IDN
+AX_PCRE
+
 AX_STATIC_BINDIR
 
 AC_CONFIG_FILES([Makefile
 				 src/Makefile
 				 test/Makefile
 				 man/Makefile
-                 pcrelib/Makefile
-                 libidn/Makefile
 				 scripts/Makefile
 				 m4/olibc.m4
 				 scripts/olibc.pc

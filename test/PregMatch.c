@@ -41,19 +41,20 @@
 int main (int argc, char ** argv) {
 	char	* s = "abcde\\nfghijAB",
 			* apiname;
-	int		ret = 0;
+	int		r = 0;
 
 	/*
 	 * API test
 	 */
 	{
 		oc_test_banner ("preg_match");
-		ret = preg_match ("/(c).*(gh).*/si", s);
-		//printf ("%s\n", ret ? "ok" : "falied");
-		if ( ret )
+		r = preg_match ("/(c).*(gh).*/si", s);
+		//printf ("%s\n", r ? "ok" : "falied");
+		if ( r ) {
 			Success;
-		else
+		} else {
 			Failure ("matched != true");
+		}
 	}
 
 	/*
@@ -63,21 +64,22 @@ int main (int argc, char ** argv) {
 		const char ** matches = null;
 
 		oc_test_banner ("preg_match_r");
-		ret = preg_match_r ("/(b).*(gh)/si", s, &matches);
-		if ( ret > 0 ) {
+		r = preg_match_r ("/(b).*(gh)/si", s, &matches);
+		if ( r > 0 ) {
 			if (
 					! strcmp ("bcde\\nfgh", matches[0]) &&
 					! strcmp ("b", matches[1]) &&
 					! strcmp ("gh", matches[2])
 			   ) {
 				Success;
-			} else
+			} else {
 				Failure ("matched count != 3");
+			}
 			ofree (matches);
 		} else {
 			Failure ("compile error");
 		}
 	}
 
-	return 0;
+	return ret;
 }

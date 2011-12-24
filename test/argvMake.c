@@ -62,5 +62,5 @@ go_fail:
 		Failure ("argc != 4");
 	}
 
-	return 0;
+	return ret;
 }

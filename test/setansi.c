@@ -47,5 +47,5 @@ int main (void) {
 	printf ("red\n");
 	setansi (stdout, OC_ENDANSI, false);
 
-	return 0;
+	return ret;
 }

@@ -48,7 +48,7 @@ int main (void) {
 	src = strdup ("\tab!c tt  \t\n");
 	if ( src == null ) {
 		Failure ("memory allocat");
-		return 0;
+		return 1;
 	}
 
 	trim (src);
@@ -65,20 +65,20 @@ int main (void) {
 		src = strdup ("\tab!c tt  \t\n");
 		if ( src == null ) {
 			Failure ("memory allocat");
-			return 0;
+			return 1;
 		}
 
 		if ( (buf = trim_r (src, true)) == null ) {
 			Failure ("");
-			return 0;
+			return 1;
 		}
 
-		if ( ! strcmp (src, dst) )
+		if ( ! strcmp (buf, dst) )
 			Success;
 		else
 			Failure ("");
 		ofree (buf);
 	}
 
-	return 0;
+	return ret;
 }

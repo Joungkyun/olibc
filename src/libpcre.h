@@ -71,8 +71,12 @@
 
 #include <olibc/oc_type.h>
 
-#ifdef HAVE_LIBPCRE
+#ifdef HAVE_PCRE_H
 #include <pcre.h>
+#endif
+
+#ifndef PCRE_EXTRA_MATCH_LIMIT_RECURSION
+#define PCRE_EXTRA_MATCH_LIMIT_RECURSION 0x0010
 #endif
 
 # ifdef __cplusplus

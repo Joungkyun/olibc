@@ -49,10 +49,11 @@ int main (void) {
 	{
 		oc_test_banner ("numberFormat");
 		buf = numberFormat (src, 0, '.', ',', 0);
-		if ( strcmp ("123,456,789", buf) )
+		if ( strcmp ("123,456,789", buf) ) {
 			Failure (buf);
-		else
+		} else {
 			Success;
+		}
 		free (buf);
 	}
 
@@ -62,12 +63,13 @@ int main (void) {
 	{
 		oc_test_banner ("human_size");
 		buf = human_size (src, false, true);
-		if ( strcmp ("117.73 Mb", buf) )
+		if ( strcmp ("117.73 Mb", buf) ) {
 			Failure (buf);
-		else
+		} else {
 			Success;
+		}
 		ofree (buf);
 	}
 
-	return 0;
+	return ret;
 }

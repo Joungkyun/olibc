@@ -49,7 +49,7 @@ oc.in:
 	cp -af olibc.pc oc.pc
 	$(PERL) -pi -e "s/prog=\"olibc/prog=\"oc/g" oc-config
 
-	$(PERL) -pi -e "s/-lolibc$(COMPAT_VERSION)/-loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)/g" oc.pc
+	$(PERL) -pi -e "s!-lolibc$(COMPAT_VERSION)!-loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)!g" oc.pc
 	$(PERL) -pi -e "s/libolibc$(COMPAT_VERSION)/liboc$(COMPAT_VERSION)/g" oc.pc
 
 ogc.in:
@@ -57,7 +57,7 @@ ogc.in:
 	cp -af olibc.pc ogc.pc
 	$(PERL) -pi -e "s/prog=\"olibc/prog=\"ogc/g" ogc-config
 
-	$(PERL) -pi -e "s/-lolibc$(COMPAT_VERSION)/-logc$(COMPAT_VERSION) -loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)/g" ogc.pc
+	$(PERL) -pi -e "s!-lolibc$(COMPAT_VERSION)!-logc$(COMPAT_VERSION) -loc$(COMPAT_VERSION) $(LDFLAGS) $(LIBS)!g" ogc.pc
 	$(PERL) -pi -e "s/libolibc$(COMPAT_VERSION)/libogc$(COMPAT_VERSION)/g" ogc.pc
 
 if COMPAT

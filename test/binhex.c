@@ -80,5 +80,5 @@ go_bin2hex_fail:
 		ofree (tmp);
 	}
 
-	return 0;
+	return ret;
 }

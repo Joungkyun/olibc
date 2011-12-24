@@ -57,7 +57,7 @@ AC_DEFUN([AX_IDN],
 					[HAVE_LIBIDN], 1,
 					[Define to 1 if you have the `idn' library (-lidn).]
 				)
-				LIBS="-lidn $LIBS"
+				#LIBS="-lidn $LIBS"
 			],[
 				AC_MSG_ERROR([Error.. you must need idn library!])
 			]
@@ -97,4 +97,4 @@ AC_DEFUN([AX_IDN],
 			AC_MSG_ERROR([You must need stringprep.h header file!])
 		fi
 	fi
-]
+])

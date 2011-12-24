@@ -83,5 +83,5 @@ go_fail:
 			unlink (wfile);
 	}
 
-	return 0;
+	return ret;
 }

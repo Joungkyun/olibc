@@ -77,5 +77,5 @@ skip:
 	if ( q != null )
 		free (q);
 
-	return 0;
+	return ret;
 }

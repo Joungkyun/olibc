@@ -90,5 +90,5 @@ go_split_fail:
 		ofree (res);
 	}
 
-	return 0;
+	return ret;
 }

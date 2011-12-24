@@ -6,6 +6,8 @@
 #ifndef TEST_H
 #define TEST_H
 
+int ret = 0;
+
 /*
 #define oc_test_banner(x) \
 	{ \
@@ -17,7 +19,11 @@
 #define oc_test_banner(x) apiname = x;
 
 #define Success printf ("PASS:   + %s\n", apiname)
-#define Failure(x) printf ("FAIL:   + %s %s%s\n", apiname, strlen(x) ? "=> " : "", x)
+#define Failure(x) \
+	{ \
+		printf ("FAIL:   + %s %s%s\n", apiname, strlen(x) ? "=> " : "", x); \
+		ret++; \
+	}
 
 #define RESULT(x,...) \
 	{ \

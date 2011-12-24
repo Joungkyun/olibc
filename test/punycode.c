@@ -43,28 +43,30 @@ int main (int argc, char ** argv) {
 
 	oc_test_banner ("convert_punycode encode");
 	puny = convert_punycode (domain, "EUC-KR");
-	if ( puny == null )
+	if ( puny == null ) {
 		Failure ("mem allocate");
-	else {
-		if ( ! strcmp (puny, punyc) )
+	} else {
+		if ( ! strcmp (puny, punyc) ) {
 			Success;
-		else
+		} else {
 			Failure ("");
+		}
 	}
 
 	oc_test_banner ("convert_punycode decode");
 	unpuny = convert_punycode (puny, "EUC-KR");
-	if ( unpuny == null )
+	if ( unpuny == null ) {
 		Failure ("mem allocate");
-	else {
-		if ( ! strcmp (domain, unpuny) )
+	} else {
+		if ( ! strcmp (domain, unpuny) ) {
 			Success;
-		else
+		} else {
 			Failure ("");
+		}
 	}
 
 	free (unpuny);
 	free (puny);
 
-	return 0;
+	return ret;
 }

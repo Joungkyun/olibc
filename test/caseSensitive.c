@@ -51,10 +51,11 @@ int main (void) {
 		oc_test_banner ("strtolower");
 		strtolower (src);
 		
-		if ( strcmp ("aabbcc", src) )
+		if ( strcmp ("aabbcc", src) ) {
 			Failure (src);
-		else
+		} else {
 			Success;
+		}
 	}
 
 	/*
@@ -63,13 +64,14 @@ int main (void) {
 	{
 		oc_test_banner ("strtoupper");
 		strtoupper (src);
-		if ( strcmp ("AABBCC", src) )
+		if ( strcmp ("AABBCC", src) ) {
 			Failure (src);
-		else
+		} else {
 			Success;
+		}
 	}
 
 	ofree (src);
 
-	return 0;
+	return ret;
 }

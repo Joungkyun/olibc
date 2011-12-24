@@ -106,5 +106,5 @@ go_ogetopt_fail:
 	}
 
 	ofree_array (o_cmdarg);
-	return 0;
+	return ret;
 }

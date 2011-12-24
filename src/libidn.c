@@ -166,7 +166,7 @@ char * convert_punycode (CChar * src, CChar * charset) // {{{
 					 	 dst, stringprep_locale_charset ());
 		} else {
 			p = charset_conv (dst, charset, "UTF-8");
-			stringprep_locale_charset_cache = "UTF-8";
+			//stringprep_locale_charset_cache = "UTF-8";
 		}
 
 		if ( p == null ) {

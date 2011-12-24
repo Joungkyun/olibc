@@ -34,7 +34,7 @@ AC_DEFUN([AX_PCRE],
 		fi
 
 		pcre_incdir="$pcre_prefix/include"
-		pcre_cppflags="-I$pcre_incdir"
+		pcre_cppflags="-I$pcre_incdir -I$pcre_incdir/pcre"
 		if test -f "$pcre_prefix/lib64/libpcre.so"; then
 			pcre_libdir="$pcre_prefix/lib64"
 		elif test -f "$pcre_prefix/lib64/libpcre.a"; then
@@ -57,7 +57,7 @@ AC_DEFUN([AX_PCRE],
 					[HAVE_LIBIDN], 1,
 					[Define to 1 if you have the `pcre' library (-lpcre).]
 				)
-				LIBS="-lpcre $LIBS"
+				#LIBS="-lpcre $LIBS"
 			],[
 				AC_MSG_ERROR([Error.. you must need pcre library!])
 			]
@@ -97,4 +97,4 @@ AC_DEFUN([AX_PCRE],
 			AC_MSG_ERROR([You must need pcre.h header file!])
 		fi
 	fi
-]
+])

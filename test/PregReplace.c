@@ -42,19 +42,19 @@ int main (int argc, char ** argv) {
 	char	* s = "a!bcd!e\nfg!hijA!B",
 			* buf,
 			* apiname;
-	int		ret = 0;
+	int		r = 0;
 
 	//
 	// preg_replace api test
 	//
 	oc_test_banner ("preg_replace");
-	buf = preg_replace ("/!([^!]+)!/", "!aa!", s, &ret);
+	buf = preg_replace ("/!([^!]+)!/", "!aa!", s, &r);
 	if ( buf != null ) {
 		char * c;
 		char * buf_t;
 		int cc = 0;
 
-		if ( ret == 14 ) {
+		if ( r == 14 ) {
 			buf_t = buf;
 			while ( (c = strstr (buf_t, "!aa!")) != null ) {
 				cc++;
@@ -66,7 +66,7 @@ int main (int argc, char ** argv) {
 			else
 				Failure ("cc != 2");
 		} else
-			Failure ("ret != 14");
+			Failure ("r != 14");
 	} else
 		Failure ("buf == null");
 
@@ -99,5 +99,5 @@ int main (int argc, char ** argv) {
 
 
 
-	return 0;
+	return ret;
 }

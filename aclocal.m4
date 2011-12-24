@@ -1756,8 +1756,9 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([m4/ax_compat_option.m4])
-m4_include([m4/ax_create_stdint_h.m4])
 m4_include([m4/ax_gcc_visibiliity.m4])
 m4_include([m4/ax_static_bindir.m4])
 m4_include([m4/iconv.m4])
+m4_include([m4/idn.m4])
 m4_include([m4/libtool.m4])
+m4_include([m4/pcre.m4])
