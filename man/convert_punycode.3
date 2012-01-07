@@ -1,7 +1,7 @@
-.TH convert_punycode(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
+.TH convert_punycode(3) 2012-01-08 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man convert_punycode.3
-.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
+.\" 2012-01-08 JoungKyun Kim <htt://oops.org>
 .\" $Id$
 .SH NAME
 convert_punycode \- Convert between punycode and international domain.
@@ -9,7 +9,7 @@ convert_punycode \- Convert between punycode and international domain.
 .SH SYNOPSIS
 .B #include <olibc/libidn.h>
 .sp
-.BI "char * convert_punycode_r (const char * src, bool mode, const char * charset)"
+.BI "char * convert_punycode (const char * src, const char * charset)"
 
 .SH "Link Library"
 .B \-logc
@@ -29,11 +29,6 @@ convert to international domain from punycode
 .B src
 .br
 International domain for converting
-
-.TP
-.B mode
-.br
-encode(set false) or decode(set true)
 
 .TP
 .B charset
@@ -56,13 +51,13 @@ int main (void) {
     char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
 	char * buf;
 
-    buf = convert_punycode (x, false, "EUC-KR");
+    buf = convert_punycode (x, "EUC-KR");
     if ( buf != NULL ) {
         printf ("%s\\n", buf);
         free (buf);
     }
 
-    buf = convert_punycode (y, true, "EUC-KR");
+    buf = convert_punycode (y, "EUC-KR");
     if ( buf != NULL ) {
         printf ("%s\\n", buf);
         free (buf);

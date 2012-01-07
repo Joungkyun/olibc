@@ -1,7 +1,7 @@
-.TH convert_punycode(3) 2011-03-14 "Linux Manpage" "OOPS Library's Manual"
+.TH convert_punycode(3) 2012-01-08 "Linux Manpage" "OOPS Library's Manual"
 .\" Process with
 .\" nroff -man convert_punycode.3
-.\" 2011-03-14 JoungKyun Kim <htt://oops.org>
+.\" 2012-01-08 JoungKyun Kim <htt://oops.org>
 .\" $Id$
 .SH 이름
 convert_punycode \- 다국어 도메인을 변환
@@ -9,7 +9,7 @@ convert_punycode \- 다국어 도메인을 변환
 .SH 사용법
 .B #include <olibc/libidn.h>
 .sp
-.BI "char * convert_punycode_r (const char * src, bool mode, const char * charset)"
+.BI "char * convert_punycode (const char * src, const char * charset)"
 
 .SH 라이브러리 링크
 .B \-logc
@@ -58,18 +58,14 @@ International doman name의 문자셋을 지정한다.
 int main (void) {
     char x[32] = "한글도메인.kr";
     char y[64] = "xn--bj0bj3i97fq8o5lq.kr";
+    char *buf;
 
-    printf ("%s\\n", convert_punycode (x, 0, 1));
-    printf ("%s\\n", convert_punycode (y, 1, 1));
-
-    len = convert_punycode_r (x, &buf, 0, "EUC-KR");
-    if ( buf != NULL ) {
+    if ( (buf = convert_punycode (x, "EUC-KR")) != NULL ) {
         printf ("%s\\n", buf);
         free (buf);
     }
 
-    len = convert_punycode_r (y, &buf, 0, "EUC-KR");
-    if ( buf != NULL ) {
+    if ( (buf = convert_punycode (y, "EUC-KR")) != NULL ) {
         printf ("%s\\n", buf);
         free (buf);
     }
