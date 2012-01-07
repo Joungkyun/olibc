@@ -4,6 +4,9 @@ $Id$
 
 1.0.1
 -------------------------------------------------------------------------------
+* Sun, Jan  8 2012
+	- fixed convert_punycode when charset is null
+
 * Sat, Dec 24 2011
 	- 1.0.1 start
 

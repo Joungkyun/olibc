@@ -51,7 +51,7 @@
 #include <punycode.h>
 #include <stringprep.h>
 
-#ifdef EANBLE_NLS
+#ifdef ENABLE_NLS
 #include <langinfo.h>
 #endif
 
@@ -160,14 +160,21 @@ char * convert_punycode (CChar * src, CChar * charset) // {{{
 		// Encoding mode
 		//
 		if ( charset == null ) {
-			p = stringprep_locale_to_utf8 (dst);
-			if ( p == null )
-				oc_error ("%s: could not convert from %s to UTF-8.\n",
-					 	 dst, stringprep_locale_charset ());
-		} else {
-			p = charset_conv (dst, charset, "UTF-8");
-			//stringprep_locale_charset_cache = "UTF-8";
+#ifdef ENABLE_NLS
+			char * pp;
+			pp = setlocale (LC_CTYPE, null);
+			setlocale (LC_CTYPE, "");
+
+			charset = (const char *) nl_langinfo (CODESET);
+
+			setlocale (LC_CTYPE, pp);
+#else
+			charset = "UTF-8";
+#endif
 		}
+
+		p = charset_conv (dst, charset, "UTF-8");
+		//stringprep_locale_charset_cache = "UTF-8";
 
 		if ( p == null ) {
 			ofree (dst);
