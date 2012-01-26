@@ -50,7 +50,7 @@ $Id$
 	- add join() api
 	- fixed wrong realpath_r() operation
 	- changed function declare of is_ksc5601 api
-	- changed convert_punycode_r api ot convert_punycode
+	- changed convert_punycode_r api to convert_punycode
 
 * Thu, Mar 24 2011
 	- changed internal variable name for conflict other programs
