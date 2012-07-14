@@ -1582,6 +1582,43 @@ char * join (CChar * glue, CChar ** sep) // {{{
 } // }}}
 
 /**
+ * @brief	compare two strings that is reverse.
+ * @param	s1 compared strings
+ * @param	s2 compared strings
+ * @param	compare length
+ * @return		return an integer less than, equal to, or greater than zero.
+ *				if s1 (or the first n bytes thereof) is found, respectively,
+ *				to be less than, to match, or be greater than s2.
+ *
+ * This function is reverse strncmp.
+ */
+OLIBC_API
+int strrncmp (CChar * s1, CChar * s2, int len) // {{{
+{
+	int s1len, s2len, clen;
+
+	s1len = safe_strlen (a);
+	s2len = safe_strlen (b);
+	clen = (s1len > s2len) ? s2len : s1len;
+
+	if ( len > clen )
+		len = clen;
+
+	s1len--; s2len--;
+	for ( ; a[s1len--] == b[s2len--]; len-- ) {
+		if ( s1len < 0 || s2len < 0 )
+			break;
+
+		if ( len == 0 )
+			return 0;
+	}
+
+	s1len++; s2len++;
+
+	return a[s1len] - b[s2len];
+} // }}}
+
+/**
  * @example trim.c
  *   The example for trim() and trim_r() api
  * @example addslashes.c

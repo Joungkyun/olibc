@@ -4,6 +4,9 @@ $Id$
 
 1.0.1
 -------------------------------------------------------------------------------
+* Sun, Jul 15 2012
+	- add strrncmp api
+
 * Sun, Jan  8 2012
 	- fixed convert_punycode when charset is null
 

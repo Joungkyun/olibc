@@ -246,6 +246,8 @@
 		memset (dst + size, 0, 1); \
 	}
 
+#define safe_strlen(x) (x != NULL) ? strlen(x) : 0
+
 bool only_whitespace (CChar * stream, CInt length);
 size_t get_charcount (CChar * str, size_t sl, CChar * del, size_t dl);
 Bit64 devided64_high_low (Long64 v);

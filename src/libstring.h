@@ -91,6 +91,7 @@ extern Long64 str2long (CChar * src);
 extern double str2double (CChar * src);
 extern int char2int (CChar c);
 extern bool is_strint (char c);
+extern int strrncmp (CChar * s1, CChar * s2, int len);
 
 extern void setansi (FILE * stream, int color, bool noansi);
 
