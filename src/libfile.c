@@ -309,6 +309,58 @@ char * realpath_r (CChar * path) // {{{
 	return buf;
 } // }}}
 
+OLIBC_API
+int search_process (char *proc) { // {{{
+	DIR * dir;
+	struct dirent * entry;
+	struct stat f;
+	int proclen = safe_strlen (proc);
+	int pid = 0;
+	int ret = 1;
+
+	if ( (dir = opendir ("/proc")) == NULL )
+		return 1;
+
+	while ( (entry = readdir (dir)) != NULL ) {
+		char path[256] = { 0, };
+
+		safe_lstat (path, &f);
+
+		if ( (pid = atoi (entry->d_name)) <= 0 )
+			continue;
+
+		sprintf (path, "/proc/%d/cmdline", pid);
+
+		{
+			FILE * fp;
+			char buf[256] = { 0, };
+			char *bufp;
+
+			if ( (fp = fopen (path, "r+")) == NULL )
+				continue;
+
+			bufp = fgets (buf, 256, fp);
+
+			if ( ! strrncmp (proc, buf, proclen) ) {
+				int buflen = strlen (buf);
+				if ( proclen < buflen ) {
+					if ( buf[buflen - proclen - 1] != '/' )
+						continue;
+				}
+
+				ret = pid;
+				break;
+			}
+
+			fclose (fp);
+		}
+	}
+
+	closedir (dir);
+
+	return ret;
+} // }}}
+
 /**
  * @example fileExists.c
  *   The example for file_exists() api

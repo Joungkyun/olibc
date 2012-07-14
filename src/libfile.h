@@ -75,6 +75,7 @@ extern bool file_exists (CChar * path, int mode);
 extern size_t readfile (CChar * path, char ** buf);
 extern bool writefile (CChar * path, CChar * data, size_t size, bool mode);
 extern char * realpath_r (CChar * path);
+extern int search_process (char *proc);
 
 # ifdef __cplusplus
 }
