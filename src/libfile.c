@@ -309,6 +309,13 @@ char * realpath_r (CChar * path) // {{{
 	return buf;
 } // }}}
 
+/**
+ * @brief	Returns pid of given process name
+ * @param	name of process that isn't include path
+ * @return	Returns the pid or 0
+ *
+ * The search_process() returns pid of given process name.
+ */
 OLIBC_API
 int search_process (char *proc) { // {{{
 	DIR * dir;
@@ -359,6 +366,42 @@ int search_process (char *proc) { // {{{
 	closedir (dir);
 
 	return ret;
+} // }}}
+
+/**
+ * @brief	Returns process name of given pid
+ * @param	pid
+ * @return	Returns the process name or NULL
+ * @exception DEALLOCATE
+ *   If the @e return @e value is not null, the caller should
+ *   deallocate this buffer using @e free()
+ *
+ * The getprocname() returns pid of given process name.
+ */
+OLIBC_API
+char * getprocname (pid_t pid) { // {{{
+	FILE * fp;
+	char path[256] = { 0, };
+	char buf[256] = { 0, };
+	char * bufp;
+	char * retv;
+
+	sprintf (path, "/proc/%d/cmdline", pid);
+
+	if ( (fp = fopen (path, "r+")) == NULL )
+		return NULL;
+
+	bufp = fgets (buf, 256, fp);
+
+	if ( strlen (buf) < 1 )
+		return 0;
+
+	if ( (bufp = strrchr (buf, '/')) == NULL )
+		retv = strdup (buf);
+	else
+		retv = strdup (bufp + 1);
+
+	return retv;
 } // }}}
 
 /**

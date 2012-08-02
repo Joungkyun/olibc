@@ -4,6 +4,9 @@ $Id$
 
 1.0.1
 -------------------------------------------------------------------------------
+* Fri, Aug  3 2012
+	- add getprocname api
+
 * Sun, Jul 15 2012
 	- add strrncmp api
 	- add search_process api
