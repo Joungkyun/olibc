@@ -1,9 +1,11 @@
 Changelog
 
-$Id$
 
 1.0.1
 -------------------------------------------------------------------------------
+* Tue, Mar  7 2017
+	- fixed #1 unknown type name 'DIR'
+
 * Fri, Aug  3 2012
 	- add getprocname api
 

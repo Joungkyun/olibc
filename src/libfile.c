@@ -46,6 +46,7 @@
  */
 /* $Id$ */
 #include <oc_common.h>
+#include <dirent.h>
 
 #include <limits.h>
 #include <libfile.h>
