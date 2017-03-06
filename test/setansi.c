@@ -39,8 +39,10 @@
 #include "test.h"
 
 int main (void) {
+#if 0
 	char	* apiname;
 	oc_test_banner ("setansi");
+#endif
 
 	printf ("PASS: ");
 	setansi (stdout, OC_RED, false);

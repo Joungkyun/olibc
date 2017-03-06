@@ -235,11 +235,9 @@ bool writefile (CChar * path, CChar * data, size_t size, bool mode) // {{{
 
 	FILE	* fp;
 	char	* act = "wb";
-	int		ret;
 
 	act = "wb";
 	if ( mode == true ) {
-		ret = stat (path, &s);
 		act = (stat (path, &s) < 0) ? "wb" : "ab";
 	}
 
@@ -342,22 +340,21 @@ int search_process (char *proc) { // {{{
 		{
 			FILE * fp;
 			char buf[256] = { 0, };
-			char *bufp;
 
 			if ( (fp = fopen (path, "r+")) == NULL )
 				continue;
 
-			bufp = fgets (buf, 256, fp);
+			if ( fgets (buf, 256, fp) != NULL ) {
+				if ( ! strrncmp (proc, buf, proclen) ) {
+					int buflen = strlen (buf);
+					if ( proclen < buflen ) {
+						if ( buf[buflen - proclen - 1] != '/' )
+							continue;
+					}
 
-			if ( ! strrncmp (proc, buf, proclen) ) {
-				int buflen = strlen (buf);
-				if ( proclen < buflen ) {
-					if ( buf[buflen - proclen - 1] != '/' )
-						continue;
+					ret = pid;
+					break;
 				}
-
-				ret = pid;
-				break;
 			}
 
 			fclose (fp);
