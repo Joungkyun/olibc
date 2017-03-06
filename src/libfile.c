@@ -373,7 +373,7 @@ int search_process (char *proc) { // {{{
  *   If the @e return @e value is not null, the caller should
  *   deallocate this buffer using @e free()
  *
- * The getprocname() returns pid of given process name.
+ * The getprocname() returns process name of given pid
  */
 OLIBC_API
 char * getprocname (pid_t pid) { // {{{
