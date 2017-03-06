@@ -6,7 +6,7 @@
 #
 AC_PREREQ(2.59)
 
-AC_INIT([olibc], [1.0.1], [http://oops.org])
+AC_INIT([olibc], [1.0.2], [http://oops.org])
 #AC_CONFIG_MACRO_DIR([./m4])
 
 AC_CONFIG_AUX_DIR([build])
