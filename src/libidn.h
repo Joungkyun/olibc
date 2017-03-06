@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2011 JoungKyun.Kim <http://oops.org/>
+ *  Copyright (C) 2017 JoungKyun.Kim <http://oops.org/>
  *
  *  This file is part of olibc.
  *
@@ -26,9 +26,8 @@
  * @author	JoungKyun.Kim <http://oops.org>
  * $Date$
  * $Revision$
- * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ * @attention	Copyright (c) 2017 JoungKyun.Kim all rights reserved.
  */
-/* $Id$ */
 #ifndef LIBIDN_H
 #define LIBIDN_H
 

@@ -1,6 +1,6 @@
 /*
  *                       Written by JoungKyun.Kim
- *            Copyright (c) 2011 JoungKyun.Kim <http://oops.org>
+ *            Copyright (c) 2017 JoungKyun.Kim <http://oops.org>
  *
  * -----------------------------------------------------------------------------
  * Redistribution and use in source and binary forms, with or without
@@ -47,10 +47,8 @@
  * @author	JoungKyun.Kim <http://oops.org>
  * $Date$
  * $Revision$
- * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ * @attention	Copyright (c) 2017 JoungKyun.Kim all rights reserved.
  */
-
-/* $Id$ */
 
 #include <oc_common.h>
 #include <libpcre.h>

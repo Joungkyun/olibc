@@ -8,7 +8,7 @@
  * @author	JoungKyun.Kim <http://oops.org>
  * $Date$
  * $Revision$
- * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ * @attention	Copyright (c) 2017 JoungKyun.Kim all rights reserved.
  */
 /* $Id$ */
 #ifndef OLIBC_CONFIG_H

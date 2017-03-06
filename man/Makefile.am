@@ -1,6 +1,6 @@
 #
 #                       Written by JoungKyun.Kim
-#            Copyright (c) 2011 JoungKyun.Kim <http://oops.org>
+#            Copyright (c) 2017 JoungKyun.Kim <http://oops.org>
 #
 # -----------------------------------------------------------------------------
 # Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
 # This file is part of olibc.
 #
 
-# $Id$
 
 if ! COMPAT
 EXTRA_DIST = ko/addslashes.3 ko/argv_make.3 ko/bin2dec.3 ko/bin2hex.3 \

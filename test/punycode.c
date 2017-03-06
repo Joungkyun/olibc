@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2011 JoungKyun.Kim <http://oops.org/>
+ *  Copyright (C) 2017 JoungKyun.Kim <http://oops.org/>
  *
  *  This file is part of olibc.
  *
@@ -16,8 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
-
-/* $Id$ */
 
 #include <olibc/libstring.h>
 #include <olibc/libidn.h>

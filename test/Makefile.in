@@ -16,7 +16,7 @@
 
 #
 #                       Written by JoungKyun.Kim
-#            Copyright (c) 2011 JoungKyun.Kim <http://oops.org>
+#            Copyright (c) 2017 JoungKyun.Kim <http://oops.org>
 #
 # -----------------------------------------------------------------------------
 # Redistribution and use in source and binary forms, with or without
@@ -48,8 +48,6 @@
 # -----------------------------------------------------------------------------
 # This file is part of libimginfo.
 #
-
-# $Id$
 
 SOURCES = $(CharsetConv_SOURCES) PregGrep.c PregMatch.c PregQuote.c PregReplace.c addslashes.c argvMake.c bindec.c binhex.c caseSensitive.c charset.c fileExists.c getWhitespace.c humanSize.c microtime.c oGetopt.c punycode.c readfile.c realpath_r.c setansi.c split.c str2long.c trim.c
 

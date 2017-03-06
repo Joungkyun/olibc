@@ -1,6 +1,6 @@
 /*
  *                       Written by JoungKyun.Kim
- *            Copyright (c) 2011 JoungKyun.Kim <http://oops.org>
+ *            Copyright (c) 2017 JoungKyun.Kim <http://oops.org>
  *
  * -----------------------------------------------------------------------------
  * Redistribution and use in source and binary forms, with or without
@@ -41,12 +41,10 @@
  *
  * @author	JoungKyun.Kim <http://oops.org>
  * @date	2011/02/21
- * @attention	Copyright (c) 2011 JoungKyun.Kim all rights reserved.
+ * @attention	Copyright (c) 2017 JoungKyun.Kim all rights reserved.
  */
 /*
- * $Id$
- *
- * Copyright (C) 2011 JoungKyun.Kim
+ * Copyright (C) 2017 JoungKyun.Kim
  *
  * This file is part of olibc
  *
