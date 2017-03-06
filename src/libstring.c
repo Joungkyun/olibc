@@ -1597,15 +1597,15 @@ int strrncmp (CChar * s1, CChar * s2, int len) // {{{
 {
 	int s1len, s2len, clen;
 
-	s1len = safe_strlen (a);
-	s2len = safe_strlen (b);
+	s1len = safe_strlen (s1);
+	s2len = safe_strlen (s2);
 	clen = (s1len > s2len) ? s2len : s1len;
 
 	if ( len > clen )
 		len = clen;
 
 	s1len--; s2len--;
-	for ( ; a[s1len--] == b[s2len--]; len-- ) {
+	for ( ; s1[s1len--] == s2[s2len--]; len-- ) {
 		if ( s1len < 0 || s2len < 0 )
 			break;
 
@@ -1615,7 +1615,7 @@ int strrncmp (CChar * s1, CChar * s2, int len) // {{{
 
 	s1len++; s2len++;
 
-	return a[s1len] - b[s2len];
+	return s1[s1len] - s2[s2len];
 } // }}}
 
 /**

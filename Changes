@@ -5,6 +5,7 @@ Changelog
 -------------------------------------------------------------------------------
 * Tue, Mar  7 2017
 	- fixed #1 unknown type name 'DIR'
+	- fixed #2 compile error with undeclared variable in strrncmp
 
 * Fri, Aug  3 2012
 	- add getprocname api
